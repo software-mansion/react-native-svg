@@ -6,10 +6,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-
 package com.horcrux.svg;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -19,268 +19,321 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.os.Build;
 import android.view.View;
-
+import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.uimanager.annotations.ReactProp;
-import com.facebook.react.views.view.ReactViewGroup;
-
+import com.facebook.react.bridge.ReadableType;
+import java.util.ArrayList;
 import javax.annotation.Nullable;
 
 @SuppressLint("ViewConstructor")
 class GroupView extends RenderableView {
-    @Nullable ReadableMap mFont;
-    private GlyphContext mGlyphContext;
+  @Nullable ReadableMap mFont;
+  private GlyphContext mGlyphContext;
+  private Bitmap mLayerBitmap;
+  private Canvas mLayerCanvas;
+  private final Paint mLayerPaint;
 
-    public GroupView(ReactContext reactContext) {
-        super(reactContext);
+  public GroupView(ReactContext reactContext) {
+    super(reactContext);
+    mLayerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+  }
+
+  public void setFont(Dynamic dynamic) {
+    if (dynamic.getType() == ReadableType.Map) {
+      mFont = dynamic.asMap();
+    } else {
+      mFont = null;
+    }
+    invalidate();
+  }
+
+  public void setFont(@Nullable ReadableMap font) {
+    mFont = font;
+    invalidate();
+  }
+
+  void setupGlyphContext(Canvas canvas) {
+    RectF clipBounds = new RectF(canvas.getClipBounds());
+    if (mMatrix != null) {
+      mMatrix.mapRect(clipBounds);
+    }
+    mGlyphContext = new GlyphContext(mScale, clipBounds.width(), clipBounds.height());
+  }
+
+  GlyphContext getGlyphContext() {
+    return mGlyphContext;
+  }
+
+  private static <T> T requireNonNull(T obj) {
+    if (obj == null) throw new NullPointerException();
+    return obj;
+  }
+
+  GlyphContext getTextRootGlyphContext() {
+    return requireNonNull(getTextRoot()).getGlyphContext();
+  }
+
+  void pushGlyphContext() {
+    getTextRootGlyphContext().pushContext(this, mFont);
+  }
+
+  void popGlyphContext() {
+    getTextRootGlyphContext().popContext();
+  }
+
+  void draw(final Canvas canvas, final Paint paint, final float opacity) {
+    setupGlyphContext(canvas);
+    clip(canvas, paint);
+    drawGroup(canvas, paint, opacity);
+    renderMarkers(canvas, paint, opacity);
+  }
+
+  void drawGroup(final Canvas canvas, final Paint paint, final float opacity) {
+    pushGlyphContext();
+    final SvgView svg = getSvgView();
+    final GroupView self = this;
+    final RectF groupRect = new RectF();
+
+    if (mOpacity != 1) {
+      if (mLayerBitmap == null) {
+        mLayerBitmap =
+            Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
+        mLayerCanvas = new Canvas(mLayerBitmap);
+      } else {
+        mLayerBitmap.recycle();
+        mLayerBitmap =
+            Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
+        mLayerCanvas.setBitmap(mLayerBitmap);
+      }
+      // Copy current matrix from original canvas
+      mLayerCanvas.save();
+      mLayerCanvas.setMatrix(canvas.getMatrix());
+    } else {
+      mLayerCanvas = canvas;
     }
 
-    @ReactProp(name = "font")
-    public void setFont(@Nullable ReadableMap font) {
-        mFont = font;
-        invalidate();
-    }
-
-    void setupGlyphContext(Canvas canvas) {
-        RectF clipBounds = new RectF(canvas.getClipBounds());
-        if (mMatrix != null) {
-            mMatrix.mapRect(clipBounds);
+    elements = new ArrayList<>();
+    for (int i = 0; i < getChildCount(); i++) {
+      View child = getChildAt(i);
+      if (child instanceof MaskView) {
+        continue;
+      }
+      if (child instanceof VirtualView) {
+        VirtualView node = ((VirtualView) child);
+        if ("none".equals(node.mDisplay)) {
+          continue;
         }
-        if (mTransform != null) {
-            mTransform.mapRect(clipBounds);
-        }
-        mGlyphContext = new GlyphContext(mScale, clipBounds.width(), clipBounds.height());
-    }
-
-    GlyphContext getGlyphContext() {
-        return mGlyphContext;
-    }
-
-    private static <T> T requireNonNull(T obj) {
-        if (obj == null)
-            throw new NullPointerException();
-        return obj;
-    }
-
-    GlyphContext getTextRootGlyphContext() {
-        return requireNonNull(getTextRoot()).getGlyphContext();
-    }
-
-    void pushGlyphContext() {
-        getTextRootGlyphContext().pushContext(this, mFont);
-    }
-
-    void popGlyphContext() {
-        getTextRootGlyphContext().popContext();
-    }
-
-    void draw(final Canvas canvas, final Paint paint, final float opacity) {
-        setupGlyphContext(canvas);
-        clip(canvas, paint);
-        drawGroup(canvas, paint, opacity);
-    }
-
-    void drawGroup(final Canvas canvas, final Paint paint, final float opacity) {
-        pushGlyphContext();
-        final SvgView svg = getSvgView();
-        final GroupView self = this;
-        final RectF groupRect = new RectF();
-        for (int i = 0; i < getChildCount(); i++) {
-            View child = getChildAt(i);
-            if (child instanceof MaskView) {
-                continue;
-            }
-            if (child instanceof VirtualView) {
-                VirtualView node = ((VirtualView)child);
-                if ("none".equals(node.mDisplay)) {
-                    continue;
-                }
-                if (node instanceof RenderableView) {
-                    ((RenderableView)node).mergeProperties(self);
-                }
-
-                int count = node.saveAndSetupCanvas(canvas, mCTM);
-                node.render(canvas, paint, opacity * mOpacity);
-                RectF r = node.getClientRect();
-                if (r != null) {
-                    groupRect.union(r);
-                }
-
-                node.restoreCanvas(canvas, count);
-
-                if (node instanceof RenderableView) {
-                    ((RenderableView)node).resetProperties();
-                }
-
-                if (node.isResponsible()) {
-                    svg.enableTouchEvents();
-                }
-            } else if (child instanceof SvgView) {
-                SvgView svgView = (SvgView)child;
-                svgView.drawChildren(canvas);
-                if (svgView.isResponsible()) {
-                    svg.enableTouchEvents();
-                }
-            }
-        }
-        this.setClientRect(groupRect);
-        popGlyphContext();
-    }
-
-    void drawPath(Canvas canvas, Paint paint, float opacity) {
-        super.draw(canvas, paint, opacity);
-    }
-
-    @Override
-    Path getPath(final Canvas canvas, final Paint paint) {
-        if (mPath != null) {
-            return mPath;
-        }
-        mPath = new Path();
-
-        for (int i = 0; i < getChildCount(); i++) {
-            View node = getChildAt(i);
-            if (node instanceof MaskView) {
-                continue;
-            }
-            if (node instanceof VirtualView) {
-                VirtualView n = (VirtualView)node;
-                Matrix transform = n.mMatrix;
-                mPath.addPath(n.getPath(canvas, paint), transform);
-            }
+        if (node instanceof RenderableView) {
+          ((RenderableView) node).mergeProperties(self);
         }
 
-        return mPath;
+        int count = node.saveAndSetupCanvas(mLayerCanvas, mCTM);
+        node.render(mLayerCanvas, paint, opacity);
+        RectF r = node.getClientRect();
+
+        if (r != null) {
+          groupRect.union(r);
+        }
+
+        node.restoreCanvas(mLayerCanvas, count);
+
+        if (node instanceof RenderableView) {
+          ((RenderableView) node).resetProperties();
+        }
+
+        if (node.isResponsible()) {
+          svg.enableTouchEvents();
+        }
+
+        if (node.elements != null) {
+          elements.addAll(node.elements);
+        }
+
+      } else if (child instanceof SvgView) {
+        SvgView svgView = (SvgView) child;
+        // Merge properties with inner Svg element.
+        if (svgView.getChildCount() > 0) {
+          View viewNode = svgView.getChildAt(0);
+          if (viewNode instanceof GroupView) {
+            ((GroupView) viewNode).mergeProperties(self);
+          }
+        }
+        svgView.drawChildren(canvas);
+        if (svgView.isResponsible()) {
+          svg.enableTouchEvents();
+        }
+      }
     }
 
-    Path getPath(final Canvas canvas, final Paint paint, final Region.Op op) {
-        final Path path = new Path();
+    if (mOpacity != 1) {
+      // Restore copied canvas and temporary reset original canvas matrix to draw bitmap 1:1
+      mLayerCanvas.restore();
+      int saveCount = canvas.save();
+      canvas.setMatrix(null);
+      mLayerPaint.setAlpha((int) (mOpacity * 255));
+      if (mLayerBitmap != null) {
+        canvas.drawBitmap(mLayerBitmap, 0, 0, mLayerPaint);
+      }
+      canvas.restoreToCount(saveCount);
+    }
+    this.setClientRect(groupRect);
+    popGlyphContext();
+  }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            final Path.Op pop = Path.Op.valueOf(op.name());
-            for (int i = 0; i < getChildCount(); i++) {
-                View node = getChildAt(i);
-                if (node instanceof MaskView) {
-                    continue;
-                }
-                if (node instanceof VirtualView) {
-                    VirtualView n = (VirtualView)node;
-                    Matrix transform = n.mMatrix;
-                    Path p2;
-                    if (n instanceof GroupView) {
-                        p2 = ((GroupView)n).getPath(canvas, paint, op);
-                    } else {
-                        p2 = n.getPath(canvas, paint);
-                    }
-                    p2.transform(transform);
-                    path.op(p2, pop);
-                }
-            }
-        } else {
-            Rect clipBounds = canvas.getClipBounds();
-            final Region bounds = new Region(clipBounds);
-            final Region r = new Region();
-            for (int i = 0; i < getChildCount(); i++) {
-                View node = getChildAt(i);
-                if (node instanceof MaskView) {
-                    continue;
-                }
-                if (node instanceof VirtualView) {
-                    VirtualView n = (VirtualView)node;
-                    Matrix transform = n.mMatrix;
-                    Path p2;
-                    if (n instanceof GroupView) {
-                        p2 = ((GroupView)n).getPath(canvas, paint, op);
-                    } else {
-                        p2 = n.getPath(canvas, paint);
-                    }
-                    if (transform != null) {
-                        p2.transform(transform);
-                    }
-                    Region r2 = new Region();
-                    r2.setPath(p2, bounds);
-                    r.op(r2, op);
-                }
-            }
-            path.addPath(r.getBoundaryPath());
-        }
+  void drawPath(Canvas canvas, Paint paint, float opacity) {
+    super.draw(canvas, paint, opacity);
+  }
 
-        return path;
+  @Override
+  Path getPath(final Canvas canvas, final Paint paint) {
+    if (mPath != null) {
+      return mPath;
+    }
+    mPath = new Path();
+
+    for (int i = 0; i < getChildCount(); i++) {
+      View node = getChildAt(i);
+      if (node instanceof MaskView) {
+        continue;
+      }
+      if (node instanceof VirtualView) {
+        VirtualView n = (VirtualView) node;
+        Matrix transform = n.mMatrix;
+        mPath.addPath(n.getPath(canvas, paint), transform);
+      }
     }
 
-    @Override
-    int hitTest(final float[] src) {
-        if (!mInvertible || !mTransformInvertible) {
-            return -1;
+    return mPath;
+  }
+
+  Path getPath(final Canvas canvas, final Paint paint, final Region.Op op) {
+    final Path path = new Path();
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+      final Path.Op pop = Path.Op.valueOf(op.name());
+      for (int i = 0; i < getChildCount(); i++) {
+        View node = getChildAt(i);
+        if (node instanceof MaskView) {
+          continue;
         }
-
-        float[] dst = new float[2];
-        mInvMatrix.mapPoints(dst, src);
-        mInvTransform.mapPoints(dst);
-
-        int x = Math.round(dst[0]);
-        int y = Math.round(dst[1]);
-
-        Path clipPath = getClipPath();
-        if (clipPath != null) {
-            if (mClipRegionPath != clipPath) {
-                mClipRegionPath = clipPath;
-                mClipBounds = new RectF();
-                clipPath.computeBounds(mClipBounds, true);
-                mClipRegion = getRegion(clipPath, mClipBounds);
-            }
-            if (!mClipRegion.contains(x, y)) {
-                return -1;
-            }
+        if (node instanceof VirtualView) {
+          VirtualView n = (VirtualView) node;
+          Matrix transform = n.mMatrix;
+          Path p2;
+          if (n instanceof GroupView) {
+            p2 = ((GroupView) n).getPath(canvas, paint, op);
+          } else {
+            p2 = n.getPath(canvas, paint);
+          }
+          p2.transform(transform);
+          path.op(p2, pop);
         }
-
-        for (int i = getChildCount() - 1; i >= 0; i--) {
-            View child = getChildAt(i);
-            if (child instanceof VirtualView) {
-                if (child instanceof MaskView) {
-                    continue;
-                }
-
-                VirtualView node = (VirtualView) child;
-
-                int hitChild = node.hitTest(dst);
-                if (hitChild != -1) {
-                    return (node.isResponsible() || hitChild != child.getId()) ? hitChild : getId();
-                }
-            } else if (child instanceof SvgView) {
-                SvgView node = (SvgView) child;
-
-                int hitChild = node.reactTagForTouch(dst[0], dst[1]);
-                if (hitChild != child.getId()) {
-                    return hitChild;
-                }
-            }
+      }
+    } else {
+      Rect clipBounds = canvas.getClipBounds();
+      final Region bounds = new Region(clipBounds);
+      final Region r = new Region();
+      for (int i = 0; i < getChildCount(); i++) {
+        View node = getChildAt(i);
+        if (node instanceof MaskView) {
+          continue;
         }
+        if (node instanceof VirtualView) {
+          VirtualView n = (VirtualView) node;
+          Matrix transform = n.mMatrix;
+          Path p2;
+          if (n instanceof GroupView) {
+            p2 = ((GroupView) n).getPath(canvas, paint, op);
+          } else {
+            p2 = n.getPath(canvas, paint);
+          }
+          if (transform != null) {
+            p2.transform(transform);
+          }
+          Region r2 = new Region();
+          r2.setPath(p2, bounds);
+          r.op(r2, op);
+        }
+      }
+      path.addPath(r.getBoundaryPath());
+    }
 
+    return path;
+  }
+
+  @Override
+  int hitTest(final float[] src) {
+    if (!mInvertible) {
+      return -1;
+    }
+
+    float[] dst = new float[2];
+    mInvMatrix.mapPoints(dst, src);
+    mInvTransform.mapPoints(dst);
+
+    int x = Math.round(dst[0]);
+    int y = Math.round(dst[1]);
+
+    Path clipPath = getClipPath();
+    if (clipPath != null) {
+      if (mClipRegionPath != clipPath) {
+        mClipRegionPath = clipPath;
+        mClipBounds = new RectF();
+        clipPath.computeBounds(mClipBounds, true);
+        mClipRegion = getRegion(clipPath, mClipBounds);
+      }
+      if (!mClipRegion.contains(x, y)) {
         return -1;
+      }
     }
 
-    void saveDefinition() {
-        if (mName != null) {
-            getSvgView().defineTemplate(this, mName);
+    for (int i = getChildCount() - 1; i >= 0; i--) {
+      View child = getChildAt(i);
+      if (child instanceof VirtualView) {
+        if (child instanceof MaskView) {
+          continue;
         }
 
-        for (int i = 0; i < getChildCount(); i++) {
-            View node = getChildAt(i);
-            if (node instanceof VirtualView) {
-                ((VirtualView)node).saveDefinition();
-            }
+        VirtualView node = (VirtualView) child;
+
+        int hitChild = node.hitTest(dst);
+        if (hitChild != -1) {
+          return (node.isResponsible() || hitChild != child.getId()) ? hitChild : getId();
         }
+      } else if (child instanceof SvgView) {
+        SvgView node = (SvgView) child;
+
+        int hitChild = node.reactTagForTouch(dst[0], dst[1]);
+        if (hitChild != child.getId()) {
+          return hitChild;
+        }
+      }
     }
 
-    @Override
-    void resetProperties() {
-        for (int i = 0; i < getChildCount(); i++) {
-            View node = getChildAt(i);
-            if (node instanceof RenderableView) {
-                ((RenderableView)node).resetProperties();
-            }
-        }
+    return -1;
+  }
+
+  void saveDefinition() {
+    if (mName != null) {
+      getSvgView().defineTemplate(this, mName);
     }
+
+    for (int i = 0; i < getChildCount(); i++) {
+      View node = getChildAt(i);
+      if (node instanceof VirtualView) {
+        ((VirtualView) node).saveDefinition();
+      }
+    }
+  }
+
+  @Override
+  void resetProperties() {
+    for (int i = 0; i < getChildCount(); i++) {
+      View node = getChildAt(i);
+      if (node instanceof RenderableView) {
+        ((RenderableView) node).resetProperties();
+      }
+    }
+  }
 }

@@ -1,21 +1,34 @@
-import React from 'react';
-import extractTransform from '../lib/extract/extractTransform';
+import type { ReactNode } from 'react';
+import * as React from 'react';
 import { withoutXY } from '../lib/extract/extractProps';
-import { NumberProp, TransformProps } from '../lib/extract/types';
+import type {
+  CommonPathProps,
+  MaskType,
+  NumberProp,
+  Units,
+} from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
-import { RNSVGMask } from './NativeComponents';
+import RNSVGMask from '../fabric/MaskNativeComponent';
+import type { NativeMethods } from 'react-native';
+import { maskType } from '../lib/maskType';
 
-export default class Mask extends Shape<{
+export interface MaskProps extends CommonPathProps {
+  children?: ReactNode;
+  id?: string;
   x?: NumberProp;
   y?: NumberProp;
   width?: NumberProp;
   height?: NumberProp;
-  transform?: number[] | string | TransformProps;
-  maskTransform?: number[] | string | TransformProps;
-  maskUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
-  maskContentUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
-}> {
+  maskUnits?: Units;
+  maskContentUnits?: Units;
+  maskType?: MaskType;
+  style?: {
+    maskType: MaskType;
+  };
+}
+
+export default class Mask extends Shape<MaskProps> {
   static displayName = 'Mask';
 
   static defaultProps = {
@@ -28,8 +41,6 @@ export default class Mask extends Shape<{
   render() {
     const { props } = this;
     const {
-      maskTransform,
-      transform,
       x,
       y,
       width,
@@ -37,23 +48,23 @@ export default class Mask extends Shape<{
       maskUnits,
       maskContentUnits,
       children,
+      style,
     } = props;
     const maskProps = {
       x,
       y,
       width,
       height,
-      maskTransform: extractTransform(maskTransform || transform || props),
       maskUnits: maskUnits !== undefined ? units[maskUnits] : 0,
       maskContentUnits:
         maskContentUnits !== undefined ? units[maskContentUnits] : 1,
+      maskType: maskType[props?.maskType || style?.maskType || 'luminance'],
     };
     return (
       <RNSVGMask
-        ref={this.refMethod}
+        ref={(ref) => this.refMethod(ref as (Mask & NativeMethods) | null)}
         {...withoutXY(this, props)}
-        {...maskProps}
-      >
+        {...maskProps}>
         {children}
       </RNSVGMask>
     );

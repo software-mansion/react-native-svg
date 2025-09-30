@@ -1,7 +1,8 @@
 # Contributing to React Native Svg
 
 Thank you for helping out with react-native-svg!
-We'd like to make contributions as pleasant as possible, so here's a small guide of how we see it. Happy to hear your feedback about anything, so please let us know.
+We'd like to make contributions as pleasant as possible, so here's a small guide of how we see it. Happy to hear your
+feedback about anything, so please let us know.
 
 ### Modifying react-native-svg
 
@@ -13,46 +14,65 @@ We'd like to make contributions as pleasant as possible, so here's a small guide
 
 ### Testing your changes
 
-You can test your changes on any React Native application you have set up locally.
-You can also use the testing application available at https://github.com/msand/react-native-svg-e2e/
-or: https://github.com/magicismight/react-native-svg-example
-
-Just `cd` to your application and type `yarn link react-native-svg` to make your app use your local modified package instead of the one from npmjs.com (this is what point 5 was about in the previous section).
-
-If you made changes in the native code, don't forget to run `react-native link` before building your React Native application so that latest changes are taken into account.
+Add test example in [tests-example](https://github.com/react-native-svg/react-native-svg/tree/main/tests-example)
+concerning your change following the convention of `TestX.tsx` where `X` is your PR number.
 
 ## Tests
 
-We use `typescript` for type checks, `eslint` with `prettier` for linting/formatting, `jest/detox` for tests (unit and e2e). All tests are run on travis-ci for all opened pull requests, but you should use them locally when making changes.
+We use `typescript` for type checks, `eslint` with `prettier` for linting/formatting. All tests are run by github
+actions for all opened pull requests.
 
 - `yarn test`: Run all tests, except for e2e (see note below).
 - `yarn lint`: Run `eslint` check.
 - `yarn tsc`: Run `typescript` check.
-- `yarn flow`: Run `flow` type check.
 - `yarn jest`: Run `jest` type check.
+- `yarn e2e`: Run E2E tests (see section below)
 
-Currently e2e tests exist here: https://github.com/msand/react-native-svg-e2e/
+### Running E2E tests:
+
+> [!WARNING]  
+> Reference images in this repository are generated with [pixel ratio](https://reactnative.dev/docs/pixelratio) = `3`.
+> Make sure to run tests on a device that also has pixel ratio equal 3. Otherwise tests will fail.
+> In order to use device with different pixel ratio, adjust it in `e2e/generateRefereces.ts` viewport and regenerate
+> references.
+
+1. Navigate to the example application's directory and initiate the Metro server using the yarn start command.
+2. To run the example application on your preferred platform (note: currently only Android and iOS are supported),
+   execute the command `yarn android` or `yarn ios` within the example app's directory.
+3. Start the Jest server by running `yarn e2e` in the project's root directory.
+4. In the example application, select the E2E tab.
+5. Allow the tests to complete.
+6. The test results, along with any differences (i.e. the actual rendered svg versus the reference image), can be viewed
+   in the `e2e/diffs` directory.
+
+### To add new E2E test cases, proceed as follows:
+
+1. Put an SVG file of your selection into the `e2e/cases` directory.
+2. Execute `yarn generateE2eRefrences`. This action launches a headless Chrome browser via Puppeteer, capturing
+   snapshots of all rendered SVGs as .png files. These files will serve as a reference during testing.
+3. Check the `e2e/references` directory to observe newly created .png files.
+4. When you rerun the E2E tests, the new test case(s) you've added will be incorporated.
 
 ## Sending a pull request
 
 When you're sending a pull request:
 
-- Communication is a key. If you want fix/add something, please open new/find existing issue, so we can discuss it.
+- Communication is a key. If you want fix/add something, please consider either opening a new issue or finding an
+  existing one so we can further discuss it.
 - We prefer small pull requests focused on one change, as those are easier to test/check.
 - Please make sure that all tests are passing on your local machine.
 - Follow the template when opening a PR.
 
 ## Commits and versioning
 
-All PRs are merged into the `develop` branch, following [conventional commit message](https://www.conventionalcommits.org/en/v1.0.0-beta.3). Combined with [semantic versioning](https://semver.org/), this allows us to have a frequent releases of the library.
-
-_Note_: We don't force this convention on Pull Requests from contributors, but it's a clean way to see what type of changes are made, so feel free to follow it.
+All PRs are merged into the `main` branch and released with `release-it`.
 
 Most notably prefixes you'll see:
 
-- **fix**: Bug fixes, triggers _patch_ release
-- **feat**: New feature implemented, triggers _minor_
-- **chore**: Changes that are not affecting end user (CI config changes, scripts, ["grunt work"](https://stackoverflow.com/a/26944812/3510245))
+- **fix**: Bug fixes
+- **feat**: New feature implemented
+- **chore**: Changes that are not affecting end user (CI config changes,
+  scripts, ["grunt work"](https://stackoverflow.com/a/26944812/3510245))
 - **docs**: Documentation changes.
 - **perf**: A code change that improves performance.
 - **refactor**: A code change that neither fixes a bug nor adds a feature.
@@ -60,11 +80,12 @@ Most notably prefixes you'll see:
 
 ## Release process
 
-We use [Semantic Release](http://semantic-release.org) to release new versions of the library when changes are merged into the `master` branch, which we plan to keep stable. Bug fixes take priority in the release order. The master branch should always contain the latest released code.
+We use [release-it](https://github.com/release-it/release-it) to release new versions of library from `main` branch.
 
 ## Reporting issues
 
-You can report issues on our [bug tracker](https://github.com/react-native-community/react-native-svg/issues). Please search for existing issues and follow the issue template when opening an one. Except no need to add any notes to the changelog as semtice released handles that automatically based on the commit messages.
+You can report issues on our [bug tracker](https://github.com/react-native-community/react-native-svg/issues). Please
+search for existing issues and follow the issue template when opening one.
 
 ## License
 

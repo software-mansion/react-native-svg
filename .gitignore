@@ -1,7 +1,8 @@
 # OSX
 #
 .DS_Store
-
+.yarn
+.yarnrc.yml
 # Xcode
 #
 *.pbxuser
@@ -18,7 +19,6 @@ xcuserdata
 DerivedData
 *.hmap
 *.ipa
-gradle
 project.xcworkspace
 
 # Android/IJ
@@ -47,7 +47,10 @@ cn-doc.md
 experimental/
 
 /lib/
-/flow-typed/
 
 # VS Code
 .vscode/
+
+# E2E reports
+jest-html-reporters-attach/
+report.html

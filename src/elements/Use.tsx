@@ -1,18 +1,24 @@
-import React from 'react';
+import type { ReactNode } from 'react';
+import * as React from 'react';
 import { withoutXY } from '../lib/extract/extractProps';
-import { NumberProp } from '../lib/extract/types';
+import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import { idPattern } from '../lib/util';
 import Shape from './Shape';
-import { RNSVGUse } from './NativeComponents';
+import RNSVGUse from '../fabric/UseNativeComponent';
+import type { NativeMethods } from 'react-native';
 
-export default class Use extends Shape<{
-  x?: NumberProp;
-  y?: NumberProp;
-  width?: NumberProp;
-  height?: NumberProp;
+export interface UseProps extends CommonPathProps {
+  children?: ReactNode;
   xlinkHref?: string;
   href?: string;
-}> {
+  width?: NumberProp;
+  height?: NumberProp;
+  x?: NumberProp;
+  y?: NumberProp;
+  opacity?: NumberProp;
+}
+
+export default class Use extends Shape<UseProps> {
   static displayName = 'Use';
 
   static defaultProps = {
@@ -41,18 +47,21 @@ export default class Use extends Shape<{
       console.warn(
         'Invalid `href` prop for `Use` element, expected a href like "#id", but got: "' +
           href +
-          '"',
+          '"'
       );
     }
     const useProps = {
-      href: match,
+      href: match ?? undefined,
       x,
       y,
       width,
       height,
     };
     return (
-      <RNSVGUse ref={this.refMethod} {...withoutXY(this, props)} {...useProps}>
+      <RNSVGUse
+        ref={(ref) => this.refMethod(ref as (Use & NativeMethods) | null)}
+        {...withoutXY(this, props)}
+        {...useProps}>
         {children}
       </RNSVGUse>
     );

@@ -19,6 +19,9 @@
 @property (nonatomic, strong) NSString *align;
 @property (nonatomic, assign) RNSVGVBMOS meetOrSlice;
 
-- (void)renderMarker:(CGContextRef)context rect:(CGRect)rect position:(RNSVGMarkerPosition*)position strokeWidth:(CGFloat)strokeWidth;
+- (void)renderMarker:(CGContextRef)context
+                rect:(CGRect)rect
+            position:(RNSVGMarkerPosition *)position
+         strokeWidth:(CGFloat)strokeWidth;
 
 @end

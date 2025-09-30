@@ -1,20 +1,38 @@
-import React, { Component } from 'react';
+import type { Component } from 'react';
+import * as React from 'react';
 import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
 import extractTransform from '../lib/extract/extractTransform';
+import type { TextChild } from '../lib/extract/extractText';
 import extractText, { setTSpan } from '../lib/extract/extractText';
 import { pickNotNil } from '../lib/util';
 import Shape from './Shape';
-import { TransformProps } from '../lib/extract/types';
-import { RNSVGTSpan } from './NativeComponents';
+import type {
+  ColumnMajorTransformMatrix,
+  CommonPathProps,
+  FontProps,
+  NumberArray,
+  NumberProp,
+} from '../lib/extract/types';
+import RNSVGTSpan from '../fabric/TSpanNativeComponent';
 
-export default class TSpan extends Shape<{}> {
+export interface TSpanProps extends CommonPathProps, FontProps {
+  children?: TextChild;
+  x?: NumberArray;
+  y?: NumberArray;
+  dx?: NumberArray;
+  dy?: NumberArray;
+  rotate?: NumberArray;
+  inlineSize?: NumberProp;
+}
+
+export default class TSpan extends Shape<TSpanProps> {
   static displayName = 'TSpan';
 
   setNativeProps = (
-    props: Object & {
-      matrix?: number[];
-      style?: [] | {};
-    } & TransformProps,
+    props: TSpanProps & {
+      matrix?: ColumnMajorTransformMatrix;
+      style?: [] | unknown;
+    }
   ) => {
     const matrix = !props.matrix && extractTransform(props);
     if (matrix) {
@@ -33,7 +51,7 @@ export default class TSpan extends Shape<{}> {
         x: null,
         y: null,
       },
-      this,
+      this
     );
     Object.assign(props, extractText(prop, false));
     props.ref = this.refMethod as (instance: Component | null) => void;

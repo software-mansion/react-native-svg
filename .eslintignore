@@ -1,8 +1,11 @@
 **/node_modules/
-Example/examples/
-Example/android/
-Example/ios/
+apps/**/node_modules/
+apps/**/android/
+apps/**/ios/
+apps/**/windows/
+apps/**/macos/
 screenshots/
 android/
 apple/
+windows/
 src/lib/extract/transform.js

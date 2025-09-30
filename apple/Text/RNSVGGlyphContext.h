@@ -1,5 +1,5 @@
-#import <React/UIView+React.h>
 #import <CoreText/CoreText.h>
+#import <React/UIView+React.h>
 #import "RNSVGFontData.h"
 
 @class RNSVGText;
@@ -10,8 +10,7 @@
 
 - (CTFontRef)getGlyphFont;
 
-- (instancetype)initWithWidth:(CGFloat)width
-                       height:(CGFloat)height;
+- (instancetype)initWithWidth:(CGFloat)width height:(CGFloat)height;
 
 - (RNSVGFontData *)getFont;
 
@@ -33,17 +32,16 @@
 
 - (void)popContext;
 
-- (void)pushContext:(RNSVGText*)node
-               font:(NSDictionary*)font
-                  x:(NSArray<RNSVGLength*>*)x
-                  y:(NSArray<RNSVGLength*>*)y
-             deltaX:(NSArray<RNSVGLength*>*)deltaX
-             deltaY:(NSArray<RNSVGLength*>*)deltaY
-             rotate:(NSArray<RNSVGLength*>*)rotate;
+- (void)pushContext:(RNSVGText *)node
+               font:(NSDictionary *)font
+                  x:(NSArray<RNSVGLength *> *)x
+                  y:(NSArray<RNSVGLength *> *)y
+             deltaX:(NSArray<RNSVGLength *> *)deltaX
+             deltaY:(NSArray<RNSVGLength *> *)deltaY
+             rotate:(NSArray<RNSVGLength *> *)rotate;
 
-- (void)pushContext:(RNSVGGroup*)node
-                             font:(NSDictionary *)font;
+- (void)pushContext:(RNSVGGroup *)node font:(NSDictionary *)font;
 
-- (NSArray*)getFontContext;
+- (NSArray *)getFontContext;
 
 @end

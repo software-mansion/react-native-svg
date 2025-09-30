@@ -6,38 +6,36 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-
 package com.horcrux.svg;
 
 import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-
 import com.facebook.react.bridge.ReactContext;
 
 @SuppressLint("ViewConstructor")
 class DefinitionView extends VirtualView {
 
-    DefinitionView(ReactContext reactContext) {
-        super(reactContext);
-    }
+  DefinitionView(ReactContext reactContext) {
+    super(reactContext);
+  }
 
-    @SuppressWarnings("EmptyMethod")
-    void draw(Canvas canvas, Paint paint, float opacity) {}
+  @SuppressWarnings("EmptyMethod")
+  void draw(Canvas canvas, Paint paint, float opacity) {}
 
-    @Override
-    boolean isResponsible() {
-        return false;
-    }
+  @Override
+  boolean isResponsible() {
+    return false;
+  }
 
-    @Override
-    Path getPath(Canvas canvas, Paint paint) {
-        return null;
-    }
+  @Override
+  Path getPath(Canvas canvas, Paint paint) {
+    return null;
+  }
 
-    @Override
-    int hitTest(float[] src) {
-        return -1;
-    }
+  @Override
+  int hitTest(float[] src) {
+    return -1;
+  }
 }

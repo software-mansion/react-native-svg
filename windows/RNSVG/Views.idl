@@ -1,0 +1,96 @@
+import "Types.idl";
+
+namespace RNSVG
+{
+  [experimental]
+  interface IRenderable
+  {
+    D2DGeometry Geometry;
+    Boolean IsResponsible;
+
+    void CreateResources();
+    void Draw(D2DDeviceContext deviceContext, Windows.Foundation.Size size);
+    void MergeProperties(IRenderable other);
+    void SaveDefinition();
+    void Unload();
+    void CreateGeometry(D2DDeviceContext deviceContext);
+    IRenderable HitTest(Windows.Foundation.Point point);
+  };
+
+  [experimental]
+  interface ISvgView
+  {
+    D2DDevice Device{ get; };
+    D2DDeviceContext DeviceContext{ get; };
+    Windows.Foundation.Size CanvasSize { get; };
+    Windows.Foundation.Collections.IMap<String, IRenderable> Templates{ get; };
+    Windows.Foundation.Collections.IMap<String, IBrushView> Brushes{ get; };
+
+    void Invalidate();
+  };
+
+  [experimental]
+  interface IRenderableView
+  {
+    Boolean IsUnloaded { get; };
+
+    String Id{ get; };
+    Windows.Foundation.Numerics.Matrix3x2 SvgTransform{ get; };
+    Single FillOpacity{ get; };
+    String FillBrushId{ get; };
+    Single StrokeOpacity{ get; };
+    String StrokeBrushId{ get; };
+    SVGLength StrokeWidth{ get; };
+    Single StrokeMiterLimit{ get; };
+    Single StrokeDashOffset{ get; };
+    Windows.Foundation.Collections.IVector<SVGLength> StrokeDashArray{ get; };
+    LineCap StrokeLineCap{ get; };
+    LineJoin StrokeLineJoin{ get; };
+    FillRule FillRule{ get; };
+    D2DGeometry ClipPathGeometry(D2DDeviceContext deviceContext);
+  };
+
+  [experimental]
+  interface IGroupView
+  {
+    Single FontSize;
+    String FontFamily;
+    String FontWeight;
+
+    void DrawGroup(D2DDeviceContext deviceContext, Windows.Foundation.Size size);
+  };
+
+  [experimental]
+  interface ITextView
+  {
+    Windows.Foundation.Collections.IVector<SVGLength> X{ get; };
+    Windows.Foundation.Collections.IVector<SVGLength> Y{ get; };
+    Windows.Foundation.Collections.IVector<SVGLength> DX{ get; };
+    Windows.Foundation.Collections.IVector<SVGLength> DY{ get; };
+  };
+
+  [experimental]
+  interface ITSpanView
+  {
+    Windows.Foundation.Collections.IVector<SVGLength> Rotate { get; };
+  };
+
+  [experimental]
+  interface ISymbolView
+  {
+    Single MinX{ get; };
+    Single MinY{ get; };
+    Single VbWidth{ get; };
+    Single VbHeight{ get; };
+    String Align{ get; };
+    MeetOrSlice MeetOrSlice{ get; };
+  };
+
+  [experimental]
+  interface IBrushView
+  {
+    D2DBrush Brush{ get; };
+    void CreateBrush();
+    void SetBounds(Windows.Foundation.Rect rect);
+  };
+}

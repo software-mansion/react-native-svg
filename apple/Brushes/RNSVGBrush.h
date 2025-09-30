@@ -12,7 +12,7 @@
 
 @interface RNSVGBrush : NSObject
 
-@property (nonatomic, strong) NSString* brushRef;
+@property (nonatomic, strong) NSString *brushRef;
 
 /* @abstract */
 - (instancetype)initWithArray:(NSArray *)data;

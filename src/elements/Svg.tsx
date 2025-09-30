@@ -1,32 +1,32 @@
-import React, { Component } from 'react';
-import {
-  findNodeHandle,
+import type { Component } from 'react';
+import * as React from 'react';
+import type {
+  ColorValue,
   MeasureInWindowOnSuccessCallback,
   MeasureLayoutOnSuccessCallback,
   MeasureOnSuccessCallback,
-  NativeModules,
-  StyleSheet,
+  NativeMethods,
+  StyleProp,
   ViewStyle,
 } from 'react-native';
-import {
-  ClipProps,
-  Color,
+import { findNodeHandle, Platform, StyleSheet } from 'react-native';
+import type {
   extractedProps,
-  FillProps,
+  HitSlop,
   NumberProp,
   ResponderInstanceProps,
-  ResponderProps,
-  StrokeProps,
-  TransformProps,
 } from '../lib/extract/types';
 import extractResponder from '../lib/extract/extractResponder';
 import extractViewBox from '../lib/extract/extractViewBox';
-import extractColor from '../lib/extract/extractColor';
 import Shape from './Shape';
+import type { GProps } from './G';
 import G from './G';
-import { RNSVGSvg } from './NativeComponents';
-
-const RNSVGSvgViewManager = NativeModules.RNSVGSvgViewManager;
+import RNSVGSvgAndroid from '../fabric/AndroidSvgViewNativeComponent';
+import RNSVGSvgIOS from '../fabric/IOSSvgViewNativeComponent';
+import type { Spec } from '../fabric/NativeSvgViewModule';
+import extractOpacity from '../lib/extract/extractOpacity';
+import { extractTransformSvgView } from '../lib/extract/extractTransform';
+import { ViewProps } from '../fabric/utils';
 
 const styles = StyleSheet.create({
   svg: {
@@ -36,20 +36,16 @@ const styles = StyleSheet.create({
 });
 const defaultStyle = styles.svg;
 
-export default class Svg extends Shape<
-  {
-    color?: Color;
-    viewBox?: string;
-    opacity?: NumberProp;
-    onLayout?: () => void;
-    preserveAspectRatio?: string;
-    style?: ViewStyle[] | ViewStyle;
-  } & TransformProps &
-    ResponderProps &
-    StrokeProps &
-    FillProps &
-    ClipProps
-> {
+export interface SvgProps extends GProps, ViewProps, HitSlop {
+  width?: NumberProp;
+  height?: NumberProp;
+  viewBox?: string;
+  preserveAspectRatio?: string;
+  color?: ColorValue;
+  title?: string;
+}
+
+export default class Svg extends Shape<SvgProps> {
   static displayName = 'Svg';
 
   static defaultProps = {
@@ -69,37 +65,31 @@ export default class Svg extends Shape<
   measureLayout = (
     relativeToNativeNode: number,
     onSuccess: MeasureLayoutOnSuccessCallback,
-    onFail: () => void /* currently unused */,
+    onFail: () => void /* currently unused */
   ) => {
     const { root } = this;
     root && root.measureLayout(relativeToNativeNode, onSuccess, onFail);
   };
 
   setNativeProps = (
-    props: Object & {
-      width?: NumberProp;
-      height?: NumberProp;
+    props: SvgProps & {
       bbWidth?: NumberProp;
       bbHeight?: NumberProp;
-    },
+    }
   ) => {
-    const { width, height } = props;
-    if (width) {
-      props.bbWidth = width;
-    }
-    if (height) {
-      props.bbHeight = height;
-    }
     const { root } = this;
     root && root.setNativeProps(props);
   };
 
-  toDataURL = (callback: () => void, options?: Object) => {
+  toDataURL = (callback: (base64: string) => void, options?: object) => {
     if (!callback) {
       return;
     }
     const handle = findNodeHandle(this.root as Component);
-    RNSVGSvgViewManager.toDataURL(handle, options, callback);
+    const RNSVGSvgViewModule: Spec =
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      require('../fabric/NativeSvgViewModule').default;
+    RNSVGSvgViewModule.toDataURL(handle, options, callback);
   };
 
   render() {
@@ -117,14 +107,13 @@ export default class Svg extends Shape<
       ...extracted,
     };
     let {
-      color,
       width,
       height,
       focusable,
+      transform,
 
       // Inherited G properties
       font,
-      transform,
       fill,
       fillOpacity,
       fillRule,
@@ -136,14 +125,19 @@ export default class Svg extends Shape<
       strokeLinecap,
       strokeLinejoin,
       strokeMiterlimit,
+      position,
     } = stylesAndProps;
-    if (width === undefined && height === undefined) {
+    if (
+      width === undefined &&
+      height === undefined &&
+      position !== 'absolute'
+    ) {
       width = height = '100%';
     }
 
     const props: extractedProps = extracted as extractedProps;
     props.focusable = Boolean(focusable) && focusable !== 'false';
-    const rootStyles: (ViewStyle | ViewStyle[])[] = [defaultStyle];
+    const rootStyles: StyleProp<ViewStyle>[] = [defaultStyle];
 
     if (style) {
       rootStyles.push(style);
@@ -151,7 +145,7 @@ export default class Svg extends Shape<
 
     let override = false;
     const overrideStyles: ViewStyle = {};
-    const o = opacity != null ? +opacity : NaN;
+    const o = opacity != null ? extractOpacity(opacity) : NaN;
     if (!isNaN(o)) {
       override = true;
       overrideStyles.opacity = o;
@@ -183,28 +177,28 @@ export default class Svg extends Shape<
 
     extractResponder(props, props, this as ResponderInstanceProps);
 
-    const tint = extractColor(color);
-    if (tint != null) {
-      props.color = tint;
-      props.tintColor = tint;
+    const gStyle = Object.assign({}, StyleSheet.flatten(style));
+    if (transform) {
+      if (gStyle.transform) {
+        props.transform = gStyle.transform;
+        gStyle.transform = undefined;
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      props.transform = extractTransformSvgView(props as any);
     }
 
-    if (onLayout != null) {
-      props.onLayout = onLayout;
-    }
+    const RNSVGSvg = Platform.OS === 'android' ? RNSVGSvgAndroid : RNSVGSvgIOS;
 
     return (
       <RNSVGSvg
         {...props}
-        ref={this.refMethod}
-        {...extractViewBox({ viewBox, preserveAspectRatio })}
-      >
+        ref={(ref) => this.refMethod(ref as (Svg & NativeMethods) | null)}
+        {...extractViewBox({ viewBox, preserveAspectRatio })}>
         <G
           {...{
             children,
-            style,
+            style: gStyle,
             font,
-            transform,
             fill,
             fillOpacity,
             fillRule,
@@ -216,6 +210,7 @@ export default class Svg extends Shape<
             strokeLinecap,
             strokeLinejoin,
             strokeMiterlimit,
+            onLayout,
           }}
         />
       </RNSVGSvg>

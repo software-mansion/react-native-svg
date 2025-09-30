@@ -1,5 +1,5 @@
 import { PanResponder } from 'react-native';
-import {
+import type {
   extractedProps,
   ResponderInstanceProps,
   ResponderProps,

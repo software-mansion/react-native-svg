@@ -2,11 +2,7 @@
 
 #import "RNSVGUIKit.h"
 
-typedef enum RNSVGMarkerType {
-    kStartMarker,
-    kMidMarker,
-    kEndMarker
-} RNSVGMarkerType;
+typedef enum RNSVGMarkerType { kStartMarker, kMidMarker, kEndMarker } RNSVGMarkerType;
 
 #define RNSVGZEROPOINT CGRectZero.origin
 
@@ -18,8 +14,8 @@ typedef enum RNSVGMarkerType {
 @property (nonatomic, assign) float angle;
 
 // Instance creation
-+ (instancetype) markerPosition:(RNSVGMarkerType)type origin:(CGPoint)origin angle:(float)angle;
++ (instancetype)markerPosition:(RNSVGMarkerType)type origin:(CGPoint)origin angle:(float)angle;
 
-+ (NSArray<RNSVGMarkerPosition*>*) fromCGPath:(CGPathRef)path;
++ (NSArray<RNSVGMarkerPosition *> *)fromCGPath:(CGPathRef)path;
 
 @end

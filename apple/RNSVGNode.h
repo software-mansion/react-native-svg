@@ -6,10 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import <React/UIView+React.h>
-#import <React/RCTPointerEvents.h>
 #import "RNSVGCGFCRule.h"
 #import "RNSVGSvgView.h"
+#import "RNSVGUIKit.h"
+
+#import <React/RCTPointerEvents.h>
+#import <React/UIView+React.h>
+
 @class RNSVGGroup;
 
 /**
@@ -18,7 +21,6 @@
  */
 
 @interface RNSVGNode : RNSVGView
-
 /*
  N[1/Sqrt[2], 36]
  The inverse of the square root of 2.
@@ -36,6 +38,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 @property (nonatomic, strong) NSString *markerStart;
 @property (nonatomic, strong) NSString *markerMid;
 @property (nonatomic, strong) NSString *markerEnd;
+@property (nonatomic, strong) RNSVGPlatformView *parentComponentView;
 
 /**
  * Used to control how touch events are processed.
@@ -46,9 +49,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 @property (nonatomic, assign) CGAffineTransform ctm;
 @property (nonatomic, assign) CGAffineTransform screenCTM;
 @property (nonatomic, assign) CGAffineTransform matrix;
-@property (nonatomic, assign) CGAffineTransform transforms;
 @property (nonatomic, assign) CGAffineTransform invmatrix;
-@property (nonatomic, assign) CGAffineTransform invTransform;
 @property (nonatomic, assign) BOOL active;
 @property (nonatomic, assign) BOOL dirty;
 @property (nonatomic, assign) BOOL merging;
@@ -61,8 +62,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 @property (nonatomic, assign) CGRect fillBounds;
 @property (nonatomic, assign) CGRect strokeBounds;
 @property (nonatomic, assign) CGRect markerBounds;
-@property (nonatomic, copy) RCTDirectEventBlock onLayout;
-
+@property (nonatomic, copy) RCTDirectEventBlock onSvgLayout;
 
 /**
  * RNSVGSvgView which ownes current RNSVGNode
@@ -101,7 +101,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 /**
  * getPath will return the path inside node as a ClipPath.
  */
-- (CGPathRef)getPath:(CGContextRef) context;
+- (CGPathRef)getPath:(CGContextRef)context;
 
 - (CGFloat)relativeOnWidthString:(NSString *)length;
 
@@ -110,6 +110,8 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 - (CGFloat)relativeOnOtherString:(NSString *)length;
 
 - (CGFloat)relativeOn:(RNSVGLength *)length relative:(CGFloat)relative;
+
+- (CGFloat)relativeOnFraction:(RNSVGLength *)length relative:(CGFloat)relative;
 
 - (CGFloat)relativeOnWidth:(RNSVGLength *)length;
 
@@ -137,5 +139,14 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 - (void)clearChildCache;
 
 - (void)clearPath;
+
+/**
+ * get canvas dimensions
+ */
+- (CGFloat)getCanvasWidth;
+
+- (CGFloat)getCanvasHeight;
+
+- (void)setTransforms:(CGAffineTransform)transforms;
 
 @end

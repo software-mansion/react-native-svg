@@ -1,0 +1,33 @@
+name: Test JS build
+concurrency:
+  group: js-${{ github.ref }}
+  cancel-in-progress: true
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Get react-native-svg node_modules cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-svg-${{ hashFiles('yarn.lock') }}
+          restore-keys: ${{ runner.os }}-node-modules-svg-
+
+      - name: Install react-native-svg node_modules
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: yarn bob
+
+      - name: Test and lint
+        run: yarn test

@@ -7,8 +7,8 @@
  */
 
 typedef enum {
-    kRNSVGUndefinedType,
-    kRNSVGLinearGradient,
-    kRNSVGRadialGradient,
-    kRNSVGPattern
+  kRNSVGUndefinedType,
+  kRNSVGLinearGradient,
+  kRNSVGRadialGradient,
+  kRNSVGPattern
 } RNSVGBrushType;

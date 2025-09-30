@@ -8,14 +8,14 @@
 
 #import "RCTConvert+RNSVG.h"
 #import "RNSVGBrushType.h"
-#import "RNSVGUnits.h"
 #import "RNSVGLength.h"
+#import "RNSVGUnits.h"
 
 @class RNSVGPattern;
 
 @interface RNSVGPainter : NSObject
 
-@property (nonatomic, assign) RNSVGPattern* pattern;
+@property (nonatomic, assign) RNSVGPattern *pattern;
 @property (nonatomic, assign) CGRect paintBounds;
 @property (nonatomic, assign) bool useObjectBoundingBoxForContentUnits;
 @property (nonatomic, assign) CGRect bounds;

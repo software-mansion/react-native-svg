@@ -1,0 +1,371 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Midl Include="ReactPackageProvider.idl" />
+    <Midl Include="Views.idl">
+      <Filter>IDLs</Filter>
+    </Midl>
+    <Midl Include="ViewProps.idl">
+      <Filter>IDLs</Filter>
+    </Midl>
+    <Midl Include="ViewManagers.idl">
+      <Filter>IDLs</Filter>
+    </Midl>
+    <Midl Include="Types.idl">
+      <Filter>IDLs</Filter>
+    </Midl>
+    <Midl Include="Paper.idl">
+      <Filter>IDLs</Filter>
+    </Midl>
+    <Midl Include="Fabric.idl">
+      <Filter>IDLs</Filter>
+    </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+    <ClCompile Include="ReactPackageProvider.cpp" />
+    <ClCompile Include="CircleViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="DefsViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="EllipseViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="LineViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="PathViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="RectViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="SvgViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="UseViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="D2DBrush.cpp">
+      <Filter>D2DWrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="D2DDevice.cpp">
+      <Filter>D2DWrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="D2DDeviceContext.cpp">
+      <Filter>D2DWrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="D2DGeometry.cpp">
+      <Filter>D2DWrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectXDeviceManager.cpp">
+      <Filter>D2DWrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="PathView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="LineView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="EllipseView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="ClipPathView.cpp">
+      <Filter>Views\Group</Filter>
+    </ClCompile>
+    <ClCompile Include="DefsView.cpp">
+      <Filter>Views\Group</Filter>
+    </ClCompile>
+    <ClCompile Include="GroupView.cpp">
+      <Filter>Views\Group</Filter>
+    </ClCompile>
+    <ClCompile Include="MarkerView.cpp">
+      <Filter>Views\Group</Filter>
+    </ClCompile>
+    <ClCompile Include="MaskView.cpp">
+      <Filter>Views\Group</Filter>
+    </ClCompile>
+    <ClCompile Include="SymbolView.cpp">
+      <Filter>Views\Group</Filter>
+    </ClCompile>
+    <ClCompile Include="BrushView.cpp">
+      <Filter>Views\Group\Brush</Filter>
+    </ClCompile>
+    <ClCompile Include="LinearGradientView.cpp">
+      <Filter>Views\Group\Brush</Filter>
+    </ClCompile>
+    <ClCompile Include="PatternView.cpp">
+      <Filter>Views\Group\Brush</Filter>
+    </ClCompile>
+    <ClCompile Include="RadialGradientView.cpp">
+      <Filter>Views\Group\Brush</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="SvgView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="UseView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="RectView.cpp">
+      <Filter>Views</Filter>
+    </ClCompile>
+    <ClCompile Include="TextView.cpp">
+      <Filter>Views\Group\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="TSpanView.cpp">
+      <Filter>Views\Group\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="SVGLength.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ClipPathViewManager.cpp">
+      <Filter>ViewManagers\Group</Filter>
+    </ClCompile>
+    <ClCompile Include="GroupViewManager.cpp">
+      <Filter>ViewManagers\Group</Filter>
+    </ClCompile>
+    <ClCompile Include="MarkerViewManager.cpp">
+      <Filter>ViewManagers\Group</Filter>
+    </ClCompile>
+    <ClCompile Include="MaskViewManager.cpp">
+      <Filter>ViewManagers\Group</Filter>
+    </ClCompile>
+    <ClCompile Include="SymbolViewManager.cpp">
+      <Filter>ViewManagers\Group</Filter>
+    </ClCompile>
+    <ClCompile Include="LinearGradientViewManager.cpp">
+      <Filter>ViewManagers\Group\Brush</Filter>
+    </ClCompile>
+    <ClCompile Include="PatternViewManager.cpp">
+      <Filter>ViewManagers\Group\Brush</Filter>
+    </ClCompile>
+    <ClCompile Include="RadialGradientViewManager.cpp">
+      <Filter>ViewManagers\Group\Brush</Filter>
+    </ClCompile>
+    <ClCompile Include="TextViewManager.cpp">
+      <Filter>ViewManagers\Group\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="UnsupportedSvgViewManager.cpp">
+      <Filter>ViewManagers</Filter>
+    </ClCompile>
+    <ClCompile Include="TSpanViewManager.cpp">
+      <Filter>ViewManagers\Group\Text</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="ReactPackageProvider.h" />
+    <ClInclude Include="RNSVGModule.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="CircleViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="DefsViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="EllipseViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="LineViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="PathViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="RectViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="SvgViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="UseViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="D2DBrush.h">
+      <Filter>D2DWrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="D2DDevice.h">
+      <Filter>D2DWrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="D2DDeviceContext.h">
+      <Filter>D2DWrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="D2DGeometry.h">
+      <Filter>D2DWrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectXDeviceManager.h">
+      <Filter>D2DWrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="D2DHelpers.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="SVGLength.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="UseView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="SvgView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="RectView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="PathView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="LineView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="EllipseView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleView.h">
+      <Filter>Views</Filter>
+    </ClInclude>
+    <ClInclude Include="ClipPathView.h">
+      <Filter>Views\Group</Filter>
+    </ClInclude>
+    <ClInclude Include="DefsView.h">
+      <Filter>Views\Group</Filter>
+    </ClInclude>
+    <ClInclude Include="GroupView.h">
+      <Filter>Views\Group</Filter>
+    </ClInclude>
+    <ClInclude Include="MarkerView.h">
+      <Filter>Views\Group</Filter>
+    </ClInclude>
+    <ClInclude Include="MaskView.h">
+      <Filter>Views\Group</Filter>
+    </ClInclude>
+    <ClInclude Include="SymbolView.h">
+      <Filter>Views\Group</Filter>
+    </ClInclude>
+    <ClInclude Include="BrushView.h">
+      <Filter>Views\Group\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="LinearGradientView.h">
+      <Filter>Views\Group\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="PatternView.h">
+      <Filter>Views\Group\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="RadialGradientView.h">
+      <Filter>Views\Group\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="TextView.h">
+      <Filter>Views\Group\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="TSpanView.h">
+      <Filter>Views\Group\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="ClipPathViewManager.h">
+      <Filter>ViewManagers\Group</Filter>
+    </ClInclude>
+    <ClInclude Include="GroupViewManager.h">
+      <Filter>ViewManagers\Group</Filter>
+    </ClInclude>
+    <ClInclude Include="MarkerViewManager.h">
+      <Filter>ViewManagers\Group</Filter>
+    </ClInclude>
+    <ClInclude Include="MaskViewManager.h">
+      <Filter>ViewManagers\Group</Filter>
+    </ClInclude>
+    <ClInclude Include="SymbolViewManager.h">
+      <Filter>ViewManagers\Group</Filter>
+    </ClInclude>
+    <ClInclude Include="LinearGradientViewManager.h">
+      <Filter>ViewManagers\Group\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="PatternViewManager.h">
+      <Filter>ViewManagers\Group\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="RadialGradientViewManager.h">
+      <Filter>ViewManagers\Group\Brush</Filter>
+    </ClInclude>
+    <ClInclude Include="TextViewManager.h">
+      <Filter>ViewManagers\Group\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="UnsupportedSvgViewManager.h">
+      <Filter>ViewManagers</Filter>
+    </ClInclude>
+    <ClInclude Include="TSpanViewManager.h">
+      <Filter>ViewManagers\Group\Text</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PropertySheet.props" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="ViewManagers">
+      <UniqueIdentifier>{3cca2e46-5d4d-47f9-ab24-a74775813566}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D2DWrappers">
+      <UniqueIdentifier>{11cd109d-9693-4379-b313-91e84a088dc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IDLs">
+      <UniqueIdentifier>{01cd3fc8-d908-49ea-ac93-8a059a60ee52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{55dd67d5-d7d5-46de-9b24-19c9be48ccf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Views">
+      <UniqueIdentifier>{7ca32ee4-8ca3-4d97-bda7-0e97f99bc602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Views\Group">
+      <UniqueIdentifier>{77129028-b876-41ef-8a85-ac26692ba778}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Views\Group\Brush">
+      <UniqueIdentifier>{6d94c69a-4512-4f21-9ae1-f69a4c26bef2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Views\Group\Text">
+      <UniqueIdentifier>{e3339b4a-0b3f-462c-a379-5d273e5983c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ViewManagers\Group">
+      <UniqueIdentifier>{a05877e3-02b7-4cb9-9068-a53577e33c6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ViewManagers\Group\Brush">
+      <UniqueIdentifier>{c64cf11f-6756-40fa-ad9d-4b0a6ec9352a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ViewManagers\Group\Text">
+      <UniqueIdentifier>{89263b15-eac2-4cbd-9e22-0ddbbb893da3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="RNSVG.rc" />
+  </ItemGroup>
+</Project>

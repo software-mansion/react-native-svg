@@ -1,13 +1,20 @@
-import React from 'react';
+import type { ReactNode } from 'react';
+import * as React from 'react';
 import extractViewBox from '../lib/extract/extractViewBox';
 import Shape from './Shape';
-import { RNSVGSymbol } from './NativeComponents';
+import RNSVGSymbol from '../fabric/SymbolNativeComponent';
+import type { NumberProp } from '../lib/extract/types';
+import type { NativeMethods } from 'react-native';
 
-export default class Symbol extends Shape<{
+export interface SymbolProps {
+  children?: ReactNode;
   id?: string;
   viewBox?: string;
   preserveAspectRatio?: string;
-}> {
+  opacity?: NumberProp;
+}
+
+export default class Symbol extends Shape<SymbolProps> {
   static displayName = 'Symbol';
 
   render() {
@@ -16,10 +23,9 @@ export default class Symbol extends Shape<{
     const symbolProps = { name: id };
     return (
       <RNSVGSymbol
-        ref={this.refMethod}
+        ref={(ref) => this.refMethod(ref as Shape<SymbolProps> & NativeMethods)}
         {...symbolProps}
-        {...extractViewBox(props)}
-      >
+        {...extractViewBox(props)}>
         {children}
       </RNSVGSymbol>
     );

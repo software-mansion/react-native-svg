@@ -1,26 +1,25 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "lib": ["es6", "es2016"],
+    "baseUrl": ".",
+    "declaration": true,
+    "paths": {
+      "react-native-svg": ["./src"],
+      "react-native-svg/css": ["./src/css/index.tsx"],
+      "react-native-svg/filter-image": ["./src/filter-image/index.tsx"]
+    },
+    "preserveSymlinks": true,
+    "target": "es6",
+    "module": "ESNext",
     "jsx": "react-native",
-    "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
+    "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["react", "react-native"]
+    "moduleResolution": "node",
+    "lib": ["es6", "dom"],
+    "esModuleInterop": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true
   },
-  "files": [
-    "src/index.d.ts"
-  ],
-  "include": ["src/index.ts"]
+  "include": ["src"]
 }

@@ -6,56 +6,72 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-
 package com.horcrux.svg;
-
 
 import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.uimanager.annotations.ReactProp;
+import java.util.ArrayList;
 
 @SuppressLint("ViewConstructor")
 class CircleView extends RenderableView {
-    private SVGLength mCx;
-    private SVGLength mCy;
-    private SVGLength mR;
+  private SVGLength mCx;
+  private SVGLength mCy;
+  private SVGLength mR;
 
-    public CircleView(ReactContext reactContext) {
-        super(reactContext);
-    }
+  public CircleView(ReactContext reactContext) {
+    super(reactContext);
+  }
 
-    @ReactProp(name = "cx")
-    public void setCx(Dynamic cx) {
-        mCx = SVGLength.from(cx);
-        invalidate();
-    }
+  public void setCx(Dynamic cx) {
+    mCx = SVGLength.from(cx);
+    invalidate();
+  }
 
-    @ReactProp(name = "cy")
-    public void setCy(Dynamic cy) {
-        mCy = SVGLength.from(cy);
-        invalidate();
-    }
+  public void setCy(Dynamic cy) {
+    mCy = SVGLength.from(cy);
+    invalidate();
+  }
 
-    @ReactProp(name = "r")
-    public void setR(Dynamic r) {
-        mR = SVGLength.from(r);
-        invalidate();
-    }
+  public void setR(Dynamic r) {
+    mR = SVGLength.from(r);
+    invalidate();
+  }
 
-    @Override
-    Path getPath(Canvas canvas, Paint paint) {
-        Path path = new Path();
+  @Override
+  Path getPath(Canvas canvas, Paint paint) {
+    Path path = new Path();
 
-        double cx = relativeOnWidth(mCx);
-        double cy = relativeOnHeight(mCy);
-        double r = relativeOnOther(mR);
+    double cx = relativeOnWidth(mCx);
+    double cy = relativeOnHeight(mCy);
+    double r = relativeOnOther(mR);
 
-        path.addCircle((float) cx, (float) cy, (float) r, Path.Direction.CW);
-        return path;
-    }
+    path.addCircle((float) cx, (float) cy, (float) r, Path.Direction.CW);
+
+    elements = new ArrayList<>();
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementMoveToPoint, new Point[] {new Point(cx, cy - r)}));
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementAddLineToPoint,
+            new Point[] {new Point(cx, cy - r), new Point(cx + r, cy)}));
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementAddLineToPoint,
+            new Point[] {new Point(cx + r, cy), new Point(cx, cy + r)}));
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementAddLineToPoint,
+            new Point[] {new Point(cx, cy + r), new Point(cx - r, cy)}));
+    elements.add(
+        new PathElement(
+            ElementType.kCGPathElementAddLineToPoint,
+            new Point[] {new Point(cx - r, cy), new Point(cx, cy - r)}));
+
+    return path;
+  }
 }

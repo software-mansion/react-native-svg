@@ -1,0 +1,10 @@
+{
+  "ios": {
+    "paper": [],
+    "fabric": []
+  },
+  "android": {
+    "paper": ["2"],
+    "fabric": ["2"]
+  }
+}

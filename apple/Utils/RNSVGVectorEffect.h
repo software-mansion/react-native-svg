@@ -7,8 +7,8 @@
  */
 
 typedef CF_ENUM(int32_t, RNSVGVectorEffect) {
-    kRNSVGVectorEffectDefault,
-    kRNSVGVectorEffectNonScalingStroke,
-    kRNSVGVectorEffectInherit,
-    kRNSVGVectorEffectUri
+  kRNSVGVectorEffectDefault,
+  kRNSVGVectorEffectNonScalingStroke,
+  kRNSVGVectorEffectInherit,
+  kRNSVGVectorEffectUri
 };

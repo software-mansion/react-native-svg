@@ -25,6 +25,6 @@
 - (CGPathRef)getGroupPath:(CGContextRef)context;
 - (CTFontRef)getFontFromContext;
 - (CGFloat)getSubtreeTextChunksTotalAdvance;
-- (RNSVGText*)getTextAnchorRoot;
+- (RNSVGText *)getTextAnchorRoot;
 
 @end

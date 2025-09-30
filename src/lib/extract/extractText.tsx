@@ -1,9 +1,12 @@
-import React, { Children, ComponentType } from 'react';
+import type { ComponentType } from 'react';
+import * as React from 'react';
+import { Children } from 'react';
 import extractLengthList from './extractLengthList';
 import { pickNotNil } from '../util';
-import { NumberArray, NumberProp } from './types';
+import type { NumberArray, NumberProp } from './types';
 
-const fontRegExp = /^\s*((?:(?:normal|bold|italic)\s+)*)(?:(\d+(?:\.\d+)?(?:%|px|em|pt|pc|mm|cm|in]))*(?:\s*\/.*?)?\s+)?\s*"?([^"]*)/i;
+const fontRegExp =
+  /^\s*((?:(?:normal|bold|italic)\s+)*)(?:(\d+(?:\.\d+)?(?:%|px|em|pt|pc|mm|cm|in]))*(?:\s*\/.*?)?\s+)?\s*"?([^"]*)/i;
 const fontFamilyPrefix = /^[\s"']*/;
 const fontFamilySuffix = /[\s"']*$/;
 const commaReg = /\s*,\s*/g;
@@ -30,7 +33,7 @@ function extractSingleFontFamily(fontFamilyString?: string) {
 }
 
 function parseFontString(font: string) {
-  if (cachedFontObjectsFromString.hasOwnProperty(font)) {
+  if (Object.prototype.hasOwnProperty.call(cachedFontObjectsFromString, font)) {
     return cachedFontObjectsFromString[font];
   }
   const match = fontRegExp.exec(font);
@@ -111,13 +114,17 @@ export function extractFont(props: fontProps) {
   return { ...baseFont, ...ownedFont };
 }
 
-let TSpan: ComponentType;
+let TSpan: ComponentType<React.PropsWithChildren>;
 
 export function setTSpan(TSpanImplementation: ComponentType) {
   TSpan = TSpanImplementation;
 }
 
-function getChild(child: undefined | string | number | ComponentType) {
+export type TextChild =
+  | (undefined | string | number | ComponentType | React.ReactElement)
+  | TextChild[];
+
+function getChild(child: TextChild) {
   if (typeof child === 'string' || typeof child === 'number') {
     return <TSpan>{String(child)}</TSpan>;
   } else {
@@ -131,7 +138,7 @@ export type TextProps = {
   dx?: NumberArray;
   dy?: NumberArray;
   rotate?: NumberArray;
-  children?: string | number | (string | number | ComponentType)[];
+  children?: TextChild;
   inlineSize?: NumberProp;
   baselineShift?: NumberProp;
   verticalAlign?: NumberProp;

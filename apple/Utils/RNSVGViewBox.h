@@ -12,6 +12,9 @@
 
 @interface RNSVGViewBox : NSObject
 
-+ (CGAffineTransform)getTransform:(CGRect)vbRect eRect:(CGRect)eRect align:(NSString *)align meetOrSlice:(RNSVGVBMOS)meetOrSlice;
++ (CGAffineTransform)getTransform:(CGRect)vbRect
+                            eRect:(CGRect)eRect
+                            align:(NSString *)align
+                      meetOrSlice:(RNSVGVBMOS)meetOrSlice;
 
 @end

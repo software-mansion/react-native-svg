@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "web-example",
+    "slug": "web-example",
+    "version": "1.0.0",
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-asset"
+    ]
+  }
+}

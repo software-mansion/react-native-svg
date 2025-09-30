@@ -1,9 +1,11 @@
-import React, { Children, ReactElement } from 'react';
+import type { ReactElement } from 'react';
+import * as React from 'react';
+import { Children } from 'react';
+import { processColor } from 'react-native';
 
-import extractColor from './extractColor';
 import extractOpacity from './extractOpacity';
 import extractTransform from './extractTransform';
-import { TransformProps } from './types';
+import type { TransformProps } from './types';
 import units from '../units';
 
 const percentReg = /^([+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)(%?)$/;
@@ -14,7 +16,7 @@ function percentToFloat(
     | string
     | {
         __getAnimatedValue: () => number;
-      },
+      }
 ): number {
   if (typeof percent === 'number') {
     return percent;
@@ -41,11 +43,11 @@ export default function extractGradient(
   props: {
     id?: string;
     children?: ReactElement[];
-    transform?: number[] | string | TransformProps;
-    gradientTransform?: number[] | string | TransformProps;
+    transform?: TransformProps['transform'];
+    gradientTransform?: TransformProps['transform'];
     gradientUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
   } & TransformProps,
-  parent: {},
+  parent: unknown
 ) {
   const { id, children, gradientTransform, transform, gradientUnits } = props;
   if (!id) {
@@ -54,10 +56,10 @@ export default function extractGradient(
 
   const stops = [];
   const childArray = children
-    ? Children.map(children, child =>
+    ? Children.map(children, (child) =>
         React.cloneElement(child, {
           parent,
-        }),
+        })
       )
     : [];
   const l = childArray.length;
@@ -71,10 +73,10 @@ export default function extractGradient(
       },
     } = childArray[i];
     const offsetNumber = percentToFloat(offset || 0);
-    const color = stopColor && extractColor(stopColor);
+    const color = stopColor && processColor(stopColor);
     if (typeof color !== 'number' || isNaN(offsetNumber)) {
       console.warn(
-        `"${stopColor}" is not a valid color or "${offset}" is not a valid offset`,
+        `"${stopColor}" is not a valid color or "${offset}" is not a valid offset`
       );
       continue;
     }
@@ -96,7 +98,7 @@ export default function extractGradient(
     children: childArray,
     gradientUnits: (gradientUnits && units[gradientUnits]) || 0,
     gradientTransform: extractTransform(
-      gradientTransform || transform || props,
+      gradientTransform || transform || props
     ),
   };
 }

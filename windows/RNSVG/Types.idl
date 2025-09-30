@@ -1,0 +1,134 @@
+namespace RNSVG {
+  enum SVGClass {
+    RNSVGGroup,
+    RNSVGPath,
+    RNSVGText,
+    RNSVGTSpan,
+    RNSVGTextPath,
+    RNSVGImage,
+    RNSVGCircle,
+    RNSVGEllipse,
+    RNSVGLine,
+    RNSVGRect,
+    RNSVGClipPath,
+    RNSVGDefs,
+    RNSVGUse,
+    RNSVGSymbol,
+    RNSVGLinearGradient,
+    RNSVGRadialGradient,
+    RNSVGPattern,
+    RNSVGMask,
+    RNSVGMarker,
+    RNSVGForeignObject,
+    Unknown,
+  };
+
+  // https://github.com/software-mansion/react-native-svg/blob/main/src/lib/extract/extractViewBox.ts#L3-L10
+  enum MeetOrSlice {
+    Meet,
+    Slice,
+    None,
+  };
+
+  enum BaseProp {
+    Matrix,
+    Fill,
+    FillOpacity,
+    FillRule,
+    Stroke,
+    StrokeOpacity,
+    StrokeWidth,
+    StrokeMiterLimit,
+    StrokeDashOffset,
+    StrokeDashArray,
+    StrokeLineCap,
+    StrokeLineJoin,
+    Unknown,
+  };
+
+  enum FontProp {
+    FontSize,
+    FontWeight,
+    FontFamily,
+    Unknown,
+  };
+
+  enum LengthType
+  {
+    Unknown,
+    Number,
+    Percentage,
+    EMS,
+    EXS,
+    Pixel,
+    Centimeter,
+    Millimeter,
+    Inch,
+    Point,
+    Pica,
+  };
+
+  // https://github.com/software-mansion/react-native-svg/blob/main/src/lib/extract/extractStroke.ts#L6-L10
+  enum LineCap {
+    Butt,
+    Round,
+    Square,
+  };
+
+  // https://github.com/software-mansion/react-native-svg/blob/main/src/lib/extract/extractStroke.ts#L12-L16
+  enum LineJoin {
+    Miter,
+    Round,
+    Bevel,
+  };
+
+  // https://github.com/software-mansion/react-native-svg/blob/main/src/lib/extract/extractFill.ts#L6-L9
+  enum FillRule {
+    EvenOdd,
+    NonZero,
+  };
+
+  // https://github.com/software-mansion/react-native-svg/blob/main/src/lib/extract/extractStroke.ts#L18-L25
+  //enum VectorEffect {
+  //  None,
+  //  NonScalingStroke,
+  //  Inherit,
+  //  Uri,
+  //};
+
+  struct SVGLength {
+    Single Value;
+    LengthType Unit;
+  };
+
+  [default_interface]
+  runtimeclass D2DDevice {
+    D2DDevice();
+  };
+
+  [default_interface]
+  runtimeclass D2DDeviceContext {
+    D2DDeviceContext();
+  };
+
+  [default_interface]
+  runtimeclass D2DGeometry {
+    D2DGeometry();
+  };
+
+  [default_interface]
+  runtimeclass D2DBrush {
+    D2DBrush();
+  };
+
+  [default_interface]
+  runtimeclass DirectXDeviceManager {
+    DirectXDeviceManager();
+
+    D2DDevice Device{ get; };
+    D2DDeviceContext DeviceContext{ get; };
+
+    void CreateDeviceResourcesIfNeeded();
+    void DiscardDeviceResources();
+  };
+}

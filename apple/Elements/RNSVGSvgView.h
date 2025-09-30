@@ -8,14 +8,18 @@
 
 #import "RNSVGUIKit.h"
 
-#import "RNSVGPainter.h"
 #import "RNSVGContainer.h"
+#import "RNSVGPainter.h"
 #import "RNSVGVBMOS.h"
 
 @class RNSVGNode;
+@class RNSVGMarker;
+@class RNSVGMask;
+@class RNSVGFilter;
 
 @interface RNSVGSvgView : RNSVGView <RNSVGContainer>
 
+@property (nonatomic, strong) RNSVGColor *color;
 @property (nonatomic, strong) RNSVGLength *bbWidth;
 @property (nonatomic, strong) RNSVGLength *bbHeight;
 @property (nonatomic, assign) CGFloat minX;
@@ -30,6 +34,7 @@
 @property (nonatomic, assign) CGAffineTransform initialCTM;
 @property (nonatomic, assign) CGAffineTransform invInitialCTM;
 @property (nonatomic, assign) CGAffineTransform viewBoxTransform;
+@property (nonatomic, assign) UIEdgeInsets hitTestEdgeInsets;
 
 /**
  * define <ClipPath></ClipPath> content as clipPath template.
@@ -38,7 +43,7 @@
 
 - (RNSVGNode *)getDefinedClipPath:(NSString *)clipPathName;
 
-- (void)defineTemplate:(__kindof RNSVGNode *)template templateName:(NSString *)templateName;
+- (void)defineTemplate:(__kindof RNSVGNode *)definedTemplate templateName:(NSString *)templateName;
 
 - (RNSVGNode *)getDefinedTemplate:(NSString *)templateName;
 
@@ -46,17 +51,19 @@
 
 - (RNSVGPainter *)getDefinedPainter:(NSString *)painterName;
 
-- (void)defineMarker:(RNSVGNode *)marker markerName:(NSString *)markerName;
+- (void)defineMarker:(RNSVGMarker *)marker markerName:(NSString *)markerName;
 
-- (RNSVGNode *)getDefinedMarker:(NSString *)markerName;
+- (RNSVGMarker *)getDefinedMarker:(NSString *)markerName;
 
-- (void)defineMask:(RNSVGNode *)mask maskName:(NSString *)maskName;
+- (void)defineMask:(RNSVGMask *)mask maskName:(NSString *)maskName;
 
-- (RNSVGNode *)getDefinedMask:(NSString *)maskName;
+- (RNSVGMask *)getDefinedMask:(NSString *)maskName;
 
-- (NSString *)getDataURL;
+- (void)defineFilter:(RNSVGFilter *)filter filterName:(NSString *)filterName;
 
-- (NSString *)getDataURLwithBounds:(CGRect)bounds;
+- (RNSVGFilter *)getDefinedFilter:(NSString *)filterName;
+
+- (NSString *)getDataURLWithBounds:(CGRect)bounds;
 
 - (CGRect)getContextBounds;
 
@@ -65,5 +72,7 @@
 - (void)drawToContext:(CGContextRef)context withRect:(CGRect)rect;
 
 - (CGAffineTransform)getViewBoxTransform;
+
+- (CGAffineTransform)getInvViewBoxTransform;
 
 @end

@@ -1,24 +1,28 @@
-import React from 'react';
+import type { ReactNode } from 'react';
+import * as React from 'react';
 import extractTransform from '../lib/extract/extractTransform';
 import extractViewBox from '../lib/extract/extractViewBox';
-import { NumberProp, TransformProps } from '../lib/extract/types';
+import type { NumberProp, TransformProps, Units } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
-import { RNSVGPattern } from './NativeComponents';
+import RNSVGPattern from '../fabric/PatternNativeComponent';
+import type { NativeMethods } from 'react-native';
 
-export default class Pattern extends Shape<{
+export interface PatternProps extends TransformProps {
+  children?: ReactNode;
   id?: string;
   x?: NumberProp;
   y?: NumberProp;
   width?: NumberProp;
   height?: NumberProp;
+  patternTransform?: TransformProps['transform'];
+  patternUnits?: Units;
+  patternContentUnits?: Units;
   viewBox?: string;
   preserveAspectRatio?: string;
-  transform?: number[] | string | TransformProps;
-  patternTransform?: number[] | string | TransformProps;
-  patternUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
-  patternContentUnits?: 'objectBoundingBox' | 'userSpaceOnUse';
-}> {
+}
+
+export default class Pattern extends Shape<PatternProps> {
   static displayName = 'Pattern';
 
   static defaultProps = {
@@ -46,11 +50,11 @@ export default class Pattern extends Shape<{
     } = props;
     const matrix = extractTransform(patternTransform || transform || props);
     const patternProps = {
-      name: id,
       x,
       y,
       width,
       height,
+      name: id,
       matrix,
       patternTransform: matrix,
       patternUnits: (patternUnits && units[patternUnits]) || 0,
@@ -58,10 +62,9 @@ export default class Pattern extends Shape<{
     };
     return (
       <RNSVGPattern
-        ref={this.refMethod}
+        ref={(ref) => this.refMethod(ref as (Pattern & NativeMethods) | null)}
         {...patternProps}
-        {...extractViewBox({ viewBox, preserveAspectRatio })}
-      >
+        {...extractViewBox({ viewBox, preserveAspectRatio })}>
         {children}
       </RNSVGPattern>
     );

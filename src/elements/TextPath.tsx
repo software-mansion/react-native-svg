@@ -1,31 +1,42 @@
-import React, { Component } from 'react';
+import type { Component } from 'react';
+import * as React from 'react';
 import extractTransform from '../lib/extract/extractTransform';
 import { withoutXY } from '../lib/extract/extractProps';
-import { NumberProp, TransformProps } from '../lib/extract/types';
+import type {
+  ColumnMajorTransformMatrix,
+  NumberProp,
+  TextPathMethod,
+  TextPathMidLine,
+  TextPathSpacing,
+  TextSpecificProps,
+  TransformProps,
+} from '../lib/extract/types';
+import type { TextChild } from '../lib/extract/extractText';
 import extractText from '../lib/extract/extractText';
 import { idPattern, pickNotNil } from '../lib/util';
 import Shape from './Shape';
 import TSpan from './TSpan';
-import { RNSVGTextPath } from './NativeComponents';
+import RNSVGTextPath from '../fabric/TextPathNativeComponent';
 
-export default class TextPath extends Shape<{
-  children?: NumberProp | [NumberProp | React.ComponentType];
-  alignmentBaseline?: string;
-  startOffset?: NumberProp;
+export interface TextPathProps extends TextSpecificProps {
+  children?: TextChild;
   xlinkHref?: string;
-  midLine?: string;
-  spacing?: string;
-  method?: string;
   href?: string;
+  startOffset?: NumberProp;
+  method?: TextPathMethod;
+  spacing?: TextPathSpacing;
+  midLine?: TextPathMidLine;
   side?: string;
-}> {
+}
+
+export default class TextPath extends Shape<TextPathProps> {
   static displayName = 'TextPath';
 
   setNativeProps = (
-    props: Object & {
-      matrix?: number[];
-      style?: [] | {};
-    } & TransformProps,
+    props: object & {
+      matrix?: ColumnMajorTransformMatrix;
+      style?: [] | unknown;
+    } & TransformProps
   ) => {
     const matrix = !props.matrix && extractTransform(props);
     if (matrix) {
@@ -58,7 +69,7 @@ export default class TextPath extends Shape<{
           {
             children,
           },
-          true,
+          true
         ),
         {
           href: match,
@@ -68,7 +79,7 @@ export default class TextPath extends Shape<{
           side,
           alignmentBaseline,
           midLine,
-        },
+        }
       );
       props.ref = this.refMethod as (instance: Component | null) => void;
       return <RNSVGTextPath {...props} />;
@@ -77,7 +88,7 @@ export default class TextPath extends Shape<{
     console.warn(
       'Invalid `href` prop for `TextPath` element, expected a href like "#id", but got: "' +
         href +
-        '"',
+        '"'
     );
     return (
       <TSpan ref={this.refMethod as (instance: Component | null) => void}>

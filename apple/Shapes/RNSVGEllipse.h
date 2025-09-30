@@ -11,8 +11,8 @@
 #import "RNSVGPath.h"
 
 @interface RNSVGEllipse : RNSVGRenderable
-@property (nonatomic, strong) RNSVGLength* cx;
-@property (nonatomic, strong) RNSVGLength* cy;
-@property (nonatomic, strong) RNSVGLength* rx;
-@property (nonatomic, strong) RNSVGLength* ry;
+@property (nonatomic, strong) RNSVGLength *cx;
+@property (nonatomic, strong) RNSVGLength *cy;
+@property (nonatomic, strong) RNSVGLength *rx;
+@property (nonatomic, strong) RNSVGLength *ry;
 @end

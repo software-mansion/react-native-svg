@@ -1,10 +1,15 @@
-import React from 'react';
+import * as React from 'react';
 import Path from './Path';
 import Shape from './Shape';
-import { NumberProp } from '../lib/extract/types';
+import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import extractPolyPoints from '../lib/extract/extractPolyPoints';
 
-export default class Polygon extends Shape<{ points?: number[] }> {
+export interface PolygonProps extends CommonPathProps {
+  opacity?: NumberProp;
+  points?: string | ReadonlyArray<NumberProp>;
+}
+
+export default class Polygon extends Shape<PolygonProps> {
   static displayName = 'Polygon';
 
   static defaultProps = {
@@ -12,10 +17,9 @@ export default class Polygon extends Shape<{ points?: number[] }> {
   };
 
   setNativeProps = (
-    props: Object & {
-      points?: string | NumberProp[];
+    props: PolygonProps & {
       d?: string;
-    },
+    }
   ) => {
     const { points } = props;
     if (points) {

@@ -5,12 +5,7 @@
 const DEG_TO_RAD = Math.PI / 180;
 
 export const identity: [number, number, number, number, number, number] = [
-  1,
-  0,
-  0,
-  1,
-  0,
-  0,
+  1, 0, 0, 1, 0, 0,
 ];
 
 let a = 1;
@@ -75,7 +70,7 @@ export function append(
   c2: number,
   d2: number,
   tx2: number,
-  ty2: number,
+  ty2: number
 ) {
   const change = a2 !== 1 || b2 !== 0 || c2 !== 0 || d2 !== 1;
   const translate = tx2 !== 0 || ty2 !== 0;
@@ -136,7 +131,7 @@ export function appendTransform(
   skewX: number,
   skewY: number,
   regX: number,
-  regY: number,
+  regY: number
 ) {
   if (
     x === 0 &&

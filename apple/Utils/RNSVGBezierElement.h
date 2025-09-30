@@ -19,8 +19,7 @@
 @property (nonatomic, assign) CGPoint controlPoint2;
 
 // Instance creation
-+ (instancetype) elementWithPathElement: (CGPathElement) element;
-+ (NSArray *) elementsFromCGPath:(CGPathRef)path;
++ (instancetype)elementWithPathElement:(CGPathElement)element;
++ (NSArray *)elementsFromCGPath:(CGPathRef)path;
 
 @end
-

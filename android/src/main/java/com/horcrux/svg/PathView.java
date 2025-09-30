@@ -6,37 +6,38 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-
 package com.horcrux.svg;
 
 import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.uimanager.annotations.ReactProp;
 
 @SuppressLint("ViewConstructor")
 class PathView extends RenderableView {
-    private Path mPath;
+  private Path mPath;
 
-    public PathView(ReactContext reactContext) {
-        super(reactContext);
-        PathParser.mScale = mScale;
-        mPath = new Path();
+  public PathView(ReactContext reactContext) {
+    super(reactContext);
+    PathParser.mScale = mScale;
+    mPath = new Path();
+  }
+
+  public void setD(String d) {
+    mPath = PathParser.parse(d);
+    elements = PathParser.elements;
+    for (PathElement elem : elements) {
+      for (Point point : elem.points) {
+        point.x *= mScale;
+        point.y *= mScale;
+      }
     }
+    invalidate();
+  }
 
-    @ReactProp(name = "d")
-    public void setD(String d) {
-        mPath = PathParser.parse(d);
-        elements = PathParser.elements;
-        invalidate();
-    }
-
-    @Override
-    Path getPath(Canvas canvas, Paint paint) {
-        return mPath;
-    }
-
+  @Override
+  Path getPath(Canvas canvas, Paint paint) {
+    return mPath;
+  }
 }

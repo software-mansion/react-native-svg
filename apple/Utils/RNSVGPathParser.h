@@ -10,7 +10,7 @@
 
 @interface RNSVGPathParser : NSObject
 
-- (instancetype) initWithPathString:(NSString *)d;
+- (instancetype)initWithPathString:(NSString *)d;
 - (CGPathRef)getPath;
 
 @end
