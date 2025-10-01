@@ -23,6 +23,8 @@ jobs:
       matrix:
         working-directory: [paper-example, fabric-example]
       fail-fast: false
+    env:
+      DEVICE: iPhone 17 Pro
     concurrency:
       group: ios-${{ matrix.working-directory }}-${{ github.ref }}
       cancel-in-progress: true
