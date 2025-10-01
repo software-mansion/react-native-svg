@@ -18,7 +18,7 @@ on:
 jobs:
   build:
     if: github.repository == 'software-mansion/react-native-svg'
-    runs-on: macos-14
+    runs-on: macos-latest
     strategy:
       matrix:
         working-directory: [paper-macos-example, fabric-macos-example]
