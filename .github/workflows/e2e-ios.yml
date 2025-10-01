@@ -2,7 +2,7 @@ name: E2E iOS
 on:
   pull_request:
     paths:
-      - .github/workflows/ios-e2e.yml
+      - .github/workflows/e2e-ios.yml
       - apps/common/example/**
       - apple/**
       - src/**
