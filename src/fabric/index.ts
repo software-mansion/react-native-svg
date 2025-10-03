@@ -24,6 +24,7 @@ import RNSVGFilter from './FilterNativeComponent';
 import RNSVGFeBlend from './FeBlendNativeComponent';
 import RNSVGFeColorMatrix from './FeColorMatrixNativeComponent';
 import RNSVGFeComposite from './FeCompositeNativeComponent';
+import RNSVGFeConvolveMatrix from './FeConvolveMatrixNativeComponent';
 import RNSVGFeFlood from './FeFloodNativeComponent';
 import RNSVGFeGaussianBlur from './FeGaussianBlurNativeComponent';
 import RNSVGFeMerge from './FeMergeNativeComponent';
@@ -56,6 +57,7 @@ export {
   RNSVGFeBlend,
   RNSVGFeColorMatrix,
   RNSVGFeComposite,
+  RNSVGFeConvolveMatrix,
   RNSVGFeFlood,
   RNSVGFeGaussianBlur,
   RNSVGFeMerge,
