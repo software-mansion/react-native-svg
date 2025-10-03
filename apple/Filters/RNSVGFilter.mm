@@ -166,11 +166,13 @@ using namespace facebook::react;
 - (CIImage *)getMaskFromRect:(CGContext *)context rect:(CGRect)rect ctm:(CGAffineTransform)ctm
 {
   CGPathRef path = CGPathCreateWithRect(rect, nil);
-  path = CGPathCreateCopyByTransformingPath(path, &ctm);
+  CGPathRef transformedPath = CGPathCreateCopyByTransformingPath(path, &ctm);
+  CGPathRelease(path);
 
   CGContextSetRGBFillColor(context, 255, 255, 255, 255);
-  CGContextAddPath(context, path);
+  CGContextAddPath(context, transformedPath);
   CGContextFillPath(context);
+  CGPathRelease(transformedPath);
 
   CGImage *maskImage = CGBitmapContextCreateImage(context);
   CIImage *ciMaskImage = [CIImage imageWithCGImage:maskImage];

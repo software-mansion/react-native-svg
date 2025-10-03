@@ -181,6 +181,7 @@
     wght_id = (CFNumberRef)axisId;
     break;
   }
+  CFRelease(cgAxes);
 
   if (wght_id == 0) {
     return ref;
