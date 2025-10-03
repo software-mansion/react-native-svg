@@ -212,7 +212,7 @@ using namespace facebook::react;
     return nil;
   }
   CGPathRef path = [definedTemplate getPath:context];
-  return CGPathCreateCopyByTransformingPath(path, &transform);
+  return (CGPathRef)CFAutorelease(CGPathCreateCopyByTransformingPath(path, &transform));
 }
 
 @end
