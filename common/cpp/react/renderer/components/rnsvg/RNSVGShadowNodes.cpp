@@ -12,6 +12,7 @@ extern const char RNSVGFeCompositeComponentName[] = "RNSVGFeComposite";
 extern const char RNSVGFeFloodComponentName[] = "RNSVGFeFlood";
 extern const char RNSVGFeGaussianBlurComponentName[] = "RNSVGFeGaussianBlur";
 extern const char RNSVGFeMergeComponentName[] = "RNSVGFeMerge";
+extern const char RNSVGFeMorphologyComponentName[] = "RNSVGFeMorphology";
 extern const char RNSVGFeOffsetComponentName[] = "RNSVGFeOffset";
 extern const char RNSVGFilterComponentName[] = "RNSVGFilter";
 extern const char RNSVGForeignObjectComponentName[] = "RNSVGForeignObject";

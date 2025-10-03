@@ -91,6 +91,14 @@ JSI_EXPORT extern const char RNSVGFeMergeComponentName[];
 using RNSVGFeMergeShadowNode =
     RNSVGConcreteShadowNode<RNSVGFeMergeComponentName, RNSVGFeMergeProps>;
 
+JSI_EXPORT extern const char RNSVGFeMorphologyComponentName[];
+
+/*
+ * `ShadowNode` for <RNSVGFeMorphology> component.
+ */
+using RNSVGFeMorphologyShadowNode =
+    RNSVGConcreteShadowNode<RNSVGFeMorphologyComponentName, RNSVGFeMorphologyProps>;
+
 JSI_EXPORT extern const char RNSVGFeOffsetComponentName[];
 
 /*
