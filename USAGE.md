@@ -1308,6 +1308,7 @@ The following filters have been implemented:
 - FeGaussianBlur
 - FeMerge
 - FeOffset
+- FeTurbulence
 
 Not supported yet:
 
@@ -1325,7 +1326,6 @@ Not supported yet:
 - FeSpecularLighting
 - FeSpotLight
 - FeTile
-- FeTurbulence
 
 Exmaple use of filters:
 
