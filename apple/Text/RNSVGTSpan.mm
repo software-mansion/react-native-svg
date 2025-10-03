@@ -1065,7 +1065,11 @@ using namespace facebook::react;
 
         CGContextConcatCTM(context, transform);
         CGContextTranslateCTM(context, 0, -fontSize);
+#if TARGET_OS_OSX
         [emojiLabel.layer renderInContext:context];
+#else
+        [emojiLabel drawTextInRect:emojiLabel.bounds];
+#endif // TARGET_OS_OSX
         CGContextTranslateCTM(context, 0, fontSize);
         CGContextConcatCTM(context, CGAffineTransformInvert(transform));
 
