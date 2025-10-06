@@ -19,7 +19,7 @@ jobs:
     env:
       WORKING_DIRECTORY: paper-example
       API_LEVEL: 34
-      SYSTEM_IMAGES: system-images;android-34;google_apis;x86_64
+      SYSTEM_IMAGES: system-images;android-34;google_apis;arm64-v8a
       AVD_NAME: rn-svg-avd
     concurrency:
       group: android-e2e-example-${{ github.ref }}
@@ -55,7 +55,7 @@ jobs:
           key: ${{ runner.os }}-build-system-images-${{ env.SYSTEM_IMAGES }}
       - name: SKDs - download required images
         if: ${{ steps.cache-sdd-img.outputs.cache-hit != 'true' }}
-        run: $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "system-images;android-34;google_apis;x86_64"
+        run: $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "system-images;android-34;google_apis;arm64-v8a"
       - name: Cache AVD
         id: cache-avd
         uses: actions/cache@v3
