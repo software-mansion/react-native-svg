@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 jobs:
   test:
-    runs-on: macos-14
+    runs-on: macos-26
     timeout-minutes: 60
     env:
       WORKING_DIRECTORY: paper-example
@@ -34,7 +34,7 @@ jobs:
           node-version: 18
           cache: 'yarn'
       - name: Set up JDK 17
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'zulu'
