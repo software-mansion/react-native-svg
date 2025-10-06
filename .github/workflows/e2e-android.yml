@@ -64,7 +64,7 @@ jobs:
           key: ${{ runner.os }}-avd-images-${{ env.SYSTEM_IMAGES }}-${{ env.AVD_NAME }}
       - name: Emulator - Create
         if: ${{ steps.cache-avd.outputs.cache-hit != 'true' }}
-        run: $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd -n ${{ env.AVD_NAME }} --device 28 --package "${{ env.SYSTEM_IMAGES }}" --sdcard 512M
+        run: $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd -n ${{ env.AVD_NAME }} --device 28 -k "${{ env.SYSTEM_IMAGES }}" --sdcard 512M
       - name: Emulator - Set screen settings
         if: ${{ steps.cache-avd.outputs.cache-hit != 'true' }}
         run: |
