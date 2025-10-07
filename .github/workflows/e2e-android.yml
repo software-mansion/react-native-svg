@@ -51,17 +51,19 @@ jobs:
             "system-images;android-${API_LEVEL};google_apis;x86_64" \
             "emulator"
 
-      - name: Create and start emulator
+      - name: Create emulator
+        run: echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd -n $AVD_NAME -k "${SYSTEM_IMAGES}" --device "pixel_6"
+
+      - name: Boot emulator
         run: |
-          echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd -n $AVD_NAME -k "${SYSTEM_IMAGES}" --device "pixel_6"
-          $ANDROID_HOME/emulator/emulator -avd $AVD_NAME -no-snapshot -noaudio -no-window -gpu swiftshader_indirect -no-boot-anim &
-          adb wait-for-device
-          adb shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
+          $ANDROID_HOME/emulator/emulator -avd $AVD_NAME -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim &
+          $ANDROID_HOME/platform-tools/adb wait-for-device
+          $ANDROID_HOME/platform-tools/adb shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
           echo "Emulator booted successfully."
 
       - name: Reverse TCP
         working-directory: apps/${{ env.WORKING_DIRECTORY }}
-        run: adb devices | grep '\t' | awk '{print $1}' | sed 's/\\s//g' | xargs -I {} adb -s {} reverse tcp:8081 tcp:8081
+        run: $ANDROID_HOME/platform-tools/adb devices | grep '\t' | awk '{print $1}' | sed 's/\\s//g' | xargs -I {} $ANDROID_HOME/platform-tools/adb -s {} reverse tcp:8081 tcp:8081
 
       - name: Install root node dependencies
         run: yarn
@@ -79,15 +81,15 @@ jobs:
         run: E2E=true yarn start &> output.log &
 
       - name: Install APK
-        run: adb install -r apps/${{ env.WORKING_DIRECTORY }}/android/app/build/outputs/apk/debug/app-debug.apk
+        run: $ANDROID_HOME/platform-tools/adb install -r apps/${{ env.WORKING_DIRECTORY }}/android/app/build/outputs/apk/debug/app-debug.apk
 
       - name: Launch APK
         run: |
           PACKAGE="com.example"
           ACTIVITY=".MainActivity"
           echo "Launching $PACKAGE/$ACTIVITY..."
-          adb shell am start -n "$PACKAGE/$ACTIVITY"
-          adb shell 'until pidof com.example > /dev/null; do sleep 1; done'
+          $ANDROID_HOME/platform-tools/adb shell am start -n "$PACKAGE/$ACTIVITY"
+          $ANDROID_HOME/platform-tools/adb shell 'until pidof com.example > /dev/null; do sleep 1; done'
           echo "App started."
 
       - name: Run E2E Tests
