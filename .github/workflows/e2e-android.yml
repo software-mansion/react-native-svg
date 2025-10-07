@@ -99,7 +99,6 @@ jobs:
       - name: Run emulator, Metro, and E2E
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          working-directory: apps/${{ env.WORKING_DIRECTORY }}
           api-level: ${{ env.API_LEVEL }}
           target: default
           profile: pixel_2
@@ -111,6 +110,7 @@ jobs:
           avd-name: e2e_emulator
           arch: x86_64
           script: |
+            cd apps/${{ env.WORKING_DIRECTORY }}
             # Start Metro in the background
             E2E=true yarn start &> output.log &
             # Wait for emulator to boot fully
