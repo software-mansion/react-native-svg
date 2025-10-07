@@ -63,7 +63,9 @@ jobs:
 
       - name: Build Android app
         working-directory: apps/${{ env.WORKING_DIRECTORY }}/android
-        run: E2E=true ./gradlew assembleDebug
+        run: |
+          export E2E=true
+          ./gradlew assembleDebug
 
       - name: Enable KVM
         run: |
@@ -111,7 +113,8 @@ jobs:
           arch: x86_64
           script: |
             # Start Metro in the background
-            E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start &> output.log &
+            export E2E=true
+            yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start &> output.log &
             # Wait for emulator to boot fully
             $ANDROID_HOME/platform-tools/adb wait-for-device
             $ANDROID_HOME/platform-tools/adb shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
@@ -121,7 +124,8 @@ jobs:
             bash -c 'until $ANDROID_HOME/platform-tools/adb shell monkey -p com.paperexample 1 | grep -q "Events injected: 1"; do sleep 1; echo "Retrying app launch..."; done'
 
             # Run your E2E tests
-            E2E=true yarn e2e
+            export E2E=true
+            yarn e2e
 
       # - name: Start Metro server
       #   working-directory: apps/${{ env.WORKING_DIRECTORY }}
