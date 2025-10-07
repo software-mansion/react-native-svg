@@ -21,6 +21,7 @@ jobs:
       API_LEVEL: 34
       SYSTEM_IMAGES: system-images;android-34;google_apis;x86_64
       AVD_NAME: rn-svg-avd
+      E2E: true
     concurrency:
       group: android-e2e-example-${{ github.ref }}
       cancel-in-progress: true
@@ -63,9 +64,7 @@ jobs:
 
       - name: Build Android app
         working-directory: apps/${{ env.WORKING_DIRECTORY }}/android
-        run: |
-          export E2E=true
-          ./gradlew assembleDebug
+        run: ./gradlew assembleDebug
 
       - name: Enable KVM
         run: |
