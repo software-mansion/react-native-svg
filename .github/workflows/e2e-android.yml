@@ -61,9 +61,9 @@ jobs:
           sudo apt update
           sudo apt-get install -y libpulse0 libgl1 libxkbfile1
 
-      # - name: Build Android app
-      #   working-directory: apps/${{ env.WORKING_DIRECTORY }}/android
-      #   run: ./gradlew assembleDebug
+      - name: Build Android app
+        working-directory: apps/${{ env.WORKING_DIRECTORY }}/android
+        run: ./gradlew assembleDebug
 
       - name: Enable KVM
         run: |
@@ -117,7 +117,7 @@ jobs:
             $ANDROID_HOME/platform-tools/adb wait-for-device
             $ANDROID_HOME/platform-tools/adb shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
             # Install the app APK
-            adb install -r android/app/build/outputs/apk/debug/app-debug.apk
+            $ANDROID_HOME/platform-tools/adb install -r android/app/build/outputs/apk/debug/app-debug.apk
             # Run your E2E tests
             E2E=true yarn e2e
 
