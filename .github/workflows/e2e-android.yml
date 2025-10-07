@@ -61,9 +61,9 @@ jobs:
           sudo apt update
           sudo apt-get install -y libpulse0 libgl1 libxkbfile1
 
-      - name: Build Android app
-        working-directory: apps/${{ env.WORKING_DIRECTORY }}/android
-        run: ./gradlew assembleDebug
+      # - name: Build Android app
+      #   working-directory: apps/${{ env.WORKING_DIRECTORY }}/android
+      #   run: ./gradlew assembleDebug
 
       - name: Enable KVM
         run: |
@@ -99,7 +99,7 @@ jobs:
       - name: Run emulator, Metro, and E2E
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          working-directory: ${{ env.WORKING_DIRECTORY }}
+          working-directory: apps/${{ env.WORKING_DIRECTORY }}
           api-level: ${{ env.API_LEVEL }}
           target: default
           profile: pixel_2
@@ -147,6 +147,3 @@ jobs:
           path: |
             report.html
             jest-html-reporters-attach/
-
-      - name: Kill emulator (so it can be cached safely)
-        run: adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done
