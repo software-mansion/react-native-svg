@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 jobs:
   test:
-    runs-on: macos-26
+    runs-on: macos-latest-large
     timeout-minutes: 60
     env:
       WORKING_DIRECTORY: paper-example
