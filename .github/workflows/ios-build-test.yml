@@ -18,7 +18,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-26
+    runs-on: macos-latest
     strategy:
       matrix:
         working-directory: [paper-example, fabric-example]
