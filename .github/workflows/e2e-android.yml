@@ -88,7 +88,7 @@ jobs:
           target: default
           profile: pixel_2
           ram-size: '4096M'
-          disk-size: '10G'
+          disk-size: '5G'
           disable-animations: false
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
@@ -104,7 +104,7 @@ jobs:
           target: default
           profile: pixel_2
           ram-size: '4096M'
-          disk-size: '10G'
+          disk-size: '5G'
           disable-animations: false
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
