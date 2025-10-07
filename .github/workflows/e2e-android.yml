@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 jobs:
   test:
-    runs-on: macos-latest-large
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
       WORKING_DIRECTORY: paper-example
@@ -25,59 +25,35 @@ jobs:
       group: android-e2e-example-${{ github.ref }}
       cancel-in-progress: true
     steps:
-      - name: checkout
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           submodules: recursive
-      - uses: actions/setup-node@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'yarn'
+
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'zulu'
           cache: 'gradle'
-      - name: Install NDK
-        uses: nttld/setup-ndk@v1
-        id: setup-ndk
-        with:
-          ndk-version: r26d
-          local-cache: true
-      - name: Set ANDROID_NDK
-        run: echo "ANDROID_NDK=$ANDROID_HOME/ndk-bundle" >> $GITHUB_ENV
-      - name: Cache SDK image
-        id: cache-sdk-img
-        uses: actions/cache@v4
-        with:
-          path: $ANDROID_HOME/system-images/
-          key: ${{ runner.os }}-build-system-images-${{ env.SYSTEM_IMAGES }}
-      - name: SKDs - download required images
-        if: ${{ steps.cache-sdd-img.outputs.cache-hit != 'true' }}
-        run: $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "system-images;android-34;google_apis;x86_64"
-      - name: Cache AVD
-        id: cache-avd
-        uses: actions/cache@v4
-        with:
-          path: ~/.android/avd/${{ env.AVD_NAME }}.avd
-          key: ${{ runner.os }}-avd-images-${{ env.SYSTEM_IMAGES }}-${{ env.AVD_NAME }}
-      - name: Emulator - Create
-        if: ${{ steps.cache-avd.outputs.cache-hit != 'true' }}
-        run: $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd -n ${{ env.AVD_NAME }} --device 28 --package "${{ env.SYSTEM_IMAGES }}" --sdcard 512M
-      - name: Emulator - Set screen settings
-        if: ${{ steps.cache-avd.outputs.cache-hit != 'true' }}
-        run: |
-          echo "AVD config path: $HOME/.android/avd/${{ env.AVD_NAME }}.avd/config.ini"
-          sed -i '' 's/.*hw\.lcd\.density.*/hw\.lcd\.density = 480/g' $HOME/.android/avd/${{ env.AVD_NAME }}.avd/config.ini
-          sed -i '' 's/.*hw\.lcd\.width.*/hw\.lcd\.width = 1344/g' $HOME/.android/avd/${{ env.AVD_NAME }}.avd/config.ini
-          sed -i '' 's/.*hw\.lcd\.height.*/hw\.lcd\.height = 2992/g' $HOME/.android/avd/${{ env.AVD_NAME }}.avd/config.ini
-      - name: Emulator - Boot
-        run: $ANDROID_HOME/emulator/emulator -memory 4096 -avd ${{ env.AVD_NAME }} -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim &
 
-      - name: ADB Wait For Device
-        run: adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
-        timeout-minutes: 10
+      - name: Install Android SDK components
+        run: |
+          sdkmanager --install "platform-tools" "platforms;android-${API_LEVEL}" "system-images;android-${API_LEVEL};google_apis;x86_64" "emulator"
+
+      - name: Create and start emulator
+        run: |
+          echo "no" | avdmanager create avd -n $AVD_NAME -k "${SYSTEM_IMAGES}" --device "pixel_6"
+          $ANDROID_HOME/emulator/emulator -avd $AVD_NAME -no-snapshot -noaudio -no-window -gpu swiftshader_indirect -no-boot-anim &
+          adb wait-for-device
+          adb shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
+          echo "Emulator booted successfully."
 
       - name: Reverse TCP
         working-directory: apps/${{ env.WORKING_DIRECTORY }}
@@ -87,8 +63,8 @@ jobs:
         run: yarn
 
       - name: Install example app node dependencies
-        run: yarn
         working-directory: apps/${{ env.WORKING_DIRECTORY }}
+        run: yarn
 
       - name: Build Android app
         working-directory: apps/${{ env.WORKING_DIRECTORY }}/android
@@ -102,9 +78,15 @@ jobs:
         run: adb install -r apps/${{ env.WORKING_DIRECTORY }}/android/app/build/outputs/apk/debug/app-debug.apk
 
       - name: Launch APK
-        run: 'while ! (adb shell monkey -p com.example 1 | grep -q "Events injected: 1"); do sleep 1; echo "Retrying due to errors in previous run..."; done'
+        run: |
+          PACKAGE="com.example"
+          ACTIVITY=".MainActivity"
+          echo "Launching $PACKAGE/$ACTIVITY..."
+          adb shell am start -n "$PACKAGE/$ACTIVITY"
+          adb shell 'until pidof com.example > /dev/null; do sleep 1; done'
+          echo "App started."
 
-      - name: Run e2e Tests
+      - name: Run E2E Tests
         run: E2E=true yarn e2e
 
       - name: Upload test report
