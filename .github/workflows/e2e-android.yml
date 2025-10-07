@@ -45,7 +45,11 @@ jobs:
 
       - name: Install Android SDK components
         run: |
-          sdkmanager --install "platform-tools" "platforms;android-${API_LEVEL}" "system-images;android-${API_LEVEL};google_apis;x86_64" "emulator"
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install \
+            "platform-tools" \
+            "platforms;android-${API_LEVEL}" \
+            "system-images;android-${API_LEVEL};google_apis;x86_64" \
+            "emulator"
 
       - name: Create and start emulator
         run: |
