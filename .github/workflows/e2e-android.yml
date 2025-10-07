@@ -119,7 +119,7 @@ jobs:
             # Install the app APK
             $ANDROID_HOME/platform-tools/adb install -r android/app/build/outputs/apk/debug/app-debug.apk
             # Launch the app using bash
-            bash -c 'until $ANDROID_HOME/platform-tools/adb shell monkey -p com.example 1 | grep -q "Events injected: 1"; do sleep 1; echo "Retrying app launch..."; done'
+            bash -c 'until $ANDROID_HOME/platform-tools/adb shell monkey -p com.paperexample 1 | grep -q "Events injected: 1"; do sleep 1; echo "Retrying app launch..."; done'
 
             # Run your E2E tests
             cd ../..
