@@ -63,7 +63,7 @@ jobs:
 
       - name: Build Android app
         working-directory: apps/${{ env.WORKING_DIRECTORY }}/android
-        run: E2E=true ./gradlew assembleDebug
+        run: ./gradlew assembleDebug
 
       - name: Enable KVM
         run: |
@@ -111,17 +111,29 @@ jobs:
           arch: x86_64
           script: |
             # Start Metro in the background
-            E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start &> output.log &
+            E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start &> metro.log &
+            METRO_PID=$!
+            echo "Metro started with PID $METRO_PID"
+
             # Wait for emulator to boot fully
             $ANDROID_HOME/platform-tools/adb wait-for-device
             $ANDROID_HOME/platform-tools/adb shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
+
             # Install the app APK
             $ANDROID_HOME/platform-tools/adb install -r apps/${{ env.WORKING_DIRECTORY }}/android/app/build/outputs/apk/debug/app-debug.apk
+
+            # Run your E2E tests
+            yarn e2e &> e2e.log &
+            E2E_PID=$!
+            echo "E2E runner started with PID $E2E_PID"
+
             # Launch the app using bash
             bash -c 'until $ANDROID_HOME/platform-tools/adb shell monkey -p com.paperexample 1 | grep -q "Events injected: 1"; do sleep 1; echo "Retrying app launch..."; done'
 
-            # Run your E2E tests
-            E2E=true yarn e2e
+            wait $E2E_PID
+
+            # Stop Metro
+            kill $METRO_PID || true
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
