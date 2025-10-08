@@ -237,6 +237,18 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   _opacity = opacity;
 }
 
+- (void)setMarkerPath:(CGPathRef)markerPath
+{
+  if (_markerPath == markerPath) {
+    return;
+  }
+  
+  CGPathRelease(_markerPath);
+  
+  _markerPath = markerPath;
+  [self invalidate];
+}
+
 - (void)setMatrix:(CGAffineTransform)matrix
 {
   if (CGAffineTransformEqualToTransform(matrix, _matrix)) {
@@ -632,6 +644,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   CGPathRelease(_cachedClipPath);
   CGPathRelease(_strokePath);
   CGPathRelease(_path);
+  CGPathRelease(_markerPath);
 }
 
 #ifdef RCT_NEW_ARCH_ENABLED

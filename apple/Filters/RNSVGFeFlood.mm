@@ -78,7 +78,11 @@ using namespace facebook::react;
 
 - (CIImage *)applyFilter:(NSMutableDictionary<NSString *, CIImage *> *)results previousFilterResult:(CIImage *)previous
 {
-  return [CIImage imageWithColor:[CIColor colorWithCGColor:[self.floodColor getColorWithOpacity:self.floodOpacity]]];
+  CGColorRef color = [self.floodColor getColorWithOpacity:self.floodOpacity];
+  CIImage *image = [CIImage imageWithColor:[CIColor colorWithCGColor:color]];
+  CGColorRelease(color);
+  
+  return image;
 }
 
 #ifdef RCT_NEW_ARCH_ENABLED
