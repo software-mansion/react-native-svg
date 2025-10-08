@@ -16,58 +16,69 @@ export const TestingView = () => {
   const [message, setMessage] = useState('⏳ Connecting to Jest server...');
 
   const connect = useCallback(() => {
-    const client = new WebSocket(wsUri);
-    setWsClient(client);
     setMessage('⏳ Connecting to Jest server...');
-    client.onopen = () => {
-      client.send(
-        JSON.stringify({
-          os: Platform.OS,
-          version: Platform.Version,
-          arch: isFabric() ? 'fabric' : 'paper',
-          connectionTime: new Date(),
-        }),
-      );
-      setMessage('✅ Connected to Jest server. Waiting for render requests.');
-    };
-    client.onerror = (err: any) => {
-      if (!err.message) {
-        return;
-      }
-      console.error(
-        `Error while connecting to E2E WebSocket server at ${wsUri}: ${err.message}. Will retry in 3 seconds.`,
-      );
-      setMessage(
-        `🚨 Failed to connect to Jest server at ${wsUri}: ${err.message}! Will retry in 3 seconds.`,
-      );
-      setTimeout(() => {
-        connect();
-      }, 3000);
-    };
-    client.onmessage = ({data: rawMessage}) => {
-      const message = JSON.parse(rawMessage);
-      if (message.type == 'renderRequest') {
-        setMessage(`✅ Rendering tests, please don't close this tab.`);
-        const {width, height} = message;
-        setResolution({width, height});
-        setRenderedContent(
-          createElementFromObject(
-            message.data.type || 'SvgFromXml',
-            message.data.props,
-          ),
+    const startTime = Date.now();
+    const MAX_TIMEOUT = 5000;
+    let client = null;
+
+    const attemptConnect = () => {
+      client = new WebSocket(wsUri);
+      setWsClient(client);
+
+      client.onopen = () => {
+        client.send(
+          JSON.stringify({
+            os: Platform.OS,
+            version: Platform.Version,
+            arch: isFabric() ? 'fabric' : 'paper',
+            connectionTime: new Date(),
+          }),
         );
-        setReadyToSnapshot(true);
-      }
+
+        setMessage('✅ Connected to Jest server. Waiting for render requests.');
+      };
+
+      client.onerror = (err: any) => {
+        const elapsed = Date.now() - startTime;
+        if (elapsed >= MAX_TIMEOUT) {
+          setMessage(`❌ Failed to connect within ${MAX_TIMEOUT} milliseconds`);
+          return;
+        }
+
+        console.error(
+          `Error connecting to E2E WebSocket at ${wsUri}: ${
+            err.message ?? ''
+          }. Retrying...`,
+        );
+        setMessage(`🚨 Failed to connect: ${err.message ?? ''}. Retrying...`);
+        setTimeout(attemptConnect, 500);
+      };
+
+      client.onmessage = ({data: rawMessage}) => {
+        const message = JSON.parse(rawMessage);
+        if (message.type === 'renderRequest') {
+          setMessage(`✅ Rendering tests, please don't close this tab.`);
+          const {width, height} = message;
+          setResolution({width, height});
+          setRenderedContent(
+            createElementFromObject(
+              message.data.type || 'SvgFromXml',
+              message.data.props,
+            ),
+          );
+          setReadyToSnapshot(true);
+        }
+      };
+
+      client.onclose = event => {
+        if (event.code === 1006 && event.reason) return;
+        setMessage(
+          `✅ Connection closed. You can close this tab safely. (${event.code})`,
+        );
+      };
     };
-    client.onclose = event => {
-      if (event.code == 1006 && event.reason) {
-        // this is an error, let error handler take care of it
-        return;
-      }
-      setMessage(
-        `✅ Connection to Jest server has been closed. You can close this tab safely. (${event.code})`,
-      );
-    };
+
+    attemptConnect();
 
     return () => {
       setWsClient(null);
