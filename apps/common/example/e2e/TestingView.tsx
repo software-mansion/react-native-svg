@@ -18,7 +18,7 @@ export const TestingView = () => {
   const connect = useCallback(() => {
     setMessage('⏳ Connecting to Jest server...');
     const startTime = Date.now();
-    const MAX_TIMEOUT = 5000;
+    const MAX_TIMEOUT = 10000;
     let client = null;
 
     const attemptConnect = () => {
