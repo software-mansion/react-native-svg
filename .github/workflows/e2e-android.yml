@@ -47,23 +47,12 @@ jobs:
           node-version: 18
           cache: 'yarn'
 
-      - name: Install root node dependencies
-        run: yarn
-
-      - name: Install example app node dependencies
-        working-directory: apps/${{ env.WORKING_DIRECTORY }}
-        run: yarn
-
       - name: Install AVD dependencies
         # libxkbfile1 is removed by "Free Disk Space (Ubuntu)" step first. Here we install it again
         # as it seems to be needed by the emulator.
         run: |
           sudo apt update
           sudo apt-get install -y libpulse0 libgl1 libxkbfile1
-
-      - name: Build Android app
-        working-directory: apps/${{ env.WORKING_DIRECTORY }}/android
-        run: ./gradlew assembleDebug
 
       - name: Enable KVM
         run: |
@@ -110,12 +99,23 @@ jobs:
           avd-name: e2e_emulator
           arch: x86_64
           script: |
-            # Start Metro in the background
-            E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start &> output.log &
+            # Install root node dependencies      
+            yarn install      
+            # Install example app node dependencies     
+            yarn --cwd apps/${{ env.WORKING_DIRECTORY }} install
 
             # Wait for emulator to boot fully
             $ANDROID_HOME/platform-tools/adb wait-for-device
             $ANDROID_HOME/platform-tools/adb shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
+
+            # Set up ADB reverse for Metro      
+            $ANDROID_HOME/platform-tools/adb reverse tcp:8081 tcp:8081
+
+            # Start Metro in the background
+            E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start &> output.log &
+
+            # Build the Android app      
+            ./gradlew --project-dir apps/${{ env.WORKING_DIRECTORY }}/android assembleDebug
 
             # Install the app APK
             $ANDROID_HOME/platform-tools/adb install -r apps/${{ env.WORKING_DIRECTORY }}/android/app/build/outputs/apk/debug/app-debug.apk
