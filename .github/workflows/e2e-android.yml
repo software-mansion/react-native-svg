@@ -90,7 +90,7 @@ jobs:
         with:
           api-level: ${{ env.API_LEVEL }}
           target: default
-          profile: pixel_2
+          profile: pixel_8_pro
           ram-size: '4096M'
           disk-size: '5G'
           disable-animations: false
@@ -103,6 +103,9 @@ jobs:
             yarn install      
             # Install example app node dependencies     
             yarn --cwd apps/${{ env.WORKING_DIRECTORY }} install
+
+            # Set up ADB reverse for Metro      
+            $ANDROID_HOME/platform-tools/adb reverse tcp:8081 tcp:8081
 
             # Start Metro in the background
             E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start &> output.log &
