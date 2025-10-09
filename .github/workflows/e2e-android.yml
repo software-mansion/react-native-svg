@@ -18,8 +18,8 @@ jobs:
     timeout-minutes: 60
     env:
       WORKING_DIRECTORY: paper-example
-      API_LEVEL: 36
-      SYSTEM_IMAGES: system-images;android-36;google_apis;x86_64
+      API_LEVEL: 34
+      SYSTEM_IMAGES: system-images;android-34;google_apis;x86_64
       AVD_NAME: rn-svg-avd
     concurrency:
       group: android-e2e-example-${{ github.ref }}
@@ -74,7 +74,7 @@ jobs:
         with:
           api-level: ${{ env.API_LEVEL }}
           target: default
-          profile: pixel_8_pro
+          profile: pixel_6
           ram-size: '4096M'
           disk-size: '5G'
           disable-animations: false
