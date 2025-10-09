@@ -69,21 +69,21 @@ jobs:
             ~/.android/adb*
           key: avd-${{ env.API_LEVEL }}
 
-      - name: Create AVD and generate snapshot for caching
-        if: steps.avd-cache.outputs.cache-hit != 'true'
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ env.API_LEVEL }}
-          target: default
-          profile: pixel_2
-          ram-size: '4096M'
-          disk-size: '5G'
-          disable-animations: false
-          force-avd-creation: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          avd-name: e2e_emulator
-          arch: x86_64
-          script: echo "Generated AVD snapshot for caching."
+      # - name: Create AVD and generate snapshot for caching
+      #   if: steps.avd-cache.outputs.cache-hit != 'true'
+      #   uses: reactivecircus/android-emulator-runner@v2
+      #   with:
+      #     api-level: ${{ env.API_LEVEL }}
+      #     target: default
+      #     profile: pixel_2
+      #     ram-size: '4096M'
+      #     disk-size: '5G'
+      #     disable-animations: false
+      #     force-avd-creation: false
+      #     emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+      #     avd-name: e2e_emulator
+      #     arch: x86_64
+      #     script: echo "Generated AVD snapshot for caching."
 
       - name: Run emulator, Metro, and E2E
         uses: reactivecircus/android-emulator-runner@v2
@@ -103,13 +103,6 @@ jobs:
             yarn install      
             # Install example app node dependencies     
             yarn --cwd apps/${{ env.WORKING_DIRECTORY }} install
-
-            # Wait for emulator to boot fully
-            $ANDROID_HOME/platform-tools/adb wait-for-device
-            $ANDROID_HOME/platform-tools/adb shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
-
-            # Set up ADB reverse for Metro      
-            $ANDROID_HOME/platform-tools/adb reverse tcp:8081 tcp:8081
 
             # Start Metro in the background
             E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start &> output.log &
