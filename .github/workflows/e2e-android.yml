@@ -115,7 +115,7 @@ jobs:
             E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start &> output.log &
 
             # Build the Android app      
-            cd apps/${{ env.WORKING_DIRECTORY }}/android && ./gradlew --project-dir assembleDebug
+            cd apps/${{ env.WORKING_DIRECTORY }}/android && ./gradlew assembleDebug
 
             # Install the app APK
             $ANDROID_HOME/platform-tools/adb install -r apps/${{ env.WORKING_DIRECTORY }}/android/app/build/outputs/apk/debug/app-debug.apk
