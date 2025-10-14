@@ -399,7 +399,7 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
 
   function doctype() {
     const index = source.indexOf('>', i);
-    if (!~index) {
+    if (index === -1) {
       error('expected >');
     }
 
