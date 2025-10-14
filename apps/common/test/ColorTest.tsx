@@ -1,50 +1,41 @@
-import React from 'react';
-import {PlatformColor, Platform, Button, DynamicColorIOS} from 'react-native';
-import {Svg, Circle, Rect, Text, TSpan} from 'react-native-svg';
-
-const color =
-  Platform.OS !== 'web'
-    ? PlatformColor(
-        Platform.select({
-          ios: 'systemTealColor',
-          android: '@android:color/holo_blue_bright',
-          default: 'black',
-        }),
-      )
-    : 'black';
-
-// const customContrastDynamicTextColor = DynamicColorIOS({
-//   dark: 'hsla(360, 40%, 30%, 1.0)',
-//   light: '#ff00ff55',
-//   highContrastDark: 'black',
-//   highContrastLight: 'white',
-// });
+import {Alert, View} from 'react-native';
+import {Circle, Rect, Svg} from 'react-native-svg';
 
 export default () => {
-  const [test, setTest] = React.useState(50);
-
   return (
-    <>
-      <Svg height="100" width="100" color={color}>
-        <Circle cx="50" cy="50" r={test} strokeWidth="2.5" fill={color} />
-        <Rect
-          x="15"
-          y="15"
-          width="70"
-          height="70"
-          stroke="currentColor"
-          strokeWidth="5"
+    <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+      <Svg height="220" width="220" viewBox="0 0 240 240" collapsable={false}>
+        {/* <G onPress={() => Alert.alert('Pressed on G')} collapsable={false}> */}
+        {/* <Text
+              collapsable={false}
+              fill="black"
+              fontWeight="bold"
+              fontSize="40"
+              x="100"
+              y="40"
+              onPress={() => Alert.alert('Pressed on Text')}>
+              H
+            </Text> */}
+        <Circle
+          collapsable={false}
+          cx="80"
+          cy="80"
+          r="30"
+          fill="green"
+          x="20"
+          onPress={() => Alert.alert('Pressed on Circle')}
         />
+        <Rect
+          collapsable={false}
+          x="20"
+          y="20"
+          width="40"
+          height="40"
+          fill="yellow"
+          onPress={() => Alert.alert('Pressed on Rect')}
+        />
+        {/* </G> */}
       </Svg>
-      <Svg height="300" width="300" fill="red">
-        <Text x={0} y={0} fontSize={20}>
-          <TSpan dx={test} inlineSize={'100%'} fill="currentColor">
-            Testing word-wrap... Testing word-wrap... Testing word-wrap...
-            Testing word-wrap...
-          </TSpan>
-        </Text>
-      </Svg>
-      <Button title="Click me" onPress={() => setTest(test + 1)} />
-    </>
+    </View>
   );
 };
