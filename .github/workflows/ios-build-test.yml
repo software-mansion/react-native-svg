@@ -18,11 +18,13 @@ on:
 
 jobs:
   build:
-    runs-on: macos-14
+    runs-on: macos-latest
     strategy:
       matrix:
         working-directory: [paper-example, fabric-example]
       fail-fast: false
+    env:
+      DEVICE: iPhone 17 Pro
     concurrency:
       group: ios-${{ matrix.working-directory }}-${{ github.ref }}
       cancel-in-progress: true
@@ -33,7 +35,7 @@ jobs:
       - name: Use latest stable Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '16.1'
+          xcode-version: '16.4'
 
       - name: Get react-native-svg node_modules cache
         uses: actions/cache@v4
@@ -92,4 +94,4 @@ jobs:
 
       - name: Build app
         working-directory: apps/${{ matrix.working-directory }}
-        run: npx react-native run-ios --simulator="iPhone 15 Pro" --mode Debug --verbose --no-packager
+        run: npx react-native run-ios --simulator="${{ env.DEVICE }}" --mode Debug --verbose --no-packager
