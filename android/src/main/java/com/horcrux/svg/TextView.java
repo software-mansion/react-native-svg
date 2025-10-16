@@ -80,28 +80,6 @@ class TextView extends GroupView {
     invalidate();
   }
 
-  public void setVerticalAlign(Dynamic dynamicVerticalAlign) {
-    String verticalAlign = SVGLength.toString(dynamicVerticalAlign);
-    if (verticalAlign != null) {
-      verticalAlign = verticalAlign.trim();
-      int i = verticalAlign.lastIndexOf(' ');
-      try {
-        mAlignmentBaseline = AlignmentBaseline.getEnum(verticalAlign.substring(i));
-      } catch (IllegalArgumentException e) {
-        mAlignmentBaseline = AlignmentBaseline.baseline;
-      }
-      try {
-        mBaselineShift = verticalAlign.substring(0, i);
-      } catch (IndexOutOfBoundsException e) {
-        mBaselineShift = null;
-      }
-    } else {
-      mAlignmentBaseline = AlignmentBaseline.baseline;
-      mBaselineShift = null;
-    }
-    invalidate();
-  }
-
   public void setRotate(Dynamic rotate) {
     mRotate = SVGLength.arrayFrom(rotate);
     invalidate();
