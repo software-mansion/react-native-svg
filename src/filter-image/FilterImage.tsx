@@ -45,6 +45,7 @@ export const FilterImage = (props: FilterImageProps) => {
         <Filter id={filterId}>
           {extractedFilters.map(mapFilterToComponent)}
         </Filter>
+        {/* @ts-ignore This type is broken in web implementation. */}
         <Image
           {...imageProps}
           href={props.src || props.source}

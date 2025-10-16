@@ -58,7 +58,9 @@
     "prepare": "npm run bob && husky install",
     "release": "npm login && release-it",
     "test": "npm run lint && npm run tsc",
-    "tsc": "tsc --noEmit",
+    "tsc": "yarn tsc-native && yarn tsc-web",
+    "tsc-native": "tsc --noEmit",
+    "tsc-web": "tsc --project tsconfig.web.json --noEmit",
     "e2e": "jest e2e",
     "generateE2eReferences": "ts-node e2e/generateReferences.ts",
     "check-archs-consistency": "node ./scripts/codegen-check-consistency.js",
@@ -168,5 +170,5 @@
       }
     }
   },
-  "packageManager": "yarn@1.22.22"
+  "packageManager": "yarn@4.10.3"
 }
