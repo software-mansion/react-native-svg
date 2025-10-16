@@ -27,6 +27,7 @@ import RNSVGFeComposite from './FeCompositeNativeComponent';
 import RNSVGFeFlood from './FeFloodNativeComponent';
 import RNSVGFeGaussianBlur from './FeGaussianBlurNativeComponent';
 import RNSVGFeMerge from './FeMergeNativeComponent';
+import RNSVGFeMorphology from './FeMorphologyNativeComponent';
 import RNSVGFeOffset from './FeOffsetNativeComponent';
 
 export {
@@ -59,5 +60,6 @@ export {
   RNSVGFeFlood,
   RNSVGFeGaussianBlur,
   RNSVGFeMerge,
+  RNSVGFeMorphology,
   RNSVGFeOffset,
 };
