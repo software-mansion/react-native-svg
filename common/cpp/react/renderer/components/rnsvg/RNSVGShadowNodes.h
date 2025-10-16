@@ -66,6 +66,15 @@ using RNSVGFeCompositeShadowNode = RNSVGConcreteShadowNode<
     RNSVGFeCompositeComponentName,
     RNSVGFeCompositeProps>;
 
+JSI_EXPORT extern const char RNSVGFeDisplacementMapComponentName[];
+
+/*
+ * `ShadowNode` for <RNSVGFeDisplacementMap> component.
+ */
+using RNSVGFeDisplacementMapShadowNode = RNSVGConcreteShadowNode<
+    RNSVGFeDisplacementMapComponentName,
+    RNSVGFeDisplacementMapProps>;
+
 JSI_EXPORT extern const char RNSVGFeFloodComponentName[];
 
 /*
@@ -98,6 +107,14 @@ JSI_EXPORT extern const char RNSVGFeOffsetComponentName[];
  */
 using RNSVGFeOffsetShadowNode =
     RNSVGConcreteShadowNode<RNSVGFeOffsetComponentName, RNSVGFeOffsetProps>;
+
+JSI_EXPORT extern const char RNSVGFeTurbulenceComponentName[];
+
+/*
+ * `ShadowNode` for <RNSVGFeTurbulence> component.
+ */
+using RNSVGFeTurbulenceShadowNode =
+    RNSVGConcreteShadowNode<RNSVGFeTurbulenceComponentName, RNSVGFeTurbulenceProps>;
 
 JSI_EXPORT extern const char RNSVGFilterComponentName[];
 
