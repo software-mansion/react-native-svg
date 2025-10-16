@@ -200,7 +200,11 @@ class GroupView extends RenderableView {
       if (node instanceof VirtualView) {
         VirtualView n = (VirtualView) node;
         Matrix transform = n.mMatrix;
-        mPath.addPath(n.getPath(canvas, paint), transform);
+        Path path = n.getPath(canvas, paint);
+
+        if (path != null) {
+          mPath.addPath(path, transform);
+        }
       }
     }
 
