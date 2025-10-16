@@ -99,6 +99,14 @@ JSI_EXPORT extern const char RNSVGFeOffsetComponentName[];
 using RNSVGFeOffsetShadowNode =
     RNSVGConcreteShadowNode<RNSVGFeOffsetComponentName, RNSVGFeOffsetProps>;
 
+JSI_EXPORT extern const char RNSVGFeTurbulenceComponentName[];
+
+/*
+ * `ShadowNode` for <RNSVGFeTurbulence> component.
+ */
+using RNSVGFeTurbulenceShadowNode =
+    RNSVGConcreteShadowNode<RNSVGFeTurbulenceComponentName, RNSVGFeTurbulenceProps>;
+
 JSI_EXPORT extern const char RNSVGFilterComponentName[];
 
 /*
