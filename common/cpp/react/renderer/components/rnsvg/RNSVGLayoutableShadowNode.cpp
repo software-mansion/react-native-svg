@@ -20,8 +20,7 @@ void RNSVGLayoutableShadowNode::setShadowNodePosition(float x, float y) {
     style.setPositionType(yoga::PositionType::Absolute);
     style.setPosition(yoga::Edge::Left, yoga::StyleLength::points(x));
     style.setPosition(yoga::Edge::Top, yoga::StyleLength::points(y));
-//    style.setMargin(yoga::Edge::Left, yoga::StyleLength::points(x));
-//    style.setMargin(yoga::Edge::Top, yoga::StyleLength::points(y));
+  
     yogaNode_.setStyle(style);
 }
 

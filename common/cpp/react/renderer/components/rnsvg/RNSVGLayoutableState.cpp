@@ -1,5 +1,3 @@
-#pragma once
-
 #include "RNSVGLayoutableState.h"
 
 namespace facebook::react {

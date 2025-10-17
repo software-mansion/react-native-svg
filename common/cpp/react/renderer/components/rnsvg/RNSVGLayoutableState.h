@@ -22,7 +22,7 @@ public:
       height_((float)data["height"].getDouble()){};
       
   folly::dynamic getDynamic() const {
-    return folly::dynamic::object("x", x_)("y", y_)("width", width_)("height", height_)
+    return folly::dynamic::object("x", x_)("y", y_)("width", width_)("height", height_);
   };
 #endif
 
