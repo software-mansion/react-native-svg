@@ -69,10 +69,10 @@ HoverExample.title = 'Hover the svg path';
 
 function GroupExample() {
   return (
-    <Svg height="220" width="220" viewBox="0 0 240 240" collapsable={false}>
-      {/* <G onPress={() => Alert.alert('Pressed on G')} collapsable={false}> */}
-      {/* <Text
-          collapsable={false}
+    <Svg height="120" width="120" viewBox="0 0 240 240">
+      <G onPress={() => Alert.alert('Pressed on G')} scale="1.4">
+        <Circle cx="80" cy="80" r="30" fill="green" x="20" scale="1.2" />
+        <Text
           fill="black"
           fontWeight="bold"
           fontSize="40"
@@ -80,26 +80,9 @@ function GroupExample() {
           y="40"
           onPress={() => Alert.alert('Pressed on Text')}>
           H
-        </Text> */}
-      <Circle
-        collapsable={false}
-        cx="80"
-        cy="80"
-        r="30"
-        fill="green"
-        x="20"
-        onPress={() => Alert.alert('Pressed on Circle')}
-      />
-      <Rect
-        collapsable={false}
-        x="20"
-        y="20"
-        width="40"
-        height="40"
-        fill="yellow"
-        onPress={() => Alert.alert('Pressed on Rect')}
-      />
-      {/* </G> */}
+        </Text>
+        <Rect x="20" y="20" width="40" height="40" fill="yellow" />
+      </G>
     </Svg>
   );
 }
