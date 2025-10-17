@@ -17,11 +17,12 @@ public:
 #ifdef ANDROID
   RNSVGLayoutableState(RNSVGLayoutableState const &previousState, folly::dynamic data)
     : x_((float)data["x"].getDouble()),
-    y_((float)data["y"].getDouble()),
-    width_((float)data["width"].getDouble()),
-    height_((float)data["height"].getDouble()){};
+      y_((float)data["y"].getDouble()),
+      width_((float)data["width"].getDouble()),
+      height_((float)data["height"].getDouble()){};
+      
   folly::dynamic getDynamic() const {
-    return {};
+    return folly::dynamic::object("x", x_)("y", y_)("width", width_)("height", height_)
   };
 #endif
 
@@ -31,10 +32,10 @@ public:
   float getHeight() const;
 
 private:
-  const float x_{};
-  const float y_{};
-  const float width_{};
-  const float height_{};
+ float x_{};
+ float y_{};
+ float width_{};
+ float height_{};
 };
 
 } // namespace facebook::react
