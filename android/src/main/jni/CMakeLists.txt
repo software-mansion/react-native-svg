@@ -63,7 +63,7 @@ target_link_libraries(
 )
 
 target_include_directories(
-  ${CMAKE_PROJECT_NAME}
+  react_codegen_rnsvg
   PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}
 )
