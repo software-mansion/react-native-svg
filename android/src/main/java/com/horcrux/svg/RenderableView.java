@@ -499,15 +499,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
       draw(canvas, paint, opacity);
     }
 
-    if (this.stateWrapper != null) {
-      WritableMap map = Arguments.createMap();
-      RectF clientRect = this.getClientRect();
-      map.putDouble("x", clientRect.left / mScale);
-      map.putDouble("y", clientRect.top / mScale);
-      map.putDouble("width", clientRect.width() / mScale);
-      map.putDouble("height", clientRect.height() / mScale);
-      this.stateWrapper.updateState(map);
-    }
+    this.updateShadowNodeMetrics();
   }
 
   @Override
@@ -831,5 +823,20 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
 
   private boolean hasOwnProperty(String propName) {
     return mAttributeList != null && mAttributeList.contains(propName);
+  }
+
+  protected void updateShadowNodeMetrics() {
+    RectF clientRect = this.getClientRect();
+
+    if (this.stateWrapper == null || clientRect == null) {
+      return;
+    }
+    
+    WritableMap map = Arguments.createMap();
+    map.putDouble("x", clientRect.left / mScale);
+    map.putDouble("y", clientRect.top / mScale);
+    map.putDouble("width", clientRect.width() / mScale);
+    map.putDouble("height", clientRect.height() / mScale);
+    this.stateWrapper.updateState(map);
   }
 }

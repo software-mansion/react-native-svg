@@ -18,12 +18,6 @@
 #import "RNSVGVectorEffect.h"
 #import "RNSVGViewBox.h"
 
-#ifdef RCT_NEW_ARCH_ENABLED
-#import <rnsvg/RNSVGComponentDescriptors.h>
-
-using namespace facebook::react;
-#endif
-
 @implementation RNSVGRenderable {
   NSMutableDictionary *_originProperties;
   NSArray<NSString *> *_lastMergedList;
@@ -448,7 +442,7 @@ UInt32 saturate(CGFloat value)
 
   [self renderMarkers:context path:self.path rect:&rect];
 #ifdef RCT_NEW_ARCH_ENABLED
-  _state->updateState(RNSVGLayoutableState(self.clientRect.origin.x, self.clientRect.origin.y, self.clientRect.size.width, self.clientRect.size.height));
+  [self updateShadowNodeMetrics];
 #endif
 }
 
@@ -790,5 +784,18 @@ UInt32 saturate(CGFloat value)
 
   return nil;
 }
+
+#ifdef RCT_NEW_ARCH_ENABLED
+- (void)updateShadowNodeMetrics
+{
+  if (_state) {
+    _state->updateState(RNSVGLayoutableState(self.clientRect.origin.x, self.clientRect.origin.y, self.clientRect.size.width, self.clientRect.size.height));
+  }
+}
+
+- (RNSVGRenderableShadowNode::ConcreteState::Shared)state {
+  return _state;
+}
+#endif
 
 @end

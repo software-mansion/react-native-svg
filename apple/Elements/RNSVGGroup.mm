@@ -16,6 +16,7 @@
 #import <react/renderer/components/view/conversions.h>
 #import <rnsvg/RNSVGComponentDescriptors.h>
 #import "RNSVGFabricConversions.h"
+#import "RNSVGRenderUtils.h"
 #endif // RCT_NEW_ARCH_ENABLED
 
 @implementation RNSVGGroup {
@@ -307,6 +308,16 @@ using namespace facebook::react;
     return YES;
   }];
 }
+
+#ifdef RCT_NEW_ARCH_ENABLED
+- (void)updateShadowNodeMetrics
+{
+  auto statePtr = [self state];
+  if (statePtr) {
+    statePtr->updateState(RNSVGLayoutableState(0, 0, [self getCanvasWidth], [self getCanvasHeight]));
+  }
+}
+#endif
 
 @end
 
