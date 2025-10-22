@@ -18,14 +18,7 @@ const decodeBase64Image = (uri: string) => {
   const splitContent = decoded.split(';')[1].split(',');
   const content = splitContent.slice(1).join(',');
 
-  // Decode base64 using native APIs
-  const binaryString = atob(content);
-  const bytes = new Uint8Array(binaryString.length);
-  for (let i = 0; i < binaryString.length; i++) {
-    bytes[i] = binaryString.charCodeAt(i);
-  }
-  const decoder = new TextDecoder('utf-8');
-  return decoder.decode(bytes);
+  return atob(content);
 };
 
 function dataUriToXml(uri: string): string | null {
