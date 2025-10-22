@@ -1,5 +1,4 @@
 import { Platform } from 'react-native';
-import { Buffer } from 'buffer';
 
 export async function fetchText(uri?: string): Promise<string | null> {
   if (!uri) {
@@ -17,10 +16,16 @@ export async function fetchText(uri?: string): Promise<string | null> {
 const decodeBase64Image = (uri: string) => {
   const decoded = decodeURIComponent(uri);
   const splitContent = decoded.split(';')[1].split(',');
-  const dataType = splitContent[0] as BufferEncoding;
   const content = splitContent.slice(1).join(',');
 
-  return Buffer.from(content, dataType).toString('utf-8');
+  // Decode base64 using native APIs
+  const binaryString = atob(content);
+  const bytes = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  const decoder = new TextDecoder('utf-8');
+  return decoder.decode(bytes);
 };
 
 function dataUriToXml(uri: string): string | null {
