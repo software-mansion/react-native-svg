@@ -26,7 +26,6 @@ import com.facebook.react.uimanager.UIManagerHelper;
 import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.views.view.ReactViewGroup;
 import com.horcrux.svg.events.SvgOnLayoutEvent;
-
 import java.util.ArrayList;
 import javax.annotation.Nullable;
 
@@ -86,7 +85,7 @@ public abstract class VirtualView extends ReactViewGroup {
   private float canvasHeight = -1;
   private float canvasWidth = -1;
   private GlyphContext glyphContext;
-  protected  @Nullable StateWrapper stateWrapper = null;
+  protected @Nullable StateWrapper stateWrapper = null;
 
   Path mPath;
   Path mFillPath;
@@ -256,7 +255,7 @@ public abstract class VirtualView extends ReactViewGroup {
     int count = canvas.save();
     mCTM.set(mMatrix);
     canvas.concat(mCTM);
-    mCTM.preConcat(ctm);
+    mCTM.postConcat(ctm);
     mCTMInvertible = mCTM.invert(mInvCTM);
     return count;
   }
@@ -444,7 +443,9 @@ public abstract class VirtualView extends ReactViewGroup {
 
   double relativeOnWidth(SVGLength length) {
     SvgView svg = getSvgView();
-    if (length.unit == SVGLength.UnitType.PERCENTAGE && svg != null && svg.getViewBox().width() != 0) {
+    if (length.unit == SVGLength.UnitType.PERCENTAGE
+        && svg != null
+        && svg.getViewBox().width() != 0) {
       return relativeOn(length, svg.getViewBox().width());
     }
     return relativeOn(length, getCanvasWidth());
@@ -452,7 +453,9 @@ public abstract class VirtualView extends ReactViewGroup {
 
   double relativeOnHeight(SVGLength length) {
     SvgView svg = getSvgView();
-    if (length.unit == SVGLength.UnitType.PERCENTAGE && svg != null && svg.getViewBox().height() != 0) {
+    if (length.unit == SVGLength.UnitType.PERCENTAGE
+        && svg != null
+        && svg.getViewBox().height() != 0) {
       return relativeOn(length, svg.getViewBox().height());
     }
     return relativeOn(length, getCanvasHeight());
@@ -619,13 +622,13 @@ public abstract class VirtualView extends ReactViewGroup {
         UIManagerHelper.getEventDispatcherForReactTag(mContext, getId());
     if (eventDispatcher != null) {
       eventDispatcher.dispatchEvent(
-        new SvgOnLayoutEvent(
-          UIManagerHelper.getSurfaceId(VirtualView.this),
-          this.getId(),
-          left,
-          top,
-          width,
-          height));
+          new SvgOnLayoutEvent(
+              UIManagerHelper.getSurfaceId(VirtualView.this),
+              this.getId(),
+              left,
+              top,
+              width,
+              height));
     }
   }
 
