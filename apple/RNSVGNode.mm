@@ -266,12 +266,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 
 - (void)setTransforms:(CGAffineTransform)transforms
 {
-  if (CGAffineTransformEqualToTransform(transforms, _matrix)) {
-    return;
-  }
-
-  _matrix = transforms;
-  [self invalidate];
+  self.matrix = transforms;
 }
 
 - (void)setClientRect:(CGRect)clientRect
