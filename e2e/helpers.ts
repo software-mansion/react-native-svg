@@ -1,7 +1,7 @@
 import { E2EMessage } from './types';
 import { PNG } from 'pngjs';
 import fs from 'node:fs';
-import pixelmatch from 'pixelmatch';
+import blazediff from '@blazediff/core';
 
 const replacer = (key: string, value: any) => {
   if (key === 'type' && typeof value !== 'string') return value.displayName;
@@ -36,7 +36,7 @@ export const compareImages = (
     width: referencePng.width,
   });
 
-  const pixelDiff = pixelmatch(
+  const diff = blazediff(
     referencePng.data,
     responsePng.data,
     diffPng.data,
@@ -53,5 +53,5 @@ export const compareImages = (
   if (opts.diffFilePath) {
     fs.writeFileSync(opts.diffFilePath, PNG.sync.write(diffPng));
   }
-  return pixelDiff;
+  return diff;
 };
