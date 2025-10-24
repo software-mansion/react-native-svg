@@ -74,7 +74,7 @@ jobs:
         with:
           api-level: ${{ env.API_LEVEL }}
           target: default
-          profile: pixel_8_pro
+          profile: pixel_7
           ram-size: '4096M'
           disk-size: '5G'
           disable-animations: false
