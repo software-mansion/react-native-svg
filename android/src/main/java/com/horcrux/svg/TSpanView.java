@@ -1218,7 +1218,6 @@ class TSpanView extends TextView {
 
     float[] dst = new float[2];
     mInvMatrix.mapPoints(dst, src);
-    mInvTransform.mapPoints(dst);
     int x = Math.round(dst[0]);
     int y = Math.round(dst[1]);
 

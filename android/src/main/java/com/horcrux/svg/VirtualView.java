@@ -57,7 +57,6 @@ public abstract class VirtualView extends ReactViewGroup {
   Matrix mMatrix = new Matrix();
   Matrix mInvCTM = new Matrix();
   Matrix mInvMatrix = new Matrix();
-  final Matrix mInvTransform = new Matrix();
   boolean mInvertible = true;
   boolean mCTMInvertible = true;
   private RectF mClientRect;
