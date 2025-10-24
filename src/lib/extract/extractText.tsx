@@ -4,6 +4,7 @@ import { Children } from 'react';
 import extractLengthList from './extractLengthList';
 import { pickNotNil } from '../util';
 import type { NumberArray, NumberProp } from './types';
+import { parse as parseVerticalAlign } from './verticalAlign';
 
 const fontRegExp =
   /^\s*((?:(?:normal|bold|italic)\s+)*)(?:(\d+(?:\.\d+)?(?:%|px|em|pt|pc|mm|cm|in]))*(?:\s*\/.*?)?\s+)?\s*"?([^"]*)/i;
@@ -146,18 +147,18 @@ export type TextProps = {
 } & fontProps;
 
 export default function extractText(props: TextProps, container: boolean) {
-  const {
-    x,
-    y,
-    dx,
-    dy,
-    rotate,
-    children,
-    inlineSize,
-    baselineShift,
-    verticalAlign,
-    alignmentBaseline,
-  } = props;
+  const { x, y, dx, dy, rotate, children, inlineSize, verticalAlign } = props;
+  let baselineShift, alignmentBaseline;
+
+  if (verticalAlign) {
+    const { baselineShift: parsedShift, alignmentBaseline: parsedAlign } =
+      parseVerticalAlign(String(verticalAlign));
+    baselineShift = parsedShift;
+    alignmentBaseline = parsedAlign;
+  }
+
+  baselineShift = props.baselineShift ?? baselineShift;
+  alignmentBaseline = props.alignmentBaseline ?? alignmentBaseline;
 
   const textChildren =
     typeof children === 'string' || typeof children === 'number' ? (
@@ -175,7 +176,6 @@ export default function extractText(props: TextProps, container: boolean) {
     children: textChildren,
     inlineSize,
     baselineShift,
-    verticalAlign,
     alignmentBaseline,
     font: extractFont(props),
     x: extractLengthList(x),
