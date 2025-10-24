@@ -87,6 +87,30 @@
   }
 }
 
++ (RNSVGTurbulenceStitchTile)RNSVGTurbulenceStitchTileFromCppEquivalent:(react::RNSVGFeTurbulenceStitchTiles)stitchTiles
+{
+  switch (stitchTiles) {
+    case react::RNSVGFeTurbulenceStitchTiles::Stitch:
+      return SVG_FETURBULENCE_STITCH_TILE_STITCH;
+    case react::RNSVGFeTurbulenceStitchTiles::NoStitch:
+      return SVG_FETURBULENCE_STITCH_TILE_NO_STITCH;
+    default:
+      return SVG_FETURBULENCE_STITCH_TILE_NO_STITCH;
+  }
+}
+
++ (RNSVGTurbulenceType)RNSVGTurbulenceTypeFromCppEquivalent:(react::RNSVGFeTurbulenceType)type
+{
+  switch (type) {
+    case react::RNSVGFeTurbulenceType::Turbulence:
+      return SVG_FETURBULENCE_TYPE_TURBULENCE;
+    case react::RNSVGFeTurbulenceType::FractalNoise:
+      return SVG_FETURBULENCE_TYPE_FRACTAL_NOISE;
+    default:
+      return SVG_FETURBULENCE_TYPE_TURBULENCE;
+  }
+}
+
 @end
 
 #endif // RCT_NEW_ARCH_ENABLED
