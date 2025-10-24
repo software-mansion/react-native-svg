@@ -107,7 +107,6 @@ class UseView extends RenderableView {
 
     float[] dst = new float[2];
     mInvMatrix.mapPoints(dst, src);
-    mInvTransform.mapPoints(dst);
 
     VirtualView template = getSvgView().getDefinedTemplate(mHref);
     if (template == null) {
