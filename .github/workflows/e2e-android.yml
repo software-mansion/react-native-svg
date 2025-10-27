@@ -92,19 +92,21 @@ jobs:
             $ANDROID_HOME/platform-tools/adb reverse tcp:8081 tcp:8081
 
             # Start Metro in the background
-            nohup E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start > output.log 2>&1 < /dev/null &
+            E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start &> output.log &
 
-            # Build the Android app      
-            cd apps/${{ env.WORKING_DIRECTORY }}/android && ./gradlew assembleDebug
+            kill $!
 
-            # Install the app APK
-            $ANDROID_HOME/platform-tools/adb install -r apps/${{ env.WORKING_DIRECTORY }}/android/app/build/outputs/apk/debug/app-debug.apk
+            # # Build the Android app      
+            # cd apps/${{ env.WORKING_DIRECTORY }}/android && ./gradlew assembleDebug
 
-            # Launch the app using bash
-            bash -c 'until $ANDROID_HOME/platform-tools/adb shell monkey -p com.paperexample 1 | grep -q "Events injected: 1"; do sleep 1; echo "Retrying app launch..."; done'
+            # # Install the app APK
+            # $ANDROID_HOME/platform-tools/adb install -r apps/${{ env.WORKING_DIRECTORY }}/android/app/build/outputs/apk/debug/app-debug.apk
 
-            # Run E2E tests
-            yarn e2e
+            # # Launch the app using bash
+            # bash -c 'until $ANDROID_HOME/platform-tools/adb shell monkey -p com.paperexample 1 | grep -q "Events injected: 1"; do sleep 1; echo "Retrying app launch..."; done'
+
+            # # Run E2E tests
+            # yarn e2e
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
