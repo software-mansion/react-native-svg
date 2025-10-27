@@ -701,7 +701,6 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
 
     float[] dst = new float[2];
     mInvMatrix.mapPoints(dst, src);
-    mInvTransform.mapPoints(dst);
     int x = Math.round(dst[0]);
     int y = Math.round(dst[1]);
 

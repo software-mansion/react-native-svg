@@ -323,7 +323,7 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
         return cdata;
       }
       if (/doctype/i.test(source.slice(start, end))) {
-        return neutral;
+        return doctype;
       }
     }
 
@@ -394,6 +394,16 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
     children.push(source.slice(i + 7, index));
 
     i = index + 2;
+    return neutral;
+  }
+
+  function doctype() {
+    const index = source.indexOf('>', i);
+    if (index === -1) {
+      error('expected >');
+    }
+
+    i = index;
     return neutral;
   }
 

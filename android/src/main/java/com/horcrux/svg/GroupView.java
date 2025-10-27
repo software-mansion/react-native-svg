@@ -118,7 +118,8 @@ class GroupView extends RenderableView {
     elements = new ArrayList<>();
     for (int i = 0; i < getChildCount(); i++) {
       View child = getChildAt(i);
-      if (child instanceof MaskView) {
+      if (child instanceof MaskView || child instanceof ClipPathView) {
+        ((RenderableView) child).mergeProperties(self);
         continue;
       }
       if (child instanceof VirtualView) {
@@ -202,7 +203,11 @@ class GroupView extends RenderableView {
       if (node instanceof VirtualView) {
         VirtualView n = (VirtualView) node;
         Matrix transform = n.mMatrix;
-        mPath.addPath(n.getPath(canvas, paint), transform);
+        Path path = n.getPath(canvas, paint);
+
+        if (path != null) {
+          mPath.addPath(path, transform);
+        }
       }
     }
 
@@ -272,7 +277,6 @@ class GroupView extends RenderableView {
 
     float[] dst = new float[2];
     mInvMatrix.mapPoints(dst, src);
-    mInvTransform.mapPoints(dst);
 
     int x = Math.round(dst[0]);
     int y = Math.round(dst[1]);

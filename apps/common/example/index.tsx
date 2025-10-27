@@ -60,7 +60,7 @@ export default function App() {
               )}
             />
           ))}
-          <Stack.Screen name={'E2E'}>{E2e.component}</Stack.Screen>
+          <Stack.Screen name={'E2E'} component={E2e.component} />
         </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>
