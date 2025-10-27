@@ -82,36 +82,31 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           avd-name: e2e_emulator
           arch: x86_64
-          script: |
-            # Install root node dependencies      
-            yarn install      
-            # Install example app node dependencies     
+          script: >
+            bash -c '
+            set -e
+
+            yarn install
             yarn --cwd apps/${{ env.WORKING_DIRECTORY }} install
 
-            # Set up ADB reverse for Metro      
             $ANDROID_HOME/platform-tools/adb reverse tcp:8081 tcp:8081
 
-            # Start Metro in the background
-            E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start &> output.log &
-            echo $! > metro.pid
-            echo "Saved Metro PID: $(cat metro.pid)"
+            E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start > output.log 2>&1 &
+            METRO_PID=$!
+            echo "Metro started with PID $METRO_PID"
 
-            echo "Metro PID is $METRO_PID"
+            # sleep 10
 
-            # # Build the Android app      
-            # cd apps/${{ env.WORKING_DIRECTORY }}/android && ./gradlew assembleDebug
+            # cd apps/${{ env.WORKING_DIRECTORY }}/android
+            # ./gradlew assembleDebug
 
-            # # Install the app APK
-            # $ANDROID_HOME/platform-tools/adb install -r apps/${{ env.WORKING_DIRECTORY }}/android/app/build/outputs/apk/debug/app-debug.apk
+            # $ANDROID_HOME/platform-tools/adb install -r app/build/outputs/apk/debug/app-debug.apk
 
-            # # Launch the app using bash
-            # bash -c 'until $ANDROID_HOME/platform-tools/adb shell monkey -p com.paperexample 1 | grep -q "Events injected: 1"; do sleep 1; echo "Retrying app launch..."; done'
-
-            # # Run E2E tests
             # yarn e2e
 
-            # Kill Metro
-            kill $(cat metro.pid) || true
+            echo "Stopping Metro with PID $METRO_PID"
+            kill $METRO_PID || true
+            '
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
