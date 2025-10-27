@@ -106,6 +106,9 @@ jobs:
             # Run E2E tests
             yarn e2e
 
+            # Kill Metro so the script can finish
+            pkill -f "yarn start"
+
       - name: Upload test report
         uses: actions/upload-artifact@v4
         with:
