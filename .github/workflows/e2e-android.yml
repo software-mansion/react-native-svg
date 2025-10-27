@@ -93,6 +93,10 @@ jobs:
 
             # Start Metro in the background
             E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start &> output.log &
+            METRO_PID=$!
+            disown
+
+            echo "Metro PID is $METRO_PID"
 
             # # Build the Android app      
             # cd apps/${{ env.WORKING_DIRECTORY }}/android && ./gradlew assembleDebug
@@ -107,7 +111,7 @@ jobs:
             # yarn e2e
 
             # Kill Metro
-            kill %%
+            kill $METRO_PID || true
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
