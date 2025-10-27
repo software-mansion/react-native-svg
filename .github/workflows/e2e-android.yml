@@ -92,7 +92,8 @@ jobs:
             $ANDROID_HOME/platform-tools/adb reverse tcp:8081 tcp:8081
 
             # Start Metro in the background
-            E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start &> output.log &
+            nohup E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start > output.log 2>&1 &
+            disown
 
             # Build the Android app      
             cd apps/${{ env.WORKING_DIRECTORY }}/android && ./gradlew assembleDebug
@@ -105,9 +106,6 @@ jobs:
 
             # Run E2E tests
             yarn e2e
-
-            # Kill Metro so the script can finish
-            pkill -f "yarn start"
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
