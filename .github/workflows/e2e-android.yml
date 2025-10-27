@@ -107,7 +107,7 @@ jobs:
             # yarn e2e
 
             # Kill Metro
-            pkill -f "yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start" || true
+            ps -ef | grep "yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start" | grep -v grep | awk '{print $2}' | xargs -r kill || true
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
