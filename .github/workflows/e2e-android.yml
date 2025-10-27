@@ -92,7 +92,7 @@ jobs:
             $ANDROID_HOME/platform-tools/adb reverse tcp:8081 tcp:8081
 
             # Start Metro in the background
-            E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start &> output.log &
+            nohup E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start &> output.log &
             METRO_PID=$!
 
             echo "Metro PID is $METRO_PID"
