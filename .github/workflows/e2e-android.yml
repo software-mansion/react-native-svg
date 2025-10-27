@@ -82,38 +82,32 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           avd-name: e2e_emulator
           arch: x86_64
-          script: >
-            sh -c '
-              # Install root node dependencies      
-              yarn install      
-              # Install example app node dependencies     
-              yarn --cwd apps/${{ env.WORKING_DIRECTORY }} install
+          script: |
+            # Install root node dependencies      
+            yarn install      
+            # Install example app node dependencies     
+            yarn --cwd apps/${{ env.WORKING_DIRECTORY }} install
 
-              # Set up ADB reverse for Metro      
-              $ANDROID_HOME/platform-tools/adb reverse tcp:8081 tcp:8081
+            # Set up ADB reverse for Metro      
+            $ANDROID_HOME/platform-tools/adb reverse tcp:8081 tcp:8081
 
-              # Start Metro in the background
-              E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start &> output.log &
-              METRO_PID=$!
-              echo "Saved Metro PID: $METRO_PID"
+            # Start Metro in the background
+            E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start &> output.log &
 
-              echo "Metro PID is $METRO_PID"
+            # # Build the Android app      
+            # cd apps/${{ env.WORKING_DIRECTORY }}/android && ./gradlew assembleDebug
 
-              # # Build the Android app      
-              # cd apps/${{ env.WORKING_DIRECTORY }}/android && ./gradlew assembleDebug
+            # # Install the app APK
+            # $ANDROID_HOME/platform-tools/adb install -r apps/${{ env.WORKING_DIRECTORY }}/android/app/build/outputs/apk/debug/app-debug.apk
 
-              # # Install the app APK
-              # $ANDROID_HOME/platform-tools/adb install -r apps/${{ env.WORKING_DIRECTORY }}/android/app/build/outputs/apk/debug/app-debug.apk
+            # # Launch the app using bash
+            # bash -c 'until $ANDROID_HOME/platform-tools/adb shell monkey -p com.paperexample 1 | grep -q "Events injected: 1"; do sleep 1; echo "Retrying app launch..."; done'
 
-              # # Launch the app using bash
-              # bash -c 'until $ANDROID_HOME/platform-tools/adb shell monkey -p com.paperexample 1 | grep -q "Events injected: 1"; do sleep 1; echo "Retrying app launch..."; done'
+            # # Run E2E tests
+            # yarn e2e
 
-              # # Run E2E tests
-              # yarn e2e
-
-              # Kill Metro
-              kill $METRO_PID || true
-            '
+            # Kill Metro
+            pkill -f "yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start" || true
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
