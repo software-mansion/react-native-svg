@@ -28,11 +28,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # - name: Free Disk Space (Ubuntu)
-      #   uses: jlumbroso/free-disk-space@main
-      #   with:
-      #     tool-cache: true
-      #     android: false
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: true
+          android: false
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -101,7 +101,7 @@ jobs:
             $ANDROID_HOME/platform-tools/adb install -r apps/${{ env.WORKING_DIRECTORY }}/android/app/build/outputs/apk/debug/app-debug.apk
 
             # Launch the app using bash
-            bash -c 'until $ANDROID_HOME/platform-tools/adb shell monkey -p com.paperexample 1 | grep -q "Events injected: 1"; do sleep 1; echo "Retrying app launch..."; done'
+            bash -c 'until $ANDROID_HOME/platform-tools/adb shell monkey -p com.${{ env.WORKING_DIRECTORY }} 1 | grep -q "Events injected: 1"; do sleep 1; echo "Retrying app launch..."; done'
 
             # Run E2E tests
             yarn e2e
