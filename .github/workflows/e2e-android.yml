@@ -94,7 +94,6 @@ jobs:
             # Start Metro in the background
             E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start &> output.log &
             METRO_PID=$!
-            disown
 
             echo "Metro PID is $METRO_PID"
 
