@@ -107,7 +107,7 @@ jobs:
             # yarn e2e
 
             # Kill Metro
-            ps -ef | grep "yarn start"
+            ps -ef | grep "yarn start" | grep -v grep | awk '{print $2}' | xargs -r kill || true
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
