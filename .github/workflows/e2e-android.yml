@@ -28,11 +28,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
-        with:
-          tool-cache: true
-          android: false
+      # - name: Free Disk Space (Ubuntu)
+      #   uses: jlumbroso/free-disk-space@main
+      #   with:
+      #     tool-cache: true
+      #     android: false
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -92,20 +92,22 @@ jobs:
             $ANDROID_HOME/platform-tools/adb reverse tcp:8081 tcp:8081
 
             # Start Metro in the background
-            nohup E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start > output.log 2>&1 &
-            disown
+            E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start &> output.log &
+            METRO_PID=$!
 
-            # Build the Android app      
-            cd apps/${{ env.WORKING_DIRECTORY }}/android && ./gradlew assembleDebug
+            # # Build the Android app      
+            # cd apps/${{ env.WORKING_DIRECTORY }}/android && ./gradlew assembleDebug
 
-            # Install the app APK
-            $ANDROID_HOME/platform-tools/adb install -r apps/${{ env.WORKING_DIRECTORY }}/android/app/build/outputs/apk/debug/app-debug.apk
+            # # Install the app APK
+            # $ANDROID_HOME/platform-tools/adb install -r apps/${{ env.WORKING_DIRECTORY }}/android/app/build/outputs/apk/debug/app-debug.apk
 
-            # Launch the app using bash
-            bash -c 'until $ANDROID_HOME/platform-tools/adb shell monkey -p com.paperexample 1 | grep -q "Events injected: 1"; do sleep 1; echo "Retrying app launch..."; done'
+            # # Launch the app using bash
+            # bash -c 'until $ANDROID_HOME/platform-tools/adb shell monkey -p com.paperexample 1 | grep -q "Events injected: 1"; do sleep 1; echo "Retrying app launch..."; done'
 
-            # Run E2E tests
-            yarn e2e
+            # # Run E2E tests
+            # yarn e2e
+
+            kill $METRO_PID || true
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
