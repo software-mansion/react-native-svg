@@ -106,6 +106,8 @@ jobs:
             # Run E2E tests
             yarn e2e
 
+            sleep 20
+
             # Kill Metro
             killall -9 node || true
 
