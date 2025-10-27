@@ -83,9 +83,6 @@ jobs:
           avd-name: e2e_emulator
           arch: x86_64
           script: |
-            bash <<'EOF'
-            set -e
-
             # Install root node dependencies      
             yarn install      
             # Install example app node dependencies     
@@ -96,7 +93,8 @@ jobs:
 
             # Start Metro in the background
             E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start &> output.log &
-            METRO_PID=$!
+            echo $! > metro.pid
+            echo "Saved Metro PID: $(cat metro.pid)"
 
             echo "Metro PID is $METRO_PID"
 
@@ -113,9 +111,7 @@ jobs:
             # yarn e2e
 
             # Kill Metro
-            kill $METRO_PID || true
-
-            EOF
+            kill $(cat metro.pid) || true
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
