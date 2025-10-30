@@ -34,6 +34,7 @@ using namespace facebook::react;
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const RNSVGForeignObjectProps>();
     _props = defaultProps;
+    _managedNodes = [NSHashTable weakObjectsHashTable];
   }
   return self;
 }
@@ -77,6 +78,12 @@ using namespace facebook::react;
   _y = nil;
   _foreignObjectheight = nil;
   _foreignObjectwidth = nil;
+  
+  for (RNSVGView *node in self.managedNodes) {
+      node.hidden = NO;
+  }
+  
+  [self.managedNodes removeAllObjects];
 }
 #endif // RCT_NEW_ARCH_ENABLED
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
@@ -139,9 +146,32 @@ using namespace facebook::react;
       CGContextClipToRect(context, svgViewRect);
       [svgView drawToContext:context withRect:svgViewRect];
     } else {
-      node.hidden = false;
+      CATransform3D transform = node.layer.transform;
+      
+#ifdef RCT_NEW_ARCH_ENABLED
+      [self.managedNodes addObject:node];
+#endif
+      
+      CGContextSaveGState(context);
+      CGRect bounds = node.layer.bounds;
+      CGPoint position = node.layer.position;
+
+      CGContextTranslateCTM(context, position.x, position.y);
+      
+      if (!CATransform3DIsIdentity(transform)) {
+        CGAffineTransform affine = CATransform3DGetAffineTransform(transform);
+        CGContextConcatCTM(context, affine);
+      }
+      
+      // This moves the origin from that center point to the object's top-left corner,
+      // which is where drawing operations will begin.
+      CGContextTranslateCTM(context, -bounds.size.width / 2, -bounds.size.height / 2);
+      
+      node.hidden = NO;
       [node.layer renderInContext:context];
-      node.hidden = true;
+      node.hidden = YES;
+
+      CGContextRestoreGState(context);
     }
 
     return YES;
@@ -172,6 +202,20 @@ using namespace facebook::react;
 
   [self popGlyphContext];
 }
+
+#ifdef RCT_NEW_ARCH_ENABLED
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+
+    // We know layout is done, but the async text rendering is not.
+    // We schedule the SVG redraw for the next runloop cycle.
+    // This gives the text layout system time to finish its work.
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self invalidate];
+    });
+}
+#endif
 
 - (void)drawRect:(CGRect)rect
 {
