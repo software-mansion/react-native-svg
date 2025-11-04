@@ -8,8 +8,5 @@
 @property (nonatomic, strong) RNSVGLength *y;
 @property (nonatomic, strong) RNSVGLength *foreignObjectwidth;
 @property (nonatomic, strong) RNSVGLength *foreignObjectheight;
-#ifdef RCT_NEW_ARCH_ENABLED
-@property (nonatomic, strong) NSHashTable<RNSVGView *> *managedNodes;
-#endif
 
 @end

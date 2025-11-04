@@ -34,7 +34,6 @@ using namespace facebook::react;
   if (self = [super initWithFrame:frame]) {
     static const auto defaultProps = std::make_shared<const RNSVGForeignObjectProps>();
     _props = defaultProps;
-    _managedNodes = [NSHashTable weakObjectsHashTable];
   }
   return self;
 }
@@ -78,12 +77,6 @@ using namespace facebook::react;
   _y = nil;
   _foreignObjectheight = nil;
   _foreignObjectwidth = nil;
-  
-  for (RNSVGView *node in self.managedNodes) {
-      node.hidden = NO;
-  }
-  
-  [self.managedNodes removeAllObjects];
 }
 #endif // RCT_NEW_ARCH_ENABLED
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
@@ -148,10 +141,6 @@ using namespace facebook::react;
     } else {
       CATransform3D transform = node.layer.transform;
       
-#ifdef RCT_NEW_ARCH_ENABLED
-      [self.managedNodes addObject:node];
-#endif
-      
       CGContextSaveGState(context);
       CGRect bounds = node.layer.bounds;
       CGPoint position = node.layer.position;
@@ -206,14 +195,20 @@ using namespace facebook::react;
 #ifdef RCT_NEW_ARCH_ENABLED
 - (void)layoutSubviews
 {
-    [super layoutSubviews];
+  [super layoutSubviews];
+// We know layout is done, but the async text rendering is not.
+// We schedule the SVG redraw for the next runloop cycle.
+// This gives the text layout system time to finish its work.
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [self invalidate];
+  });
+}
 
-    // We know layout is done, but the async text rendering is not.
-    // We schedule the SVG redraw for the next runloop cycle.
-    // This gives the text layout system time to finish its work.
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self invalidate];
-    });
+- (void) willRemoveSubview:(UIView *) subview
+{
+  if ([subview isKindOfClass:[RCTViewComponentView class]]) {
+    subview.hidden = NO;
+  }
 }
 #endif
 
