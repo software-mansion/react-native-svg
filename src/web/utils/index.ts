@@ -63,3 +63,41 @@ export function encodeSvg(svgString: string) {
     .replace(/>/g, '%3E')
     .replace(/\s+/g, ' ');
 }
+
+const KEEP_CAMEL_CASE = new Set([
+  'stdDeviation',
+  'edgeMode',
+  'kernelMatrix',
+  'kernelUnitLength',
+  'preserveAlpha',
+  'baseFrequency',
+  'targetX',
+  'targetY',
+  'numOctaves',
+  'stitchTiles',
+  'filterUnits',
+  'primitiveUnits',
+  'pathLength',
+  'gradientUnits',
+  'gradientTransform',
+  'spreadMethod',
+  'markerHeight',
+  'markerUnits',
+  'markerWidth',
+  'viewBox',
+  'refX',
+  'refY',
+  'maskContentUnits',
+  'maskUnits',
+  'patternContentUnits',
+  'patternTransform',
+  'patternUnits',
+  'textLength',
+  'lengthAdjust',
+  'startOffset',
+  'clipPathUnits',
+]);
+
+export const getAttributeName = (attr: string) => {
+  return KEEP_CAMEL_CASE.has(attr) ? attr : camelCaseToDashed(attr);
+};
