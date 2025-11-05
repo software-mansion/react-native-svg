@@ -193,17 +193,6 @@ using namespace facebook::react;
 }
 
 #ifdef RCT_NEW_ARCH_ENABLED
-- (void)layoutSubviews
-{
-  [super layoutSubviews];
-// We know layout is done, but the async text rendering is not.
-// We schedule the SVG redraw for the next runloop cycle.
-// This gives the text layout system time to finish its work.
-  dispatch_async(dispatch_get_main_queue(), ^{
-    [self invalidate];
-  });
-}
-
 - (void) willRemoveSubview:(UIView *) subview
 {
   if ([subview isKindOfClass:[RCTViewComponentView class]]) {
