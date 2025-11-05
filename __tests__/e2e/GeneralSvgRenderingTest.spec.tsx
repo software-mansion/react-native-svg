@@ -34,7 +34,7 @@ testCases.forEach((testCase) => {
 
     const referenceFilePath = path.resolve(
       'e2e',
-      'references',
+      global.os === 'android' ? 'references/android' : 'references/ios',
       testCase.replace('.svg', '.png')
     );
     const renderedFilePath = path.resolve(

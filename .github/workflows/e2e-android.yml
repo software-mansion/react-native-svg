@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 jobs:
   test:
-    runs-on: macos-12
+    runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
       WORKING_DIRECTORY: paper-example
@@ -25,87 +25,89 @@ jobs:
       group: android-e2e-example-${{ github.ref }}
       cancel-in-progress: true
     steps:
-      - name: checkout
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
         with:
-          submodules: recursive
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: 'yarn'
+          tool-cache: true
+          android: false
+
       - name: Set up JDK 17
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'zulu'
           cache: 'gradle'
-      - name: Install NDK
-        uses: nttld/setup-ndk@v1
-        id: setup-ndk
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
         with:
-          ndk-version: r26d
-          local-cache: true
-      - name: Set ANDROID_NDK
-        run: echo "ANDROID_NDK=$ANDROID_HOME/ndk-bundle" >> $GITHUB_ENV
-      - name: Cache SDK image
-        id: cache-sdk-img
-        uses: actions/cache@v3
-        with:
-          path: $ANDROID_HOME/system-images/
-          key: ${{ runner.os }}-build-system-images-${{ env.SYSTEM_IMAGES }}
-      - name: SKDs - download required images
-        if: ${{ steps.cache-sdd-img.outputs.cache-hit != 'true' }}
-        run: $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "system-images;android-34;google_apis;x86_64"
-      - name: Cache AVD
-        id: cache-avd
-        uses: actions/cache@v3
-        with:
-          path: ~/.android/avd/${{ env.AVD_NAME }}.avd
-          key: ${{ runner.os }}-avd-images-${{ env.SYSTEM_IMAGES }}-${{ env.AVD_NAME }}
-      - name: Emulator - Create
-        if: ${{ steps.cache-avd.outputs.cache-hit != 'true' }}
-        run: $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd -n ${{ env.AVD_NAME }} --device 28 --package "${{ env.SYSTEM_IMAGES }}" --sdcard 512M
-      - name: Emulator - Set screen settings
-        if: ${{ steps.cache-avd.outputs.cache-hit != 'true' }}
+          node-version: 22
+          cache: 'yarn'
+
+      - name: Install AVD dependencies
+        # libxkbfile1 is removed by "Free Disk Space (Ubuntu)" step first. Here we install it again
+        # as it seems to be needed by the emulator.
         run: |
-          echo "AVD config path: $HOME/.android/avd/${{ env.AVD_NAME }}.avd/config.ini"
-          sed -i '' 's/.*hw\.lcd\.density.*/hw\.lcd\.density = 480/g' $HOME/.android/avd/${{ env.AVD_NAME }}.avd/config.ini
-          sed -i '' 's/.*hw\.lcd\.width.*/hw\.lcd\.width = 1344/g' $HOME/.android/avd/${{ env.AVD_NAME }}.avd/config.ini
-          sed -i '' 's/.*hw\.lcd\.height.*/hw\.lcd\.height = 2992/g' $HOME/.android/avd/${{ env.AVD_NAME }}.avd/config.ini
-      - name: Emulator - Boot
-        run: $ANDROID_HOME/emulator/emulator -memory 4096 -avd ${{ env.AVD_NAME }} -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim &
+          sudo apt update
+          sudo apt-get install -y libpulse0 libgl1 libxkbfile1
 
-      - name: ADB Wait For Device
-        run: adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
-        timeout-minutes: 10
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
 
-      - name: Reverse TCP
-        working-directory: apps/${{ env.WORKING_DIRECTORY }}
-        run: adb devices | grep '\t' | awk '{print $1}' | sed 's/\\s//g' | xargs -I {} adb -s {} reverse tcp:8081 tcp:8081
+      - name: AVD cache
+        uses: actions/cache@v4
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ env.API_LEVEL }}
 
-      - name: Install root node dependencies
-        run: yarn
+      - name: Run emulator, Metro, and E2E
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ env.API_LEVEL }}
+          target: default
+          profile: pixel_7
+          ram-size: '4096M'
+          disk-size: '5G'
+          disable-animations: false
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          avd-name: e2e_emulator
+          arch: x86_64
+          script: |
+            # Install root node dependencies      
+            yarn install      
+            # Install example app node dependencies     
+            yarn --cwd apps/${{ env.WORKING_DIRECTORY }} install
 
-      - name: Install example app node dependencies
-        run: yarn
-        working-directory: apps/${{ env.WORKING_DIRECTORY }}
+            # Set up ADB reverse for Metro      
+            $ANDROID_HOME/platform-tools/adb reverse tcp:8081 tcp:8081
 
-      - name: Build Android app
-        working-directory: apps/${{ env.WORKING_DIRECTORY }}/android
-        run: ./gradlew assembleDebug
+            # Start Metro in the background
+            E2E=true yarn --cwd apps/${{ env.WORKING_DIRECTORY }} start &> output.log &
 
-      - name: Start Metro server
-        working-directory: apps/${{ env.WORKING_DIRECTORY }}
-        run: E2E=true yarn start &> output.log &
+            # Build the Android app      
+            cd apps/${{ env.WORKING_DIRECTORY }}/android && ./gradlew assembleDebug
 
-      - name: Install APK
-        run: adb install -r apps/${{ env.WORKING_DIRECTORY }}/android/app/build/outputs/apk/debug/app-debug.apk
+            # Install the app APK
+            $ANDROID_HOME/platform-tools/adb install -r apps/${{ env.WORKING_DIRECTORY }}/android/app/build/outputs/apk/debug/app-debug.apk
 
-      - name: Launch APK
-        run: 'while ! (adb shell monkey -p com.example 1 | grep -q "Events injected: 1"); do sleep 1; echo "Retrying due to errors in previous run..."; done'
+            # Launch the app using bash
+            bash -c 'until $ANDROID_HOME/platform-tools/adb shell monkey -p com.paperexample 1 | grep -q "Events injected: 1"; do sleep 1; echo "Retrying app launch..."; done'
 
-      - name: Run e2e Tests
-        run: E2E=true yarn e2e
+            # Run E2E tests
+            yarn e2e
+
+            # Kill Metro
+            lsof -ti:8081 | xargs -r kill
 
       - name: Upload test report
         uses: actions/upload-artifact@v4
@@ -114,6 +116,3 @@ jobs:
           path: |
             report.html
             jest-html-reporters-attach/
-
-      - name: Kill emulator (so it can be cached safely)
-        run: adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done
