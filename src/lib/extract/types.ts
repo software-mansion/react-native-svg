@@ -382,6 +382,9 @@ export interface TextSpecificProps extends CommonPathProps, FontProps {
   verticalAlign?: NumberProp;
   lengthAdjust?: LengthAdjust;
   textLength?: NumberProp;
+  /**
+   * @deprecated Use other font props instead.
+   */
   fontData?: null | { [name: string]: unknown };
   fontFeatureSettings?: string;
 }
