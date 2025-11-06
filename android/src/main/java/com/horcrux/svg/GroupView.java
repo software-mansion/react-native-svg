@@ -116,7 +116,8 @@ class GroupView extends RenderableView {
     elements = new ArrayList<>();
     for (int i = 0; i < getChildCount(); i++) {
       View child = getChildAt(i);
-      if (child instanceof MaskView) {
+      if (child instanceof MaskView || child instanceof ClipPathView) {
+        ((RenderableView) child).mergeProperties(self);
         continue;
       }
       if (child instanceof VirtualView) {
@@ -152,6 +153,13 @@ class GroupView extends RenderableView {
 
       } else if (child instanceof SvgView) {
         SvgView svgView = (SvgView) child;
+        // Merge properties with inner Svg element.
+        if (svgView.getChildCount() > 0) {
+          View viewNode = svgView.getChildAt(0);
+          if (viewNode instanceof GroupView) {
+            ((GroupView) viewNode).mergeProperties(self);
+          }
+        }
         svgView.drawChildren(canvas);
         if (svgView.isResponsible()) {
           svg.enableTouchEvents();
@@ -165,7 +173,9 @@ class GroupView extends RenderableView {
       int saveCount = canvas.save();
       canvas.setMatrix(null);
       mLayerPaint.setAlpha((int) (mOpacity * 255));
-      canvas.drawBitmap(mLayerBitmap, 0, 0, mLayerPaint);
+      if (mLayerBitmap != null) {
+        canvas.drawBitmap(mLayerBitmap, 0, 0, mLayerPaint);
+      }
       canvas.restoreToCount(saveCount);
     }
     this.setClientRect(groupRect);
@@ -191,7 +201,11 @@ class GroupView extends RenderableView {
       if (node instanceof VirtualView) {
         VirtualView n = (VirtualView) node;
         Matrix transform = n.mMatrix;
-        mPath.addPath(n.getPath(canvas, paint), transform);
+        Path path = n.getPath(canvas, paint);
+
+        if (path != null) {
+          mPath.addPath(path, transform);
+        }
       }
     }
 
@@ -261,7 +275,6 @@ class GroupView extends RenderableView {
 
     float[] dst = new float[2];
     mInvMatrix.mapPoints(dst, src);
-    mInvTransform.mapPoints(dst);
 
     int x = Math.round(dst[0]);
     int y = Math.round(dst[1]);

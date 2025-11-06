@@ -7,6 +7,10 @@ import type {
   TransformsStyle,
 } from 'react-native';
 import type React from 'react';
+import {
+  DirectEventHandler,
+  Int32,
+} from 'react-native/Libraries/Types/CodegenTypes';
 
 export type NumberProp = string | number;
 export type NumberArray = NumberProp[] | NumberProp;
@@ -299,6 +303,15 @@ export interface CommonMarkerProps {
   markerEnd?: string;
 }
 
+type OnSvgLayoutEvent = Readonly<{
+  layout: {
+    x: Int32;
+    y: Int32;
+    width: Int32;
+    height: Int32;
+  };
+}>;
+
 export interface NativeProps {
   onLayout?: (event: LayoutChangeEvent) => void;
 }
@@ -348,7 +361,7 @@ export type extractedProps = {
   mask?: string;
   opacity?: number;
   propList?: string[];
-  onLayout?: (event: LayoutChangeEvent) => void;
+  onSvgLayout?: DirectEventHandler<OnSvgLayoutEvent>;
   ref?: (instance: React.Component | null) => void;
   markerStart?: string;
   markerMid?: string;
@@ -368,6 +381,9 @@ export interface TextSpecificProps extends CommonPathProps, FontProps {
   verticalAlign?: NumberProp;
   lengthAdjust?: LengthAdjust;
   textLength?: NumberProp;
+  /**
+   * @deprecated Use other font props instead.
+   */
   fontData?: null | { [name: string]: unknown };
   fontFeatureSettings?: string;
 }

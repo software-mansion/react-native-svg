@@ -20,11 +20,12 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
-import com.facebook.react.uimanager.OnLayoutEvent;
 import com.facebook.react.uimanager.PointerEvents;
 import com.facebook.react.uimanager.UIManagerHelper;
 import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.views.view.ReactViewGroup;
+import com.horcrux.svg.events.SvgOnLayoutEvent;
+
 import java.util.ArrayList;
 import javax.annotation.Nullable;
 
@@ -56,7 +57,6 @@ public abstract class VirtualView extends ReactViewGroup {
   Matrix mMatrix = new Matrix();
   Matrix mInvCTM = new Matrix();
   Matrix mInvMatrix = new Matrix();
-  final Matrix mInvTransform = new Matrix();
   boolean mInvertible = true;
   boolean mCTMInvertible = true;
   private RectF mClientRect;
@@ -409,10 +409,18 @@ public abstract class VirtualView extends ReactViewGroup {
   }
 
   double relativeOnWidth(SVGLength length) {
+    SvgView svg = getSvgView();
+    if (length.unit == SVGLength.UnitType.PERCENTAGE && svg != null && svg.getViewBox().width() != 0) {
+      return relativeOn(length, svg.getViewBox().width());
+    }
     return relativeOn(length, getCanvasWidth());
   }
 
   double relativeOnHeight(SVGLength length) {
+    SvgView svg = getSvgView();
+    if (length.unit == SVGLength.UnitType.PERCENTAGE && svg != null && svg.getViewBox().height() != 0) {
+      return relativeOn(length, svg.getViewBox().height());
+    }
     return relativeOn(length, getCanvasHeight());
   }
 
@@ -576,7 +584,14 @@ public abstract class VirtualView extends ReactViewGroup {
     EventDispatcher eventDispatcher =
         UIManagerHelper.getEventDispatcherForReactTag(mContext, getId());
     if (eventDispatcher != null) {
-      eventDispatcher.dispatchEvent(OnLayoutEvent.obtain(this.getId(), left, top, width, height));
+      eventDispatcher.dispatchEvent(
+        new SvgOnLayoutEvent(
+          UIManagerHelper.getSurfaceId(VirtualView.this),
+          this.getId(),
+          left,
+          top,
+          width,
+          height));
     }
   }
 

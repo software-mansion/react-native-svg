@@ -340,7 +340,11 @@ using namespace facebook::react;
   return CGRectContainsPoint(hitFrame, point);
 }
 
+#ifdef RCT_NEW_ARCH_ENABLED
+- (RNSVGPlatformView *)betterHitTest:(CGPoint)point withEvent:(UIEvent *)event
+#else
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+#endif
 {
   if (point.x < 0 || point.y < 0 || point.x > self.bounds.size.width || point.y > self.bounds.size.height) {
     return nil;

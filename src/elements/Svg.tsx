@@ -125,9 +125,15 @@ export default class Svg extends Shape<SvgProps> {
       strokeLinecap,
       strokeLinejoin,
       strokeMiterlimit,
+      position,
     } = stylesAndProps;
     let transform;
     if (width === undefined && height === undefined) {
+    if (
+      width === undefined &&
+      height === undefined &&
+      position !== 'absolute'
+    ) {
       width = height = '100%';
     }
 
@@ -173,10 +179,6 @@ export default class Svg extends Shape<SvgProps> {
 
     extractResponder(props, props, this as ResponderInstanceProps);
 
-    if (onLayout != null) {
-      props.onLayout = onLayout;
-    }
-
     const gStyle = Object.assign({}, StyleSheet.flatten(style));
     if (transformProp) {
       if (gStyle.transform) {
@@ -213,6 +215,7 @@ export default class Svg extends Shape<SvgProps> {
             strokeLinecap,
             strokeLinejoin,
             strokeMiterlimit,
+            onLayout,
           }}
         />
       </RNSVGSvg>

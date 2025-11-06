@@ -1,5 +1,5 @@
 {
-  "version": "15.12.1",
+  "version": "15.14.0",
   "name": "react-native-svg",
   "description": "SVG library for react-native",
   "homepage": "https://github.com/react-native-community/react-native-svg",
@@ -112,7 +112,7 @@
     "react": "^18.3.1",
     "react-native": "^0.77.0",
     "react-native-builder-bob": "^0.20.4",
-    "react-native-windows": "^0.76.3",
+    "react-native-windows": "^0.77.0",
     "react-test-renderer": "^18.2.0",
     "release-it": "^14.12.5",
     "ts-node": "^10.9.2",

@@ -15,7 +15,7 @@ namespace RNSVG
   [default_interface]
   runtimeclass SvgView : XAML_NAMESPACE.Controls.Panel, IRenderable, IRenderablePaper, ISvgView
   {
-    SvgView(Microsoft.ReactNative.IReactContext context);
+    SvgView(Microsoft.ReactNative.IReactContext context, DirectXDeviceManager deviceManager);
 
     GroupView Group;
     Windows.UI.Color CurrentColor{ get; };

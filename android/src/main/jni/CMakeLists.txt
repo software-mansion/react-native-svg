@@ -26,6 +26,9 @@ target_include_directories(
   ${RNSVG_GENERATED_REACT_DIR}
 )
 
+# https://developer.android.com/guide/practices/page-sizes#cmake
+target_link_options(react_codegen_rnsvg PRIVATE "-Wl,-z,max-page-size=16384")
+
 find_package(ReactAndroid REQUIRED CONFIG)
 
 if(ReactAndroid_VERSION_MINOR GREATER_EQUAL 76)
@@ -63,7 +66,7 @@ target_link_libraries(
 )
 
 target_include_directories(
-  ${CMAKE_PROJECT_NAME}
+  react_codegen_rnsvg
   PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}
 )

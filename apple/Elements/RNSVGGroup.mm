@@ -88,7 +88,7 @@ using namespace facebook::react;
 
   [self traverseSubviews:^(RNSVGView *node) {
     if ([node isKindOfClass:[RNSVGMask class]] || [node isKindOfClass:[RNSVGClipPath class]]) {
-      // no-op
+      [(RNSVGRenderable *)node mergeProperties:self];
     } else if ([node isKindOfClass:[RNSVGNode class]]) {
       RNSVGNode *svgNode = (RNSVGNode *)node;
       if (svgNode.display && [@"none" isEqualToString:svgNode.display]) {
@@ -114,6 +114,14 @@ using namespace facebook::react;
       }
     } else if ([node isKindOfClass:[RNSVGSvgView class]]) {
       RNSVGSvgView *svgView = (RNSVGSvgView *)node;
+      // Merge properties with inner Svg element.
+      if (svgView.subviews.count > 0) {
+        RNSVGView *viewNode = svgView.subviews[0];
+        if ([viewNode isKindOfClass:[RNSVGGroup class]]) {
+          RNSVGGroup *group = (RNSVGGroup *)viewNode;
+          [group mergeProperties:self];
+        }
+      }
       CGFloat width = [self relativeOnWidth:svgView.bbWidth];
       CGFloat height = [self relativeOnHeight:svgView.bbHeight];
       CGRect svgViewRect = CGRectMake(0, 0, width, height);

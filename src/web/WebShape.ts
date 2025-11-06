@@ -8,7 +8,7 @@ import {
 import { BaseProps } from './types';
 import { prepare } from './utils/prepare';
 import { convertInt32ColorToRGBA } from './utils/convertInt32Color';
-import { camelCaseToDashed, remeasure } from './utils';
+import { getAttributeName, remeasure } from './utils';
 import { hasTouchableProperty } from './utils/hasProperty';
 import SvgTouchableMixin from '../lib/SvgTouchableMixin';
 
@@ -76,7 +76,7 @@ export class WebShape<
             // apply all other incoming prop updates as attributes on the node
             // same logic as in https://github.com/software-mansion/react-native-reanimated/blob/d04720c82f5941532991b235787285d36d717247/src/reanimated2/js-reanimated/index.ts#L38-L39
             // @ts-expect-error TODO: fix this
-            current.setAttribute(camelCaseToDashed(cleanAttribute), cleanValue);
+            current.setAttribute(getAttributeName(cleanAttribute), cleanValue);
             break;
         }
       }

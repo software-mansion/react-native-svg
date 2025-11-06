@@ -136,7 +136,7 @@ class FontData {
       ReadableMap font, String prop, double scale, double fontSize, double relative) {
     ReadableType propType = font.getType(prop);
     if (propType == ReadableType.Number) {
-      return font.getDouble(prop);
+      return font.getDouble(prop) * scale;
     } else {
       String string = font.getString(prop);
       return PropHelper.fromRelative(string, relative, scale, fontSize);

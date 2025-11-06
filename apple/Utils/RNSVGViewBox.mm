@@ -74,6 +74,9 @@
       scaleX = scaleY = fmax(scaleX, scaleY);
     }
 
+    translateX = eX - (vbX * scaleX);
+    translateY = eY - (vbY * scaleY);
+
     // If align contains 'xMid', add (e-width - vb-width * scale-x) / 2 to translate-x.
     if ([align containsString:@"xMid"]) {
       translateX += (eWidth - vbWidth * scaleX) / 2.0;

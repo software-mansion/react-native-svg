@@ -180,6 +180,7 @@
     <ClInclude Include="CircleViewManager.h" />
     <ClInclude Include="ClipPathViewManager.h" />
     <ClInclude Include="DefsViewManager.h" />
+    <ClInclude Include="DirectXDeviceManager.h" />
     <ClInclude Include="EllipseViewManager.h" />
     <ClInclude Include="GroupViewManager.h" />
     <ClInclude Include="ImageViewManager.h" />
@@ -235,6 +236,7 @@
     <ClCompile Include="CircleView.cpp" />
     <ClCompile Include="ClipPathView.cpp" />
     <ClCompile Include="DefsView.cpp" />
+    <ClCompile Include="DirectXDeviceManager.cpp" />
     <ClCompile Include="EllipseView.cpp" />
     <ClCompile Include="GroupView.cpp" />
     <ClCompile Include="ImageView.cpp" />

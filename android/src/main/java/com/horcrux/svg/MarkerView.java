@@ -131,8 +131,8 @@ class MarkerView extends GroupView {
       markerTransform.preScale(strokeWidth / mScale, strokeWidth / mScale);
     }
 
-    double width = relativeOnWidth(mMarkerWidth) / mScale;
-    double height = relativeOnHeight(mMarkerHeight) / mScale;
+    double width = relativeOnWidth(mMarkerWidth);
+    double height = relativeOnHeight(mMarkerHeight);
     RectF eRect = new RectF(0, 0, (float) width, (float) height);
     if (mAlign != null) {
       RectF vbRect =
