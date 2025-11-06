@@ -70,6 +70,25 @@ function universal2axis(
   return [x || defaultValue || 0, y || defaultValue || 0];
 }
 
+export function transformsArrayToProps(
+  transformObjectsArray: TransformsStyleArray
+) {
+  const props: TransformProps = {};
+  transformObjectsArray?.forEach((transformObject) => {
+    const keys = Object.keys(transformObject);
+    if (keys.length !== 1) {
+      console.error(
+        'You must specify exactly one property per transform object.'
+      );
+    }
+    const key = keys[0] as keyof TransformProps;
+    const value = transformObject[key as keyof typeof transformObject];
+    // @ts-expect-error FIXME
+    props[key] = value;
+  });
+  return props;
+}
+
 export function props2transform(
   props: TransformProps | undefined
 ): TransformedProps | null {
@@ -163,13 +182,11 @@ export function transformToMatrix(
           columnMatrix[5]
         );
       } else {
-        const stringifiedTransform = stringifyTransformArrayProps(
+        const transformProps = props2transform(
           // @ts-expect-error FIXME
-          transform as TransformsStyleArray
-        ).join(' ');
-
-        const t = parse(stringifiedTransform);
-        append(t[0], t[3], t[1], t[4], t[2], t[5]);
+          transformsArrayToProps(transform as TransformsStyleArray)
+        );
+        transformProps && appendTransformProps(transformProps);
       }
     } else if (typeof transform === 'string') {
       try {
@@ -219,53 +236,4 @@ export function extractTransformSvgView(
     return parseTransformSvgToRnStyle(props.transform);
   }
   return props.transform as TransformsStyle['transform'];
-}
-
-export function stringifyTransformArrayProps(
-  transformArray: TransformsStyleArray
-) {
-  const getAngleValueInDeg = (angle: string) => {
-    if (angle.endsWith('rad')) {
-      return parseFloat(angle) * (180 / Math.PI);
-    }
-    if (angle.endsWith('deg')) {
-      return parseFloat(angle);
-    }
-  };
-
-  if (!transformArray) {
-    return [];
-  }
-
-  return transformArray.map((transform) => {
-    const [key, value] = Object.entries(transform)[0];
-    switch (key) {
-      case 'translateX':
-        return `translate(${value}, 0)`;
-      case 'translateY':
-        return `translate(0, ${value})`;
-      case 'rotate': {
-        const rotation = getAngleValueInDeg(value);
-        return `rotate(${rotation})`;
-      }
-      case 'scale':
-        return `scale(${value})`;
-      case 'scaleX':
-        return `scale(${value}, 1)`;
-      case 'scaleY':
-        return `scale(1, ${value})`;
-      case 'skewX': {
-        const skewX = getAngleValueInDeg(value);
-        return `skewX(${skewX})`;
-      }
-      case 'skewY': {
-        const skewY = getAngleValueInDeg(value);
-        return `skewY(${skewY})`;
-      }
-      case 'matrix':
-        return `matrix(${value.join(', ')})`;
-      default:
-        return '';
-    }
-  });
 }
