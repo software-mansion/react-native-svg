@@ -14,7 +14,6 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.module.annotations.ReactModule;
-import com.horcrux.rnsvg.NativeSvgViewModuleSpec;
 import javax.annotation.Nonnull;
 
 @ReactModule(name = SvgViewModule.NAME)

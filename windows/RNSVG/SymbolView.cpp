@@ -1,13 +1,15 @@
 #include "pch.h"
 #include "SymbolView.h"
+#if __has_include("SymbolView.g.cpp")
 #include "SymbolView.g.cpp"
+#endif
 
 #include "Utils.h"
 
 using namespace winrt;
-using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
+
 void SymbolView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 

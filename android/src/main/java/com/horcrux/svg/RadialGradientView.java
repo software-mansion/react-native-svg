@@ -45,27 +45,7 @@ class RadialGradientView extends DefinitionView {
     invalidate();
   }
 
-  public void setFx(String fx) {
-    mFx = SVGLength.from(fx);
-    invalidate();
-  }
-
-  public void setFx(Double fx) {
-    mFx = SVGLength.from(fx);
-    invalidate();
-  }
-
   public void setFy(Dynamic fy) {
-    mFy = SVGLength.from(fy);
-    invalidate();
-  }
-
-  public void setFy(String fy) {
-    mFy = SVGLength.from(fy);
-    invalidate();
-  }
-
-  public void setFy(Double fy) {
     mFy = SVGLength.from(fy);
     invalidate();
   }
@@ -75,27 +55,7 @@ class RadialGradientView extends DefinitionView {
     invalidate();
   }
 
-  public void setRx(String rx) {
-    mRx = SVGLength.from(rx);
-    invalidate();
-  }
-
-  public void setRx(Double rx) {
-    mRx = SVGLength.from(rx);
-    invalidate();
-  }
-
   public void setRy(Dynamic ry) {
-    mRy = SVGLength.from(ry);
-    invalidate();
-  }
-
-  public void setRy(String ry) {
-    mRy = SVGLength.from(ry);
-    invalidate();
-  }
-
-  public void setRy(Double ry) {
     mRy = SVGLength.from(ry);
     invalidate();
   }
@@ -105,27 +65,7 @@ class RadialGradientView extends DefinitionView {
     invalidate();
   }
 
-  public void setCx(String cx) {
-    mCx = SVGLength.from(cx);
-    invalidate();
-  }
-
-  public void setCx(Double cx) {
-    mCx = SVGLength.from(cx);
-    invalidate();
-  }
-
   public void setCy(Dynamic cy) {
-    mCy = SVGLength.from(cy);
-    invalidate();
-  }
-
-  public void setCy(String cy) {
-    mCy = SVGLength.from(cy);
-    invalidate();
-  }
-
-  public void setCy(Double cy) {
     mCy = SVGLength.from(cy);
     invalidate();
   }

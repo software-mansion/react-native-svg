@@ -4,7 +4,6 @@ import extractGradient from '../lib/extract/extractGradient';
 import type { NumberProp, TransformProps, Units } from '../lib/extract/types';
 import Shape from './Shape';
 import RNSVGRadialGradient from '../fabric/RadialGradientNativeComponent';
-import { stringifyPropsForFabric } from '../lib/extract/extractProps';
 import type { NativeMethods } from 'react-native';
 
 export interface RadialGradientProps {
@@ -33,14 +32,14 @@ export default class RadialGradient extends Shape<RadialGradientProps> {
   render() {
     const { props } = this;
     const { rx, ry, r, cx, cy, fx = cx, fy = cy } = props;
-    const radialGradientProps = stringifyPropsForFabric({
+    const radialGradientProps = {
       fx,
       fy,
       rx: rx || r,
       ry: ry || r,
       cx,
       cy,
-    });
+    };
     return (
       <RNSVGRadialGradient
         ref={(ref) =>

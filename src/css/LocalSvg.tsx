@@ -1,15 +1,16 @@
 import * as React from 'react';
 import { useState, useEffect, Component } from 'react';
-import type { ImageSourcePropType } from 'react-native';
-import { Platform, Image } from 'react-native';
-
-import { fetchText } from 'react-native-svg';
+import { Image, Platform, type ImageSourcePropType } from 'react-native';
+import { fetchText, type SvgProps } from 'react-native-svg';
+import { resolveAssetUri } from '../lib/resolveAssetUri';
 import { SvgCss, SvgWithCss } from './css';
-import type { SvgProps } from 'react-native-svg';
 
 export function getUriFromSource(source: ImageSourcePropType) {
-  const resolvedAssetSource = Image.resolveAssetSource(source);
-  return resolvedAssetSource.uri;
+  const resolvedAssetSource =
+    Platform.OS === 'web'
+      ? resolveAssetUri(source)
+      : Image.resolveAssetSource(source);
+  return resolvedAssetSource?.uri;
 }
 
 export function loadLocalRawResourceDefault(source: ImageSourcePropType) {
@@ -23,10 +24,11 @@ export function isUriAnAndroidResourceIdentifier(uri?: string) {
 
 export async function loadAndroidRawResource(uri: string) {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const RNSVGRenderableModule: any =
       // neeeded for new arch
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      require('./fabric/NativeSvgRenderableModule').default;
+      require('../fabric/NativeSvgRenderableModule').default;
     return await RNSVGRenderableModule.getRawResource(uri);
   } catch (e) {
     console.error(
@@ -39,7 +41,7 @@ export async function loadAndroidRawResource(uri: string) {
 
 export function loadLocalRawResourceAndroid(source: ImageSourcePropType) {
   const uri = getUriFromSource(source);
-  if (isUriAnAndroidResourceIdentifier(uri)) {
+  if (uri && isUriAnAndroidResourceIdentifier(uri)) {
     return loadAndroidRawResource(uri);
   } else {
     return fetchText(uri);

@@ -11,8 +11,8 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import androidx.annotation.Nullable;
+import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableMap;
 
 public interface RNSVGRectManagerInterface<T extends View> {
   void setName(T view, @Nullable String value);
@@ -27,31 +27,25 @@ public interface RNSVGRectManagerInterface<T extends View> {
   void setResponsible(T view, boolean value);
   void setDisplay(T view, @Nullable String value);
   void setPointerEvents(T view, @Nullable String value);
-  void setFill(T view, @Nullable ReadableMap value);
+  void setColor(T view, @Nullable Integer value);
+  void setFill(T view, Dynamic value);
   void setFillOpacity(T view, float value);
   void setFillRule(T view, int value);
-  void setStroke(T view, @Nullable ReadableMap value);
+  void setStroke(T view, Dynamic value);
   void setStrokeOpacity(T view, float value);
-  void setStrokeWidth(T view, @Nullable String value);
-  void setStrokeWidth(T view, @Nullable Double value);
+  void setStrokeWidth(T view, Dynamic value);
   void setStrokeLinecap(T view, int value);
   void setStrokeLinejoin(T view, int value);
-  void setStrokeDasharray(T view, @Nullable ReadableArray value);
-  void setStrokeDasharray(T view, @Nullable String value);  
+  void setStrokeDasharray(T view, Dynamic value);
   void setStrokeDashoffset(T view, float value);
   void setStrokeMiterlimit(T view, float value);
   void setVectorEffect(T view, int value);
   void setPropList(T view, @Nullable ReadableArray value);
-  void setX(T view, @Nullable String value);
-  void setX(T view, @Nullable Double value);
-  void setY(T view, @Nullable String value);
-  void setY(T view, @Nullable Double value);
-  void setHeight(T view, @Nullable String value);
-  void setHeight(T view, @Nullable Double value);
-  void setWidth(T view, @Nullable String value);
-  void setWidth(T view, @Nullable Double value);
-  void setRx(T view, @Nullable String value);
-  void setRx(T view, @Nullable Double value);
-  void setRy(T view, @Nullable String value);
-  void setRy(T view, @Nullable Double value);
+  void setFilter(T view, @Nullable String value);
+  void setX(T view, Dynamic value);
+  void setY(T view, Dynamic value);
+  void setHeight(T view, Dynamic value);
+  void setWidth(T view, Dynamic value);
+  void setRx(T view, Dynamic value);
+  void setRy(T view, Dynamic value);
 }

@@ -11,7 +11,7 @@ package com.horcrux.svg;
 import static com.horcrux.svg.RenderableViewManager.*;
 
 import androidx.annotation.Nullable;
-import com.facebook.react.TurboReactPackage;
+import com.facebook.react.BaseReactPackage;
 import com.facebook.react.ViewManagerOnDemandReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.ModuleSpec;
@@ -22,7 +22,6 @@ import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.module.annotations.ReactModuleList;
 import com.facebook.react.module.model.ReactModuleInfo;
 import com.facebook.react.module.model.ReactModuleInfoProvider;
-import com.facebook.react.turbomodule.core.interfaces.TurboModule;
 import com.facebook.react.uimanager.ViewManager;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,7 +36,7 @@ import javax.inject.Provider;
       SvgViewModule.class,
       RNSVGRenderableManager.class,
     })
-public class SvgPackage extends TurboReactPackage implements ViewManagerOnDemandReactPackage {
+public class SvgPackage extends BaseReactPackage implements ViewManagerOnDemandReactPackage {
 
   private @Nullable Map<String, ModuleSpec> mViewManagers;
 
@@ -207,6 +206,78 @@ public class SvgPackage extends TurboReactPackage implements ViewManagerOnDemand
                 }
               }));
       specs.put(
+          FilterManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new FilterManager();
+                }
+              }));
+      specs.put(
+          FeBlendManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new FeBlendManager();
+                }
+              }));
+      specs.put(
+          FeColorMatrixManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new FeColorMatrixManager();
+                }
+              }));
+      specs.put(
+          FeCompositeManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new FeCompositeManager();
+                }
+              }));
+      specs.put(
+          FeFloodManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new FeFloodManager();
+                }
+              }));
+      specs.put(
+          FeGaussianBlurManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new FeGaussianBlurManager();
+                }
+              }));
+      specs.put(
+          FeMergeManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new FeMergeManager();
+                }
+              }));
+      specs.put(
+          FeOffsetManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new FeOffsetManager();
+                }
+              }));
+      specs.put(
           ForeignObjectManager.REACT_CLASS,
           ModuleSpec.viewManagerSpec(
               new Provider<NativeModule>() {
@@ -241,7 +312,7 @@ public class SvgPackage extends TurboReactPackage implements ViewManagerOnDemand
   /** {@inheritDoc} */
   @Override
   public List<String> getViewManagerNames(ReactApplicationContext reactContext) {
-    return (List<String>) getViewManagersMap(reactContext).keySet();
+    return new ArrayList<>(getViewManagersMap(reactContext).keySet());
   }
 
   @Override
@@ -298,9 +369,8 @@ public class SvgPackage extends TurboReactPackage implements ViewManagerOnDemand
                     moduleClass.getName(),
                     reactModule.canOverrideExistingModule(),
                     reactModule.needsEagerInit(),
-                    reactModule.hasConstants(),
                     reactModule.isCxxModule(),
-                    TurboModule.class.isAssignableFrom(moduleClass)));
+                    true));
           }
 
           return reactModuleInfoMap;

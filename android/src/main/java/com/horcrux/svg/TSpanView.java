@@ -1212,13 +1212,12 @@ class TSpanView extends TextView {
     if (mContent == null) {
       return super.hitTest(src);
     }
-    if (mPath == null || !mInvertible || !mTransformInvertible) {
+    if (mPath == null || !mInvertible) {
       return -1;
     }
 
     float[] dst = new float[2];
     mInvMatrix.mapPoints(dst, src);
-    mInvTransform.mapPoints(dst);
     int x = Math.round(dst[0]);
     int y = Math.round(dst[1]);
 

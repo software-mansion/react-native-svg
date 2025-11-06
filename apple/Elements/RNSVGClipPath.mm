@@ -11,8 +11,8 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
-#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
+#import <rnsvg/RNSVGComponentDescriptors.h>
 #import "RNSVGFabricConversions.h"
 #endif // RCT_NEW_ARCH_ENABLED
 
@@ -20,6 +20,12 @@
 
 #ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
+
+// Needed because of this: https://github.com/facebook/react-native/pull/37274
++ (void)load
+{
+  [super load];
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -58,9 +64,9 @@ using namespace facebook::react;
 
 - (BOOL)isSimpleClipPath
 {
-  NSArray<RNSVGView *> *children = self.subviews;
+  NSArray<RNSVGPlatformView *> *children = self.subviews;
   if (children.count == 1) {
-    RNSVGView *child = children[0];
+    RNSVGPlatformView *child = children[0];
     if ([child class] != [RNSVGGroup class]) {
       return true;
     }

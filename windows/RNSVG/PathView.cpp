@@ -14,6 +14,7 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
+
 void PathView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
@@ -38,15 +39,16 @@ void PathView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, 
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void PathView::CreateGeometry() {
+void PathView::CreateGeometry(RNSVG::D2DDeviceContext const &context) {
   auto const &root{SvgRoot()};
 
   com_ptr<ID2D1SvgDocument> doc;
-  com_ptr<ID2D1DeviceContext5> deviceContext{get_self<D2DDeviceContext>(root.DeviceContext())->Get().as<ID2D1DeviceContext5>()};
+  com_ptr<ID2D1DeviceContext5> deviceContext{get_self<D2DDeviceContext>(context)->Get().as<ID2D1DeviceContext5>()};
 
+  auto size{root.CanvasSize()};
   check_hresult(deviceContext->CreateSvgDocument(
       nullptr,
-      D2D1::SizeF(static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())),
+      D2D1::SizeF(size.Width, size.Height),
       doc.put()));
 
   m_segmentData.resize(m_segmentData.size());

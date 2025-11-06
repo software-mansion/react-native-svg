@@ -10,8 +10,11 @@ package com.horcrux.svg;
 
 import android.graphics.Rect;
 import android.util.SparseArray;
+import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.PointerEvents;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -96,16 +99,10 @@ class SvgViewManager extends ReactViewManager
     return true;
   }
 
-  @ReactProp(name = "tintColor", customType = "Color")
-  @Override
-  public void setTintColor(SvgView node, Integer tintColor) {
-    node.setTintColor(tintColor);
-  }
-
   @ReactProp(name = "color", customType = "Color")
   @Override
   public void setColor(SvgView node, Integer color) {
-    node.setTintColor(color);
+    node.setCurrentColor(color);
   }
 
   @ReactProp(name = "minX")
@@ -154,24 +151,6 @@ class SvgViewManager extends ReactViewManager
     node.setMeetOrSlice(meetOrSlice);
   }
 
-  @Override
-  public void setBbWidth(SvgView view, @Nullable String value) {
-    view.setBbWidth(value);
-  }
-
-  public void setBbWidth(SvgView view, @Nullable Double value) {
-    view.setBbWidth(value);
-  }
-
-  @Override
-  public void setBbHeight(SvgView view, @Nullable String value) {
-    view.setBbHeight(value);
-  }
-
-  public void setBbHeight(SvgView view, @Nullable Double value) {
-    view.setBbHeight(value);
-  }
-
   @ReactProp(name = ViewProps.POINTER_EVENTS)
   public void setPointerEvents(SvgView view, @Nullable String pointerEventsStr) {
     try {
@@ -190,16 +169,6 @@ class SvgViewManager extends ReactViewManager
   @Override
   public void setHasTVPreferredFocus(SvgView view, boolean value) {
     super.setTVPreferredFocus(view, value);
-  }
-
-  @Override
-  public void setBorderTopEndRadius(SvgView view, float value) {
-    super.setBorderRadius(view, 6, value);
-  }
-
-  @Override
-  public void setBorderBottomStartRadius(SvgView view, float value) {
-    super.setBorderRadius(view, 7, value);
   }
 
   @Override
@@ -258,11 +227,6 @@ class SvgViewManager extends ReactViewManager
   }
 
   @Override
-  public void setBorderBottomEndRadius(SvgView view, float value) {
-    super.setBorderRadius(view, 8, value);
-  }
-
-  @Override
   public void setBorderEndColor(SvgView view, @Nullable Integer value) {
     super.setBorderColor(view, 6, value);
   }
@@ -275,11 +239,6 @@ class SvgViewManager extends ReactViewManager
   @Override
   public void setNativeBackgroundAndroid(SvgView view, @Nullable ReadableMap value) {
     super.setNativeBackground(view, value);
-  }
-
-  @Override
-  public void setBorderTopStartRadius(SvgView view, float value) {
-    super.setBorderRadius(view, 5, value);
   }
 
   @Override
@@ -303,24 +262,37 @@ class SvgViewManager extends ReactViewManager
   }
 
   @Override
-  public void setHitSlop(SvgView view, @Nullable ReadableMap hitSlopMap) {
+  public void setHitSlop(SvgView view, Dynamic hitSlop) {
     // we don't call super here since its signature changed in RN 0.69 and we want backwards
     // compatibility
-    if (hitSlopMap != null) {
-      view.setHitSlopRect(
-          new Rect(
-              hitSlopMap.hasKey("left")
-                  ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("left"))
-                  : 0,
-              hitSlopMap.hasKey("top")
-                  ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("top"))
-                  : 0,
-              hitSlopMap.hasKey("right")
-                  ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("right"))
-                  : 0,
-              hitSlopMap.hasKey("bottom")
-                  ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("bottom"))
-                  : 0));
+    switch (hitSlop.getType()) {
+      case Map:
+        ReadableMap hitSlopMap = hitSlop.asMap();
+        view.setHitSlopRect(
+            new Rect(
+                hitSlopMap.hasKey("left")
+                    ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("left"))
+                    : 0,
+                hitSlopMap.hasKey("top")
+                    ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("top"))
+                    : 0,
+                hitSlopMap.hasKey("right")
+                    ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("right"))
+                    : 0,
+                hitSlopMap.hasKey("bottom")
+                    ? (int) PixelUtil.toPixelFromDIP(hitSlopMap.getDouble("bottom"))
+                    : 0));
+        break;
+      case Number:
+        int hitSlopValue = (int) PixelUtil.toPixelFromDIP(hitSlop.asDouble());
+        view.setHitSlopRect(new Rect(hitSlopValue, hitSlopValue, hitSlopValue, hitSlopValue));
+        break;
+      default:
+        FLog.w(ReactConstants.TAG, "Invalid type for 'hitSlop' value " + hitSlop.getType());
+        /* falls through */
+      case Null:
+        view.setHitSlopRect(null);
+        break;
     }
   }
 
@@ -335,27 +307,82 @@ class SvgViewManager extends ReactViewManager
   }
 
   @Override
-  public void setBorderRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 0, (float) value);
+  public void setBorderBlockColor(SvgView view, @Nullable Integer value) {
+    super.setBorderColor(view, 9, value);
   }
 
   @Override
-  public void setBorderTopLeftRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 1, (float) value);
+  public void setBorderBlockEndColor(SvgView view, @Nullable Integer value) {
+    super.setBorderColor(view, 10, value);
   }
 
   @Override
-  public void setBorderTopRightRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 2, (float) value);
+  public void setBorderBlockStartColor(SvgView view, @Nullable Integer value) {
+    super.setBorderColor(view, 11, value);
   }
 
   @Override
-  public void setBorderBottomRightRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 3, (float) value);
+  public void setBorderRadius(SvgView view, Dynamic rawBorderRadius) {
+    super.setBorderRadius(view, 0, rawBorderRadius);
   }
 
   @Override
-  public void setBorderBottomLeftRadius(SvgView view, double value) {
-    super.setBorderRadius(view, 4, (float) value);
+  public void setBorderTopLeftRadius(SvgView view, Dynamic rawBorderRadius) {
+    super.setBorderRadius(view, 1, rawBorderRadius);
+  }
+
+  @Override
+  public void setBorderTopRightRadius(SvgView view, Dynamic rawBorderRadius) {
+    super.setBorderRadius(view, 2, rawBorderRadius);
+  }
+
+  @Override
+  public void setBorderBottomRightRadius(SvgView view, Dynamic rawBorderRadius) {
+    super.setBorderRadius(view, 3, rawBorderRadius);
+  }
+
+  @Override
+  public void setBorderBottomLeftRadius(SvgView view, Dynamic rawBorderRadius) {
+    super.setBorderRadius(view, 4, rawBorderRadius);
+  }
+
+  @Override
+  public void setBorderTopStartRadius(SvgView view, Dynamic rawBorderRadius) {
+    super.setBorderRadius(view, 5, rawBorderRadius);
+  }
+
+  @Override
+  public void setBorderTopEndRadius(SvgView view, Dynamic rawBorderRadius) {
+    super.setBorderRadius(view, 6, rawBorderRadius);
+  }
+
+  @Override
+  public void setBorderBottomStartRadius(SvgView view, Dynamic rawBorderRadius) {
+    super.setBorderRadius(view, 7, rawBorderRadius);
+  }
+
+  @Override
+  public void setBorderBottomEndRadius(SvgView view, Dynamic rawBorderRadius) {
+    super.setBorderRadius(view, 8, rawBorderRadius);
+  }
+
+  @Override
+  public void setBorderEndEndRadius(SvgView view, Dynamic rawBorderRadius) {
+    super.setBorderRadius(view, 9, rawBorderRadius);
+  }
+
+  @Override
+  public void setBorderEndStartRadius(SvgView view, Dynamic rawBorderRadius) {
+    super.setBorderRadius(view, 10, rawBorderRadius);
+  }
+
+  @Override
+  public void setBorderStartEndRadius(SvgView view, Dynamic rawBorderRadius) {
+    super.setBorderRadius(view, 11, rawBorderRadius);
+  }
+
+  @Override
+  public void setBorderStartStartRadius(SvgView view, Dynamic rawBorderRadius) {
+    super.setBorderRadius(view, 12, rawBorderRadius);
   }
 }

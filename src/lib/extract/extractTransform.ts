@@ -1,12 +1,18 @@
 import type { TransformsStyle } from 'react-native';
 import { append, appendTransform, identity, reset, toArray } from '../Matrix2D';
 import { parse } from './transform';
+import { parse as parseTransformSvgToRnStyle } from './transformToRn';
 import type {
   ColumnMajorTransformMatrix,
   NumberProp,
   TransformedProps,
   TransformProps,
 } from './types';
+
+export type TransformsStyleArray = Exclude<
+  TransformsStyle['transform'],
+  string
+>;
 
 function appendTransformProps(props: TransformedProps) {
   const { x, y, originX, originY, scaleX, scaleY, rotation, skewX, skewY } =
@@ -20,7 +26,7 @@ function appendTransformProps(props: TransformedProps) {
     skewX,
     skewY,
     originX,
-    originY,
+    originY
   );
 }
 
@@ -28,7 +34,7 @@ function universal2axis(
   universal: NumberProp | NumberProp[] | undefined,
   axisX: NumberProp | void,
   axisY: NumberProp | void,
-  defaultValue?: number,
+  defaultValue?: number
 ): [number, number] {
   let x;
   let y;
@@ -65,32 +71,30 @@ function universal2axis(
 }
 
 export function transformsArrayToProps(
-  transformObjectsArray: TransformsStyle['transform'],
+  transformObjectsArray: TransformsStyleArray
 ) {
   const props: TransformProps = {};
   transformObjectsArray?.forEach((transformObject) => {
     const keys = Object.keys(transformObject);
     if (keys.length !== 1) {
       console.error(
-        'You must specify exactly one property per transform object.',
+        'You must specify exactly one property per transform object.'
       );
     }
     const key = keys[0] as keyof TransformProps;
     const value = transformObject[key as keyof typeof transformObject];
+    // @ts-expect-error FIXME
     props[key] = value;
   });
   return props;
 }
 
 export function props2transform(
-  props: TransformProps | undefined,
+  props: TransformProps | undefined
 ): TransformedProps | null {
   if (!props) {
     return null;
   }
-  const extractedProps = Array.isArray(props)
-    ? transformsArrayToProps(props)
-    : props;
   const {
     rotation,
     translate,
@@ -107,7 +111,7 @@ export function props2transform(
     skewY,
     x,
     y,
-  } = extractedProps;
+  } = props;
   if (
     rotation == null &&
     translate == null &&
@@ -130,13 +134,13 @@ export function props2transform(
 
   if (Array.isArray(x) || Array.isArray(y)) {
     console.warn(
-      'Passing SvgLengthList to x or y attribute where SvgLength expected',
+      'Passing SvgLengthList to x or y attribute where SvgLength expected'
     );
   }
   const tr = universal2axis(
     translate,
     translateX || (Array.isArray(x) ? x[0] : x),
-    translateY || (Array.isArray(y) ? y[0] : y),
+    translateY || (Array.isArray(y) ? y[0] : y)
   );
   const or = universal2axis(origin, originX, originY);
   const sc = universal2axis(scale, scaleX, scaleY, 1);
@@ -157,7 +161,7 @@ export function props2transform(
 
 export function transformToMatrix(
   props: TransformedProps | null,
-  transform: TransformProps['transform'],
+  transform: TransformProps['transform']
 ): ColumnMajorTransformMatrix | null {
   if (!props && !transform) {
     return null;
@@ -175,11 +179,12 @@ export function transformToMatrix(
           columnMatrix[2],
           columnMatrix[3],
           columnMatrix[4],
-          columnMatrix[5],
+          columnMatrix[5]
         );
       } else {
         const transformProps = props2transform(
-          transformsArrayToProps(transform as TransformsStyle['transform']),
+          // @ts-expect-error FIXME
+          transformsArrayToProps(transform as TransformsStyleArray)
         );
         transformProps && appendTransformProps(transformProps);
       }
@@ -191,6 +196,7 @@ export function transformToMatrix(
         console.error(e);
       }
     } else {
+      // @ts-expect-error FIXME
       const transformProps = props2transform(transform);
       transformProps && appendTransformProps(transformProps);
     }
@@ -200,7 +206,7 @@ export function transformToMatrix(
 }
 
 export default function extractTransform(
-  props: TransformProps | TransformProps['transform'],
+  props: TransformProps | TransformProps['transform']
 ): ColumnMajorTransformMatrix | null {
   if (Array.isArray(props) && typeof props[0] === 'number') {
     return props as ColumnMajorTransformMatrix;
@@ -219,6 +225,15 @@ export default function extractTransform(
   const transformProps = props as TransformProps;
   return transformToMatrix(
     props2transform(transformProps),
-    transformProps?.transform,
+    transformProps?.transform
   );
+}
+
+export function extractTransformSvgView(
+  props: TransformsStyle
+): TransformsStyle['transform'] {
+  if (typeof props.transform === 'string') {
+    return parseTransformSvgToRnStyle(props.transform);
+  }
+  return props.transform as TransformsStyle['transform'];
 }

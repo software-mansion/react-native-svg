@@ -11,8 +11,8 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
-#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
+#import <rnsvg/RNSVGComponentDescriptors.h>
 #import "RNSVGFabricConversions.h"
 #endif // RCT_NEW_ARCH_ENABLED
 
@@ -20,6 +20,12 @@
 
 #ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
+
+// Needed because of this: https://github.com/facebook/react-native/pull/37274
++ (void)load
+{
+  [super load];
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -46,7 +52,10 @@ using namespace facebook::react;
   self.method = RCTNSStringFromStringNilIfEmpty(newProps.method);
   self.midLine = RCTNSStringFromStringNilIfEmpty(newProps.midLine);
   self.spacing = RCTNSStringFromStringNilIfEmpty(newProps.spacing);
-  self.startOffset = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.startOffset)];
+  id startOffset = RNSVGConvertFollyDynamicToId(newProps.startOffset);
+  if (startOffset != nil) {
+    self.startOffset = [RCTConvert RNSVGLength:startOffset];
+  }
 
   setCommonTextProps(newProps, self);
   _props = std::static_pointer_cast<RNSVGTextPathProps const>(props);

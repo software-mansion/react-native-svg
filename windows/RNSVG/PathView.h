@@ -4,12 +4,16 @@
 #include "RenderableView.h"
 
 namespace winrt::RNSVG::implementation {
+
 struct PathView : PathViewT<PathView, RNSVG::implementation::RenderableView> {
  public:
   PathView() = default;
 
+  // IRenderablePaper
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
-  void CreateGeometry();
+
+  // IRenderable
+  void CreateGeometry(RNSVG::D2DDeviceContext const &context);
 
  private:
   std::string m_d;

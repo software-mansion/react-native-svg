@@ -50,6 +50,12 @@ using namespace facebook::react;
 }
 #ifdef RCT_NEW_ARCH_ENABLED
 
+// Needed because of this: https://github.com/facebook/react-native/pull/37274
++ (void)load
+{
+  [super load];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
   if (self = [super initWithFrame:frame]) {
@@ -72,13 +78,21 @@ using namespace facebook::react;
 {
   const auto &newProps = static_cast<const RNSVGImageProps &>(*props);
 
-  self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
-  self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
-  if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
-    self.imageheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
+  id x = RNSVGConvertFollyDynamicToId(newProps.x);
+  if (x != nil) {
+    self.x = [RCTConvert RNSVGLength:x];
   }
-  if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
-    self.imagewidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
+  id y = RNSVGConvertFollyDynamicToId(newProps.y);
+  if (y != nil) {
+    self.y = [RCTConvert RNSVGLength:y];
+  }
+  id height = RNSVGConvertFollyDynamicToId(newProps.height);
+  if (height != nil) {
+    self.imageheight = [RCTConvert RNSVGLength:height];
+  }
+  id width = RNSVGConvertFollyDynamicToId(newProps.width);
+  if (width != nil) {
+    self.imagewidth = [RCTConvert RNSVGLength:width];
   }
   self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
   self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
@@ -125,12 +139,40 @@ using namespace facebook::react;
     // See for more info: T46311063.
     return;
   }
+  auto imageSource = _state->getData().getImageSource();
+  imageSource.size = {image.size.width, image.size.height};
+  if (_eventEmitter != nullptr) {
+    static_cast<const RNSVGImageEventEmitter &>(*_eventEmitter)
+        .onLoad(
+            {.source = {
+                 .width = imageSource.size.width * imageSource.scale,
+                 .height = imageSource.size.height * imageSource.scale,
+                 .uri = imageSource.uri,
+             }});
+  }
   dispatch_async(dispatch_get_main_queue(), ^{
     self->_image = CGImageRetain(image.CGImage);
     self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
     [self invalidate];
   });
 }
+
+- (void)didReceiveFailure:(nonnull NSError *)error fromObserver:(nonnull const void *)observer
+{
+  if (_image) {
+    CGImageRelease(_image);
+  }
+  _image = nil;
+}
+
+- (void)didReceiveProgress:(float)progress
+                    loaded:(int64_t)loaded
+                     total:(int64_t)total
+              fromObserver:(nonnull const void *)observer
+{
+}
+
+#pragma mark - RCTImageResponseDelegate - < RN 0.75
 
 - (void)didReceiveProgress:(float)progress fromObserver:(void const *)observer
 {
@@ -164,6 +206,7 @@ using namespace facebook::react;
   _imageSize = CGSizeZero;
   _reloadImageCancellationBlock = nil;
 }
+
 #endif // RCT_NEW_ARCH_ENABLED
 
 - (void)setSrc:(RCTImageSource *)src
@@ -190,10 +233,24 @@ using namespace facebook::react;
 
   _reloadImageCancellationBlock = [[self.bridge moduleForName:@"ImageLoader"]
       loadImageWithURLRequest:src.request
-                     callback:^(NSError *error, UIImage *image) {
+                     callback:^(__unused NSError *error, UIImage *image) {
                        dispatch_async(dispatch_get_main_queue(), ^{
                          self->_image = CGImageRetain(image.CGImage);
                          self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
+                         if (self->_onLoad) {
+                           RCTImageSource *sourceLoaded;
+#if TARGET_OS_OSX // [macOS]
+                           sourceLoaded = [src imageSourceWithSize:image.size scale:1];
+#else
+                           sourceLoaded = [src imageSourceWithSize:image.size scale:image.scale];
+#endif
+                           NSDictionary *dict = @{
+                             @"uri" : sourceLoaded.request.URL.absoluteString,
+                             @"width" : @(sourceLoaded.size.width),
+                             @"height" : @(sourceLoaded.size.height),
+                           };
+                           self->_onLoad(@{@"source" : dict});
+                         }
                          [self invalidate];
                        });
                      }];
@@ -299,9 +356,8 @@ using namespace facebook::react;
   self.ctm = svgToClientTransform;
   self.screenCTM = current;
 
-  CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
   CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
-  CGPoint center = CGPointApplyAffineTransform(mid, transform);
+  CGPoint center = CGPointApplyAffineTransform(mid, self.matrix);
 
   self.bounds = bounds;
   if (!isnan(center.x) && !isnan(center.y)) {

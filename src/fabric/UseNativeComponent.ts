@@ -1,11 +1,15 @@
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import type { ColorValue } from 'react-native';
 import type {
+  DirectEventHandler,
   Float,
   Int32,
   WithDefault,
 } from 'react-native/Libraries/Types/CodegenTypes';
 import type { ViewProps } from './utils';
+
+import type { UnsafeMixed } from './codegenUtils';
+import { NumberProp } from '../lib/extract/types';
 
 interface SvgNodeCommonProps {
   name?: string;
@@ -28,20 +32,31 @@ type ColorStruct = Readonly<{
   brushRef?: string;
 }>;
 
+type OnSvgLayoutEvent = Readonly<{
+  layout: {
+    x: Int32;
+    y: Int32;
+    width: Int32;
+    height: Int32;
+  };
+}>;
+
 interface SvgRenderableCommonProps {
-  fill?: ColorStruct;
+  color?: ColorValue;
+  fill?: UnsafeMixed<ColorValue | ColorStruct>;
   fillOpacity?: WithDefault<Float, 1.0>;
   fillRule?: WithDefault<Int32, 1>;
-  stroke?: ColorStruct;
+  stroke?: UnsafeMixed<ColorValue | ColorStruct>;
   strokeOpacity?: WithDefault<Float, 1.0>;
-  strokeWidth?: WithDefault<string, '1'>;
+  strokeWidth?: UnsafeMixed<NumberProp>;
   strokeLinecap?: WithDefault<Int32, 0>;
   strokeLinejoin?: WithDefault<Int32, 0>;
-  strokeDasharray?: ReadonlyArray<string>;
+  strokeDasharray?: UnsafeMixed<ReadonlyArray<NumberProp> | NumberProp>;
   strokeDashoffset?: Float;
   strokeMiterlimit?: Float;
   vectorEffect?: WithDefault<Int32, 0>;
   propList?: ReadonlyArray<string>;
+  filter?: string;
 }
 
 interface NativeProps
@@ -49,10 +64,13 @@ interface NativeProps
     SvgNodeCommonProps,
     SvgRenderableCommonProps {
   href?: string;
-  x?: string;
-  y?: string;
-  height?: string;
-  width?: string;
+  x?: UnsafeMixed<NumberProp>;
+  y?: UnsafeMixed<NumberProp>;
+  height?: UnsafeMixed<NumberProp>;
+  width?: UnsafeMixed<NumberProp>;
+  onSvgLayout?: DirectEventHandler<OnSvgLayoutEvent>;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGUse');
+export default codegenNativeComponent<NativeProps>('RNSVGUse', {
+  interfaceOnly: true,
+});

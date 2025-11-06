@@ -11,6 +11,7 @@ package com.horcrux.svg;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -58,11 +59,15 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   }
 
   private @Nullable Bitmap mBitmap;
+  private @Nullable Bitmap mCurrentBitmap;
   private boolean mRemovalTransitionStarted;
 
   public SvgView(ReactContext reactContext) {
     super(reactContext);
     mScale = DisplayMetricsHolder.getScreenDisplayMetrics().density;
+    mPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.DEV_KERN_TEXT_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
+    mPaint.setTypeface(Typeface.DEFAULT);
+
     // for some reason on Fabric the `onDraw` won't be called without it
     setWillNotDraw(false);
   }
@@ -130,7 +135,14 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
       mBitmap = drawOutput();
     }
     if (mBitmap != null) {
-      canvas.drawBitmap(mBitmap, 0, 0, null);
+      mPaint.reset();
+      mPaint.setFlags(
+          Paint.ANTI_ALIAS_FLAG
+              | Paint.DEV_KERN_TEXT_FLAG
+              | Paint.SUBPIXEL_TEXT_FLAG
+              | Paint.FILTER_BITMAP_FLAG);
+      mPaint.setTypeface(Typeface.DEFAULT);
+      canvas.drawBitmap(mBitmap, 0, 0, mPaint);
       if (toDataUrlTask != null) {
         toDataUrlTask.run();
         toDataUrlTask = null;
@@ -161,9 +173,11 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   private final Map<String, VirtualView> mDefinedTemplates = new HashMap<>();
   private final Map<String, VirtualView> mDefinedMarkers = new HashMap<>();
   private final Map<String, VirtualView> mDefinedMasks = new HashMap<>();
+  private final Map<String, VirtualView> mDefinedFilters = new HashMap<>();
   private final Map<String, Brush> mDefinedBrushes = new HashMap<>();
   private Canvas mCanvas;
   private final float mScale;
+  private final Paint mPaint = new Paint();
 
   private float mMinX;
   private float mMinY;
@@ -176,7 +190,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   final Matrix mInvViewBoxMatrix = new Matrix();
   private boolean mInvertible = true;
   private boolean mRendered = false;
-  int mTintColor = 0;
+  int mCurrentColor = Color.BLACK;
 
   boolean notRendered() {
     return !mRendered;
@@ -196,8 +210,8 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     }
   }
 
-  public void setTintColor(Integer tintColor) {
-    mTintColor = tintColor != null ? tintColor : 0;
+  public void setCurrentColor(Integer color) {
+    mCurrentColor = color != null ? color : 0;
     invalidate();
     clearChildCache();
   }
@@ -232,31 +246,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     clearChildCache();
   }
 
-  public void setBbWidth(String bbWidth) {
-    mbbWidth = SVGLength.from(bbWidth);
-    invalidate();
-    clearChildCache();
-  }
-
-  public void setBbWidth(Double bbWidth) {
-    mbbWidth = SVGLength.from(bbWidth);
-    invalidate();
-    clearChildCache();
-  }
-
   public void setBbHeight(Dynamic bbHeight) {
-    mbbHeight = SVGLength.from(bbHeight);
-    invalidate();
-    clearChildCache();
-  }
-
-  public void setBbHeight(String bbHeight) {
-    mbbHeight = SVGLength.from(bbHeight);
-    invalidate();
-    clearChildCache();
-  }
-
-  public void setBbHeight(Double bbHeight) {
     mbbHeight = SVGLength.from(bbHeight);
     invalidate();
     clearChildCache();
@@ -288,13 +278,25 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
       return null;
     }
     Bitmap bitmap = Bitmap.createBitmap((int) width, (int) height, Bitmap.Config.ARGB_8888);
-
+    mCurrentBitmap = bitmap;
     drawChildren(new Canvas(bitmap));
     return bitmap;
   }
 
   Rect getCanvasBounds() {
     return mCanvas.getClipBounds();
+  }
+
+  float getCanvasWidth() {
+    return mCanvas.getWidth();
+  }
+
+  float getCanvasHeight() {
+    return mCanvas.getHeight();
+  }
+
+  Matrix getCtm() {
+    return mCanvas.getMatrix();
   }
 
   synchronized void drawChildren(final Canvas canvas) {
@@ -319,12 +321,6 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
       canvas.concat(mViewBoxMatrix);
     }
 
-    final Paint paint = new Paint();
-
-    paint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.DEV_KERN_TEXT_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
-
-    paint.setTypeface(Typeface.DEFAULT);
-
     for (int i = 0; i < getChildCount(); i++) {
       View node = getChildAt(i);
       if (node instanceof VirtualView) {
@@ -337,7 +333,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
       if (lNode instanceof VirtualView) {
         VirtualView node = (VirtualView) lNode;
         int count = node.saveAndSetupCanvas(canvas, mViewBoxMatrix);
-        node.render(canvas, paint, 1f);
+        node.render(canvas, mPaint, 1f);
         node.restoreCanvas(canvas, count);
 
         if (node.isResponsible() && !mResponsible) {
@@ -347,7 +343,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     }
   }
 
-  private RectF getViewBox() {
+  RectF getViewBox() {
     return new RectF(
         mMinX * mScale, mMinY * mScale, (mMinX + mVbWidth) * mScale, (mMinY + mVbHeight) * mScale);
   }
@@ -363,7 +359,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
     bitmap.recycle();
     byte[] bitmapBytes = stream.toByteArray();
-    return Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
+    return Base64.encodeToString(bitmapBytes, Base64.NO_WRAP);
   }
 
   String toDataURL(int width, int height) {
@@ -377,7 +373,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
     bitmap.recycle();
     byte[] bitmapBytes = stream.toByteArray();
-    return Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
+    return Base64.encodeToString(bitmapBytes, Base64.NO_WRAP);
   }
 
   void enableTouchEvents() {
@@ -447,11 +443,23 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
     return mDefinedMasks.get(maskRef);
   }
 
+  void defineFilter(VirtualView filter, String filterRef) {
+    mDefinedFilters.put(filterRef, filter);
+  }
+
+  VirtualView getDefinedFilter(String filterRef) {
+    return mDefinedFilters.get(filterRef);
+  }
+
   void defineMarker(VirtualView marker, String markerRef) {
     mDefinedMarkers.put(markerRef, marker);
   }
 
   VirtualView getDefinedMarker(String markerRef) {
     return mDefinedMarkers.get(markerRef);
+  }
+
+  public Bitmap getCurrentBitmap() {
+    return mCurrentBitmap;
   }
 }

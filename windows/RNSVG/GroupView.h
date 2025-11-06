@@ -3,12 +3,18 @@
 #include "RenderableView.h"
 
 namespace winrt::RNSVG::implementation {
-struct GroupView : GroupViewT<GroupView, RNSVG::implementation::RenderableView> {
+
+struct GroupView
+    : GroupViewT<GroupView, RNSVG::implementation::RenderableView> {
  public:
   GroupView() = default;
-  GroupView(Microsoft::ReactNative::IReactContext const &context) : m_reactContext(context) {}
+
+  GroupView(Microsoft::ReactNative::IReactContext const & /*context*/) {}
 
   Windows::Foundation::Collections::IVector<RNSVG::IRenderable> Children() { return m_children; }
+
+  // IRenderablePaper
+  virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
 
   hstring FontFamily() { return m_fontFamily; }
   void FontFamily(hstring const &value) { m_fontFamily = value; }
@@ -16,28 +22,22 @@ struct GroupView : GroupViewT<GroupView, RNSVG::implementation::RenderableView> 
   float FontSize() { return m_fontSize; }
   void FontSize(float value) { m_fontSize = value; }
 
-  hstring FontWeight(){ return m_fontWeight; }
+  hstring FontWeight() { return m_fontWeight; }
   void FontWeight(hstring const &value) { m_fontWeight = value; }
 
-  virtual void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
-  virtual void CreateGeometry();
-
+  // IRenderable
+  virtual void CreateResources();
+  virtual void MergeProperties(RNSVG::IRenderable const &other);
   virtual void SaveDefinition();
-
-  virtual void MergeProperties(RNSVG::RenderableView const &other);
-
+  virtual void CreateGeometry(RNSVG::D2DDeviceContext const &context);
+  virtual void Unload();
+  virtual RNSVG::IRenderable HitTest(Windows::Foundation::Point const &point);
   void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);
 
   virtual void DrawGroup(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);
 
-  virtual void CreateResources();
-
-  virtual void Unload();
-
-  virtual RNSVG::IRenderable HitTest(Windows::Foundation::Point const &point);
-
  private:
-  Microsoft::ReactNative::IReactContext m_reactContext{nullptr};
+
   Windows::Foundation::Collections::IVector<RNSVG::IRenderable> m_children{
       winrt::single_threaded_vector<RNSVG::IRenderable>()};
 

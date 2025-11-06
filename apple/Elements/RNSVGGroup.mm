@@ -13,8 +13,8 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
-#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
+#import <rnsvg/RNSVGComponentDescriptors.h>
 #import "RNSVGFabricConversions.h"
 #endif // RCT_NEW_ARCH_ENABLED
 
@@ -24,6 +24,12 @@
 
 #ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
+
+// Needed because of this: https://github.com/facebook/react-native/pull/37274
++ (void)load
+{
+  [super load];
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -82,7 +88,7 @@ using namespace facebook::react;
 
   [self traverseSubviews:^(RNSVGView *node) {
     if ([node isKindOfClass:[RNSVGMask class]] || [node isKindOfClass:[RNSVGClipPath class]]) {
-      // no-op
+      [(RNSVGRenderable *)node mergeProperties:self];
     } else if ([node isKindOfClass:[RNSVGNode class]]) {
       RNSVGNode *svgNode = (RNSVGNode *)node;
       if (svgNode.display && [@"none" isEqualToString:svgNode.display]) {
@@ -108,11 +114,19 @@ using namespace facebook::react;
       }
     } else if ([node isKindOfClass:[RNSVGSvgView class]]) {
       RNSVGSvgView *svgView = (RNSVGSvgView *)node;
+      // Merge properties with inner Svg element.
+      if (svgView.subviews.count > 0) {
+        RNSVGView *viewNode = svgView.subviews[0];
+        if ([viewNode isKindOfClass:[RNSVGGroup class]]) {
+          RNSVGGroup *group = (RNSVGGroup *)viewNode;
+          [group mergeProperties:self];
+        }
+      }
       CGFloat width = [self relativeOnWidth:svgView.bbWidth];
       CGFloat height = [self relativeOnHeight:svgView.bbHeight];
-      CGRect rect = CGRectMake(0, 0, width, height);
-      CGContextClipToRect(context, rect);
-      [svgView drawToContext:context withRect:rect];
+      CGRect svgViewRect = CGRectMake(0, 0, width, height);
+      CGContextClipToRect(context, svgViewRect);
+      [svgView drawToContext:context withRect:svgViewRect];
     } else {
       [node drawRect:rect];
     }
@@ -123,8 +137,8 @@ using namespace facebook::react;
   [self setHitArea:path];
   if (!CGRectEqualToRect(bounds, CGRectNull)) {
     self.clientRect = bounds;
-    self.fillBounds = CGPathGetBoundingBox(path);
-    self.strokeBounds = CGPathGetBoundingBox(self.strokePath);
+    self.fillBounds = CGPathGetPathBoundingBox(path);
+    self.strokeBounds = CGPathGetPathBoundingBox(self.strokePath);
     self.pathBounds = CGRectUnion(self.fillBounds, self.strokeBounds);
 
     CGAffineTransform current = CGContextGetCTM(context);
@@ -133,9 +147,8 @@ using namespace facebook::react;
     self.ctm = svgToClientTransform;
     self.screenCTM = current;
 
-    CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
     CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
-    CGPoint center = CGPointApplyAffineTransform(mid, transform);
+    CGPoint center = CGPointApplyAffineTransform(mid, self.matrix);
 
     self.bounds = bounds;
     if (!isnan(center.x) && !isnan(center.y)) {
@@ -150,8 +163,13 @@ using namespace facebook::react;
 - (void)setupGlyphContext:(CGContextRef)context
 {
   CGRect clipBounds = CGContextGetClipBoundingBox(context);
+#if TARGET_OS_OSX // [macOS
+  RNSVGSvgView *svgView = [self svgView];
+  if (svgView != nil && (clipBounds.origin.x < 0 || clipBounds.origin.y < 0)) {
+    clipBounds = CGRectApplyAffineTransform([svgView boundingBox], [svgView getInvViewBoxTransform]);
+  }
+#endif // macOS]
   clipBounds = CGRectApplyAffineTransform(clipBounds, self.matrix);
-  clipBounds = CGRectApplyAffineTransform(clipBounds, self.transforms);
   CGFloat width = CGRectGetWidth(clipBounds);
   CGFloat height = CGRectGetHeight(clipBounds);
 
@@ -188,7 +206,7 @@ using namespace facebook::react;
   CGMutablePathRef __block path = CGPathCreateMutable();
   [self traverseSubviews:^(RNSVGNode *node) {
     if ([node isKindOfClass:[RNSVGNode class]] && ![node isKindOfClass:[RNSVGMask class]]) {
-      CGAffineTransform transform = CGAffineTransformConcat(node.matrix, node.transforms);
+      CGAffineTransform transform = node.matrix;
       CGPathAddPath(path, &transform, [node getPath:context]);
       CGPathAddPath(path, &transform, [node markerPath]);
       node.dirty = false;
@@ -204,7 +222,6 @@ using namespace facebook::react;
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
   CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
-  transformed = CGPointApplyAffineTransform(transformed, self.invTransform);
 
   if (!CGRectContainsPoint(self.pathBounds, transformed)) {
     return nil;

@@ -6,6 +6,9 @@ import type {
 } from 'react-native/Libraries/Types/CodegenTypes';
 import type { ViewProps } from './utils';
 
+import type { UnsafeMixed } from './codegenUtils';
+import { NumberProp } from '../lib/extract/types';
+
 interface SvgNodeCommonProps {
   name?: string;
   opacity?: WithDefault<Float, 1.0>;
@@ -22,15 +25,17 @@ interface SvgNodeCommonProps {
 }
 
 interface NativeProps extends ViewProps, SvgNodeCommonProps {
-  fx?: string;
-  fy?: string;
-  cx?: string;
-  cy?: string;
-  rx?: string;
-  ry?: string;
+  fx?: UnsafeMixed<NumberProp>;
+  fy?: UnsafeMixed<NumberProp>;
+  cx?: UnsafeMixed<NumberProp>;
+  cy?: UnsafeMixed<NumberProp>;
+  rx?: UnsafeMixed<NumberProp>;
+  ry?: UnsafeMixed<NumberProp>;
   gradient?: ReadonlyArray<Float>;
   gradientUnits?: Int32;
   gradientTransform?: ReadonlyArray<Float> | null;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGRadialGradient');
+export default codegenNativeComponent<NativeProps>('RNSVGRadialGradient', {
+  interfaceOnly: true,
+});

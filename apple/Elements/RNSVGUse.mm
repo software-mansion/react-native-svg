@@ -12,8 +12,8 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
-#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
+#import <rnsvg/RNSVGComponentDescriptors.h>
 #import "RNSVGFabricConversions.h"
 #endif // RCT_NEW_ARCH_ENABLED
 
@@ -21,6 +21,12 @@
 
 #ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
+
+// Needed because of this: https://github.com/facebook/react-native/pull/37274
++ (void)load
+{
+  [super load];
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -42,13 +48,21 @@ using namespace facebook::react;
 {
   const auto &newProps = static_cast<const RNSVGUseProps &>(*props);
 
-  self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
-  self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
-  if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
-    self.useheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
+  id x = RNSVGConvertFollyDynamicToId(newProps.x);
+  if (x != nil) {
+    self.x = [RCTConvert RNSVGLength:x];
   }
-  if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
-    self.usewidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
+  id y = RNSVGConvertFollyDynamicToId(newProps.y);
+  if (y != nil) {
+    self.y = [RCTConvert RNSVGLength:y];
+  }
+  id useheight = RNSVGConvertFollyDynamicToId(newProps.height);
+  if (useheight != nil) {
+    self.useheight = [RCTConvert RNSVGLength:useheight];
+  }
+  id usewidth = RNSVGConvertFollyDynamicToId(newProps.width);
+  if (usewidth != nil) {
+    self.usewidth = [RCTConvert RNSVGLength:usewidth];
   }
   self.href = RCTNSStringFromStringNilIfEmpty(newProps.href);
 
@@ -154,6 +168,7 @@ using namespace facebook::react;
   }
   CGRect bounds = definedTemplate.clientRect;
   self.clientRect = bounds;
+  self.pathBounds = definedTemplate.pathBounds;
 
   CGAffineTransform current = CGContextGetCTM(context);
   CGAffineTransform svgToClientTransform = CGAffineTransformConcat(current, self.svgView.invInitialCTM);
@@ -161,9 +176,8 @@ using namespace facebook::react;
   self.ctm = svgToClientTransform;
   self.screenCTM = current;
 
-  CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
   CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
-  CGPoint center = CGPointApplyAffineTransform(mid, transform);
+  CGPoint center = CGPointApplyAffineTransform(mid, self.matrix);
 
   self.bounds = bounds;
   if (!isnan(center.x) && !isnan(center.y)) {
@@ -175,7 +189,6 @@ using namespace facebook::react;
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
   CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
-  transformed = CGPointApplyAffineTransform(transformed, self.invTransform);
   RNSVGNode const *definedTemplate = [self.svgView getDefinedTemplate:self.href];
   if (event) {
     self.active = NO;
@@ -199,7 +212,7 @@ using namespace facebook::react;
     return nil;
   }
   CGPathRef path = [definedTemplate getPath:context];
-  return CGPathCreateCopyByTransformingPath(path, &transform);
+  return (CGPathRef)CFAutorelease(CGPathCreateCopyByTransformingPath(path, &transform));
 }
 
 @end

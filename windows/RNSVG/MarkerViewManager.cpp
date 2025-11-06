@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "MarkerViewManager.h"
+#if __has_include("MarkerViewManager.g.cpp")
 #include "MarkerViewManager.g.cpp"
+#endif
 
 using namespace winrt;
 using namespace Microsoft::ReactNative;

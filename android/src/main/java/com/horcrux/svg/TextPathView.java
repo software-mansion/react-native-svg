@@ -42,16 +42,6 @@ class TextPathView extends TextView {
     invalidate();
   }
 
-  public void setStartOffset(String startOffset) {
-    mStartOffset = SVGLength.from(startOffset);
-    invalidate();
-  }
-
-  public void setStartOffset(Double startOffset) {
-    mStartOffset = SVGLength.from(startOffset);
-    invalidate();
-  }
-
   public void setMethod(@Nullable String method) {
     mMethod = TextPathMethod.valueOf(method);
     invalidate();

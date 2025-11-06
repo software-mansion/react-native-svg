@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "EllipseView.h"
+#if __has_include("EllipseView.g.cpp")
 #include "EllipseView.g.cpp"
+#endif
 
 #include "JSValueXaml.h"
 #include "Utils.h"
@@ -9,6 +11,7 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
+
 void EllipseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
@@ -17,28 +20,31 @@ void EllipseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdat
     auto const &propertyValue{pair.second};
 
     if (propertyName == "cx") {
-      m_cx = SVGLength::From(propertyValue);
+      m_cx = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "cy") {
-      m_cy = SVGLength::From(propertyValue);
+      m_cy = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "rx") {
-      m_rx = SVGLength::From(propertyValue);
+      m_rx = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "ry") {
-      m_ry = SVGLength::From(propertyValue);
+      m_ry = propertyValue.To<RNSVG::SVGLength>();
     }
   }
 
   __super::UpdateProperties(reader, forceUpdate, invalidate);
 }
 
-void EllipseView::CreateGeometry() {
+void EllipseView::CreateGeometry(RNSVG::D2DDeviceContext const &context) {
   auto const root{SvgRoot()};
 
-  float cx{Utils::GetAbsoluteLength(m_cx, root.ActualWidth())};
-  float cy{Utils::GetAbsoluteLength(m_cy, root.ActualHeight())};
-  float rx{Utils::GetAbsoluteLength(m_rx, root.ActualWidth())};
-  float ry{Utils::GetAbsoluteLength(m_ry, root.ActualHeight())};
+  float width{root.CanvasSize().Width};
+  float height{root.CanvasSize().Height};
 
-  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(root.DeviceContext())->Get()};
+  float cx{Utils::GetAbsoluteLength(m_cx, width)};
+  float cy{Utils::GetAbsoluteLength(m_cy, height)};
+  float rx{Utils::GetAbsoluteLength(m_rx, width)};
+  float ry{Utils::GetAbsoluteLength(m_ry, height)};
+
+  com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 
   com_ptr<ID2D1Factory> factory;
   deviceContext->GetFactory(factory.put());

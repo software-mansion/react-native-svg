@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "ImageView.h"
+#if __has_include("ImageView.g.cpp")
 #include "ImageView.g.cpp"
+#endif
 
 #include <winrt/Windows.Security.Cryptography.h>
 #include <winrt/Windows.Storage.Streams.h>
@@ -11,6 +13,7 @@
 
 #include <d2d1effects.h>
 #include <shcore.h>
+
 #include <wincodec.h>
 
 using namespace winrt::Microsoft::ReactNative;
@@ -19,6 +22,7 @@ using namespace winrt::Windows::Storage::Streams;
 using namespace winrt::Windows::Web::Http;
 
 namespace winrt::RNSVG::implementation {
+
 void ImageView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
@@ -34,9 +38,9 @@ void ImageView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
         auto const &value{item.second};
 
         if (key == "uri") {
-          m_source.uri = to_hstring(Utils::JSValueAsString(value));
-          m_source.type = ImageSourceType::Uri;
-          m_source.format = ImageSourceFormat::Bitmap;
+          m_source.uri = Utils::JSValueAsString(value);
+          m_type = ImageSourceType::Uri;
+          m_format = ImageSourceFormat::Bitmap;
           m_source.width = 0;
           m_source.height = 0;
 
@@ -50,7 +54,7 @@ void ImageView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
         } else if (key == "scale") {
           m_source.scale = Utils::JSValueAsFloat(value);
         } else if (key == "method") {
-          m_source.method = to_hstring(Utils::JSValueAsString(value));
+          m_source.method = Utils::JSValueAsString(value);
         } else if (key == "headers") {
           m_source.headers.clear();
           for (auto const &header : value.AsObject()) {
@@ -61,13 +65,13 @@ void ImageView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
         }
       }
     } else if (propertyName == "x") {
-      m_x = SVGLength::From(propertyValue);
+      m_x = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "y") {
-      m_y = SVGLength::From(propertyValue);
+      m_y = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "width") {
-      m_width = SVGLength::From(propertyValue);
+      m_width = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "height") {
-      m_height = SVGLength::From(propertyValue);
+      m_height = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "align") {
       m_align = Utils::JSValueAsString(propertyValue);
     } else if (propertyName == "meetOrSlice") {
@@ -85,7 +89,8 @@ void ImageView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
 
   com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 
-  uint32_t imgWidth, imgHeight;
+  uint32_t imgWidth{0};
+  uint32_t imgHeight{0};
   check_hresult(m_wicbitmap->GetSize(&imgWidth, &imgHeight));
 
   m_source.width = static_cast<float>(imgWidth);
@@ -113,13 +118,13 @@ void ImageView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   }
 
   com_ptr<ID2D1Geometry> clipPathGeometry;
-  if (ClipPathGeometry()) {
-    clipPathGeometry = get_self<D2DGeometry>(ClipPathGeometry())->Get();
+  if (ClipPathGeometry(context)) {
+    clipPathGeometry = get_self<D2DGeometry>(ClipPathGeometry(context))->Get();
   }
 
   D2DHelpers::PushOpacityLayer(deviceContext.get(), clipPathGeometry.get(), m_opacity);
 
-  if (m_source.format == ImageSourceFormat::Bitmap) {
+  if (m_format == ImageSourceFormat::Bitmap) {
     D2D1_MATRIX_3X2_F transform{D2DHelpers::GetTransform(deviceContext.get())};
 
     if (m_propSetMap[RNSVG::BaseProp::Matrix]) {
@@ -167,26 +172,26 @@ void ImageView::Unload() {
 }
 
 IAsyncAction ImageView::LoadImageSourceAsync(bool invalidate) {
-  Uri uri{m_source.uri};
+  Uri uri{winrt::to_hstring(m_source.uri)};
   hstring scheme{uri ? uri.SchemeName() : L""};
   hstring ext{uri ? uri.Extension() : L""};
 
   if (ext == L".svg" || ext == L".svgz") {
-    m_source.format = ImageSourceFormat::Svg;
+    m_format = ImageSourceFormat::Svg;
     co_return;
   }
 
   if (scheme == L"http" || scheme == L"https") {
-    m_source.type = ImageSourceType::Download;
+    m_type = ImageSourceType::Download;
   } else if (scheme == L"data") {
-    m_source.type = ImageSourceType::InlineData;
-    if (to_string(m_source.uri).find("image/svg+xml") != std::string::npos) {
-      m_source.format = ImageSourceFormat::Svg;
+    m_type = ImageSourceType::InlineData;
+    if (m_source.uri.find("image/svg+xml") != std::string::npos) {
+      m_format = ImageSourceFormat::Svg;
       co_return;
     }
   }
 
-  const bool fromStream{m_source.type == ImageSourceType::Download || m_source.type == ImageSourceType::InlineData};
+  const bool fromStream{m_type == ImageSourceType::Download || m_type == ImageSourceType::InlineData};
 
   InMemoryRandomAccessStream stream{nullptr};
 
@@ -216,7 +221,7 @@ IAsyncAction ImageView::LoadImageSourceAsync(bool invalidate) {
 
 IAsyncOperation<InMemoryRandomAccessStream> ImageView::GetImageMemoryStreamAsync(
     ImageSource source) {
-  switch (source.type) {
+  switch (m_type) {
     case ImageSourceType::Download:
       co_return co_await GetImageStreamAsync(source);
     case ImageSourceType::InlineData:
@@ -231,9 +236,9 @@ IAsyncOperation<InMemoryRandomAccessStream> ImageView::GetImageStreamAsync(
   try {
     co_await resume_background();
 
-    auto httpMethod{source.method.empty() ? HttpMethod::Get() : HttpMethod{source.method}};
+    auto httpMethod{source.method.empty() ? HttpMethod::Get() : HttpMethod{winrt::to_hstring(source.method)}};
 
-    Uri uri{source.uri};
+    Uri uri{winrt::to_hstring(source.uri)};
     HttpRequestMessage request{httpMethod, uri};
 
     if (!source.headers.empty()) {
@@ -265,7 +270,7 @@ IAsyncOperation<InMemoryRandomAccessStream> ImageView::GetImageStreamAsync(
 
 IAsyncOperation<InMemoryRandomAccessStream> ImageView::GetImageInlineDataAsync(
     ImageSource source) {
-  std::string uri{to_string(source.uri)};
+  std::string uri{source.uri};
 
   size_t start = uri.find(',');
   if (start == std::string::npos || start + 1 > uri.length()) {

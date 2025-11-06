@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { extract, stringifyPropsForFabric } from '../lib/extract/extractProps';
+import { extract } from '../lib/extract/extractProps';
 import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import RNSVGEllipse from '../fabric/EllipseNativeComponent';
@@ -28,7 +28,10 @@ export default class Ellipse extends Shape<EllipseProps> {
     const { cx, cy, rx, ry } = props;
     const ellipseProps = {
       ...extract(this, props),
-      ...stringifyPropsForFabric({ cx, cy, rx, ry }),
+      cx,
+      cy,
+      rx,
+      ry,
     };
     return (
       <RNSVGEllipse

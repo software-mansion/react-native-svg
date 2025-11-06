@@ -5,14 +5,13 @@
 
 `react-native-svg` provides SVG support to React Native on iOS, Android, macOS, Windows, and a compatibility layer for the web.
 
-[Check out the Example app](https://github.com/react-native-svg/react-native-svg/tree/main/Example)
+[Check out the Example app](https://github.com/software-mansion/react-native-svg/tree/main/apps/common/example)
 
 - [Features](#features)
 - [Installation](#installation)
 - [Troubleshooting](#troubleshooting)
 - [Opening issues](#opening-issues)
 - [Usage](#usage)
-- [TODO](#todo)
 - [Known issues](#known-issues)
 
 ## Features
@@ -75,6 +74,9 @@ npx expo install react-native-svg
 | >=8              | >=0.57.4     |
 | >=9              | >=0.57.4     |
 | >=12.3.0         | >=0.64.0     |
+| >=15.0.0         | >=0.70.0     |
+| >=15.8.0         | >=0.73.0     |
+| >=15.13.0        | >=0.78.0     |
 
 ## Support for Fabric
 
@@ -109,34 +111,7 @@ react-native run-android
 ### Adding Windows support
 
 1. `npx react-native-windows-init --overwrite`
-2. `cd windows\<AppName>`
-3. Open `<AppName>.vcxproj`
-
-#### RN 0.68+
-
-4. Scroll to the bottom until you find:
-   ```xml
-   <ItemGroup>
-      <PackageReference Include="Microsoft.Windows.CppWinRT" Version="X.X.XXXXXX.X" />
-   </ItemGroup>
-   ```
-5. Add the following to that `<ItemGroup>`
-   ```xml
-   <PackageReference Include="Win2D.uwp" Version="1.26.0" />
-   ```
-
-#### Pre RN 0.68
-
-4. Scroll to the bottom until you find:
-
-   ```xml
-   <ImportGroup Label="ExtensionTargets">
-   ```
-
-5. Add the following to that `<ImportGroup>`
-   ```xml
-   <Import Project="$(SolutionDir)\packages\Win2D.uwp.1.26.0\build\native\Win2D.uwp.targets" Condition="Exists('$(SolutionDir)\packages\Win2D.uwp.1.26.0\build\native\Win2D.uwp.targets')" />
-   ```
+2. `react-native run-windows`
 
 ## Opening issues
 
@@ -152,10 +127,10 @@ If you suspect that you've found a spec conformance bug, then you can test using
 
 To check how to use the library, see [USAGE.md](https://github.com/react-native-svg/react-native-svg/blob/main/USAGE.md)
 
-## TODO:
-
-1. Filters ([connected PR](https://github.com/react-native-svg/react-native-svg/pull/896))
-
 ## Known issues:
 
 1. Unable to apply focus point of RadialGradient on Android.
+
+## React Native SVG is maintained by Software Mansion
+
+Since 2012 [Software Mansion](https://swmansion.com) is a software agency with experience in building web and mobile apps. We are Core React Native Contributors and experts in dealing with all kinds of React Native issues. We can help you build your next dream product – [Hire us](https://swmansion.com/contact/projects?utm_source=svg&utm_medium=readme).

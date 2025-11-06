@@ -1,14 +1,18 @@
 #pragma once
+
 #include "LinearGradientView.g.h"
 #include "BrushView.h"
 
 namespace winrt::RNSVG::implementation {
+
 struct LinearGradientView : LinearGradientViewT<LinearGradientView, RNSVG::implementation::BrushView> {
  public:
   LinearGradientView() = default;
 
-  // RenderableView
+  // IRenderablePaper
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
+
+  // IRenderable
   void Unload();
 
  private:
@@ -19,6 +23,7 @@ struct LinearGradientView : LinearGradientViewT<LinearGradientView, RNSVG::imple
   std::vector<D2D1_GRADIENT_STOP> m_stops{};
   std::string m_gradientUnits{"objectBoundingBox"};
 
+  // BrushView
   void CreateBrush();
   void UpdateBounds();
   void SetPoints(ID2D1LinearGradientBrush *brush, D2D1_RECT_F bounds);

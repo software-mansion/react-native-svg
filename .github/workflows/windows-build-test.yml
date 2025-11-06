@@ -1,0 +1,62 @@
+name: Test Windows build
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/windows-build-test.yml'
+      - 'windows/**'
+      - 'src/fabric/**'
+      - 'package.json'
+      - 'apps/paper-windows-example/windows/**'
+      - 'apps/paper-windows-example/package.json'
+      - 'apps/fabric-windows-example/windows/**'
+      - 'apps/fabric-windows-example/package.json'
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-2022
+    strategy:
+      matrix:
+        working-directory: [paper-windows-example, fabric-windows-example]
+    concurrency:
+      group: windows-${{ matrix.working-directory }}-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '^18'
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Restore react-native-svg node_modules from cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-svg-${{ hashFiles('yarn.lock') }}
+          restore-keys: ${{ runner.os }}-node-modules-svg-
+
+      - name: Install svg node_modules
+        run: yarn install --frozen-lockfile
+
+      - name: Restore app node_modules from cache
+        uses: actions/cache@v3
+        with:
+          path: apps/${{ matrix.working-directory }}/node_modules
+          key: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-${{ hashFiles(format('apps/{0}/yarn.lock', matrix.working-directory)) }}
+          restore-keys: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-
+
+      - name: Install app node_modules
+        working-directory: apps/${{ matrix.working-directory }}
+        run: yarn --frozen-lockfile
+
+      - name: Build app
+        working-directory: apps/${{ matrix.working-directory }}/windows
+        run: npx react-native run-windows --logging --no-packager --no-deploy --no-autolink

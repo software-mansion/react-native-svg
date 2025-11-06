@@ -6,6 +6,7 @@ import extractOpacity from './extractOpacity';
 import { idPattern } from '../util';
 import type {
   ClipProps,
+  ColorProps,
   extractedProps,
   FillProps,
   NumberProp,
@@ -53,6 +54,7 @@ export default function extractProps(
     ResponderProps &
     StrokeProps &
     FillProps &
+    ColorProps &
     ClipProps,
   ref: object
 ) {
@@ -75,6 +77,9 @@ export default function extractProps(
   extractResponder(extracted, props, ref);
   extractFill(extracted, props, inherited);
   extractStroke(extracted, props, inherited);
+  if (props.color) {
+    extracted.color = props.color;
+  }
 
   if (inherited.length) {
     extracted.propList = inherited;
@@ -149,23 +154,6 @@ export function extract(
   props: object & { style?: [] | unknown }
 ) {
   return extractProps(propsAndStyles(props), instance);
-}
-
-export function stringifyPropsForFabric(props: {
-  [key: string]: NumberProp | undefined | null;
-}) {
-  const extracted: { [key: string]: NumberProp } = {};
-  Object.keys(props).forEach((k) => {
-    const prop = props[k];
-    if (prop !== undefined && prop !== null) {
-      const propStr = prop as string;
-      const propNum = parseInt(propStr, 10);
-      const doNotParse = isNaN(propNum) || propStr[propStr.length - 1] === '%';
-      extracted[k] = doNotParse ? propStr : propNum;
-    }
-  });
-
-  return extracted;
 }
 
 export function withoutXY(

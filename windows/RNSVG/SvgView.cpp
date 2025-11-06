@@ -5,59 +5,27 @@
 #include "SvgView.g.cpp"
 #endif
 
+#include <UI.Xaml.Media.Imaging.h>
+#ifdef USE_WINUI3
+#include <microsoft.ui.xaml.media.dxinterop.h>
+#include <winrt/Microsoft.Graphics.Display.h>
+#else
 #include <windows.ui.xaml.media.dxinterop.h>
-#include <winrt/Windows.UI.Xaml.Media.Imaging.h>
 #include <winrt/Windows.Graphics.Display.h>
+#endif
 
 #include "D2DDevice.h"
 #include "D2DDeviceContext.h"
 #include "GroupView.h"
-#include "Utils.h"
 
 #include <d3d11_4.h>
 
 using namespace winrt;
-using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
-SvgView::SvgView(IReactContext const &context) : m_reactContext(context) {
-  uint32_t creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 
-  D3D_FEATURE_LEVEL featureLevels[] = {
-      D3D_FEATURE_LEVEL_11_1,
-      D3D_FEATURE_LEVEL_11_0,
-      D3D_FEATURE_LEVEL_10_1,
-      D3D_FEATURE_LEVEL_10_0,
-      D3D_FEATURE_LEVEL_9_3,
-      D3D_FEATURE_LEVEL_9_2,
-      D3D_FEATURE_LEVEL_9_1};
-
-  // Create the Direct3D device.
-  com_ptr<ID3D11Device> d3dDevice;
-  D3D_FEATURE_LEVEL supportedFeatureLevel;
-  check_hresult(D3D11CreateDevice(
-      nullptr, // default adapter
-      D3D_DRIVER_TYPE_HARDWARE,
-      0,
-      creationFlags,
-      featureLevels,
-      ARRAYSIZE(featureLevels),
-      D3D11_SDK_VERSION,
-      d3dDevice.put(),
-      &supportedFeatureLevel,
-      nullptr));
-
-  com_ptr<IDXGIDevice> dxgiDevice{d3dDevice.as<IDXGIDevice>()};
-
-  // Create the Direct2D device and a corresponding context.
-  com_ptr<ID2D1Device> device;
-  check_hresult(D2D1CreateDevice(dxgiDevice.get(), nullptr, device.put()));
-  m_device = make<RNSVG::implementation::D2DDevice>(device);
-
-  com_ptr<ID2D1DeviceContext> deviceContext;
-  check_hresult(device->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE, deviceContext.put()));
-  m_deviceContext = make<RNSVG::implementation::D2DDeviceContext>(deviceContext);
-
+SvgView::SvgView(IReactContext const &context, RNSVG::DirectXDeviceManager const &deviceManager)
+    : m_reactContext(context), m_deviceManager(deviceManager) {
   m_panelLoadedRevoker = Loaded(winrt::auto_revoke, {get_weak(), &SvgView::Panel_Loaded});
   m_panelUnloadedRevoker = Unloaded(winrt::auto_revoke, {get_weak(), &SvgView::Panel_Unloaded});
 }
@@ -90,15 +58,15 @@ void SvgView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, b
           SaveDefinition();
         }
       } else if (propertyName == "width") {
-        m_width = SVGLength::From(propertyValue);
+        m_width = propertyValue.To<RNSVG::SVGLength>();
       } else if (propertyName == "height") {
-        m_height = SVGLength::From(propertyValue);
+        m_height = propertyValue.To<RNSVG::SVGLength>();
       } else if (propertyName == "bbWidth") {
-        m_bbWidth = SVGLength::From(propertyValue);
-        Width(m_bbWidth.Value());
+        m_bbWidth = propertyValue.To<RNSVG::SVGLength>();
+        Width(m_bbWidth.Value);
       } else if (propertyName == "bbHeight") {
-        m_bbHeight = SVGLength::From(propertyValue);
-        Height(m_bbHeight.Value());
+        m_bbHeight = propertyValue.To<RNSVG::SVGLength>();
+        Height(m_bbHeight.Value);
       } else if (propertyName == "vbWidth") {
         m_vbWidth = Utils::JSValueAsFloat(propertyValue);
       } else if (propertyName == "vbHeight") {
@@ -122,19 +90,6 @@ void SvgView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, b
   }
 }
 
-void SvgView::SaveDefinition() {
-  if (m_id != L"" && m_group) {
-    m_group.SvgRoot().Templates().Insert(m_id, *this);
-    m_group.SaveDefinition();
-  }
-}
-
-void SvgView::MergeProperties(RNSVG::RenderableView const &other) {
-  if (m_group) {
-    m_group.MergeProperties(other);
-  }
-}
-
 Size SvgView::MeasureOverride(Size const &availableSize) {
   for (auto const &child : Children()) {
     child.Measure(availableSize);
@@ -149,6 +104,38 @@ Size SvgView::ArrangeOverride(Size const &finalSize) {
   return finalSize;
 }
 
+void SvgView::Panel_Loaded(IInspectable const &sender, xaml::RoutedEventArgs const & ) {
+  if (auto const &svgView{sender.try_as<RNSVG::SvgView>()}) { 
+    if (!m_loaded) { 
+      m_loaded = true; 
+      svgView.CreateResources();
+    }
+  }
+}
+
+void SvgView::Panel_Unloaded(IInspectable const &sender, xaml::RoutedEventArgs const & ) {
+  if (auto const &svgView{sender.try_as<RNSVG::SvgView>()}) {
+    svgView.Unload();
+  }
+}
+
+winrt::Windows::Foundation::Size SvgView::CanvasSize() noexcept {
+  return ActualSize();
+}
+
+void SvgView::SaveDefinition() {
+  if (m_id != L"" && m_group) {
+    m_group.SvgRoot().Templates().Insert(m_id, *this);
+    m_group.SaveDefinition();
+  }
+}
+
+void SvgView::MergeProperties(RNSVG::IRenderable const &other) {
+  if (m_group) {
+    m_group.MergeProperties(other);
+  }
+}
+
 void SvgView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 
@@ -159,7 +146,7 @@ void SvgView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
     float width{size.Width};
     float height{size.Height};
 
-    if (m_parent) {
+    if (SvgParent()) {
       width = Utils::GetAbsoluteLength(m_bbWidth, width);
       height = Utils::GetAbsoluteLength(m_bbHeight, height);
     }
@@ -180,9 +167,9 @@ void SvgView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   deviceContext->SetTransform(transform);
 }
 
-void SvgView::CreateGeometry() {
+void SvgView::CreateGeometry(RNSVG::D2DDeviceContext const &context) {
   if (m_group) {
-    m_group.CreateGeometry();
+    m_group.CreateGeometry(context);
   }
 }
 
@@ -196,23 +183,7 @@ void SvgView::CreateResources() {
   m_image.Width(ActualWidth());
   m_image.Height(ActualHeight());
   m_image.Stretch(xaml::Media::Stretch::UniformToFill);
-
   Children().Append(m_image);
-}
-
-void SvgView::Panel_Loaded(IInspectable const &sender, xaml::RoutedEventArgs const & /*args*/) {
-  if (auto const &svgView{sender.try_as<RNSVG::SvgView>()}) {
-    if (!m_loaded) {
-      m_loaded = true;
-      svgView.CreateResources();
-    }
-  }
-}
-
-void SvgView::Panel_Unloaded(IInspectable const &sender, xaml::RoutedEventArgs const & /*args*/) {
-  if (auto const &svgView{sender.try_as<RNSVG::SvgView>()}) {
-    svgView.Unload();
-  }
 }
 
 void SvgView::Unload() {
@@ -226,16 +197,24 @@ void SvgView::Unload() {
 }
 
 void SvgView::Invalidate() {
-  if (!m_loaded) {
-    return;
-  }
-
   m_brushes.Clear();
   m_templates.Clear();
+
+  // Recreate the shared graphics device resources if necessary.
+  m_deviceManager.CreateDeviceResourcesIfNeeded();
+
+  if (!m_loaded || Device() == nullptr || DeviceContext() == nullptr) {
+    return;
+  }
 
   com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(DeviceContext())->Get()};
 
   Size size{static_cast<float>(ActualWidth()), static_cast<float>(ActualHeight())};
+
+  // Check if the size is valid (non-zero)
+  if (size.Width <= 0 || size.Height <= 0) {
+    return;
+  }
 
   xaml::Media::Imaging::SurfaceImageSource surfaceImageSource(
       static_cast<int32_t>(size.Width), static_cast<int32_t>(size.Height));
@@ -269,8 +248,13 @@ void SvgView::Invalidate() {
 
   Draw(DeviceContext(), size);
 
-  deviceContext->EndDraw();
-  sisNativeWithD2D->EndDraw();
+  HRESULT endDrawResult = deviceContext->EndDraw();
+  HRESULT sisNativeEndDrawResult = sisNativeWithD2D->EndDraw();
+
+  // If either draw call failed with D2DERR_RECREATE_TARGET, then discard the current device resources.
+  if (endDrawResult == D2DERR_RECREATE_TARGET || sisNativeEndDrawResult == D2DERR_RECREATE_TARGET) {
+    m_deviceManager.DiscardDeviceResources();
+  }
 
   m_image.Source(surfaceImageSource);
 }

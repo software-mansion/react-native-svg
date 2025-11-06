@@ -11,12 +11,14 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import androidx.annotation.Nullable;
+import com.facebook.react.bridge.ColorPropConverter;
+import com.facebook.react.bridge.DynamicFromObject;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
-import com.facebook.react.uimanager.BaseViewManagerInterface;
+import com.facebook.react.uimanager.LayoutShadowNode;
 
-public class RNSVGLineManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGLineManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
+public class RNSVGLineManagerDelegate<T extends View, U extends BaseViewManager<T, ? extends LayoutShadowNode> & RNSVGLineManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
   public RNSVGLineManagerDelegate(U viewManager) {
     super(viewManager);
   }
@@ -59,8 +61,11 @@ public class RNSVGLineManagerDelegate<T extends View, U extends BaseViewManagerI
       case "pointerEvents":
         mViewManager.setPointerEvents(view, value == null ? null : (String) value);
         break;
+      case "color":
+        mViewManager.setColor(view, ColorPropConverter.getColor(value, view.getContext()));
+        break;
       case "fill":
-        mViewManager.setFill(view, (ReadableMap) value);
+        mViewManager.setFill(view, new DynamicFromObject(value));
         break;
       case "fillOpacity":
         mViewManager.setFillOpacity(view, value == null ? 1f : ((Double) value).floatValue());
@@ -69,19 +74,13 @@ public class RNSVGLineManagerDelegate<T extends View, U extends BaseViewManagerI
         mViewManager.setFillRule(view, value == null ? 1 : ((Double) value).intValue());
         break;
       case "stroke":
-        mViewManager.setStroke(view, (ReadableMap) value);
+        mViewManager.setStroke(view, new DynamicFromObject(value));
         break;
       case "strokeOpacity":
         mViewManager.setStrokeOpacity(view, value == null ? 1f : ((Double) value).floatValue());
         break;
       case "strokeWidth":
-        if (value instanceof String) {
-          mViewManager.setStrokeWidth(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setStrokeWidth(view, (Double) value);
-        } else {
-          mViewManager.setStrokeWidth(view, "1");
-        }
+        mViewManager.setStrokeWidth(view, new DynamicFromObject(value));
         break;
       case "strokeLinecap":
         mViewManager.setStrokeLinecap(view, value == null ? 0 : ((Double) value).intValue());
@@ -90,11 +89,7 @@ public class RNSVGLineManagerDelegate<T extends View, U extends BaseViewManagerI
         mViewManager.setStrokeLinejoin(view, value == null ? 0 : ((Double) value).intValue());
         break;
       case "strokeDasharray":
-        if (value instanceof String) {
-          mViewManager.setStrokeDasharray(view, (String) value);
-        } else if (value instanceof ReadableArray) {
-          mViewManager.setStrokeDasharray(view, (ReadableArray) value);
-        }
+        mViewManager.setStrokeDasharray(view, new DynamicFromObject(value));
         break;
       case "strokeDashoffset":
         mViewManager.setStrokeDashoffset(view, value == null ? 0f : ((Double) value).floatValue());
@@ -108,41 +103,20 @@ public class RNSVGLineManagerDelegate<T extends View, U extends BaseViewManagerI
       case "propList":
         mViewManager.setPropList(view, (ReadableArray) value);
         break;
+      case "filter":
+        mViewManager.setFilter(view, value == null ? null : (String) value);
+        break;
       case "x1":
-        if (value instanceof String) {
-          mViewManager.setX1(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setX1(view, (Double) value);
-        } else {
-          mViewManager.setX1(view, (Double) null);
-        }
+        mViewManager.setX1(view, new DynamicFromObject(value));
         break;
       case "y1":
-        if (value instanceof String) {
-          mViewManager.setY1(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setY1(view, (Double) value);
-        } else {
-          mViewManager.setY1(view, (Double) null);
-        }
+        mViewManager.setY1(view, new DynamicFromObject(value));
         break;
       case "x2":
-        if (value instanceof String) {
-          mViewManager.setX2(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setX2(view, (Double) value);
-        } else {
-          mViewManager.setX2(view, (Double) null);
-        }
+        mViewManager.setX2(view, new DynamicFromObject(value));
         break;
       case "y2":
-        if (value instanceof String) {
-          mViewManager.setY2(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setY2(view, (Double) value);
-        } else {
-          mViewManager.setY2(view, (Double) null);
-        }
+        mViewManager.setY2(view, new DynamicFromObject(value));
         break;
       default:
         super.setProperty(view, propName, value);

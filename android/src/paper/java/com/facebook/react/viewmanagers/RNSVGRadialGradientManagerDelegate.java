@@ -11,11 +11,13 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import androidx.annotation.Nullable;
+import com.facebook.react.bridge.DynamicFromObject;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
-import com.facebook.react.uimanager.BaseViewManagerInterface;
+import com.facebook.react.uimanager.LayoutShadowNode;
 
-public class RNSVGRadialGradientManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGRadialGradientManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
+public class RNSVGRadialGradientManagerDelegate<T extends View, U extends BaseViewManager<T, ? extends LayoutShadowNode> & RNSVGRadialGradientManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
   public RNSVGRadialGradientManagerDelegate(U viewManager) {
     super(viewManager);
   }
@@ -59,58 +61,22 @@ public class RNSVGRadialGradientManagerDelegate<T extends View, U extends BaseVi
         mViewManager.setPointerEvents(view, value == null ? null : (String) value);
         break;
       case "fx":
-        if (value instanceof String) {
-          mViewManager.setFx(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setFx(view, (Double) value);
-        } else {
-          mViewManager.setFx(view, (Double) null);
-        }
+        mViewManager.setFx(view, new DynamicFromObject(value));
         break;
       case "fy":
-        if (value instanceof String) {
-          mViewManager.setFy(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setFy(view, (Double) value);
-        } else {
-          mViewManager.setFy(view, (Double) null);
-        }
+        mViewManager.setFy(view, new DynamicFromObject(value));
         break;
       case "cx":
-        if (value instanceof String) {
-          mViewManager.setCx(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setCx(view, (Double) value);
-        } else {
-          mViewManager.setCx(view, (Double) null);
-        }
+        mViewManager.setCx(view, new DynamicFromObject(value));
         break;
       case "cy":
-        if (value instanceof String) {
-          mViewManager.setCy(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setCy(view, (Double) value);
-        } else {
-          mViewManager.setCy(view, (Double) null);
-        }
+        mViewManager.setCy(view, new DynamicFromObject(value));
         break;
       case "rx":
-        if (value instanceof String) {
-          mViewManager.setRx(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setRx(view, (Double) value);
-        } else {
-          mViewManager.setRx(view, (Double) null);
-        }
+        mViewManager.setRx(view, new DynamicFromObject(value));
         break;
       case "ry":
-        if (value instanceof String) {
-          mViewManager.setRy(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setRy(view, (Double) value);
-        } else {
-          mViewManager.setRy(view, (Double) null);
-        }
+        mViewManager.setRy(view, new DynamicFromObject(value));
         break;
       case "gradient":
         mViewManager.setGradient(view, (ReadableArray) value);

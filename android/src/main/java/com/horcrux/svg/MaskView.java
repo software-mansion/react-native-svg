@@ -27,6 +27,13 @@ class MaskView extends GroupView {
   @SuppressWarnings({"FieldCanBeLocal", "unused"})
   private Brush.BrushUnits mMaskContentUnits;
 
+  MaskType mMaskType;
+
+  enum MaskType {
+    LUMINANCE,
+    ALPHA
+  }
+
   public MaskView(ReactContext reactContext) {
     super(reactContext);
   }
@@ -36,27 +43,7 @@ class MaskView extends GroupView {
     invalidate();
   }
 
-  public void setX(String x) {
-    mX = SVGLength.from(x);
-    invalidate();
-  }
-
-  public void setX(Double x) {
-    mX = SVGLength.from(x);
-    invalidate();
-  }
-
   public void setY(Dynamic y) {
-    mY = SVGLength.from(y);
-    invalidate();
-  }
-
-  public void setY(String y) {
-    mY = SVGLength.from(y);
-    invalidate();
-  }
-
-  public void setY(Double y) {
     mY = SVGLength.from(y);
     invalidate();
   }
@@ -66,29 +53,13 @@ class MaskView extends GroupView {
     invalidate();
   }
 
-  public void setWidth(String width) {
-    mW = SVGLength.from(width);
-    invalidate();
-  }
-
-  public void setWidth(Double width) {
-    mW = SVGLength.from(width);
-    invalidate();
-  }
-
   public void setHeight(Dynamic height) {
     mH = SVGLength.from(height);
     invalidate();
   }
 
-  public void setHeight(String height) {
-    mH = SVGLength.from(height);
-    invalidate();
-  }
-
-  public void setHeight(Double height) {
-    mH = SVGLength.from(height);
-    invalidate();
+  public Brush.BrushUnits getMaskUnits() {
+    return mMaskUnits;
   }
 
   public void setMaskUnits(int maskUnits) {
@@ -110,6 +81,22 @@ class MaskView extends GroupView {
         break;
       case 1:
         mMaskContentUnits = Brush.BrushUnits.USER_SPACE_ON_USE;
+        break;
+    }
+    invalidate();
+  }
+
+  public MaskType getMaskType() {
+    return mMaskType;
+  }
+
+  public void setMaskType(int maskType) {
+    switch (maskType) {
+      case 0:
+        mMaskType = MaskType.LUMINANCE;
+        break;
+      case 1:
+        mMaskType = MaskType.ALPHA;
         break;
     }
     invalidate();

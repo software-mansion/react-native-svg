@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "LinearGradientView.h"
+#if __has_include("LinearGradientView.g.cpp")
 #include "LinearGradientView.g.cpp"
+#endif
 
 #include "Utils.h"
 
@@ -8,6 +10,7 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
+
 void LinearGradientView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
@@ -16,13 +19,13 @@ void LinearGradientView::UpdateProperties(IJSValueReader const &reader, bool for
     auto const &propertyValue{pair.second};
 
     if (propertyName == "x1") {
-      m_x1 = SVGLength::From(propertyValue);
+      m_x1 = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "y1") {
-      m_y1 = SVGLength::From(propertyValue);
+      m_y1 = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "x2") {
-      m_x2 = SVGLength::From(propertyValue);
+      m_x2 = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "y2") {
-      m_y2 = SVGLength::From(propertyValue);
+      m_y2 = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "gradient") {
       m_stops = Utils::JSValueAsStops(propertyValue);
     } else if (propertyName == "gradientUnits") {
@@ -54,7 +57,7 @@ void LinearGradientView::CreateBrush() {
   winrt::com_ptr<ID2D1GradientStopCollection> stopCollection;
   winrt::check_hresult(deviceContext->CreateGradientStopCollection(&m_stops[0], static_cast<uint32_t>(m_stops.size()), stopCollection.put()));
 
-  Size size{static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())};
+  Size size{root.CanvasSize()};
 
   D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES brushProperties;
   brushProperties.startPoint = {0, 0};
@@ -77,7 +80,7 @@ void LinearGradientView::UpdateBounds() {
   }
 }
 
-void LinearGradientView::SetPoints(ID2D1LinearGradientBrush * brush, D2D1_RECT_F bounds) {
+void LinearGradientView::SetPoints(ID2D1LinearGradientBrush *brush, D2D1_RECT_F bounds) {
   float width{D2DHelpers::WidthFromD2DRect(bounds)};
   float height{D2DHelpers::HeightFromD2DRect(bounds)};
 

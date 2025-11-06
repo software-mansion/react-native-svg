@@ -204,6 +204,14 @@ class Brush {
       double rx = getVal(mPoints[2], width, scale, textSize);
       double ry = getVal(mPoints[3], height, scale, textSize);
 
+      if (rx <= 0 || ry <= 0) {
+        // Gradient with radius = 0 should be rendered as solid color of the last stop
+        rx = width;
+        ry = height;
+        stops = new float[] {stops[0], stops[stops.length - 1]};
+        stopsColors =
+            new int[] {stopsColors[stopsColors.length - 1], stopsColors[stopsColors.length - 1]};
+      }
       double ratio = ry / rx;
 
       double cx = getVal(mPoints[4], width, scale, textSize) + offsetX;

@@ -5,6 +5,7 @@
     "paths": {
       "react-native-svg": ["./src"],
       "react-native-svg/css": ["./src/css/index.tsx"],
+      "react-native-svg/filter-image": ["./src/filter-image/index.tsx"]
     },
     "preserveSymlinks": true,
     "target": "es6",
@@ -17,7 +18,8 @@
     "esModuleInterop": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "isolatedModules": true
   },
   "include": ["src"]
 }

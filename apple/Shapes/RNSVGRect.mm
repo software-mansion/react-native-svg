@@ -12,8 +12,8 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
-#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
+#import <rnsvg/RNSVGComponentDescriptors.h>
 #import "RNSVGFabricConversions.h"
 #endif // RCT_NEW_ARCH_ENABLED
 
@@ -21,6 +21,12 @@
 
 #ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
+
+// Needed because of this: https://github.com/facebook/react-native/pull/37274
++ (void)load
+{
+  [super load];
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -42,16 +48,30 @@ using namespace facebook::react;
 {
   const auto &newProps = static_cast<const RNSVGRectProps &>(*props);
 
-  self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
-  self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
-  if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
-    self.rectheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
+  id x = RNSVGConvertFollyDynamicToId(newProps.x);
+  if (x != nil) {
+    self.x = [RCTConvert RNSVGLength:x];
   }
-  if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
-    self.rectwidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
+  id y = RNSVGConvertFollyDynamicToId(newProps.y);
+  if (y != nil) {
+    self.y = [RCTConvert RNSVGLength:y];
   }
-  self.rx = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.rx)];
-  self.ry = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.ry)];
+  id rectheight = RNSVGConvertFollyDynamicToId(newProps.height);
+  if (rectheight != nil) {
+    self.rectheight = [RCTConvert RNSVGLength:rectheight];
+  }
+  id rectwidth = RNSVGConvertFollyDynamicToId(newProps.width);
+  if (rectwidth != nil) {
+    self.rectwidth = [RCTConvert RNSVGLength:rectwidth];
+  }
+  id rx = RNSVGConvertFollyDynamicToId(newProps.rx);
+  if (rx != nil) {
+    self.rx = [RCTConvert RNSVGLength:rx];
+  }
+  id ry = RNSVGConvertFollyDynamicToId(newProps.ry);
+  if (ry != nil) {
+    self.ry = [RCTConvert RNSVGLength:ry];
+  }
 
   setCommonRenderableProps(newProps, self);
   _props = std::static_pointer_cast<RNSVGRectProps const>(props);

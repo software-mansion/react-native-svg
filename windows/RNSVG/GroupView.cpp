@@ -14,6 +14,7 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
+
 void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
@@ -92,7 +93,7 @@ void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
   __super::UpdateProperties(reader, forceUpdate, false);
 
   for (auto const &child : Children()) {
-    child.UpdateProperties(reader, false, false);
+    child.as<IRenderablePaper>().UpdateProperties(reader, false, false);
   }
 
   if (invalidate && SvgParent()) {
@@ -100,11 +101,12 @@ void GroupView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate,
   }
 }
 
-void GroupView::CreateGeometry() {
-  std::vector<ID2D1Geometry*> geometries;
-  for (auto const child : Children()) {
+void GroupView::CreateGeometry(RNSVG::D2DDeviceContext const &context) {
+  std::vector<ID2D1Geometry *> geometries;
+  for (auto const childComponent : Children()) {
+    auto const child = childComponent.as<IRenderable>();
     if (!child.Geometry()) {
-      child.CreateGeometry();
+      child.CreateGeometry(context);
     }
 
     if (child.Geometry()) {
@@ -117,7 +119,7 @@ void GroupView::CreateGeometry() {
   }
 
   if (!geometries.empty()) {
-    com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(SvgRoot().DeviceContext())->Get()};
+    com_ptr<ID2D1DeviceContext> deviceContext{get_self<D2DDeviceContext>(context)->Get()};
 
     com_ptr<ID2D1Factory> factory;
     deviceContext->GetFactory(factory.put());
@@ -134,15 +136,15 @@ void GroupView::SaveDefinition() {
   __super::SaveDefinition();
 
   for (auto const &child : Children()) {
-    child.SaveDefinition();
+    child.as<IRenderable>().SaveDefinition();
   }
 }
 
-void GroupView::MergeProperties(RNSVG::RenderableView const &other) {
+void GroupView::MergeProperties(RNSVG::IRenderable const &other) {
   __super::MergeProperties(other);
 
   for (auto const &child : Children()) {
-    child.MergeProperties(*this);
+    child.as<IRenderable>().MergeProperties(*this);
   }
 }
 
@@ -157,8 +159,8 @@ void GroupView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
 
   com_ptr<ID2D1Geometry> clipPathGeometry;
 
-  if (ClipPathGeometry()) {
-    clipPathGeometry = get_self<D2DGeometry>(ClipPathGeometry())->Get();
+  if (ClipPathGeometry(context)) {
+    clipPathGeometry = get_self<D2DGeometry>(ClipPathGeometry(context))->Get();
   }
 
   D2DHelpers::PushOpacityLayer(deviceContext.get(), clipPathGeometry.get(), m_opacity);
@@ -176,23 +178,23 @@ void GroupView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
 
 void GroupView::DrawGroup(RNSVG::D2DDeviceContext const &context, Size const &size) {
   for (auto const &child : Children()) {
-    child.Draw(context, size);
+    child.as<IRenderable>().Draw(context, size);
   }
 }
 
 void GroupView::CreateResources() {
   for (auto const &child : Children()) {
-    child.CreateResources();
+    child.as<IRenderable>().CreateResources();
   }
 }
 
 void GroupView::Unload() {
   for (auto const &child : Children()) {
-    child.Unload();
+    child.as<IRenderable>().Unload();
   }
 
-  m_reactContext = nullptr;
   m_fontPropMap.clear();
+
   m_children.Clear();
 
   __super::Unload();
@@ -202,23 +204,18 @@ winrt::RNSVG::IRenderable GroupView::HitTest(Point const &point) {
   RNSVG::IRenderable renderable{nullptr};
   if (IsResponsible()) {
     for (auto const &child : Children()) {
-      if (auto const &hit{child.HitTest(point)}) {
+      if (auto const &hit{child.as<IRenderable>().HitTest(point)}) {
         renderable = hit;
       }
     }
     if (renderable && !renderable.IsResponsible()) {
       return *this;
     } else if (!renderable) {
-      if (!Geometry()) {
-        CreateGeometry();
-      }
-
       if (Geometry()) {
         com_ptr<ID2D1Geometry> geometry{get_self<D2DGeometry>(Geometry())->Get()};
 
         D2D1_RECT_F bounds;
         check_hresult(geometry->GetBounds(nullptr, &bounds));
-
 
         if (xaml::RectHelper::Contains(D2DHelpers::FromD2DRect(bounds), point)) {
           return *this;

@@ -1,4 +1,5 @@
 #pragma once
+
 #include "ClipPathView.g.h"
 #include "GroupView.h"
 
@@ -7,7 +8,7 @@ struct ClipPathView : ClipPathViewT<ClipPathView, RNSVG::implementation::GroupVi
  public:
   ClipPathView() = default;
 
-  // RenderableView
+  // IRenderable
   void Draw(RNSVG::D2DDeviceContext const & /*deviceContext*/, Windows::Foundation::Size const & /*size*/){};
 };
 } // namespace winrt::RNSVG::implementation

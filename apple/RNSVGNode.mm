@@ -12,6 +12,11 @@
 #import "RNSVGGlyphContext.h"
 #import "RNSVGGroup.h"
 
+#ifdef RCT_NEW_ARCH_ENABLED
+#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
+using namespace facebook::react;
+#endif // RCT_NEW_ARCH_ENABLED
+
 @interface RNSVGNode ()
 @property (nonatomic, readwrite, weak) RNSVGSvgView *svgView;
 @property (nonatomic, readwrite, weak) RNSVGGroup *textRoot;
@@ -33,31 +38,44 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 - (instancetype)init
 {
   if (self = [super init]) {
-    self.opacity = 1;
 #if !TARGET_OS_OSX // On macOS, views are transparent by default
     self.opaque = false;
 #endif
-    self.matrix = CGAffineTransformIdentity;
-    self.transforms = CGAffineTransformIdentity;
-    self.invTransform = CGAffineTransformIdentity;
+    _matrix = CGAffineTransformIdentity;
+    _invmatrix = CGAffineTransformIdentity;
+    _opacity = 1;
     _merging = false;
     _dirty = false;
   }
   return self;
 }
 
-- (void)insertReactSubview:(RNSVGView *)subview atIndex:(NSInteger)atIndex
+- (void)insertReactSubview:(RNSVGPlatformView *)subview atIndex:(NSInteger)atIndex
 {
   [super insertReactSubview:subview atIndex:atIndex];
   [self insertSubview:subview atIndex:atIndex];
   [self invalidate];
 }
 
-- (void)removeReactSubview:(RNSVGView *)subview
+- (void)removeReactSubview:(RNSVGPlatformView *)subview
 {
   [super removeReactSubview:subview];
   [self invalidate];
 }
+
+#ifdef RCT_NEW_ARCH_ENABLED
+- (void)mountChildComponentView:(RNSVGView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+  [super mountChildComponentView:childComponentView index:index];
+  [self invalidate];
+}
+
+- (void)unmountChildComponentView:(RNSVGView<RCTComponentViewProtocol> *)childComponentView index:(NSInteger)index
+{
+  [super unmountChildComponentView:childComponentView index:index];
+  [self invalidate];
+}
+#endif
 
 - (void)didUpdateReactSubviews
 {
@@ -70,7 +88,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     return;
   }
   _dirty = true;
-  RNSVGView *container = self.superview;
+  RNSVGPlatformView *container = self.superview;
   // on Fabric, when the child components are added to hierarchy and their props are set,
   // their superview is not set yet.
   if (container != nil) {
@@ -219,6 +237,18 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   _opacity = opacity;
 }
 
+- (void)setMarkerPath:(CGPathRef)markerPath
+{
+  if (_markerPath == markerPath) {
+    return;
+  }
+  
+  CGPathRelease(_markerPath);
+  
+  _markerPath = markerPath;
+  [self invalidate];
+}
+
 - (void)setMatrix:(CGAffineTransform)matrix
 {
   if (CGAffineTransformEqualToTransform(matrix, _matrix)) {
@@ -226,12 +256,17 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   }
   _matrix = matrix;
   _invmatrix = CGAffineTransformInvert(matrix);
-  RNSVGView *container = self.superview;
+  RNSVGPlatformView *container = self.superview;
   // on Fabric, when the child components are added to hierarchy and their props are set,
   // their superview is still their componentView, we change it in `mountChildComponentView` method.
   if ([container conformsToProtocol:@protocol(RNSVGContainer)]) {
     [(id<RNSVGContainer>)container invalidate];
   }
+}
+
+- (void)setTransforms:(CGAffineTransform)transforms
+{
+  self.matrix = transforms;
 }
 
 - (void)setClientRect:(CGRect)clientRect
@@ -242,16 +277,18 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   _clientRect = clientRect;
 #ifdef RCT_NEW_ARCH_ENABLED
   if (_eventEmitter != nullptr) {
-    facebook::react::LayoutMetrics customLayoutMetrics = _layoutMetrics;
-    customLayoutMetrics.frame.size.width = _clientRect.size.width;
-    customLayoutMetrics.frame.size.height = _clientRect.size.height;
-    customLayoutMetrics.frame.origin.x = _clientRect.origin.x;
-    customLayoutMetrics.frame.origin.y = _clientRect.origin.y;
-    _eventEmitter->onLayout(customLayoutMetrics);
+    static_cast<const RNSVGGroupEventEmitter &>(*_eventEmitter)
+      .onSvgLayout(
+        {.layout = {
+            .x = static_cast<int>(_clientRect.origin.x),
+            .y = static_cast<int>(_clientRect.origin.y),
+            .width = static_cast<int>(_clientRect.size.width),
+            .height = static_cast<int>(_clientRect.size.height)
+        }});
   }
 #else
-  if (self.onLayout) {
-    self.onLayout(@{
+  if (self.onSvgLayout) {
+    self.onSvgLayout(@{
       @"layout" : @{
         @"x" : @(_clientRect.origin.x),
         @"y" : @(_clientRect.origin.y),
@@ -353,7 +390,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     if (_cachedClipPath) {
       CGPathRelease(_cachedClipPath);
     }
-    CGAffineTransform transform = CGAffineTransformConcat(_clipNode.matrix, _clipNode.transforms);
+    CGAffineTransform transform = _clipNode.matrix;
     _cachedClipPath = CGPathCreateCopyByTransformingPath([_clipNode getPath:context], &transform);
   }
 
@@ -432,6 +469,17 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
                                           fontSize:[self getFontSizeFromContext]];
 }
 
+- (CGFloat)relativeOnFraction:(RNSVGLength *)length relative:(CGFloat)relative
+{
+  RNSVGLengthUnitType unit = length.unit;
+  if (unit == SVG_LENGTHTYPE_NUMBER) {
+    return relative * length.value;
+  } else if (unit == SVG_LENGTHTYPE_PERCENTAGE) {
+    return length.value / 100 * relative;
+  }
+  return [self fromRelative:length];
+}
+
 - (CGFloat)relativeOn:(RNSVGLength *)length relative:(CGFloat)relative
 {
   RNSVGLengthUnitType unit = length.unit;
@@ -445,35 +493,25 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 
 - (CGFloat)relativeOnWidth:(RNSVGLength *)length
 {
-  RNSVGLengthUnitType unit = length.unit;
-  if (unit == SVG_LENGTHTYPE_NUMBER) {
-    return length.value;
-  } else if (unit == SVG_LENGTHTYPE_PERCENTAGE) {
-    return length.value / 100 * [self getCanvasWidth];
+  if (length.unit == SVG_LENGTHTYPE_PERCENTAGE && self.svgView.vbWidth != 0) {
+    return [self relativeOn:length relative:self.svgView.vbWidth];
   }
-  return [self fromRelative:length];
+
+  return [self relativeOn:length relative:[self getCanvasWidth]];
 }
 
 - (CGFloat)relativeOnHeight:(RNSVGLength *)length
 {
-  RNSVGLengthUnitType unit = length.unit;
-  if (unit == SVG_LENGTHTYPE_NUMBER) {
-    return length.value;
-  } else if (unit == SVG_LENGTHTYPE_PERCENTAGE) {
-    return length.value / 100 * [self getCanvasHeight];
+  if (length.unit == SVG_LENGTHTYPE_PERCENTAGE && self.svgView.vbHeight != 0) {
+    return [self relativeOn:length relative:self.svgView.vbHeight];
   }
-  return [self fromRelative:length];
+
+  return [self relativeOn:length relative:[self getCanvasHeight]];
 }
 
 - (CGFloat)relativeOnOther:(RNSVGLength *)length
 {
-  RNSVGLengthUnitType unit = length.unit;
-  if (unit == SVG_LENGTHTYPE_NUMBER) {
-    return length.value;
-  } else if (unit == SVG_LENGTHTYPE_PERCENTAGE) {
-    return length.value / 100 * [self getCanvasDiagonal];
-  }
-  return [self fromRelative:length];
+  return [self relativeOn:length relative:[self getCanvasDiagonal]];
 }
 
 - (CGFloat)fromRelative:(RNSVGLength *)length
@@ -601,6 +639,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   CGPathRelease(_cachedClipPath);
   CGPathRelease(_strokePath);
   CGPathRelease(_path);
+  CGPathRelease(_markerPath);
 }
 
 #ifdef RCT_NEW_ARCH_ENABLED
@@ -608,19 +647,15 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 {
   [super prepareForRecycle];
 
-  self.opacity = 1;
 #if !TARGET_OS_OSX // On macOS, views are transparent by default
   self.opaque = false;
 #endif
-  self.matrix = CGAffineTransformIdentity;
-  self.transforms = CGAffineTransformIdentity;
-  self.invTransform = CGAffineTransformIdentity;
   _merging = false;
   _dirty = false;
 
   _name = nil;
   _display = nil;
-  _opacity = 0;
+  _opacity = 1;
   _clipRule = kRNSVGCGFCRuleEvenodd;
   _clipPath = nil;
   _mask = nil;
@@ -635,9 +670,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   _ctm = CGAffineTransformIdentity;
   _screenCTM = CGAffineTransformIdentity;
   _matrix = CGAffineTransformIdentity;
-  _transforms = CGAffineTransformIdentity;
   _invmatrix = CGAffineTransformIdentity;
-  _invTransform = CGAffineTransformIdentity;
   _active = NO;
   _skip = NO;
   if (_markerPath) {
@@ -649,7 +682,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   _fillBounds = CGRectZero;
   _strokeBounds = CGRectZero;
   _markerBounds = CGRectZero;
-  _onLayout = nil;
+  _onSvgLayout = nil;
 
   _svgView = nil;
   _textRoot = nil;

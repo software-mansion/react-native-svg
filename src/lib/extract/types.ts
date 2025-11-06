@@ -2,13 +2,19 @@ import type {
   ColorValue,
   GestureResponderEvent,
   GestureResponderHandlers,
+  Insets,
   LayoutChangeEvent,
   TransformsStyle,
 } from 'react-native';
 import type React from 'react';
+import {
+  DirectEventHandler,
+  Int32,
+} from 'react-native/Libraries/Types/CodegenTypes';
 
 export type NumberProp = string | number;
 export type NumberArray = NumberProp[] | NumberProp;
+export type BooleanProp = boolean | 'true' | 'false';
 
 export type FillRule = 'evenodd' | 'nonzero';
 export type Units = 'userSpaceOnUse' | 'objectBoundingBox';
@@ -82,6 +88,13 @@ export type TextPathMidLine = 'sharp' | 'smooth';
 export type Linecap = 'butt' | 'square' | 'round';
 export type Linejoin = 'miter' | 'bevel' | 'round';
 
+export type FilterEdgeMode = 'duplicate' | 'wrap' | 'none';
+export type FilterColorMatrixType =
+  | 'matrix'
+  | 'saturate'
+  | 'hueRotate'
+  | 'luminanceToAlpha';
+
 export interface TouchableProps {
   disabled?: boolean;
   onPress?: (event: GestureResponderEvent) => void;
@@ -101,6 +114,10 @@ export interface FillProps {
   fill?: ColorValue;
   fillOpacity?: NumberProp;
   fillRule?: FillRule;
+}
+
+export interface ColorProps {
+  color?: ColorValue;
 }
 
 export interface ClipProps {
@@ -188,20 +205,65 @@ export type ColumnMajorTransformMatrix = [
 ];
 
 export interface TransformProps {
+  /**
+   * @deprecated Use translateX and translateY in transform prop instead.
+   */
   translate?: NumberArray;
+  /**
+   * @deprecated Use translateX in transform prop instead.
+   */
   translateX?: NumberProp;
+  /**
+   * @deprecated Use translateY in transform prop instead.
+   */
   translateY?: NumberProp;
+  /**
+   * @deprecated
+   */
   origin?: NumberArray;
+  /**
+   * @deprecated
+   */
   originX?: NumberProp;
+  /**
+   * @deprecated
+   */
   originY?: NumberProp;
+  /**
+   * @deprecated Use scaleX and scaleY in transform prop instead.
+   */
   scale?: NumberArray;
+  /**
+   * @deprecated Use scaleX in transform prop instead.
+   */
   scaleX?: NumberProp;
+  /**
+   * @deprecated Use scaleY in transform prop instead.
+   */
   scaleY?: NumberProp;
+  /**
+   * @deprecated Use skewX and skewY in transform prop instead.
+   */
   skew?: NumberArray;
+  /**
+   * @deprecated Use skewX in transform prop instead.
+   */
   skewX?: NumberProp;
+  /**
+   * @deprecated Use skewY in transform prop instead.
+   */
   skewY?: NumberProp;
+  /**
+   * @deprecated Use rotate in transform prop instead.
+   */
   rotation?: NumberProp;
+  /**
+   * @deprecated Use translateX in transform prop instead.
+   */
   x?: NumberArray;
+  /**
+   * @deprecated Use translateY in transform prop instead.
+   */
   y?: NumberArray;
   transform?:
     | ColumnMajorTransformMatrix
@@ -209,6 +271,9 @@ export interface TransformProps {
     | TransformsStyle['transform'];
 }
 
+/**
+ * @deprecated TransformedProps should no longer be used.
+ */
 export interface TransformedProps {
   rotation: number;
   originX: number;
@@ -221,8 +286,14 @@ export interface TransformedProps {
   y: number;
 }
 
+export type MaskType = 'alpha' | 'luminance';
+
 export interface CommonMaskProps {
   mask?: string;
+}
+
+export interface CommonFilterProps {
+  filter?: string;
 }
 
 export interface CommonMarkerProps {
@@ -231,6 +302,15 @@ export interface CommonMarkerProps {
   markerMid?: string;
   markerEnd?: string;
 }
+
+type OnSvgLayoutEvent = Readonly<{
+  layout: {
+    x: Int32;
+    y: Int32;
+    width: Int32;
+    height: Int32;
+  };
+}>;
 
 export interface NativeProps {
   onLayout?: (event: LayoutChangeEvent) => void;
@@ -242,8 +322,10 @@ export interface AccessibilityProps {
   testID?: string;
 }
 
+// FIXME: This interface should probably be named CommonRenderableProps
 export interface CommonPathProps
-  extends FillProps,
+  extends ColorProps,
+    FillProps,
     StrokeProps,
     ClipProps,
     TransformProps,
@@ -253,8 +335,13 @@ export interface CommonPathProps
     DefinitionProps,
     CommonMarkerProps,
     CommonMaskProps,
+    CommonFilterProps,
     NativeProps,
     AccessibilityProps {}
+
+export interface HitSlop {
+  hitSlop?: Insets | number | undefined;
+}
 
 export type ResponderInstanceProps = {
   touchableHandleResponderMove?: (e: GestureResponderEvent) => void;
@@ -275,7 +362,7 @@ export type extractedProps = {
   opacity?: number;
   matrix?: number[];
   propList?: string[];
-  onLayout?: (event: LayoutChangeEvent) => void;
+  onSvgLayout?: DirectEventHandler<OnSvgLayoutEvent>;
   ref?: (instance: React.Component | null) => void;
   markerStart?: string;
   markerMid?: string;
@@ -295,6 +382,9 @@ export interface TextSpecificProps extends CommonPathProps, FontProps {
   verticalAlign?: NumberProp;
   lengthAdjust?: LengthAdjust;
   textLength?: NumberProp;
+  /**
+   * @deprecated Use other font props instead.
+   */
   fontData?: null | { [name: string]: unknown };
   fontFeatureSettings?: string;
 }

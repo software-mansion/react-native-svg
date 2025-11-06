@@ -4,12 +4,16 @@
 #include "RenderableView.h"
 
 namespace winrt::RNSVG::implementation {
+
 struct RectView : RectViewT<RectView, RNSVG::implementation::RenderableView> {
  public:
   RectView() = default;
 
+  // IRenderablePaper
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
-  void CreateGeometry();
+
+  // IRenderable
+  void CreateGeometry(RNSVG::D2DDeviceContext const &context);
 
  private:
   RNSVG::SVGLength m_width{};

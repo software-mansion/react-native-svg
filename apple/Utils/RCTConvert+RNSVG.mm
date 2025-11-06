@@ -42,8 +42,67 @@ RCT_ENUM_CONVERTER(
     kRNSVGUnitsObjectBoundingBox,
     intValue)
 
+RCT_ENUM_CONVERTER(
+    RNSVGMaskType,
+    (@{
+      @"luminance" : @(kRNSVGMaskTypeLuminance),
+      @"alpha" : @(kRNSVGMaskTypeAlpha),
+    }),
+    kRNSVGMaskTypeLuminance,
+    intValue)
+
+RCT_ENUM_CONVERTER(
+    RNSVGEdgeMode,
+    (@{
+      @"duplicate" : @(SVG_EDGEMODE_DUPLICATE),
+      @"wrap" : @(SVG_EDGEMODE_WRAP),
+      @"none" : @(SVG_EDGEMODE_NONE),
+    }),
+    SVG_EDGEMODE_UNKNOWN,
+    intValue)
+
+RCT_ENUM_CONVERTER(
+    RNSVGColorMatrixType,
+    (@{
+      @"matrix" : @(SVG_FECOLORMATRIX_TYPE_MATRIX),
+      @"saturate" : @(SVG_FECOLORMATRIX_TYPE_SATURATE),
+      @"hueRotate" : @(SVG_FECOLORMATRIX_TYPE_HUEROTATE),
+      @"luminanceToAlpha" : @(SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA),
+    }),
+    SVG_FECOLORMATRIX_TYPE_UNKNOWN,
+    intValue)
+
+RCT_ENUM_CONVERTER(
+    RNSVGBlendMode,
+    (@{
+      @"unknown" : @(SVG_FEBLEND_MODE_UNKNOWN),
+      @"normal" : @(SVG_FEBLEND_MODE_NORMAL),
+      @"multiply" : @(SVG_FEBLEND_MODE_MULTIPLY),
+      @"screen" : @(SVG_FEBLEND_MODE_SCREEN),
+      @"darken" : @(SVG_FEBLEND_MODE_DARKEN),
+      @"lighten" : @(SVG_FEBLEND_MODE_LIGHTEN),
+    }),
+    SVG_FEBLEND_MODE_UNKNOWN,
+    intValue)
+
+RCT_ENUM_CONVERTER(
+    RNSVGCompositeOperator,
+    (@{
+      @"over" : @(SVG_FECOMPOSITE_OPERATOR_OVER),
+      @"in" : @(SVG_FECOMPOSITE_OPERATOR_IN),
+      @"out" : @(SVG_FECOMPOSITE_OPERATOR_OUT),
+      @"atop" : @(SVG_FECOMPOSITE_OPERATOR_ATOP),
+      @"xor" : @(SVG_FECOMPOSITE_OPERATOR_XOR),
+      @"arithmetic" : @(SVG_FECOMPOSITE_OPERATOR_ARITHMETIC),
+    }),
+    SVG_FECOMPOSITE_OPERATOR_UNKNOWN,
+    intValue)
+
 + (RNSVGBrush *)RNSVGBrush:(id)json
 {
+  if (json == nil) {
+    return nil;
+  }
   if ([json isKindOfClass:[NSNumber class]]) {
     return [[RNSVGSolidColorBrush alloc] initWithNumber:json];
   }

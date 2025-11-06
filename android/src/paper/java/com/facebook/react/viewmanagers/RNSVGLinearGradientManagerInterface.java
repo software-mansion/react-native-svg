@@ -11,6 +11,7 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import androidx.annotation.Nullable;
+import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
 
 public interface RNSVGLinearGradientManagerInterface<T extends View> {
@@ -26,14 +27,10 @@ public interface RNSVGLinearGradientManagerInterface<T extends View> {
   void setResponsible(T view, boolean value);
   void setDisplay(T view, @Nullable String value);
   void setPointerEvents(T view, @Nullable String value);
-  void setX1(T view, @Nullable String value);
-  void setX1(T view, @Nullable Double value);
-  void setY1(T view, @Nullable String value);
-  void setY1(T view, @Nullable Double value);
-  void setX2(T view, @Nullable String value);
-  void setX2(T view, @Nullable Double value);
-  void setY2(T view, @Nullable String value);
-  void setY2(T view, @Nullable Double value);
+  void setX1(T view, Dynamic value);
+  void setY1(T view, Dynamic value);
+  void setX2(T view, Dynamic value);
+  void setY2(T view, Dynamic value);
   void setGradient(T view, @Nullable ReadableArray value);
   void setGradientUnits(T view, int value);
   void setGradientTransform(T view, @Nullable ReadableArray value);

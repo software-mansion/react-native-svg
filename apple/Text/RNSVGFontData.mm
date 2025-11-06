@@ -26,22 +26,22 @@ RNSVGFontData *RNSVGFontData_Defaults;
 + (instancetype)Defaults
 {
   if (!RNSVGFontData_Defaults) {
-    RNSVGFontData *self = [RNSVGFontData alloc];
-    self->fontData = nil;
-    self->fontFamily = @"";
-    self->fontStyle = RNSVGFontStyleNormal;
-    self->fontWeight = RNSVGFontWeightNormal;
-    self->absoluteFontWeight = 400;
-    self->fontFeatureSettings = @"";
-    self->fontVariantLigatures = RNSVGFontVariantLigaturesNormal;
-    self->textAnchor = RNSVGTextAnchorStart;
-    self->textDecoration = RNSVGTextDecorationNone;
-    self->manualKerning = false;
-    self->kerning = RNSVG_DEFAULT_KERNING;
-    self->fontSize = RNSVG_DEFAULT_FONT_SIZE;
-    self->wordSpacing = RNSVG_DEFAULT_WORD_SPACING;
-    self->letterSpacing = RNSVG_DEFAULT_LETTER_SPACING;
-    RNSVGFontData_Defaults = self;
+    RNSVGFontData *defaults = [RNSVGFontData alloc];
+    defaults->fontData = nil;
+    defaults->fontFamily = @"";
+    defaults->fontStyle = RNSVGFontStyleNormal;
+    defaults->fontWeight = RNSVGFontWeightNormal;
+    defaults->absoluteFontWeight = 400;
+    defaults->fontFeatureSettings = @"";
+    defaults->fontVariantLigatures = RNSVGFontVariantLigaturesNormal;
+    defaults->textAnchor = RNSVGTextAnchorStart;
+    defaults->textDecoration = RNSVGTextDecorationNone;
+    defaults->manualKerning = false;
+    defaults->kerning = RNSVG_DEFAULT_KERNING;
+    defaults->fontSize = RNSVG_DEFAULT_FONT_SIZE;
+    defaults->wordSpacing = RNSVG_DEFAULT_WORD_SPACING;
+    defaults->letterSpacing = RNSVG_DEFAULT_LETTER_SPACING;
+    RNSVGFontData_Defaults = defaults;
   }
   return RNSVGFontData_Defaults;
 }
@@ -184,7 +184,7 @@ int lighter(int inherited)
   id letterSpacing = [font objectForKey:LETTER_SPACING];
   if ([letterSpacing isKindOfClass:NSNumber.class]) {
     NSNumber *ls = letterSpacing;
-    data->wordSpacing = (CGFloat)[ls doubleValue];
+    data->letterSpacing = (CGFloat)[ls doubleValue];
   } else {
     data->letterSpacing =
         letterSpacing ? [RNSVGFontData toAbsoluteWithNSString:letterSpacing fontSize:fontSize] : parent->letterSpacing;

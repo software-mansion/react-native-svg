@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "UseView.h"
+#if __has_include("UseView.g.cpp")
 #include "UseView.g.cpp"
+#endif
 
 #include "Utils.h"
 
@@ -8,6 +10,7 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
+
 void UseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
@@ -18,13 +21,13 @@ void UseView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, b
     if (propertyName == "href") {
       m_href = to_hstring(Utils::JSValueAsString(propertyValue));
     } else if (propertyName == "x") {
-      m_x = SVGLength::From(propertyValue);
+      m_x = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "y") {
-      m_y = SVGLength::From(propertyValue);
+      m_y = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "width") {
-      m_width = SVGLength::From(propertyValue);
+      m_width = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "height") {
-      m_height = SVGLength::From(propertyValue);
+      m_height = propertyValue.To<RNSVG::SVGLength>();
     }
   }
 
@@ -82,8 +85,11 @@ void UseView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
     deviceContext->PopLayer();
 
     // Restore original template props
-    if (auto const &parent{view.SvgParent().try_as<RNSVG::RenderableView>()}) {
-      view.MergeProperties(parent);
+    auto renderable{view.try_as<RNSVG::IRenderablePaper>()};
+    if (renderable) {
+      if (auto const &parent{renderable.SvgParent().try_as<RNSVG::RenderableView>()}) {
+        view.MergeProperties(parent);
+      }
     }
 
     // Restore session transform

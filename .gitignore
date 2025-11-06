@@ -1,7 +1,8 @@
 # OSX
 #
 .DS_Store
-
+.yarn
+.yarnrc.yml
 # Xcode
 #
 *.pbxuser
@@ -49,3 +50,7 @@ experimental/
 
 # VS Code
 .vscode/
+
+# E2E reports
+jest-html-reporters-attach/
+report.html

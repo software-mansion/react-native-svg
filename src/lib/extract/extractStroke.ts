@@ -27,7 +27,7 @@ const vectorEffects = {
 export default function extractStroke(
   o: extractedProps,
   props: StrokeProps,
-  inherited: string[],
+  inherited: string[]
 ) {
   const {
     stroke,
@@ -47,7 +47,7 @@ export default function extractStroke(
   }
   if (strokeWidth != null) {
     inherited.push('strokeWidth');
-    o.strokeWidth = String(strokeWidth);
+    o.strokeWidth = strokeWidth;
   }
   if (strokeOpacity != null) {
     inherited.push('strokeOpacity');

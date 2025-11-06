@@ -24,6 +24,7 @@ RCT_EXPORT_MODULE()
   return [RNSVGRenderable new];
 }
 
+RCT_EXPORT_VIEW_PROPERTY(color, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(fill, RNSVGBrush)
 RCT_EXPORT_VIEW_PROPERTY(fillOpacity, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(fillRule, RNSVGCGFCRule)
@@ -37,5 +38,6 @@ RCT_EXPORT_VIEW_PROPERTY(strokeDashoffset, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(strokeMiterlimit, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(vectorEffect, int)
 RCT_EXPORT_VIEW_PROPERTY(propList, NSArray<NSString *>)
+RCT_EXPORT_VIEW_PROPERTY(filter, NSString)
 
 @end

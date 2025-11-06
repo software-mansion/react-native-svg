@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "ImageViewManager.h"
+#if __has_include("ImageViewManager.g.cpp")
 #include "ImageViewManager.g.cpp"
+#endif
 
 using namespace winrt;
 using namespace Microsoft::ReactNative;

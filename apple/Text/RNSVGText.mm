@@ -16,8 +16,8 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
-#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
+#import <rnsvg/RNSVGComponentDescriptors.h>
 #import "RNSVGFabricConversions.h"
 #endif // RCT_NEW_ARCH_ENABLED
 
@@ -30,6 +30,12 @@
 
 #ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
+
+// Needed because of this: https://github.com/facebook/react-native/pull/37274
++ (void)load
+{
+  [super load];
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -345,7 +351,7 @@ using namespace facebook::react;
     return cachedAdvance;
   }
   CGFloat advance = 0;
-  for (RNSVGView *node in self.subviews) {
+  for (RNSVGPlatformView *node in self.subviews) {
     if ([node isKindOfClass:[RNSVGText class]]) {
       RNSVGText *text = (RNSVGText *)node;
       advance += [text getSubtreeTextChunksTotalAdvance];

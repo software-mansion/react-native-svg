@@ -1,61 +1,15 @@
-import type { ComponentType } from 'react';
+import type { ComponentType, ComponentProps, JSX } from 'react';
 import * as React from 'react';
 import { Component, useEffect, useMemo, useState } from 'react';
-import Rect from './elements/Rect';
-import Circle from './elements/Circle';
-import Ellipse from './elements/Ellipse';
-import Polygon from './elements/Polygon';
-import Polyline from './elements/Polyline';
-import Line from './elements/Line';
+import { fetchText } from './utils/fetchData';
 import type { SvgProps } from './elements/Svg';
-import Svg from './elements/Svg';
-import Path from './elements/Path';
-import G from './elements/G';
-import Text from './elements/Text';
-import TSpan from './elements/TSpan';
-import TextPath from './elements/TextPath';
-import Use from './elements/Use';
-import Image from './elements/Image';
-import Symbol from './elements/Symbol';
-import Defs from './elements/Defs';
-import LinearGradient from './elements/LinearGradient';
-import RadialGradient from './elements/RadialGradient';
-import Stop from './elements/Stop';
-import ClipPath from './elements/ClipPath';
-import Pattern from './elements/Pattern';
-import Mask from './elements/Mask';
-import Marker from './elements/Marker';
-
-export const tags: { [tag: string]: ComponentType } = {
-  svg: Svg,
-  circle: Circle,
-  ellipse: Ellipse,
-  g: G,
-  text: Text,
-  tspan: TSpan,
-  textPath: TextPath,
-  path: Path,
-  polygon: Polygon,
-  polyline: Polyline,
-  line: Line,
-  rect: Rect,
-  use: Use,
-  image: Image,
-  symbol: Symbol,
-  defs: Defs,
-  linearGradient: LinearGradient,
-  radialGradient: RadialGradient,
-  stop: Stop,
-  clipPath: ClipPath,
-  pattern: Pattern,
-  mask: Mask,
-  marker: Marker,
-};
+import { tags } from './xmlTags';
 
 function missingTag() {
   return null;
 }
 
+type Tag = ComponentType<ComponentProps<(typeof tags)[keyof typeof tags]>>;
 export interface AST {
   tag: string;
   style?: Styles;
@@ -66,7 +20,7 @@ export interface AST {
   props: {
     [prop: string]: Styles | string | undefined;
   };
-  Tag: ComponentType<React.PropsWithChildren>;
+  Tag: Tag;
 }
 
 export interface XmlAST extends AST {
@@ -98,6 +52,9 @@ export function SvgAst({ ast, override }: AstProps) {
     return null;
   }
   const { props, children } = ast;
+
+  const Svg = tags.svg;
+
   return (
     <Svg {...props} {...override}>
       {children}
@@ -105,7 +62,7 @@ export function SvgAst({ ast, override }: AstProps) {
   );
 }
 
-export const err = console.error.bind(console);
+const err = console.error.bind(console);
 
 export function SvgXml(props: XmlProps) {
   const { onError = err, xml, override, fallback } = props;
@@ -120,14 +77,6 @@ export function SvgXml(props: XmlProps) {
     onError(error);
     return fallback ?? null;
   }
-}
-
-export async function fetchText(uri: string) {
-  const response = await fetch(uri);
-  if (response.ok || (response.status === 0 && uri.startsWith('file://'))) {
-    return await response.text();
-  }
-  throw new Error(`Fetching ${uri} failed with status ${response.status}`);
 }
 
 export function SvgUri(props: UriProps) {
@@ -171,10 +120,15 @@ export class SvgFromXml extends Component<XmlProps, XmlState> {
   }
 
   parse(xml: string | null) {
+    const { onError = err } = this.props;
     try {
       this.setState({ ast: xml ? parse(xml) : null });
     } catch (e) {
-      console.error(e);
+      const error = e as Error;
+      onError({
+        ...error,
+        message: `[RNSVG] Couldn't parse SVG, reason: ${error.message}`,
+      });
     }
   }
 
@@ -213,7 +167,7 @@ export class SvgFromUri extends Component<UriProps, UriState> {
       props,
       state: { xml },
     } = this;
-    return <SvgFromXml xml={xml} override={props} />;
+    return <SvgFromXml xml={xml} override={props} onError={props.onError} />;
   }
 }
 
@@ -246,6 +200,11 @@ export function astToReact(
 ): JSX.Element | string {
   if (typeof value === 'object') {
     const { Tag, props, children } = value;
+    if (props?.class) {
+      props.className = props.class;
+      delete props.class;
+    }
+
     return (
       <Tag key={index} {...props}>
         {(children as (AST | string)[]).map(astToReact)}
@@ -292,6 +251,7 @@ function locate(source: string, i: number) {
 }
 
 const validNameCharacters = /[a-zA-Z0-9:_-]/;
+const commentStart = /<!--/;
 const whitespace = /[\s\t\r\n]/;
 const quotemarks = /['"]/;
 
@@ -315,7 +275,11 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
   function metadata() {
     while (
       i + 1 < length &&
-      (source[i] !== '<' || !validNameCharacters.test(source[i + 1]))
+      (source[i] !== '<' ||
+        !(
+          validNameCharacters.test(source[i + 1]) ||
+          commentStart.test(source.slice(i, i + 4))
+        ))
     ) {
       i++;
     }
@@ -359,7 +323,7 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
         return cdata;
       }
       if (/doctype/i.test(source.slice(start, end))) {
-        return neutral;
+        return doctype;
       }
     }
 
@@ -367,14 +331,14 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
       return closingTag;
     }
 
-    const tag = getName();
+    const tag = getName() as keyof typeof tags;
     const props: { [prop: string]: Styles | string | undefined } = {};
     const element: XmlAST = {
       tag,
       props,
       children: [],
       parent: currentElement,
-      Tag: tags[tag] || missingTag,
+      Tag: (tags[tag] || missingTag) as Tag,
     };
 
     if (currentElement) {
@@ -430,6 +394,16 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
     children.push(source.slice(i + 7, index));
 
     i = index + 2;
+    return neutral;
+  }
+
+  function doctype() {
+    const index = source.indexOf('>', i);
+    if (index === -1) {
+      error('expected >');
+    }
+
+    i = index;
     return neutral;
   }
 
@@ -494,7 +468,7 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
         allowSpaces();
 
         value = getAttributeValue();
-        if (!isNaN(+value) && value.trim() !== '') {
+        if (name !== 'id' && !isNaN(+value) && value.trim() !== '') {
           value = +value;
         }
       }
@@ -576,3 +550,4 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
 
   return null;
 }
+export { tags };

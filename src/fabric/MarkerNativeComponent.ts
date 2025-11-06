@@ -7,6 +7,9 @@ import type {
 } from 'react-native/Libraries/Types/CodegenTypes';
 import type { ViewProps } from './utils';
 
+import type { UnsafeMixed } from './codegenUtils';
+import { FontObject, NumberProp } from '../lib/extract/types';
+
 interface SvgNodeCommonProps {
   name?: string;
   opacity?: WithDefault<Float, 1.0>;
@@ -29,42 +32,27 @@ type ColorStruct = Readonly<{
 }>;
 
 interface SvgRenderableCommonProps {
-  fill?: ColorStruct;
+  color?: ColorValue;
+  fill?: UnsafeMixed<ColorValue | ColorStruct>;
   fillOpacity?: WithDefault<Float, 1.0>;
   fillRule?: WithDefault<Int32, 1>;
-  stroke?: ColorStruct;
+  stroke?: UnsafeMixed<ColorValue | ColorStruct>;
   strokeOpacity?: WithDefault<Float, 1.0>;
-  strokeWidth?: WithDefault<string, '1'>;
+  strokeWidth?: UnsafeMixed<NumberProp>;
   strokeLinecap?: WithDefault<Int32, 0>;
   strokeLinejoin?: WithDefault<Int32, 0>;
-  strokeDasharray?: ReadonlyArray<string>;
+  strokeDasharray?: UnsafeMixed<ReadonlyArray<NumberProp> | NumberProp>;
   strokeDashoffset?: Float;
   strokeMiterlimit?: Float;
   vectorEffect?: WithDefault<Int32, 0>;
   propList?: ReadonlyArray<string>;
+  filter?: string;
 }
 
-type FontObject = Readonly<{
-  fontStyle?: string;
-  fontVariant?: string;
-  fontWeight?: string;
-  fontStretch?: string;
-  fontSize?: string;
-  fontFamily?: string;
-  textAnchor?: string;
-  textDecoration?: string;
-  letterSpacing?: string;
-  wordSpacing?: string;
-  kerning?: string;
-  fontFeatureSettings?: string;
-  fontVariantLigatures?: string;
-  fontVariationSettings?: string;
-}>;
-
 interface SvgGroupCommonProps {
-  fontSize?: string;
-  fontWeight?: string;
-  font?: FontObject;
+  fontSize?: UnsafeMixed<NumberProp>;
+  fontWeight?: UnsafeMixed<NumberProp>;
+  font?: UnsafeMixed<FontObject>;
 }
 
 interface NativeProps
@@ -72,10 +60,10 @@ interface NativeProps
     SvgNodeCommonProps,
     SvgRenderableCommonProps,
     SvgGroupCommonProps {
-  refX?: string;
-  refY?: string;
-  markerHeight?: string;
-  markerWidth?: string;
+  refX?: UnsafeMixed<NumberProp>;
+  refY?: UnsafeMixed<NumberProp>;
+  markerHeight?: UnsafeMixed<NumberProp>;
+  markerWidth?: UnsafeMixed<NumberProp>;
   markerUnits?: string;
   orient?: string;
   minX?: Float;
@@ -86,4 +74,6 @@ interface NativeProps
   meetOrSlice?: Int32;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGMarker');
+export default codegenNativeComponent<NativeProps>('RNSVGMarker', {
+  interfaceOnly: true,
+});

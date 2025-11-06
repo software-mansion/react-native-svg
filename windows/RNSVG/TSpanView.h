@@ -1,13 +1,18 @@
 #pragma once
+
 #include "TSpanView.g.h"
 #include "TextView.h"
 
 namespace winrt::RNSVG::implementation {
+  
 struct TSpanView : TSpanViewT<TSpanView, RNSVG::implementation::TextView> {
 public:
   TSpanView() = default;
 
+  // IRenderablePaper
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
+
+  // IRenderable
   virtual void Draw(RNSVG::D2DDeviceContext const &deviceContext, Windows::Foundation::Size const &size);
 
  private:

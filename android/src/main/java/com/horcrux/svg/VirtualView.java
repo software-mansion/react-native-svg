@@ -20,11 +20,12 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
-import com.facebook.react.uimanager.OnLayoutEvent;
 import com.facebook.react.uimanager.PointerEvents;
 import com.facebook.react.uimanager.UIManagerHelper;
 import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.views.view.ReactViewGroup;
+import com.horcrux.svg.events.SvgOnLayoutEvent;
+
 import java.util.ArrayList;
 import javax.annotation.Nullable;
 
@@ -54,13 +55,10 @@ public abstract class VirtualView extends ReactViewGroup {
   float mOpacity = 1f;
   Matrix mCTM = new Matrix();
   Matrix mMatrix = new Matrix();
-  Matrix mTransform = new Matrix();
   Matrix mInvCTM = new Matrix();
   Matrix mInvMatrix = new Matrix();
-  final Matrix mInvTransform = new Matrix();
   boolean mInvertible = true;
   boolean mCTMInvertible = true;
-  boolean mTransformInvertible = true;
   private RectF mClientRect;
 
   int mClipRule;
@@ -104,7 +102,7 @@ public abstract class VirtualView extends ReactViewGroup {
   ArrayList<PathElement> elements;
   PointerEvents mPointerEvents;
 
-  void setPointerEvents(PointerEvents pointerEvents) {
+  public void setPointerEvents(PointerEvents pointerEvents) {
     mPointerEvents = pointerEvents;
   }
 
@@ -249,7 +247,7 @@ public abstract class VirtualView extends ReactViewGroup {
    */
   int saveAndSetupCanvas(Canvas canvas, Matrix ctm) {
     int count = canvas.save();
-    mCTM.setConcat(mMatrix, mTransform);
+    mCTM.set(mMatrix);
     canvas.concat(mCTM);
     mCTM.preConcat(ctm);
     mCTMInvertible = mCTM.invert(mInvCTM);
@@ -357,7 +355,6 @@ public abstract class VirtualView extends ReactViewGroup {
       if (mClipNode != null) {
         Path clipPath = mClipNode.getPath(canvas, paint, Region.Op.UNION);
         clipPath.transform(mClipNode.mMatrix);
-        clipPath.transform(mClipNode.mTransform);
         switch (mClipRule) {
           case CLIP_RULE_EVENODD:
             clipPath.setFillType(Path.FillType.EVEN_ODD);
@@ -393,7 +390,7 @@ public abstract class VirtualView extends ReactViewGroup {
   abstract Path getPath(Canvas canvas, Paint paint);
 
   @Nullable
-  SvgView getSvgView() {
+  public SvgView getSvgView() {
     if (svgView != null) {
       return svgView;
     }
@@ -415,34 +412,44 @@ public abstract class VirtualView extends ReactViewGroup {
     return svgView;
   }
 
-  double relativeOnWidth(SVGLength length) {
+  double relativeOnFraction(SVGLength length, float relative) {
+    SVGLength.UnitType unit = length.unit;
+    if (unit == SVGLength.UnitType.NUMBER) {
+      return length.value * relative;
+    } else if (unit == SVGLength.UnitType.PERCENTAGE) {
+      return length.value / 100 * relative;
+    }
+    return fromRelativeFast(length);
+  }
+
+  double relativeOn(SVGLength length, float relative) {
     SVGLength.UnitType unit = length.unit;
     if (unit == SVGLength.UnitType.NUMBER) {
       return length.value * mScale;
     } else if (unit == SVGLength.UnitType.PERCENTAGE) {
-      return length.value / 100 * getCanvasWidth();
+      return length.value / 100 * relative;
     }
     return fromRelativeFast(length);
+  }
+
+  double relativeOnWidth(SVGLength length) {
+    SvgView svg = getSvgView();
+    if (length.unit == SVGLength.UnitType.PERCENTAGE && svg != null && svg.getViewBox().width() != 0) {
+      return relativeOn(length, svg.getViewBox().width());
+    }
+    return relativeOn(length, getCanvasWidth());
   }
 
   double relativeOnHeight(SVGLength length) {
-    SVGLength.UnitType unit = length.unit;
-    if (unit == SVGLength.UnitType.NUMBER) {
-      return length.value * mScale;
-    } else if (unit == SVGLength.UnitType.PERCENTAGE) {
-      return length.value / 100 * getCanvasHeight();
+    SvgView svg = getSvgView();
+    if (length.unit == SVGLength.UnitType.PERCENTAGE && svg != null && svg.getViewBox().height() != 0) {
+      return relativeOn(length, svg.getViewBox().height());
     }
-    return fromRelativeFast(length);
+    return relativeOn(length, getCanvasHeight());
   }
 
   double relativeOnOther(SVGLength length) {
-    SVGLength.UnitType unit = length.unit;
-    if (unit == SVGLength.UnitType.NUMBER) {
-      return length.value * mScale;
-    } else if (unit == SVGLength.UnitType.PERCENTAGE) {
-      return length.value / 100 * getCanvasDiagonal();
-    }
-    return fromRelativeFast(length);
+    return relativeOn(length, (float) getCanvasDiagonal());
   }
 
   /**
@@ -589,15 +596,26 @@ public abstract class VirtualView extends ReactViewGroup {
     int bottom = (int) Math.ceil(mClientRect.bottom);
     setMeasuredDimension(width, height);
     if (!(this instanceof GroupView)) {
-      setLeft(left);
-      setTop(top);
-      setRight(right);
-      setBottom(bottom);
+      SvgView root = this.getSvgView();
+      // Prevent going out of the root view bounds to properly handle touch events
+      if (root != null) {
+        setLeft(Math.max(left, 0));
+        setTop(Math.max(top, 0));
+        setRight(Math.min(right, root.getWidth()));
+        setBottom(Math.min(bottom, root.getHeight()));
+      }
     }
     EventDispatcher eventDispatcher =
         UIManagerHelper.getEventDispatcherForReactTag(mContext, getId());
     if (eventDispatcher != null) {
-      eventDispatcher.dispatchEvent(OnLayoutEvent.obtain(this.getId(), left, top, width, height));
+      eventDispatcher.dispatchEvent(
+        new SvgOnLayoutEvent(
+          UIManagerHelper.getSurfaceId(VirtualView.this),
+          this.getId(),
+          left,
+          top,
+          width,
+          height));
     }
   }
 

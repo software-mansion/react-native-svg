@@ -125,7 +125,7 @@ existing in a different way and `fallback` if you want to render another compone
 
 ```jsx
 import * as React from 'react';
-import { SvgUri } from 'react-native-svg/css';
+import { SvgUri } from 'react-native-svg';
 import { SvgFallback } from './components/SvgFallback';
 
 export default () => {
@@ -145,6 +145,44 @@ export default () => {
   );
 };
 ```
+
+# Web configuration
+
+## Metro bundler
+
+No additional steps are required when using Metro bundler.
+
+## Webpack
+
+If you are using the Webpack bundler, the following steps are needed:
+
+- Install `@react-native/assets-registry/registry` as a project dependency.
+- Ensure that you have the proper configuration to parse flow files from `@react-native/assets-registry/registry`.
+- Configure the Webpack `module -> rules` section and include an important rule for `node_modules/@react-native/assets-registry/registry`.
+
+webpack.config.js
+
+```ts
+const babelLoaderConfiguration = {
+ include: [
+   path.resolve(
+     appDirectory,
+     // Important!
+     'node_modules/@react-native/assets-registry/registry',
+   ),
+ ],
+ ...
+};
+
+module.exports = {
+ ...config,
+ module: {
+     rules: [babelLoaderConfiguration],
+   },
+};
+```
+
+For more details on the complete Webpack configuration, you can refer to this [documentation](https://necolas.github.io/react-native-web/docs/multi-platform/#compiling-and-bundling) on how to set up a `webpack.config` file for React Native Web.
 
 # Use with svg files
 
@@ -277,7 +315,7 @@ If xml string contains CSS in `<style>` element, use `SvgCss`:
 
 ```jsx
 import * as React from 'react';
-import { SvgCss } from 'react-native-svg';
+import { SvgCss } from 'react-native-svg/css';
 
 const xml = `
   <svg width="32" height="32" viewBox="0 0 32 32">
@@ -1252,3 +1290,141 @@ const styles = StyleSheet.create({
   },
 });
 ```
+
+## Filters
+
+Filter effects are a way of processing an element’s rendering before it is displayed in the document. Typically, rendering an element via CSS or SVG can conceptually be described as if the element, including its children, are drawn into a buffer (such as a raster image) and then that buffer is composited into the elements parent. Filters apply an effect before the compositing stage. Examples of such effects are blurring, changing color intensity and warping the image.
+
+> [!NOTE]
+> Not all filters have been implemented on native platforms yet. However, they do work on the Web, so we added them. Some filters will display a warning indicating they are not currently supported.
+
+The following filters have been implemented:
+
+- FeBlend
+- FeComposite
+- FeColorMatrix
+- FeDropShadow
+- FeFlood
+- FeGaussianBlur
+- FeMerge
+- FeOffset
+
+Not supported yet:
+
+- FeComponentTransfer
+- FeConvolveMatrix
+- FeDiffuseLighting
+- FeDisplacementMap
+- FeFuncA
+- FeFuncB
+- FeFuncG
+- FeFuncR
+- FeImage
+- FeMorphology
+- FePointLight
+- FeSpecularLighting
+- FeSpotLight
+- FeTile
+- FeTurbulence
+
+Exmaple use of filters:
+
+```jsx
+import React from 'react';
+import { FeColorMatrix, Filter, Rect, Svg } from 'react-native-svg';
+
+export default () => {
+  return (
+    <Svg height="300" width="300">
+      <Filter id="myFilter">
+        <FeColorMatrix type="saturate" values="0.2" />
+      </Filter>
+      <Rect
+        x="0"
+        y="0"
+        width="300"
+        height="300"
+        fill="red"
+        filter="url(#myFilter)"
+      />
+    </Svg>
+  );
+};
+```
+
+![FeColorMatrix](./screenshots/feColorMatrix.png)
+
+More info: <https://www.w3.org/TR/SVG11/filters.html>
+
+## FilterImage
+
+`FilterImage` is a new component that is not strictly related to SVG. Its behavior should be the same as a regular `Image` component from React Native with one exception - the additional prop `filters`, which accepts an array of filters to apply to the image.
+
+Filters can be applied in two ways
+
+- through `filters` prop
+- or with CSS API through style prop
+  https://developer.mozilla.org/en-US/docs/Web/CSS/filter
+
+### Examples
+
+#### CSS filter API
+
+```tsx
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { FilterImage } from 'react-native-svg/filter-image';
+
+const myImage = require('./myImage.jpg');
+
+export default () => {
+  return <FilterImage style={styles.image} source={myImage} />;
+};
+
+const styles = StyleSheet.create({
+  image: {
+    width: 200,
+    height: 200,
+    filter: 'saturate(3) grayscale(100%)',
+  },
+});
+```
+
+#### `filters` prop
+
+```tsx
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { FilterImage } from 'react-native-svg/filter-image';
+
+const myImage = require('./myImage.jpg');
+
+export default () => {
+  return (
+    <FilterImage
+      style={styles.image}
+      source={myImage}
+      filters={[
+        { name: 'feColorMatrix', type: 'saturate', values: 0.2 },
+        {
+          name: 'feColorMatrix',
+          type: 'matrix',
+          values: [
+            0.2, 0.2, 0.2, 0, 0, 0.2, 0.2, 0.2, 0, 0, 0.2, 0.2, 0.2, 0, 0, 0, 0,
+            0, 1, 0,
+          ],
+        },
+      ]}
+    />
+  );
+};
+
+const styles = StyleSheet.create({
+  image: {
+    width: 200,
+    height: 200,
+  },
+});
+```
+
+![FilterImage](./screenshots/filterImage.png)

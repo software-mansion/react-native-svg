@@ -8,13 +8,10 @@
 
 #import "RNSVGCGFCRule.h"
 #import "RNSVGSvgView.h"
+#import "RNSVGUIKit.h"
 
 #import <React/RCTPointerEvents.h>
 #import <React/UIView+React.h>
-
-#ifdef RCT_NEW_ARCH_ENABLED
-#import <React/RCTViewComponentView.h>
-#endif // RCT_NEW_ARCH_ENABLED
 
 @class RNSVGGroup;
 
@@ -23,12 +20,7 @@
  ＊interfaces for all non-definition nodes.
  */
 
-@interface RNSVGNode :
-#ifdef RCT_NEW_ARCH_ENABLED
-    RCTViewComponentView
-#else
-    RNSVGView
-#endif // RCT_NEW_ARCH_ENABLED
+@interface RNSVGNode : RNSVGView
 /*
  N[1/Sqrt[2], 36]
  The inverse of the square root of 2.
@@ -57,9 +49,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 @property (nonatomic, assign) CGAffineTransform ctm;
 @property (nonatomic, assign) CGAffineTransform screenCTM;
 @property (nonatomic, assign) CGAffineTransform matrix;
-@property (nonatomic, assign) CGAffineTransform transforms;
 @property (nonatomic, assign) CGAffineTransform invmatrix;
-@property (nonatomic, assign) CGAffineTransform invTransform;
 @property (nonatomic, assign) BOOL active;
 @property (nonatomic, assign) BOOL dirty;
 @property (nonatomic, assign) BOOL merging;
@@ -72,7 +62,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 @property (nonatomic, assign) CGRect fillBounds;
 @property (nonatomic, assign) CGRect strokeBounds;
 @property (nonatomic, assign) CGRect markerBounds;
-@property (nonatomic, copy) RCTDirectEventBlock onLayout;
+@property (nonatomic, copy) RCTDirectEventBlock onSvgLayout;
 
 /**
  * RNSVGSvgView which ownes current RNSVGNode
@@ -121,6 +111,8 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 
 - (CGFloat)relativeOn:(RNSVGLength *)length relative:(CGFloat)relative;
 
+- (CGFloat)relativeOnFraction:(RNSVGLength *)length relative:(CGFloat)relative;
+
 - (CGFloat)relativeOnWidth:(RNSVGLength *)length;
 
 - (CGFloat)relativeOnHeight:(RNSVGLength *)length;
@@ -147,5 +139,14 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 - (void)clearChildCache;
 
 - (void)clearPath;
+
+/**
+ * get canvas dimensions
+ */
+- (CGFloat)getCanvasWidth;
+
+- (CGFloat)getCanvasHeight;
+
+- (void)setTransforms:(CGAffineTransform)transforms;
 
 @end

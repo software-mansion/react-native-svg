@@ -8,6 +8,7 @@ struct BrushView : BrushViewT<BrushView, RNSVG::implementation::GroupView> {
  public:
   BrushView() = default;
 
+  // IRenderable
   void SaveDefinition();
 
   RNSVG::D2DBrush Brush() { return m_brush; }
@@ -27,3 +28,4 @@ struct BrushView : BrushViewT<BrushView, RNSVG::implementation::GroupView> {
 namespace winrt::RNSVG::factory_implementation {
 struct BrushView : BrushViewT<BrushView, implementation::BrushView> {};
 } // namespace winrt::RNSVG::factory_implementation
+

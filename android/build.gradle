@@ -37,12 +37,57 @@ def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
 }
 
+def resolveReactNativeDirectory() {
+  def reactNativeLocation = safeExtGet("REACT_NATIVE_NODE_MODULES_DIR", null)
+  if (reactNativeLocation != null) {
+    return file(reactNativeLocation)
+  }
+
+  // Fallback to node resolver for custom directory structures like monorepos.
+  def reactNativePackage = file(
+      providers.exec {
+          workingDir(rootDir)
+          commandLine("node", "--print", "require.resolve('react-native/package.json')")
+      }.standardOutput.asText.get().trim()
+  )
+  if (reactNativePackage.exists()) {
+    return reactNativePackage.parentFile
+  }
+
+  throw new GradleException("[react-native-svg] Unable to resolve react-native location in node_modules. Your app should define `REACT_NATIVE_NODE_MODULES_DIR` extension property in `app/build.gradle` with a path to react-native in node_modules.")
+}
+
+def reactNativeRootDir = resolveReactNativeDirectory()
+def reactNativeProperties = new Properties()
+file("$reactNativeRootDir/ReactAndroid/gradle.properties").withInputStream { reactNativeProperties.load(it) }
+
+def REACT_NATIVE_VERSION = reactNativeProperties.getProperty("VERSION_NAME")
+def REACT_NATIVE_MINOR_VERSION = REACT_NATIVE_VERSION.startsWith("0.0.0-") ? 1000 : REACT_NATIVE_VERSION.split("\\.")[1].toInteger()
+
+def getFrescoVersion() {
+    def reactNativeRootDir = resolveReactNativeDirectory()
+    def frescoVersion = null
+    file("$reactNativeRootDir/gradle/libs.versions.toml").withInputStream { stream ->
+        stream.eachLine { line ->
+            if (line.contains("fresco") && !line.contains("ref")) {
+                def keyValue = line.split("=")
+                if (keyValue.size() == 2) {
+                    frescoVersion = keyValue[1].trim().replaceAll(/["']/, "")
+                }
+            }
+        }
+    }
+    if (!frescoVersion) {
+        return "3.2.0"
+    }
+    return frescoVersion
+}
+def FRESCO_VERSION = getFrescoVersion()
+
 android {
     compileSdkVersion safeExtGet('compileSdkVersion', 28)
+    namespace "com.horcrux.svg"
     def agpVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION
-    if (agpVersion.tokenize('.')[0].toInteger() >= 7) {
-        namespace "com.horcrux.svg"
-    }
     if (agpVersion.tokenize('.')[0].toInteger() >= 8) {
         buildFeatures {
             buildConfig = true
@@ -74,7 +119,6 @@ android {
             if (!isNewArchitectureEnabled()) {
                 srcDirs += [
                     "src/paper/java",
-                    "build/generated/source/codegen/java"
                 ]
             }
         }
@@ -93,4 +137,11 @@ repositories {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
+    implementation("com.facebook.fresco:fresco:${FRESCO_VERSION}") {
+        exclude group: 'com.facebook.soloader'
+    }
+    implementation("com.facebook.fresco:imagepipeline-okhttp3:${FRESCO_VERSION}") {
+        exclude group: 'com.facebook.soloader'
+    }
+    implementation("com.facebook.fresco:middleware:${FRESCO_VERSION}")
 }

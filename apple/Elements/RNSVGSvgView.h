@@ -12,19 +12,14 @@
 #import "RNSVGPainter.h"
 #import "RNSVGVBMOS.h"
 
-#ifdef RCT_NEW_ARCH_ENABLED
-#import <React/RCTViewComponentView.h>
-#endif // RCT_NEW_ARCH_ENABLED
-
 @class RNSVGNode;
+@class RNSVGMarker;
+@class RNSVGMask;
+@class RNSVGFilter;
 
-@interface RNSVGSvgView :
-#ifdef RCT_NEW_ARCH_ENABLED
-    RCTViewComponentView <RNSVGContainer>
-#else
-    RNSVGView <RNSVGContainer>
-#endif // RCT_NEW_ARCH_ENABLED
+@interface RNSVGSvgView : RNSVGView <RNSVGContainer>
 
+@property (nonatomic, strong) RNSVGColor *color;
 @property (nonatomic, strong) RNSVGLength *bbWidth;
 @property (nonatomic, strong) RNSVGLength *bbHeight;
 @property (nonatomic, assign) CGFloat minX;
@@ -39,6 +34,7 @@
 @property (nonatomic, assign) CGAffineTransform initialCTM;
 @property (nonatomic, assign) CGAffineTransform invInitialCTM;
 @property (nonatomic, assign) CGAffineTransform viewBoxTransform;
+@property (nonatomic, assign) UIEdgeInsets hitTestEdgeInsets;
 
 /**
  * define <ClipPath></ClipPath> content as clipPath template.
@@ -55,13 +51,17 @@
 
 - (RNSVGPainter *)getDefinedPainter:(NSString *)painterName;
 
-- (void)defineMarker:(RNSVGNode *)marker markerName:(NSString *)markerName;
+- (void)defineMarker:(RNSVGMarker *)marker markerName:(NSString *)markerName;
 
-- (RNSVGNode *)getDefinedMarker:(NSString *)markerName;
+- (RNSVGMarker *)getDefinedMarker:(NSString *)markerName;
 
-- (void)defineMask:(RNSVGNode *)mask maskName:(NSString *)maskName;
+- (void)defineMask:(RNSVGMask *)mask maskName:(NSString *)maskName;
 
-- (RNSVGNode *)getDefinedMask:(NSString *)maskName;
+- (RNSVGMask *)getDefinedMask:(NSString *)maskName;
+
+- (void)defineFilter:(RNSVGFilter *)filter filterName:(NSString *)filterName;
+
+- (RNSVGFilter *)getDefinedFilter:(NSString *)filterName;
 
 - (NSString *)getDataURLWithBounds:(CGRect)bounds;
 
@@ -72,5 +72,7 @@
 - (void)drawToContext:(CGContextRef)context withRect:(CGRect)rect;
 
 - (CGAffineTransform)getViewBoxTransform;
+
+- (CGAffineTransform)getInvViewBoxTransform;
 
 @end

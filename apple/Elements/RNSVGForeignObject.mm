@@ -13,8 +13,8 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
-#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
+#import <rnsvg/RNSVGComponentDescriptors.h>
 #import "RNSVGFabricConversions.h"
 #endif // RCT_NEW_ARCH_ENABLED
 
@@ -22,6 +22,12 @@
 
 #ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
+
+// Needed because of this: https://github.com/facebook/react-native/pull/37274
++ (void)load
+{
+  [super load];
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -43,17 +49,21 @@ using namespace facebook::react;
 {
   const auto &newProps = static_cast<const RNSVGForeignObjectProps &>(*props);
 
-  self.x = RCTNSStringFromStringNilIfEmpty(newProps.x)
-      ? [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)]
-      : nil;
-  self.y = RCTNSStringFromStringNilIfEmpty(newProps.y)
-      ? [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)]
-      : nil;
-  if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
-    self.foreignObjectheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
+  id x = RNSVGConvertFollyDynamicToId(newProps.x);
+  if (x != nil) {
+    self.x = [RCTConvert RNSVGLength:x];
   }
-  if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
-    self.foreignObjectwidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
+  id y = RNSVGConvertFollyDynamicToId(newProps.y);
+  if (y != nil) {
+    self.y = [RCTConvert RNSVGLength:y];
+  }
+  id height = RNSVGConvertFollyDynamicToId(newProps.height);
+  if (height != nil) {
+    self.foreignObjectheight = [RCTConvert RNSVGLength:height];
+  }
+  id width = RNSVGConvertFollyDynamicToId(newProps.width);
+  if (width != nil) {
+    self.foreignObjectwidth = [RCTConvert RNSVGLength:width];
   }
 
   setCommonGroupProps(newProps, self);
@@ -125,9 +135,9 @@ using namespace facebook::react;
       RNSVGSvgView *svgView = (RNSVGSvgView *)node;
       CGFloat width = [self relativeOnWidth:svgView.bbWidth];
       CGFloat height = [self relativeOnHeight:svgView.bbHeight];
-      CGRect rect = CGRectMake(0, 0, width, height);
-      CGContextClipToRect(context, rect);
-      [svgView drawToContext:context withRect:rect];
+      CGRect svgViewRect = CGRectMake(0, 0, width, height);
+      CGContextClipToRect(context, svgViewRect);
+      [svgView drawToContext:context withRect:svgViewRect];
     } else {
       node.hidden = false;
       [node.layer renderInContext:context];
@@ -140,8 +150,8 @@ using namespace facebook::react;
   [self setHitArea:path];
   if (!CGRectEqualToRect(bounds, CGRectNull)) {
     self.clientRect = bounds;
-    self.fillBounds = CGPathGetBoundingBox(path);
-    self.strokeBounds = CGPathGetBoundingBox(self.strokePath);
+    self.fillBounds = CGPathGetPathBoundingBox(path);
+    self.strokeBounds = CGPathGetPathBoundingBox(self.strokePath);
     self.pathBounds = CGRectUnion(self.fillBounds, self.strokeBounds);
 
     CGAffineTransform current = CGContextGetCTM(context);
@@ -150,9 +160,8 @@ using namespace facebook::react;
     self.ctm = svgToClientTransform;
     self.screenCTM = current;
 
-    CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
     CGPoint mid = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds));
-    CGPoint center = CGPointApplyAffineTransform(mid, transform);
+    CGPoint center = CGPointApplyAffineTransform(mid, self.matrix);
 
     self.bounds = bounds;
     if (!isnan(center.x) && !isnan(center.y)) {

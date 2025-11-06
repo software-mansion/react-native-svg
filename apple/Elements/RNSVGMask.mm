@@ -13,8 +13,8 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
-#import <react/renderer/components/rnsvg/ComponentDescriptors.h>
 #import <react/renderer/components/view/conversions.h>
+#import <rnsvg/RNSVGComponentDescriptors.h>
 #import "RNSVGFabricConversions.h"
 #endif // RCT_NEW_ARCH_ENABLED
 
@@ -22,6 +22,12 @@
 
 #ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
+
+// Needed because of this: https://github.com/facebook/react-native/pull/37274
++ (void)load
+{
+  [super load];
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -43,16 +49,26 @@ using namespace facebook::react;
 {
   const auto &newProps = static_cast<const RNSVGMaskProps &>(*props);
 
-  self.x = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.x)];
-  self.y = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.y)];
-  if (RCTNSStringFromStringNilIfEmpty(newProps.height)) {
-    self.maskheight = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.height)];
+  id x = RNSVGConvertFollyDynamicToId(newProps.x);
+  if (x != nil) {
+    self.x = [RCTConvert RNSVGLength:x];
   }
-  if (RCTNSStringFromStringNilIfEmpty(newProps.width)) {
-    self.maskwidth = [RNSVGLength lengthWithString:RCTNSStringFromString(newProps.width)];
+  id y = RNSVGConvertFollyDynamicToId(newProps.y);
+  if (y != nil) {
+    self.y = [RCTConvert RNSVGLength:y];
   }
+  id maskheight = RNSVGConvertFollyDynamicToId(newProps.height);
+  if (maskheight != nil) {
+    self.maskheight = [RCTConvert RNSVGLength:maskheight];
+  }
+  id maskwidth = RNSVGConvertFollyDynamicToId(newProps.width);
+  if (maskwidth != nil) {
+    self.maskwidth = [RCTConvert RNSVGLength:maskwidth];
+  }
+
   self.maskUnits = newProps.maskUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
   self.maskContentUnits = newProps.maskUnits == 0 ? kRNSVGUnitsObjectBoundingBox : kRNSVGUnitsUserSpaceOnUse;
+  self.maskType = newProps.maskType == 0 ? kRNSVGMaskTypeLuminance : kRNSVGMaskTypeAlpha;
 
   setCommonGroupProps(newProps, self);
   _props = std::static_pointer_cast<RNSVGMaskProps const>(props);
@@ -67,6 +83,7 @@ using namespace facebook::react;
   _maskwidth = nil;
   _maskUnits = kRNSVGUnitsObjectBoundingBox;
   _maskContentUnits = kRNSVGUnitsObjectBoundingBox;
+  _maskType = kRNSVGMaskTypeLuminance;
 }
 #endif // RCT_NEW_ARCH_ENABLED
 
@@ -138,6 +155,15 @@ using namespace facebook::react;
   }
 
   _maskContentUnits = maskContentUnits;
+  [self invalidate];
+}
+
+- (void)setMaskType:(RNSVGMaskType)maskType
+{
+  if (maskType == _maskType) {
+    return;
+  }
+  _maskType = maskType;
   [self invalidate];
 }
 

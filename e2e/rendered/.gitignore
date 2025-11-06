@@ -1,0 +1,3 @@
+# This directory will contain rendered images for each test after the tests are ran. Do not commit those.
+!.gitignore
+**

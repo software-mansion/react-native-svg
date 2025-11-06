@@ -9,6 +9,7 @@
 package com.horcrux.svg;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -18,8 +19,10 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.os.Build;
 import android.view.View;
+import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableType;
 import java.util.ArrayList;
 import javax.annotation.Nullable;
 
@@ -27,9 +30,22 @@ import javax.annotation.Nullable;
 class GroupView extends RenderableView {
   @Nullable ReadableMap mFont;
   private GlyphContext mGlyphContext;
+  private Bitmap mLayerBitmap;
+  private Canvas mLayerCanvas;
+  private final Paint mLayerPaint;
 
   public GroupView(ReactContext reactContext) {
     super(reactContext);
+    mLayerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+  }
+
+  public void setFont(Dynamic dynamic) {
+    if (dynamic.getType() == ReadableType.Map) {
+      mFont = dynamic.asMap();
+    } else {
+      mFont = null;
+    }
+    invalidate();
   }
 
   public void setFont(@Nullable ReadableMap font) {
@@ -41,9 +57,6 @@ class GroupView extends RenderableView {
     RectF clipBounds = new RectF(canvas.getClipBounds());
     if (mMatrix != null) {
       mMatrix.mapRect(clipBounds);
-    }
-    if (mTransform != null) {
-      mTransform.mapRect(clipBounds);
     }
     mGlyphContext = new GlyphContext(mScale, clipBounds.width(), clipBounds.height());
   }
@@ -81,10 +94,30 @@ class GroupView extends RenderableView {
     final SvgView svg = getSvgView();
     final GroupView self = this;
     final RectF groupRect = new RectF();
+
+    if (mOpacity != 1) {
+      if (mLayerBitmap == null) {
+        mLayerBitmap =
+            Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
+        mLayerCanvas = new Canvas(mLayerBitmap);
+      } else {
+        mLayerBitmap.recycle();
+        mLayerBitmap =
+            Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
+        mLayerCanvas.setBitmap(mLayerBitmap);
+      }
+      // Copy current matrix from original canvas
+      mLayerCanvas.save();
+      mLayerCanvas.setMatrix(canvas.getMatrix());
+    } else {
+      mLayerCanvas = canvas;
+    }
+
     elements = new ArrayList<>();
     for (int i = 0; i < getChildCount(); i++) {
       View child = getChildAt(i);
-      if (child instanceof MaskView) {
+      if (child instanceof MaskView || child instanceof ClipPathView) {
+        ((RenderableView) child).mergeProperties(self);
         continue;
       }
       if (child instanceof VirtualView) {
@@ -96,15 +129,15 @@ class GroupView extends RenderableView {
           ((RenderableView) node).mergeProperties(self);
         }
 
-        int count = node.saveAndSetupCanvas(canvas, mCTM);
-        node.render(canvas, paint, opacity * mOpacity);
+        int count = node.saveAndSetupCanvas(mLayerCanvas, mCTM);
+        node.render(mLayerCanvas, paint, opacity);
         RectF r = node.getClientRect();
 
         if (r != null) {
           groupRect.union(r);
         }
 
-        node.restoreCanvas(canvas, count);
+        node.restoreCanvas(mLayerCanvas, count);
 
         if (node instanceof RenderableView) {
           ((RenderableView) node).resetProperties();
@@ -120,11 +153,30 @@ class GroupView extends RenderableView {
 
       } else if (child instanceof SvgView) {
         SvgView svgView = (SvgView) child;
+        // Merge properties with inner Svg element.
+        if (svgView.getChildCount() > 0) {
+          View viewNode = svgView.getChildAt(0);
+          if (viewNode instanceof GroupView) {
+            ((GroupView) viewNode).mergeProperties(self);
+          }
+        }
         svgView.drawChildren(canvas);
         if (svgView.isResponsible()) {
           svg.enableTouchEvents();
         }
       }
+    }
+
+    if (mOpacity != 1) {
+      // Restore copied canvas and temporary reset original canvas matrix to draw bitmap 1:1
+      mLayerCanvas.restore();
+      int saveCount = canvas.save();
+      canvas.setMatrix(null);
+      mLayerPaint.setAlpha((int) (mOpacity * 255));
+      if (mLayerBitmap != null) {
+        canvas.drawBitmap(mLayerBitmap, 0, 0, mLayerPaint);
+      }
+      canvas.restoreToCount(saveCount);
     }
     this.setClientRect(groupRect);
     popGlyphContext();
@@ -149,7 +201,11 @@ class GroupView extends RenderableView {
       if (node instanceof VirtualView) {
         VirtualView n = (VirtualView) node;
         Matrix transform = n.mMatrix;
-        mPath.addPath(n.getPath(canvas, paint), transform);
+        Path path = n.getPath(canvas, paint);
+
+        if (path != null) {
+          mPath.addPath(path, transform);
+        }
       }
     }
 
@@ -213,13 +269,12 @@ class GroupView extends RenderableView {
 
   @Override
   int hitTest(final float[] src) {
-    if (!mInvertible || !mTransformInvertible) {
+    if (!mInvertible) {
       return -1;
     }
 
     float[] dst = new float[2];
     mInvMatrix.mapPoints(dst, src);
-    mInvTransform.mapPoints(dst);
 
     int x = Math.round(dst[0]);
     int y = Math.round(dst[1]);

@@ -10,8 +10,13 @@
 #import <QuartzCore/QuartzCore.h>
 #import <React/RCTConvert.h>
 #import "RCTConvert+RNSVG.h"
+#import "RNSVGBlendMode.h"
 #import "RNSVGCGFCRule.h"
+#import "RNSVGColorMatrixType.h"
+#import "RNSVGCompositeOperator.h"
+#import "RNSVGEdgeMode.h"
 #import "RNSVGLength.h"
+#import "RNSVGMaskType.h"
 #import "RNSVGPathParser.h"
 #import "RNSVGUnits.h"
 #import "RNSVGVBMOS.h"
@@ -25,6 +30,7 @@
 + (RNSVGCGFCRule)RNSVGCGFCRule:(id)json;
 + (RNSVGVBMOS)RNSVGVBMOS:(id)json;
 + (RNSVGUnits)RNSVGUnits:(id)json;
++ (RNSVGMaskType)RNSVGMaskType:(id)json;
 + (RNSVGBrush *)RNSVGBrush:(id)json;
 + (RNSVGPathParser *)RNSVGCGPath:(NSString *)d;
 + (CGRect)RNSVGCGRect:(id)json offset:(NSUInteger)offset;

@@ -18,7 +18,7 @@ namespace react {
 const char RNSVGImageComponentName[] = "RNSVGImage";
 
 void RNSVGImageShadowNode::setImageManager(
-    const SharedImageManager &imageManager) {
+    const std::shared_ptr<ImageManager> &imageManager) {
   ensureUnsealed();
   imageManager_ = imageManager;
 }

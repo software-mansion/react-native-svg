@@ -10,9 +10,11 @@
 #import <React/RCTPointerEvents.h>
 #import "RNSVGBezierElement.h"
 #import "RNSVGClipPath.h"
+#import "RNSVGFilter.h"
 #import "RNSVGMarker.h"
 #import "RNSVGMarkerPosition.h"
 #import "RNSVGMask.h"
+#import "RNSVGRenderUtils.h"
 #import "RNSVGVectorEffect.h"
 #import "RNSVGViewBox.h"
 
@@ -23,6 +25,7 @@
   NSArray<RNSVGLength *> *_sourceStrokeDashArray;
   CGFloat *_strokeDashArrayData;
   CGPathRef _srcHitPath;
+  RNSVGRenderable *_caller;
 }
 
 static RNSVGRenderable *_contextElement;
@@ -55,6 +58,15 @@ static RNSVGRenderable *_contextElement;
   _srcHitPath = nil;
   [super invalidate];
   self.dirty = true;
+}
+
+- (void)setColor:(RNSVGColor *)color
+{
+  if (color == _color) {
+    return;
+  }
+  [self invalidate];
+  _color = color;
 }
 
 - (void)setFill:(RNSVGBrush *)fill
@@ -175,6 +187,15 @@ static RNSVGRenderable *_contextElement;
   [self invalidate];
 }
 
+- (void)setFilter:(NSString *)filter
+{
+  if ([_filter isEqualToString:filter]) {
+    return;
+  }
+  _filter = filter;
+  [self invalidate];
+}
+
 - (void)dealloc
 {
   CGPathRelease(_hitArea);
@@ -199,7 +220,6 @@ static RNSVGRenderable *_contextElement;
   _lastMergedList = nil;
   _attributeList = nil;
   _sourceStrokeDashArray = nil;
-  _strokeDashArrayData = nil;
   _srcHitPath = nil;
   CGPathRelease(_hitArea);
   _hitArea = nil;
@@ -210,6 +230,7 @@ static RNSVGRenderable *_contextElement;
   _strokeDashArrayData = nil;
 
   _contextElement = nil;
+  _color = nil;
   _fill = nil;
   _stroke = nil;
   _strokeLinecap = kCGLineCapButt;
@@ -219,6 +240,8 @@ static RNSVGRenderable *_contextElement;
   _strokeDashoffset = 0;
   _vectorEffect = kRNSVGVectorEffectDefault;
   _propList = nil;
+  _filter = nil;
+  _caller = nil;
 }
 #endif // RCT_NEW_ARCH_ENABLED
 
@@ -233,140 +256,174 @@ UInt32 saturate(CGFloat value)
   // This needs to be painted on a layer before being composited.
   CGContextSaveGState(context);
   CGContextConcatCTM(context, self.matrix);
-  CGContextConcatCTM(context, self.transforms);
   CGContextSetAlpha(context, self.opacity);
 
   [self beginTransparencyLayer:context];
 
-  if (self.mask) {
-    // https://www.w3.org/TR/SVG11/masking.html#MaskElement
-    RNSVGMask *_maskNode = (RNSVGMask *)[self.svgView getDefinedMask:self.mask];
+  RNSVGFilter *filterNode = self.filter ? [self.svgView getDefinedFilter:self.filter] : nil;
+  RNSVGMask *maskNode = self.mask ? [self.svgView getDefinedMask:self.mask] : nil;
+
+  if (maskNode || filterNode) {
     CGRect bounds = CGContextGetClipBoundingBox(context);
-    CGSize boundsSize = bounds.size;
-    CGFloat height = boundsSize.height;
-    CGFloat width = boundsSize.width;
-    CGFloat scale = 0.0;
-#if TARGET_OS_OSX
-    scale = [[NSScreen mainScreen] backingScaleFactor];
-#else
-    if (@available(iOS 13.0, *)) {
-      scale = [UITraitCollection currentTraitCollection].displayScale;
-    } else {
-#if !TARGET_OS_VISION
-      scale = [[UIScreen mainScreen] scale];
-#endif
-    }
-#endif // TARGET_OS_OSX
+    // Get current context transformations for offscreenContext
+    CGAffineTransform currentCTM = CGContextGetCTM(context);
+
+    CGFloat height = rect.size.height;
+    CGFloat width = rect.size.width;
+    CGFloat scale = [RNSVGRenderUtils getScreenScale];
     NSUInteger iheight = (NSUInteger)height;
     NSUInteger iwidth = (NSUInteger)width;
     NSUInteger iscale = (NSUInteger)scale;
     NSUInteger scaledHeight = iheight * iscale;
     NSUInteger scaledWidth = iwidth * iscale;
     NSUInteger npixels = scaledHeight * scaledWidth;
-    CGRect drawBounds = CGRectMake(0, 0, width, height);
+    CGAffineTransform screenScaleCTM = CGAffineTransformMake(scale, 0, 0, scale, 0, 0);
+    CGRect scaledRect = CGRectApplyAffineTransform(rect, screenScaleCTM);
 
-    // Allocate pixel buffer and bitmap context for mask
-    NSUInteger bytesPerPixel = 4;
-    NSUInteger bitsPerComponent = 8;
-    NSUInteger bytesPerRow = bytesPerPixel * scaledWidth;
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    UInt32 *pixels = (UInt32 *)calloc(npixels, sizeof(UInt32));
-    CGContextRef bcontext = CGBitmapContextCreate(
-        pixels,
-        scaledWidth,
-        scaledHeight,
-        bitsPerComponent,
-        bytesPerRow,
-        colorSpace,
-        kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
-    CGContextScaleCTM(bcontext, iscale, iscale);
+#if TARGET_OS_OSX
+    CGImage *contentImage = [RNSVGRenderUtils renderToImage:self ctm:currentCTM rect:scaledRect clip:nil];
+#else
+    CGImage *contentImage = [RNSVGRenderUtils renderToImage:self ctm:currentCTM rect:rect clip:nil];
+#endif
 
-    // Clip to mask bounds and render the mask
-    CGFloat x = [self relativeOn:[_maskNode x] relative:width];
-    CGFloat y = [self relativeOn:[_maskNode y] relative:height];
-    CGFloat w = [self relativeOn:[_maskNode maskwidth] relative:width];
-    CGFloat h = [self relativeOn:[_maskNode maskheight] relative:height];
-    CGRect maskBounds = CGRectMake(x, y, w, h);
-    CGContextClipToRect(bcontext, maskBounds);
-    [_maskNode renderLayerTo:bcontext rect:rect];
+    if (filterNode) {
+      // https://www.w3.org/TR/SVG11/filters.html#FilterElement
 
-    // Apply luminanceToAlpha filter primitive
-    // https://www.w3.org/TR/SVG11/filters.html#feColorMatrixElement
-    UInt32 *currentPixel = pixels;
-    for (NSUInteger i = 0; i < npixels; i++) {
-      UInt32 color = *currentPixel;
+      CIImage *content = [CIImage imageWithCGImage:contentImage];
 
-      UInt32 r = color & 0xFF;
-      UInt32 g = (color >> 8) & 0xFF;
-      UInt32 b = (color >> 16) & 0xFF;
+      CGImage *backgroundImage = CGBitmapContextCreateImage(context);
+      CIImage *background =
+          (backgroundImage != nil) ? [CIImage imageWithCGImage:backgroundImage] : [CIImage emptyImage];
 
-      CGFloat luma = (CGFloat)(0.299 * r + 0.587 * g + 0.144 * b);
-      *currentPixel = saturate(luma) << 24;
-      currentPixel++;
+      content = [filterNode applyFilter:content
+                          backgroundImg:background
+                       renderableBounds:self.pathBounds
+                           canvasBounds:scaledRect
+                                    ctm:currentCTM];
+
+      CGImageRelease(contentImage);
+      contentImage = [[RNSVGRenderUtils sharedCIContext] createCGImage:content fromRect:scaledRect];
+
+      if (!maskNode) {
+        CGContextConcatCTM(context, CGAffineTransformInvert(currentCTM));
+#if TARGET_OS_OSX
+        CGContextDrawImage(context, rect, contentImage);
+#else
+        CGContextDrawImage(context, scaledRect, contentImage);
+#endif
+
+        CGContextConcatCTM(context, currentCTM);
+      }
+
+      CGImageRelease(backgroundImage);
     }
+    if (maskNode) {
+      // https://www.w3.org/TR/SVG11/masking.html#MaskElement
 
-    // Create mask image and release memory
-    CGImageRef maskImage = CGBitmapContextCreateImage(bcontext);
-    CGColorSpaceRelease(colorSpace);
-    CGContextRelease(bcontext);
-    free(pixels);
+      // Allocate pixel buffer and bitmap context for mask
+      NSUInteger bytesPerPixel = 4;
+      NSUInteger bitsPerComponent = 8;
+      NSUInteger bytesPerRow = bytesPerPixel * scaledWidth;
+      CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+      UInt32 *pixels = (UInt32 *)calloc(npixels, sizeof(UInt32));
+      CGBitmapInfo bitmapInfo = (CGBitmapInfo)kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big;
+      CGContextRef bcontext = CGBitmapContextCreate(
+          pixels, scaledWidth, scaledHeight, bitsPerComponent, bytesPerRow, colorSpace, bitmapInfo);
+#if TARGET_OS_OSX // [macOS]
+      // on macOS currentCTM is not scaled properly with screen scale so we need to scale it manually
+      CGContextConcatCTM(bcontext, screenScaleCTM);
+#endif // [macOS]
+      CGContextConcatCTM(bcontext, currentCTM);
+      // Clip to mask bounds and render the mask
+      CGRect maskBounds;
+      if ([maskNode maskUnits] == RNSVGUnits::kRNSVGUnitsUserSpaceOnUse) {
+        CGFloat x = [self relativeOn:[maskNode x] relative:width];
+        CGFloat y = [self relativeOn:[maskNode y] relative:height];
+        CGFloat w = [self relativeOn:[maskNode maskwidth] relative:width];
+        CGFloat h = [self relativeOn:[maskNode maskheight] relative:height];
+        maskBounds = CGRectMake(x, y, w, h);
+      } else {
+        CGSize currentBoundsSize = self.pathBounds.size;
+        CGFloat x = [self relativeOnFraction:[maskNode x] relative:currentBoundsSize.width];
+        CGFloat y = [self relativeOnFraction:[maskNode y] relative:currentBoundsSize.height];
+        CGFloat w = [self relativeOnFraction:[maskNode maskwidth] relative:currentBoundsSize.width];
+        CGFloat h = [self relativeOnFraction:[maskNode maskheight] relative:currentBoundsSize.height];
+        maskBounds = CGRectMake(self.pathBounds.origin.x + x, self.pathBounds.origin.y + y, w, h);
+      }
+      CGContextClipToRect(bcontext, maskBounds);
+      [maskNode renderLayerTo:bcontext rect:bounds];
+
+      // Apply luminanceToAlpha filter primitive
+      // https://www.w3.org/TR/SVG11/filters.html#feColorMatrixElement
+      UInt32 *currentPixel = pixels;
+      if (maskNode.maskType == kRNSVGMaskTypeLuminance) {
+        for (NSUInteger i = 0; i < npixels; i++) {
+          UInt32 color = *currentPixel;
+
+          UInt32 r = color & 0xFF;
+          UInt32 g = (color >> 8) & 0xFF;
+          UInt32 b = (color >> 16) & 0xFF;
+
+          CGFloat luma = (CGFloat)(0.299 * r + 0.587 * g + 0.144 * b);
+          *currentPixel = saturate(luma) << 24;
+          currentPixel++;
+        }
+      }
+
+      // Create mask image and release memory
+      CGImageRef maskImage = CGBitmapContextCreateImage(bcontext);
+      CGColorSpaceRelease(colorSpace);
+      CGContextRelease(bcontext);
+      free(pixels);
 
 #if !TARGET_OS_OSX // [macOS]
-    UIGraphicsImageRendererFormat *format = [UIGraphicsImageRendererFormat defaultFormat];
-    format.scale = scale;
-    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:boundsSize format:format];
+      UIGraphicsImageRendererFormat *format = [UIGraphicsImageRendererFormat defaultFormat];
+      UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:rect.size format:format];
 
-    // Get the content image
-    UIImage *contentImage = [renderer imageWithActions:^(UIGraphicsImageRendererContext *_Nonnull rendererContext) {
-      CGContextTranslateCTM(rendererContext.CGContext, 0.0, height);
-      CGContextScaleCTM(rendererContext.CGContext, 1.0, -1.0);
-      [self renderLayerTo:rendererContext.CGContext rect:rect];
-    }];
+      // Blend current element and mask
+      UIImage *blendedImage = [renderer imageWithActions:^(UIGraphicsImageRendererContext *_Nonnull rendererContext) {
+        CGContextConcatCTM(
+            rendererContext.CGContext, CGAffineTransformInvert(CGContextGetCTM(rendererContext.CGContext)));
+        CGContextConcatCTM(rendererContext.CGContext, screenScaleCTM);
 
-    // Blend current element and mask
-    UIImage *blendedImage = [renderer imageWithActions:^(UIGraphicsImageRendererContext *_Nonnull rendererContext) {
-      CGContextSetBlendMode(rendererContext.CGContext, kCGBlendModeCopy);
-      CGContextDrawImage(rendererContext.CGContext, drawBounds, maskImage);
-      CGContextSetBlendMode(rendererContext.CGContext, kCGBlendModeSourceIn);
-      CGContextDrawImage(rendererContext.CGContext, drawBounds, contentImage.CGImage);
-    }];
+        CGContextSetBlendMode(rendererContext.CGContext, kCGBlendModeCopy);
+        CGContextDrawImage(rendererContext.CGContext, rect, maskImage);
+        CGContextSetBlendMode(rendererContext.CGContext, kCGBlendModeSourceIn);
+        CGContextDrawImage(rendererContext.CGContext, rect, contentImage);
+      }];
 
-    // Render blended result into current render context
-    [blendedImage drawInRect:drawBounds];
+      // Invert the CTM and apply transformations to draw image in 1:1
+      CGContextConcatCTM(context, CGAffineTransformInvert(currentCTM));
+      CGContextTranslateCTM(context, 0.0, scaledRect.size.height);
+      CGContextScaleCTM(context, 1.0, -1.0);
 
-    // Render blended result into current render context
-    CGImageRelease(maskImage);
+      // Render blended result into current render context
+      [blendedImage drawInRect:scaledRect];
 #else // [macOS
-      // Render content of current SVG Renderable to image
-    UIGraphicsBeginImageContextWithOptions(boundsSize, NO, 0.0);
-    CGContextRef newContext = UIGraphicsGetCurrentContext();
-    CGContextTranslateCTM(newContext, 0.0, height);
-    CGContextScaleCTM(newContext, 1.0, -1.0);
-    [self renderLayerTo:newContext rect:rect];
-    CGImageRef contentImage = CGBitmapContextCreateImage(newContext);
-    UIGraphicsEndImageContext();
+      // Blend current element and mask
+      RNSVGUIGraphicsBeginImageContextWithOptions(rect.size, NO, scale);
+      CGContextRef newContext = UIGraphicsGetCurrentContext();
 
-    // Blend current element and mask
-    UIGraphicsBeginImageContextWithOptions(boundsSize, NO, 0.0);
-    newContext = UIGraphicsGetCurrentContext();
-    CGContextTranslateCTM(newContext, 0.0, height);
-    CGContextScaleCTM(newContext, 1.0, -1.0);
+      CGContextSetBlendMode(newContext, kCGBlendModeCopy);
+      CGContextDrawImage(newContext, rect, maskImage);
+      CGContextSetBlendMode(newContext, kCGBlendModeSourceIn);
+      CGContextDrawImage(newContext, rect, contentImage);
 
-    CGContextSetBlendMode(newContext, kCGBlendModeCopy);
-    CGContextDrawImage(newContext, drawBounds, maskImage);
-    CGImageRelease(maskImage);
+      CGImageRef blendedImage = CGBitmapContextCreateImage(newContext);
+      RNSVGUIGraphicsEndImageContext();
 
-    CGContextSetBlendMode(newContext, kCGBlendModeSourceIn);
-    CGContextDrawImage(newContext, drawBounds, contentImage);
-    CGImageRelease(contentImage);
+      // Invert the CTM and apply transformations to draw image in 1:1
+      CGContextConcatCTM(context, CGAffineTransformInvert(currentCTM));
+      CGContextTranslateCTM(context, 0.0, rect.size.height);
+      CGContextScaleCTM(context, 1.0, -1.0);
 
-    CGImageRef blendedImage = CGBitmapContextCreateImage(newContext);
-    UIGraphicsEndImageContext();
-
-    // Render blended result into current render context
-    CGContextDrawImage(context, drawBounds, blendedImage);
-    CGImageRelease(blendedImage);
+      // Render blended result into current render context
+      CGContextDrawImage(context, rect, blendedImage);
+      CGImageRelease(blendedImage);
 #endif // macOS]
+      CGImageRelease(maskImage);
+    }
+    CGImageRelease(contentImage);
   } else {
     [self renderLayerTo:context rect:rect];
   }
@@ -448,8 +505,8 @@ UInt32 saturate(CGFloat value)
       self.path = CGPathRetain(path);
     }
     [self setHitArea:path];
-    self.fillBounds = CGPathGetBoundingBox(path);
-    self.strokeBounds = CGPathGetBoundingBox(self.strokePath);
+    self.fillBounds = CGPathGetPathBoundingBox(path);
+    self.strokeBounds = CGPathGetPathBoundingBox(self.strokePath);
     self.pathBounds = CGRectUnion(self.fillBounds, self.strokeBounds);
   }
   const CGRect pathBounds = self.pathBounds;
@@ -468,14 +525,15 @@ UInt32 saturate(CGFloat value)
   }
 
   CGAffineTransform vbmatrix = self.svgView.getViewBoxTransform;
-  CGAffineTransform transform = CGAffineTransformConcat(self.matrix, self.transforms);
-  CGAffineTransform matrix = CGAffineTransformConcat(transform, vbmatrix);
+  CGAffineTransform matrix = CGAffineTransformConcat(self.matrix, vbmatrix);
 
   CGRect bounds = CGRectMake(0, 0, CGRectGetWidth(clientRect), CGRectGetHeight(clientRect));
   CGPoint mid = CGPointMake(CGRectGetMidX(pathBounds), CGRectGetMidY(pathBounds));
   CGPoint center = CGPointApplyAffineTransform(mid, matrix);
 
-  self.bounds = bounds;
+  if (!isnan(bounds.size.width) && !isnan(bounds.size.height)) {
+    self.bounds = bounds;
+  }
   if (!isnan(center.x) && !isnan(center.y)) {
     self.center = center;
   }
@@ -497,7 +555,7 @@ UInt32 saturate(CGFloat value)
 
   if (self.fill) {
     if (self.fill.class == RNSVGBrush.class) {
-      CGContextSetFillColorWithColor(context, [self.tintColor CGColor]);
+      CGContextSetFillColorWithColor(context, [self getCurrentColor]);
       fillColor = YES;
     } else {
       fillColor = [self.fill applyFillColor:context opacity:self.fillOpacity];
@@ -545,7 +603,7 @@ UInt32 saturate(CGFloat value)
     BOOL strokeColor;
 
     if (self.stroke.class == RNSVGBrush.class) {
-      CGContextSetStrokeColorWithColor(context, [self.tintColor CGColor]);
+      CGContextSetStrokeColorWithColor(context, [self getCurrentColor]);
       strokeColor = YES;
     } else {
       strokeColor = [self.stroke applyStrokeColor:context opacity:self.strokeOpacity];
@@ -623,7 +681,6 @@ UInt32 saturate(CGFloat value)
   }
 
   CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
-  transformed = CGPointApplyAffineTransform(transformed, self.invTransform);
 
   if (!CGRectContainsPoint(self.pathBounds, transformed) && !CGRectContainsPoint(self.markerBounds, transformed)) {
     return nil;
@@ -661,6 +718,7 @@ UInt32 saturate(CGFloat value)
 
 - (void)mergeProperties:(__kindof RNSVGRenderable *)target
 {
+  _caller = target;
   NSArray<NSString *> *targetAttributeList = [target getAttributeList];
 
   if (targetAttributeList.count == 0) {
@@ -691,9 +749,28 @@ UInt32 saturate(CGFloat value)
     [self setValue:[_originProperties valueForKey:key] forKey:key];
   }
 
+  _caller = nil;
   _lastMergedList = nil;
   _attributeList = _propList;
   self.merging = false;
+}
+
+- (CGColor *)getCurrentColor
+{
+  if (self.color != nil) {
+    return [self.color CGColor];
+  }
+  if (_caller != nil) {
+    return [_caller getCurrentColor];
+  }
+  RNSVGPlatformView *parentView = [self superview];
+  if ([parentView isKindOfClass:[RNSVGRenderable class]]) {
+    return [(RNSVGRenderable *)parentView getCurrentColor];
+  } else if ([parentView isKindOfClass:[RNSVGSvgView class]]) {
+    return [[(RNSVGSvgView *)parentView color] CGColor];
+  }
+
+  return nil;
 }
 
 @end

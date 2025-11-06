@@ -3,10 +3,11 @@
 #include "pch.h"
 
 #include <winrt/Windows.Foundation.Numerics.h>
-#include <winrt/Windows.UI.Text.h>
+#include <UI.Text.h>
 #include "JSValueReader.h"
 #include "D2DHelpers.h"
 #include "D2DBrush.h"
+#include "D2DDeviceContext.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -38,18 +39,19 @@ struct Utils {
     return std::sqrtf(powX + powY) * static_cast<float>(M_SQRT1_2);
   }
 
-  static float GetAbsoluteLength(SVGLength const& length, double relativeTo) {
+  static float GetAbsoluteLength(SVGLength const &length, double relativeTo) {
     return GetAbsoluteLength(length, static_cast<float>(relativeTo));
   }
 
   static float GetAbsoluteLength(SVGLength const &length, float relativeTo) {
-    auto value{length.Value()};
+    auto value{length.Value};
+    auto unit{length.Unit};
 
     // 1in = 2.54cm = 96px
     auto inch{96.0f};
     auto cm{inch / 2.54f};
 
-    switch (length.Unit()) {
+    switch (unit) {
       case RNSVG::LengthType::Percentage:
         return value / 100.0f * relativeTo;
       case RNSVG::LengthType::Centimeter:
@@ -179,22 +181,14 @@ struct Utils {
   }
 
   static float JSValueAsFloat(JSValue const &value, float defaultValue = 0.0f) {
-    if (value.IsNull()) {
-      return defaultValue;
-    } else {
-      return value.AsSingle();
-    }
+    return value.IsNull() ? defaultValue : value.AsSingle();
   }
 
   static std::string JSValueAsString(JSValue const &value, std::string defaultValue = "") {
-    if (value.IsNull()) {
-      return defaultValue;
-    } else {
-      return value.AsString();
-    }
+    return value.IsNull() ? defaultValue : value.AsString();
   }
 
-  static ui::Color JSValueAsColor(JSValue const &value, ui::Color const &defaultValue = Colors::Transparent()) {
+  static Windows::UI::Color JSValueAsColor(JSValue const &value, Windows::UI::Color const &defaultValue = Colors::Transparent()) {
     if (value.IsNull()) {
       return defaultValue;
     } else if (auto const &brush{value.To<xaml::Media::Brush>()}) {
@@ -207,11 +201,7 @@ struct Utils {
   }
 
   static SVGLength JSValueAsSVGLength(JSValue const &value, SVGLength const &defaultValue = {}) {
-    if (value.IsNull()) {
-      return defaultValue;
-    } else {
-      return RNSVG::implementation::SVGLength::From(value);
-    }
+    return value.IsNull() ? defaultValue : value.To<RNSVG::SVGLength>();
   }
 
   static Numerics::float3x2 JSValueAsTransform(JSValue const &value, Numerics::float3x2 const &defaultValue = {}) {
@@ -230,7 +220,7 @@ struct Utils {
     }
   }
 
-  static D2D1::Matrix3x2F JSValueAsD2DTransform(JSValue const& value, D2D1::Matrix3x2F const defaultValue = {}) {
+  static D2D1::Matrix3x2F JSValueAsD2DTransform(JSValue const &value, D2D1::Matrix3x2F const defaultValue = {}) {
     if (value.IsNull()) {
       return defaultValue;
     } else {
@@ -264,18 +254,33 @@ struct Utils {
     return gradientStops;
   }
 
+  static winrt::Windows::UI::Color JSValueAsD2DColor(float value) {
+    auto color = static_cast<int32_t>(value);
+
+    auto alpha = static_cast<uint8_t>(color >> 24);
+    auto red = static_cast<uint8_t>((color >> 16) & 0xff);
+    auto green = static_cast<uint8_t>((color >> 8) & 0xff);
+    auto blue = static_cast<uint8_t>(color & 0xff);
+
+    return winrt::Windows::UI::ColorHelper::FromArgb(alpha, red, green, blue);
+  }
+
   static com_ptr<ID2D1Brush> GetCanvasBrush(
       hstring const &brushId,
-      ui::Color const &color,
+      Windows::UI::Color const &color,
       RNSVG::SvgView const &root,
-      com_ptr<ID2D1Geometry> const &geometry) {
+      com_ptr<ID2D1Geometry> const &geometry,
+      RNSVG::D2DDeviceContext const &context) {
     com_ptr<ID2D1Brush> brush;
-    com_ptr<ID2D1DeviceContext> deviceContext{get_self<RNSVG::implementation::D2DDeviceContext>(root.DeviceContext())->Get()};
+    com_ptr<ID2D1DeviceContext> deviceContext{get_self<RNSVG::implementation::D2DDeviceContext>(context)->Get()};
+
+    auto winColor{Windows::UI::Colors::Transparent()};
 
     if (root && brushId != L"") {
       if (brushId == L"currentColor") {
         com_ptr<ID2D1SolidColorBrush> scb;
-        deviceContext->CreateSolidColorBrush(D2DHelpers::AsD2DColor(root.CurrentColor()), scb.put());
+        winColor = root.CurrentColor();
+        deviceContext->CreateSolidColorBrush(D2DHelpers::AsD2DColor(winColor), scb.put());
         brush = scb.as<ID2D1Brush>();
       } else if (auto const &brushView{root.Brushes().TryLookup(brushId)}) {
         brushView.CreateBrush();
@@ -292,7 +297,9 @@ struct Utils {
 
     if (!brush) {
       com_ptr<ID2D1SolidColorBrush> scb;
-      deviceContext->CreateSolidColorBrush(D2DHelpers::AsD2DColor(color), scb.put());
+      assert(root != nullptr);
+      winColor = color;
+      deviceContext->CreateSolidColorBrush(D2DHelpers::AsD2DColor(winColor), scb.put());
       brush = scb.as<ID2D1Brush>();
     }
 

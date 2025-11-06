@@ -181,6 +181,7 @@
     wght_id = (CFNumberRef)axisId;
     break;
   }
+  CFRelease(cgAxes);
 
   if (wght_id == 0) {
     return ref;
@@ -451,7 +452,7 @@
 {
   [RNSVGGlyphContext incrementIndices:mXIndices_ topIndex:mXsIndex_];
   long nextIndex = mXIndex_ + 1;
-  if (nextIndex < [mXs_ count]) {
+  if (nextIndex < (long)[mXs_ count]) {
     mDX_ = 0;
     mXIndex_ = nextIndex;
     RNSVGLength *length = [mXs_ objectAtIndex:nextIndex];
@@ -465,7 +466,7 @@
 {
   [RNSVGGlyphContext incrementIndices:mYIndices_ topIndex:mYsIndex_];
   long nextIndex = mYIndex_ + 1;
-  if (nextIndex < [mYs_ count]) {
+  if (nextIndex < (long)[mYs_ count]) {
     mDY_ = 0;
     mYIndex_ = nextIndex;
     RNSVGLength *length = [mYs_ objectAtIndex:nextIndex];
@@ -478,7 +479,7 @@
 {
   [RNSVGGlyphContext incrementIndices:mDXIndices_ topIndex:mDXsIndex_];
   long nextIndex = mDXIndex_ + 1;
-  if (nextIndex < [mDXs_ count]) {
+  if (nextIndex < (long)[mDXs_ count]) {
     mDXIndex_ = nextIndex;
     RNSVGLength *length = [mDXs_ objectAtIndex:nextIndex];
     CGFloat val = [RNSVGPropHelper fromRelative:length relative:mWidth_ fontSize:mFontSize_];
@@ -491,7 +492,7 @@
 {
   [RNSVGGlyphContext incrementIndices:mDYIndices_ topIndex:mDYsIndex_];
   long nextIndex = mDYIndex_ + 1;
-  if (nextIndex < [mDYs_ count]) {
+  if (nextIndex < (long)[mDYs_ count]) {
     mDYIndex_ = nextIndex;
     RNSVGLength *length = [mDYs_ objectAtIndex:nextIndex];
     CGFloat val = [RNSVGPropHelper fromRelative:length relative:mHeight_ fontSize:mFontSize_];

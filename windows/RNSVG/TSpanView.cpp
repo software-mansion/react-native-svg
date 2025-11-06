@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "TSpanView.h"
+#if __has_include("TSpanView.g.cpp")
 #include "TSpanView.g.cpp"
+#endif
 
 #include <codecvt>
 
@@ -10,6 +12,7 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
+
 void TSpanView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
@@ -33,8 +36,9 @@ void TSpanView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   bool translateXY{X().Size() > 0 || Y().Size() > 0};
 
   if (translateXY) {
-    float x{X().Size() > 0 ? X().GetAt(0).Value() : 0};
-    float y{Y().Size() > 0 ? Y().GetAt(0).Value() : 0};
+    float x{X().Size() > 0 ? X().GetAt(0).Value : 0};
+    float y{Y().Size() > 0 ? Y().GetAt(0).Value : 0};
+
     deviceContext->SetTransform(D2D1::Matrix3x2F::Translation({x, y}) * transform);
   }
 
@@ -51,14 +55,14 @@ void TSpanView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
   check_hresult(dwriteFactory->CreateTextFormat(
       FontFamily().c_str(),
       nullptr, // Font collection (nullptr sets it to use the system font collection).
-      D2DHelpers::FontWeightFrom(FontWeight(), SvgParent()),
+      D2DHelpers::FontWeightFrom(SvgParent(), FontWeight()),
       DWRITE_FONT_STYLE_NORMAL,
       DWRITE_FONT_STRETCH_NORMAL,
       FontSize(),
       L"",
       textFormat.put()));
 
-  auto const fill{Utils::GetCanvasBrush(FillBrushId(), Fill(), SvgRoot(), nullptr)};
+  auto const fill{Utils::GetCanvasBrush(FillBrushId(), Fill(), SvgRoot(), nullptr, context)};
 
   deviceContext->DrawText(
       to_hstring(m_content).c_str(),

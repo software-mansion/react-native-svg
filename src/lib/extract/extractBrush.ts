@@ -1,5 +1,6 @@
 import type { ColorValue } from 'react-native';
 import { processColor } from 'react-native';
+import { convertPercentageColor } from '../utils/convertPercentageColor';
 
 const urlIdPattern = /^url\(#(.+)\)$/;
 
@@ -7,8 +8,8 @@ const currentColorBrush = { type: 2 };
 const contextFillBrush = { type: 3 };
 const contextStrokeBrush = { type: 4 };
 
-export default function extractBrush(color?: ColorValue) {
-  if (!color || color === 'none') {
+export default function extractBrush(color: ColorValue) {
+  if (color === 'none') {
     return null;
   }
 
@@ -29,7 +30,9 @@ export default function extractBrush(color?: ColorValue) {
     return { type: 1, brushRef: brush[1] };
   }
 
-  const processedColor = processColor(color);
+  // Convert percentage RGB/RGBA color to standard RGB/RGBA color
+  const colorToProcess = convertPercentageColor(color);
+  const processedColor = processColor(colorToProcess);
   if (typeof processedColor === 'number') {
     return { type: 0, payload: processedColor };
   }

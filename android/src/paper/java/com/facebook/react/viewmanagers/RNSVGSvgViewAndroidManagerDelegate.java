@@ -12,11 +12,13 @@ package com.facebook.react.viewmanagers;
 import android.view.View;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.ColorPropConverter;
+import com.facebook.react.bridge.DynamicFromObject;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
-import com.facebook.react.uimanager.BaseViewManagerInterface;
+import com.facebook.react.uimanager.LayoutShadowNode;
 
-public class RNSVGSvgViewAndroidManagerDelegate<T extends View, U extends BaseViewManagerInterface<T> & RNSVGSvgViewAndroidManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
+public class RNSVGSvgViewAndroidManagerDelegate<T extends View, U extends BaseViewManager<T, ? extends LayoutShadowNode> & RNSVGSvgViewAndroidManagerInterface<T>> extends BaseViewManagerDelegate<T, U> {
   public RNSVGSvgViewAndroidManagerDelegate(U viewManager) {
     super(viewManager);
   }
@@ -24,43 +26,28 @@ public class RNSVGSvgViewAndroidManagerDelegate<T extends View, U extends BaseVi
   public void setProperty(T view, String propName, @Nullable Object value) {
     switch (propName) {
       case "bbWidth":
-        if (value instanceof String) {
-          mViewManager.setBbWidth(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setBbWidth(view, (Double) value);
-        } else {
-          mViewManager.setBbWidth(view, (Double) null);
-        }
+        mViewManager.setBbWidth(view, new DynamicFromObject(value));
         break;
       case "bbHeight":
-        if (value instanceof String) {
-          mViewManager.setBbHeight(view, (String) value);
-        } else if (value instanceof Double) {
-          mViewManager.setBbHeight(view, (Double) value);
-        } else {
-          mViewManager.setBbHeight(view, (Double) null);
-        }
+        mViewManager.setBbHeight(view, new DynamicFromObject(value));
         break;
       case "minX":
-        mViewManager.setMinX(view, value == null ? Float.NaN : ((Double) value).floatValue());
+        mViewManager.setMinX(view, value == null ? 0f : ((Double) value).floatValue());
         break;
       case "minY":
-        mViewManager.setMinY(view, value == null ? Float.NaN : ((Double) value).floatValue());
+        mViewManager.setMinY(view, value == null ? 0f : ((Double) value).floatValue());
         break;
       case "vbWidth":
-        mViewManager.setVbWidth(view, value == null ? Float.NaN : ((Double) value).floatValue());
+        mViewManager.setVbWidth(view, value == null ? 0f : ((Double) value).floatValue());
         break;
       case "vbHeight":
-        mViewManager.setVbHeight(view, value == null ? Float.NaN : ((Double) value).floatValue());
+        mViewManager.setVbHeight(view, value == null ? 0f : ((Double) value).floatValue());
         break;
       case "align":
         mViewManager.setAlign(view, value == null ? null : (String) value);
         break;
       case "meetOrSlice":
         mViewManager.setMeetOrSlice(view, value == null ? 0 : ((Double) value).intValue());
-        break;
-      case "tintColor":
-        mViewManager.setTintColor(view, ColorPropConverter.getColor(value, view.getContext()));
         break;
       case "color":
         mViewManager.setColor(view, ColorPropConverter.getColor(value, view.getContext()));
@@ -70,12 +57,6 @@ public class RNSVGSvgViewAndroidManagerDelegate<T extends View, U extends BaseVi
         break;
       case "hasTVPreferredFocus":
         mViewManager.setHasTVPreferredFocus(view, value == null ? false : (boolean) value);
-        break;
-      case "borderTopEndRadius":
-        mViewManager.setBorderTopEndRadius(view, value == null ? 0f : ((Double) value).floatValue());
-        break;
-      case "borderBottomStartRadius":
-        mViewManager.setBorderBottomStartRadius(view, value == null ? 0f : ((Double) value).floatValue());
         break;
       case "borderBottomColor":
         mViewManager.setBorderBottomColor(view, ColorPropConverter.getColor(value, view.getContext()));
@@ -110,9 +91,6 @@ public class RNSVGSvgViewAndroidManagerDelegate<T extends View, U extends BaseVi
       case "borderStartColor":
         mViewManager.setBorderStartColor(view, ColorPropConverter.getColor(value, view.getContext()));
         break;
-      case "borderBottomEndRadius":
-        mViewManager.setBorderBottomEndRadius(view, value == null ? 0f : ((Double) value).floatValue());
-        break;
       case "borderEndColor":
         mViewManager.setBorderEndColor(view, ColorPropConverter.getColor(value, view.getContext()));
         break;
@@ -121,9 +99,6 @@ public class RNSVGSvgViewAndroidManagerDelegate<T extends View, U extends BaseVi
         break;
       case "nativeBackgroundAndroid":
         mViewManager.setNativeBackgroundAndroid(view, (ReadableMap) value);
-        break;
-      case "borderTopStartRadius":
-        mViewManager.setBorderTopStartRadius(view, value == null ? 0f : ((Double) value).floatValue());
         break;
       case "nativeForegroundAndroid":
         mViewManager.setNativeForegroundAndroid(view, (ReadableMap) value);
@@ -138,7 +113,7 @@ public class RNSVGSvgViewAndroidManagerDelegate<T extends View, U extends BaseVi
         mViewManager.setNeedsOffscreenAlphaCompositing(view, value == null ? false : (boolean) value);
         break;
       case "hitSlop":
-        mViewManager.setHitSlop(view, (ReadableMap) value);
+        mViewManager.setHitSlop(view, new DynamicFromObject(value));
         break;
       case "borderTopColor":
         mViewManager.setBorderTopColor(view, ColorPropConverter.getColor(value, view.getContext()));
@@ -146,20 +121,53 @@ public class RNSVGSvgViewAndroidManagerDelegate<T extends View, U extends BaseVi
       case "nextFocusLeft":
         mViewManager.setNextFocusLeft(view, value == null ? 0 : ((Double) value).intValue());
         break;
-      case "borderTopRightRadius":
-        mViewManager.setBorderTopRightRadius(view, value == null ? 0f : ((Double) value).doubleValue());
+      case "borderBlockColor":
+        mViewManager.setBorderBlockColor(view, ColorPropConverter.getColor(value, view.getContext()));
         break;
-      case "borderBottomRightRadius":
-        mViewManager.setBorderBottomRightRadius(view, value == null ? 0f : ((Double) value).doubleValue());
+      case "borderBlockEndColor":
+        mViewManager.setBorderBlockEndColor(view, ColorPropConverter.getColor(value, view.getContext()));
+        break;
+      case "borderBlockStartColor":
+        mViewManager.setBorderBlockStartColor(view, ColorPropConverter.getColor(value, view.getContext()));
         break;
       case "borderRadius":
-        mViewManager.setBorderRadius(view, value == null ? 0f : ((Double) value).doubleValue());
-        break;
-      case "borderBottomLeftRadius":
-        mViewManager.setBorderBottomLeftRadius(view, value == null ? 0f : ((Double) value).doubleValue());
+        mViewManager.setBorderRadius(view, new DynamicFromObject(value));
         break;
       case "borderTopLeftRadius":
-        mViewManager.setBorderTopLeftRadius(view, value == null ? 0f : ((Double) value).doubleValue());
+        mViewManager.setBorderTopLeftRadius(view, new DynamicFromObject(value));
+        break;
+      case "borderTopRightRadius":
+        mViewManager.setBorderTopRightRadius(view, new DynamicFromObject(value));
+        break;
+      case "borderBottomRightRadius":
+        mViewManager.setBorderBottomRightRadius(view, new DynamicFromObject(value));
+        break;
+      case "borderBottomLeftRadius":
+        mViewManager.setBorderBottomLeftRadius(view, new DynamicFromObject(value));
+        break;
+      case "borderTopStartRadius":
+        mViewManager.setBorderTopStartRadius(view, new DynamicFromObject(value));
+        break;
+      case "borderTopEndRadius":
+        mViewManager.setBorderTopEndRadius(view, new DynamicFromObject(value));
+        break;
+      case "borderBottomStartRadius":
+        mViewManager.setBorderBottomStartRadius(view, new DynamicFromObject(value));
+        break;
+      case "borderBottomEndRadius":
+        mViewManager.setBorderBottomEndRadius(view, new DynamicFromObject(value));
+        break;
+      case "borderEndEndRadius":
+        mViewManager.setBorderEndEndRadius(view, new DynamicFromObject(value));
+        break;
+      case "borderEndStartRadius":
+        mViewManager.setBorderEndStartRadius(view, new DynamicFromObject(value));
+        break;
+      case "borderStartEndRadius":
+        mViewManager.setBorderStartEndRadius(view, new DynamicFromObject(value));
+        break;
+      case "borderStartStartRadius":
+        mViewManager.setBorderStartStartRadius(view, new DynamicFromObject(value));
         break;
       default:
         super.setProperty(view, propName, value);

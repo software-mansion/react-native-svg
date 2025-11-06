@@ -4,30 +4,29 @@
 #include "SvgViewManager.g.cpp"
 #endif
 
-#include <winrt/Windows.UI.Input.h>
-#include <winrt/Windows.UI.Xaml.Input.h>
-#include <winrt/Windows.UI.Xaml.Media.h>
-#include <winrt/Windows.UI.Xaml.Shapes.h>
+#include <UI.Input.h>
+#include <UI.Xaml.Input.h>
+#include <UI.Xaml.Media.h>
+#include <UI.Xaml.Shapes.h>
 
 #include "RenderableView.h"
 #include "SvgView.h"
 
-namespace winrt {
-using namespace Windows::Foundation;
-using namespace Windows::Foundation::Collections;
-using namespace Microsoft::ReactNative;
-using namespace Windows::UI::Xaml;
-using namespace Windows::UI::Xaml::Controls;
-} // namespace winrt
-
 namespace winrt::RNSVG::implementation {
+
+SvgViewManager::SvgViewManager() {
+  // Create the shared DirectXDeviceManager instance and initialize the graphics device resources.
+  m_deviceManager = RNSVG::DirectXDeviceManager();
+  m_deviceManager.CreateDeviceResourcesIfNeeded();
+}
+
 // IViewManager
 hstring SvgViewManager::Name() {
   return L"RNSVGSvgView";
 }
 
-FrameworkElement SvgViewManager::CreateView() {
-  return winrt::RNSVG::SvgView(m_reactContext);
+xaml::FrameworkElement SvgViewManager::CreateView() {
+  return winrt::RNSVG::SvgView(m_reactContext, m_deviceManager);
 }
 
 // IViewManagerWithContext
@@ -63,14 +62,14 @@ IMapView<hstring, ViewManagerPropertyType> SvgViewManager::NativeProps() {
   return nativeProps.GetView();
 }
 
-void SvgViewManager::UpdateProperties(FrameworkElement const &view, IJSValueReader const &propertyMapReader) {
+void SvgViewManager::UpdateProperties(xaml::FrameworkElement const &view, IJSValueReader const &propertyMapReader) {
   if (auto const &svgView{view.try_as<SvgView>()}) {
     svgView->UpdateProperties(propertyMapReader);
   }
 }
 
 // IViewManagerWithChildren
-void SvgViewManager::AddView(FrameworkElement const &parent, UIElement const &child, int64_t /*index*/) {
+void SvgViewManager::AddView(xaml::FrameworkElement const &parent, xaml::UIElement const &child, int64_t /*index*/) {
   auto const &svgView{parent.try_as<RNSVG::SvgView>()};
   auto const &group{child.try_as<RNSVG::GroupView>()};
 
@@ -82,7 +81,7 @@ void SvgViewManager::AddView(FrameworkElement const &parent, UIElement const &ch
   }
 }
 
-void SvgViewManager::RemoveAllChildren(FrameworkElement const &parent) {
+void SvgViewManager::RemoveAllChildren(xaml::FrameworkElement const &parent) {
   auto const &svgView{parent.try_as<RNSVG::SvgView>()};
   if (svgView && svgView.Group()) {
     svgView.Group().Unload();
@@ -90,14 +89,14 @@ void SvgViewManager::RemoveAllChildren(FrameworkElement const &parent) {
   svgView.Group(nullptr);
 }
 
-void SvgViewManager::RemoveChildAt(FrameworkElement const &parent, int64_t /*index*/) {
+void SvgViewManager::RemoveChildAt(xaml::FrameworkElement const &parent, int64_t /*index*/) {
   RemoveAllChildren(parent);
 }
 
 void SvgViewManager::ReplaceChild(
-    FrameworkElement const &parent,
-    UIElement const &oldChild,
-    UIElement const &newChild) {
+    xaml::FrameworkElement const &parent,
+    xaml::UIElement const &oldChild,
+    xaml::UIElement const &newChild) {
   auto const &svgView{parent.try_as<RNSVG::SvgView>()};
   auto const &oldGroup{oldChild.try_as<RNSVG::GroupView>()};
   auto const &newGroup{newChild.try_as<RNSVG::GroupView>()};
@@ -114,7 +113,7 @@ void SvgViewManager::OnPointerEvent(IInspectable const& view, ReactPointerEventA
   if (auto const &svgView{view.try_as<RNSVG::SvgView>()}) {
     auto const &group{svgView.Group()};
     if (group.IsResponsible()) {
-      auto const& point{args.Args().GetCurrentPoint(svgView).Position()};
+      auto const &point{args.Args().GetCurrentPoint(svgView).Position()};
       for (auto const &child : group.Children()) {
         if (auto const &target{child.HitTest(point)}) {
           args.Target(target);

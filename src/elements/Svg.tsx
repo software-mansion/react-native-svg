@@ -7,12 +7,12 @@ import type {
   MeasureOnSuccessCallback,
   NativeMethods,
   StyleProp,
-  ViewProps,
   ViewStyle,
 } from 'react-native';
 import { findNodeHandle, Platform, StyleSheet } from 'react-native';
 import type {
   extractedProps,
+  HitSlop,
   NumberProp,
   ResponderInstanceProps,
 } from '../lib/extract/types';
@@ -24,6 +24,9 @@ import G from './G';
 import RNSVGSvgAndroid from '../fabric/AndroidSvgViewNativeComponent';
 import RNSVGSvgIOS from '../fabric/IOSSvgViewNativeComponent';
 import type { Spec } from '../fabric/NativeSvgViewModule';
+import extractOpacity from '../lib/extract/extractOpacity';
+import { extractTransformSvgView } from '../lib/extract/extractTransform';
+import { ViewProps } from '../fabric/utils';
 
 const styles = StyleSheet.create({
   svg: {
@@ -33,7 +36,7 @@ const styles = StyleSheet.create({
 });
 const defaultStyle = styles.svg;
 
-export interface SvgProps extends GProps, ViewProps {
+export interface SvgProps extends GProps, ViewProps, HitSlop {
   width?: NumberProp;
   height?: NumberProp;
   viewBox?: string;
@@ -74,13 +77,6 @@ export default class Svg extends Shape<SvgProps> {
       bbHeight?: NumberProp;
     }
   ) => {
-    const { width, height } = props;
-    if (width) {
-      props.bbWidth = String(width);
-    }
-    if (height) {
-      props.bbHeight = String(height);
-    }
     const { root } = this;
     root && root.setNativeProps(props);
   };
@@ -111,7 +107,6 @@ export default class Svg extends Shape<SvgProps> {
       ...extracted,
     };
     let {
-      color,
       width,
       height,
       focusable,
@@ -130,8 +125,13 @@ export default class Svg extends Shape<SvgProps> {
       strokeLinecap,
       strokeLinejoin,
       strokeMiterlimit,
+      position,
     } = stylesAndProps;
-    if (width === undefined && height === undefined) {
+    if (
+      width === undefined &&
+      height === undefined &&
+      position !== 'absolute'
+    ) {
       width = height = '100%';
     }
 
@@ -145,7 +145,7 @@ export default class Svg extends Shape<SvgProps> {
 
     let override = false;
     const overrideStyles: ViewStyle = {};
-    const o = opacity != null ? +opacity : NaN;
+    const o = opacity != null ? extractOpacity(opacity) : NaN;
     if (!isNaN(o)) {
       override = true;
       overrideStyles.opacity = o;
@@ -169,31 +169,22 @@ export default class Svg extends Shape<SvgProps> {
     props.style = rootStyles.length > 1 ? rootStyles : defaultStyle;
 
     if (width != null) {
-      props.bbWidth = String(width);
+      props.bbWidth = width;
     }
     if (height != null) {
-      props.bbHeight = String(height);
+      props.bbHeight = height;
     }
 
     extractResponder(props, props, this as ResponderInstanceProps);
 
-    props.tintColor = color;
-
-    if (onLayout != null) {
-      props.onLayout = onLayout;
-    }
-
-    const gStyle = Object.assign({}, style) as ViewStyle;
-    // if transform prop is of RN style's kind, we want `SvgView` to handle it
-    // since it can be done here. Otherwise, if transform is of `svg` kind, e.g. string,
-    // we want G element to parse it since `Svg` does not include parsing of those custom transforms.
-    // It is problematic due to fact that we either move the `Svg` or just its `G` child, and in the
-    // second case, when the `G` leaves the area of `Svg`, it will just disappear.
-    if (Array.isArray(transform) && typeof transform[0] === 'object') {
-      gStyle.transform = undefined;
-    } else {
-      props.transform = undefined;
-      gStyle.transform = transform;
+    const gStyle = Object.assign({}, StyleSheet.flatten(style));
+    if (transform) {
+      if (gStyle.transform) {
+        props.transform = gStyle.transform;
+        gStyle.transform = undefined;
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      props.transform = extractTransformSvgView(props as any);
     }
 
     const RNSVGSvg = Platform.OS === 'android' ? RNSVGSvgAndroid : RNSVGSvgIOS;
@@ -219,6 +210,7 @@ export default class Svg extends Shape<SvgProps> {
             strokeLinecap,
             strokeLinejoin,
             strokeMiterlimit,
+            onLayout,
           }}
         />
       </RNSVGSvg>

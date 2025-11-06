@@ -1,0 +1,6 @@
+{
+  "main": "../lib/commonjs/filter-image/index",
+  "module": "../lib/module/filter-image/index",
+  "react-native": "../src/filter-image/index",
+  "types": "../lib/typescript/filter-image/index"
+}

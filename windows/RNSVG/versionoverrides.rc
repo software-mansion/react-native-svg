@@ -1,0 +1,5 @@
+// Placeholder resource file to be overwritten at build-time.
+// 
+#define RC_VER 15,3,0
+#define RC_FILE_VER "15.3.0"
+#define RC_PRODUCT_VER "15.3.0"

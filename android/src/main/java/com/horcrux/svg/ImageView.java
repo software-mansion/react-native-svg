@@ -30,8 +30,11 @@ import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.ReactConstants;
+import com.facebook.react.uimanager.UIManagerHelper;
+import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.views.imagehelper.ImageSource;
 import com.facebook.react.views.imagehelper.ResourceDrawableIdHelper;
+import com.horcrux.svg.events.SvgLoadEvent;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -58,27 +61,7 @@ class ImageView extends RenderableView {
     invalidate();
   }
 
-  public void setX(String x) {
-    mX = SVGLength.from(x);
-    invalidate();
-  }
-
-  public void setX(Double x) {
-    mX = SVGLength.from(x);
-    invalidate();
-  }
-
   public void setY(Dynamic y) {
-    mY = SVGLength.from(y);
-    invalidate();
-  }
-
-  public void setY(String y) {
-    mY = SVGLength.from(y);
-    invalidate();
-  }
-
-  public void setY(Double y) {
     mY = SVGLength.from(y);
     invalidate();
   }
@@ -88,27 +71,7 @@ class ImageView extends RenderableView {
     invalidate();
   }
 
-  public void setWidth(String width) {
-    mW = SVGLength.from(width);
-    invalidate();
-  }
-
-  public void setWidth(Double width) {
-    mW = SVGLength.from(width);
-    invalidate();
-  }
-
   public void setHeight(Dynamic height) {
-    mH = SVGLength.from(height);
-    invalidate();
-  }
-
-  public void setHeight(String height) {
-    mH = SVGLength.from(height);
-    invalidate();
-  }
-
-  public void setHeight(Double height) {
     mH = SVGLength.from(height);
     invalidate();
   }
@@ -177,6 +140,16 @@ class ImageView extends RenderableView {
         new BaseBitmapDataSubscriber() {
           @Override
           public void onNewResultImpl(Bitmap bitmap) {
+            final EventDispatcher mEventDispatcher =
+                UIManagerHelper.getEventDispatcherForReactTag(mContext, getId());
+            mEventDispatcher.dispatchEvent(
+                new SvgLoadEvent(
+                    UIManagerHelper.getSurfaceId(ImageView.this),
+                    getId(),
+                    mContext,
+                    uriString,
+                    bitmap.getWidth(),
+                    bitmap.getHeight()));
             mLoading.set(false);
             SvgView view = getSvgView();
             if (view != null) {

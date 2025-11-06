@@ -13,6 +13,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.RectF;
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
@@ -40,27 +41,7 @@ class UseView extends RenderableView {
     invalidate();
   }
 
-  public void setX(String x) {
-    mX = SVGLength.from(x);
-    invalidate();
-  }
-
-  public void setX(Double x) {
-    mX = SVGLength.from(x);
-    invalidate();
-  }
-
   public void setY(Dynamic y) {
-    mY = SVGLength.from(y);
-    invalidate();
-  }
-
-  public void setY(String y) {
-    mY = SVGLength.from(y);
-    invalidate();
-  }
-
-  public void setY(Double y) {
     mY = SVGLength.from(y);
     invalidate();
   }
@@ -70,27 +51,7 @@ class UseView extends RenderableView {
     invalidate();
   }
 
-  public void setWidth(String width) {
-    mW = SVGLength.from(width);
-    invalidate();
-  }
-
-  public void setWidth(Double width) {
-    mW = SVGLength.from(width);
-    invalidate();
-  }
-
   public void setHeight(Dynamic height) {
-    mH = SVGLength.from(height);
-    invalidate();
-  }
-
-  public void setHeight(String height) {
-    mH = SVGLength.from(height);
-    invalidate();
-  }
-
-  public void setHeight(Double height) {
     mH = SVGLength.from(height);
     invalidate();
   }
@@ -126,7 +87,11 @@ class UseView extends RenderableView {
       template.draw(canvas, paint, opacity * mOpacity);
     }
 
-    this.setClientRect(template.getClientRect());
+    // TODO: replace getMatrix with mCTM when it will be fixed
+    RectF clientRect = new RectF();
+    this.getPath(canvas, paint).computeBounds(clientRect, true);
+    canvas.getMatrix().mapRect(clientRect);
+    this.setClientRect(clientRect);
 
     template.restoreCanvas(canvas, count);
     if (template instanceof RenderableView) {
@@ -136,13 +101,12 @@ class UseView extends RenderableView {
 
   @Override
   int hitTest(float[] src) {
-    if (!mInvertible || !mTransformInvertible) {
+    if (!mInvertible) {
       return -1;
     }
 
     float[] dst = new float[2];
     mInvMatrix.mapPoints(dst, src);
-    mInvTransform.mapPoints(dst);
 
     VirtualView template = getSvgView().getDefinedTemplate(mHref);
     if (template == null) {

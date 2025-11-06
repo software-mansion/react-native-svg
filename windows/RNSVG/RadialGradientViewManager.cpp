@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "RadialGradientViewManager.h"
+#if __has_include("RadialGradientViewManager.g.cpp")
 #include "RadialGradientViewManager.g.cpp"
+#endif
 
 using namespace winrt;
 using namespace Microsoft::ReactNative;

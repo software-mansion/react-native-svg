@@ -45,27 +45,7 @@ class MarkerView extends GroupView {
     invalidate();
   }
 
-  public void setRefX(String refX) {
-    mRefX = SVGLength.from(refX);
-    invalidate();
-  }
-
-  public void setRefX(Double refX) {
-    mRefX = SVGLength.from(refX);
-    invalidate();
-  }
-
   public void setRefY(Dynamic refY) {
-    mRefY = SVGLength.from(refY);
-    invalidate();
-  }
-
-  public void setRefY(String refY) {
-    mRefY = SVGLength.from(refY);
-    invalidate();
-  }
-
-  public void setRefY(Double refY) {
     mRefY = SVGLength.from(refY);
     invalidate();
   }
@@ -75,27 +55,7 @@ class MarkerView extends GroupView {
     invalidate();
   }
 
-  public void setMarkerWidth(String markerWidth) {
-    mMarkerWidth = SVGLength.from(markerWidth);
-    invalidate();
-  }
-
-  public void setMarkerWidth(Double markerWidth) {
-    mMarkerWidth = SVGLength.from(markerWidth);
-    invalidate();
-  }
-
   public void setMarkerHeight(Dynamic markerHeight) {
-    mMarkerHeight = SVGLength.from(markerHeight);
-    invalidate();
-  }
-
-  public void setMarkerHeight(String markerHeight) {
-    mMarkerHeight = SVGLength.from(markerHeight);
-    invalidate();
-  }
-
-  public void setMarkerHeight(Double markerHeight) {
     mMarkerHeight = SVGLength.from(markerHeight);
     invalidate();
   }
@@ -171,8 +131,8 @@ class MarkerView extends GroupView {
       markerTransform.preScale(strokeWidth / mScale, strokeWidth / mScale);
     }
 
-    double width = relativeOnWidth(mMarkerWidth) / mScale;
-    double height = relativeOnHeight(mMarkerHeight) / mScale;
+    double width = relativeOnWidth(mMarkerWidth);
+    double height = relativeOnHeight(mMarkerHeight);
     RectF eRect = new RectF(0, 0, (float) width, (float) height);
     if (mAlign != null) {
       RectF vbRect =

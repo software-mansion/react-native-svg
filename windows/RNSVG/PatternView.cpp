@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "PatternView.h"
+#if __has_include("PatternView.g.cpp")
 #include "PatternView.g.cpp"
+#endif
 
 #include "Utils.h"
 #include "D2DDevice.h"
@@ -9,6 +11,7 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
+
 void PatternView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
 
@@ -17,13 +20,13 @@ void PatternView::UpdateProperties(IJSValueReader const &reader, bool forceUpdat
     auto const &propertyValue{pair.second};
 
     if (propertyName == "x") {
-      m_x = SVGLength::From(propertyValue);
+      m_x = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "y") {
-      m_y = SVGLength::From(propertyValue);
+      m_y = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "width") {
-      m_width = SVGLength::From(propertyValue);
+      m_width = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "height") {
-      m_height = SVGLength::From(propertyValue);
+      m_height = propertyValue.To<RNSVG::SVGLength>();
     } else if (propertyName == "patternUnits") {
       m_patternUnits = Utils::JSValueAsBrushUnits(propertyValue);
     } else if (propertyName == "patternContentUnits") {
@@ -69,8 +72,9 @@ void PatternView::UpdateBounds() {
 
 void PatternView::CreateBrush() {
   auto const root{SvgRoot()};
+  auto const size{root.CanvasSize()};
 
-  D2D1_RECT_F elRect{GetAdjustedRect({0, 0, static_cast<float>(root.ActualWidth()), static_cast<float>(root.ActualHeight())})};
+  D2D1_RECT_F elRect{GetAdjustedRect({0, 0, size.Width, size.Height})};
   CreateBrush(elRect);
 }
 
@@ -142,16 +146,12 @@ com_ptr<ID2D1CommandList> PatternView::GetCommandList(ID2D1Device* device, D2D1_
 
   auto context = make<D2DDeviceContext>(deviceContext);
   for (auto const &child : Children()) {
-    child.Draw(context, D2DHelpers::SizeFromD2DRect(rect));
+    child.as<IRenderable>().Draw(context, D2DHelpers::SizeFromD2DRect(rect));
   }
 
   cmdList->Close();
-
   deviceContext->EndDraw();
 
   return cmdList;
 }
-
-
-
 } // namespace winrt::RNSVG::implementation

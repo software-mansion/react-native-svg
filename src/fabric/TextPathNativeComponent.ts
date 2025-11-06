@@ -1,11 +1,15 @@
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import type { ColorValue } from 'react-native';
 import type {
+  DirectEventHandler,
   Float,
   Int32,
   WithDefault,
 } from 'react-native/Libraries/Types/CodegenTypes';
 import type { ViewProps } from './utils';
+
+import type { UnsafeMixed } from './codegenUtils';
+import { FontObject, NumberArray, NumberProp } from '../lib/extract/types';
 
 interface SvgNodeCommonProps {
   name?: string;
@@ -28,57 +32,51 @@ type ColorStruct = Readonly<{
   brushRef?: string;
 }>;
 
+type OnSvgLayoutEvent = Readonly<{
+  layout: {
+    x: Int32;
+    y: Int32;
+    width: Int32;
+    height: Int32;
+  };
+}>;
+
 interface SvgRenderableCommonProps {
-  fill?: ColorStruct;
+  color?: ColorValue;
+  fill?: UnsafeMixed<ColorValue | ColorStruct>;
   fillOpacity?: WithDefault<Float, 1.0>;
   fillRule?: WithDefault<Int32, 1>;
-  stroke?: ColorStruct;
+  stroke?: UnsafeMixed<ColorValue | ColorStruct>;
   strokeOpacity?: WithDefault<Float, 1.0>;
-  strokeWidth?: WithDefault<string, '1'>;
+  strokeWidth?: UnsafeMixed<NumberProp>;
   strokeLinecap?: WithDefault<Int32, 0>;
   strokeLinejoin?: WithDefault<Int32, 0>;
-  strokeDasharray?: ReadonlyArray<string>;
+  strokeDasharray?: UnsafeMixed<ReadonlyArray<NumberProp> | NumberProp>;
   strokeDashoffset?: Float;
   strokeMiterlimit?: Float;
   vectorEffect?: WithDefault<Int32, 0>;
   propList?: ReadonlyArray<string>;
+  filter?: string;
 }
 
-type FontObject = Readonly<{
-  fontStyle?: string;
-  fontVariant?: string;
-  fontWeight?: string;
-  fontStretch?: string;
-  fontSize?: string;
-  fontFamily?: string;
-  textAnchor?: string;
-  textDecoration?: string;
-  letterSpacing?: string;
-  wordSpacing?: string;
-  kerning?: string;
-  fontFeatureSettings?: string;
-  fontVariantLigatures?: string;
-  fontVariationSettings?: string;
-}>;
-
 interface SvgGroupCommonProps {
-  fontSize?: string;
-  fontWeight?: string;
-  font?: FontObject;
+  fontSize?: UnsafeMixed<NumberProp>;
+  fontWeight?: UnsafeMixed<NumberProp>;
+  font?: UnsafeMixed<FontObject>;
 }
 
 interface SvgTextCommonProps {
-  dx?: ReadonlyArray<string>;
-  dy?: ReadonlyArray<string>;
-  x?: ReadonlyArray<string>;
-  y?: ReadonlyArray<string>;
-  rotate?: ReadonlyArray<string>;
-  inlineSize?: string;
-  textLength?: string;
-  baselineShift?: string;
+  dx?: UnsafeMixed<NumberArray>;
+  dy?: UnsafeMixed<NumberArray>;
+  x?: UnsafeMixed<NumberArray>;
+  y?: UnsafeMixed<NumberArray>;
+  rotate?: UnsafeMixed<NumberArray>;
+  inlineSize?: UnsafeMixed<NumberProp>;
+  textLength?: UnsafeMixed<NumberProp>;
+  baselineShift?: UnsafeMixed<NumberProp>;
   lengthAdjust?: string;
   alignmentBaseline?: string;
-  verticalAlign?: string;
+  verticalAlign?: UnsafeMixed<NumberProp>;
 }
 interface NativeProps
   extends ViewProps,
@@ -91,7 +89,10 @@ interface NativeProps
   method?: string;
   midLine?: string;
   spacing?: string;
-  startOffset?: string;
+  startOffset?: UnsafeMixed<NumberProp>;
+  onSvgLayout?: DirectEventHandler<OnSvgLayoutEvent>;
 }
 
-export default codegenNativeComponent<NativeProps>('RNSVGTextPath');
+export default codegenNativeComponent<NativeProps>('RNSVGTextPath', {
+  interfaceOnly: true,
+});

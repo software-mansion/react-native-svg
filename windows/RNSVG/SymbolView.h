@@ -1,11 +1,16 @@
 #pragma once
+
 #include "SymbolView.g.h"
 #include "GroupView.h"
 
 namespace winrt::RNSVG::implementation {
+
 struct SymbolView : SymbolViewT<SymbolView, RNSVG::implementation::GroupView> {
  public:
   SymbolView() = default;
+
+  // IRenderablePaper
+  void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
 
   float MinX() { return m_minX; }
   float MinY() { return m_minY; }
@@ -15,7 +20,6 @@ struct SymbolView : SymbolViewT<SymbolView, RNSVG::implementation::GroupView> {
   RNSVG::MeetOrSlice MeetOrSlice() { return m_meetOrSlice; }
 
   // RenderableView
-  void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
   void Draw(RNSVG::D2DDeviceContext const & /*deviceContext*/, Windows::Foundation::Size const & /*size*/){};
 
  private:

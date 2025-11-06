@@ -1,14 +1,18 @@
 #pragma once
+
 #include "PatternView.g.h"
 #include "BrushView.h"
 
 namespace winrt::RNSVG::implementation {
+
 struct PatternView : PatternViewT<PatternView, RNSVG::implementation::BrushView> {
  public:
   PatternView() = default;
-
-  // RenderableView
+  
+  // IRenderablePaper
   void UpdateProperties(Microsoft::ReactNative::IJSValueReader const &reader, bool forceUpdate, bool invalidate);
+
+  // IRenderable
   void Draw(RNSVG::D2DDeviceContext const & /*deviceContext*/, Windows::Foundation::Size const & /*size*/){};
 
  private:
@@ -26,7 +30,7 @@ struct PatternView : PatternViewT<PatternView, RNSVG::implementation::BrushView>
   float m_vbHeight{0.0f};
   std::string m_align{""};
   RNSVG::MeetOrSlice m_meetOrSlice{RNSVG::MeetOrSlice::Meet};
-
+  
   // BrushView
   void CreateBrush();
   void UpdateBounds();
