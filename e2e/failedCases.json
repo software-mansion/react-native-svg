@@ -1,10 +1,10 @@
 {
   "ios": {
-    "paper": ["clip-path-shapes", "clip-rule", "issue-1520", "mask-edge-cases"],
-    "fabric": ["clip-path-shapes", "clip-rule", "issue-1520", "mask-edge-cases"]
+    "paper": ["clip-path-shapes", "issue-1520", "mask-edge-cases"],
+    "fabric": ["clip-path-shapes", "issue-1520", "mask-edge-cases"]
   },
   "android": {
-    "paper": ["2", "clip-basic", "clip-path-shapes", "clip-rule", "issue-1520", "mask-edge-cases"],
-    "fabric": ["2", "clip-basic", "clip-path-shapes", "clip-rule", "issue-1520", "mask-edge-cases"]
+    "paper": ["2", "clip-path-shapes", "mask-edge-cases"],
+    "fabric": ["2", "clip-path-shapes", "mask-edge-cases"]
   }
 }
