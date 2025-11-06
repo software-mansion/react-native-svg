@@ -1,7 +1,7 @@
 {
   "ios": {
-    "paper": ["clip-basic", "clip-evenodd-union", "clip-path-shapes", "clip-rule", "issue-1520", "mask-edge-cases"],
-    "fabric": ["clip-basic", "clip-evenodd-union", "clip-path-shapes", "clip-rule", "issue-1520", "mask-edge-cases"]
+    "paper": ["clip-evenodd-union", "clip-path-shapes", "mask-edge-cases"],
+    "fabric": ["clip-evenodd-union", "clip-path-shapes", "mask-edge-cases"]
   },
   "android": {
     "paper": ["2", "clip-path-shapes", "mask-edge-cases"],
