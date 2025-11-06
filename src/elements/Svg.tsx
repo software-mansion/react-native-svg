@@ -129,96 +129,98 @@ export default class Svg extends Shape<SvgProps> {
     } = stylesAndProps;
     let transform;
     if (width === undefined && height === undefined) {
-    if (
-      width === undefined &&
-      height === undefined &&
-      position !== 'absolute'
-    ) {
-      width = height = '100%';
-    }
-
-    const props: extractedProps = extracted as extractedProps;
-    props.focusable = Boolean(focusable) && focusable !== 'false';
-    const rootStyles: StyleProp<ViewStyle>[] = [defaultStyle];
-
-    if (style) {
-      rootStyles.push(style);
-    }
-
-    let override = false;
-    const overrideStyles: ViewStyle = {};
-    const o = opacity != null ? extractOpacity(opacity) : NaN;
-    if (!isNaN(o)) {
-      override = true;
-      overrideStyles.opacity = o;
-    }
-
-    if (width && height) {
-      override = true;
-      const w = parseInt(width, 10);
-      const h = parseInt(height, 10);
-      const doNotParseWidth = isNaN(w) || width[width.length - 1] === '%';
-      const doNotParseHeight = isNaN(h) || height[height.length - 1] === '%';
-      overrideStyles.width = doNotParseWidth ? width : w;
-      overrideStyles.height = doNotParseHeight ? height : h;
-      overrideStyles.flex = 0;
-    }
-
-    if (override) {
-      rootStyles.push(overrideStyles);
-    }
-
-    props.style = rootStyles.length > 1 ? rootStyles : defaultStyle;
-
-    if (width != null) {
-      props.bbWidth = width;
-    }
-    if (height != null) {
-      props.bbHeight = height;
-    }
-
-    extractResponder(props, props, this as ResponderInstanceProps);
-
-    const gStyle = Object.assign({}, StyleSheet.flatten(style));
-    if (transformProp) {
-      if (gStyle.transform) {
-        transform = gStyle.transform;
-        gStyle.transform = undefined;
+      if (
+        width === undefined &&
+        height === undefined &&
+        position !== 'absolute'
+      ) {
+        width = height = '100%';
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      transform = extractTransformSvgView(props as any);
-      if (transform) {
-        props.style = [props.style, { transform }];
+
+      const props: extractedProps = extracted as extractedProps;
+      props.focusable = Boolean(focusable) && focusable !== 'false';
+      const rootStyles: StyleProp<ViewStyle>[] = [defaultStyle];
+
+      if (style) {
+        rootStyles.push(style);
       }
+
+      let override = false;
+      const overrideStyles: ViewStyle = {};
+      const o = opacity != null ? extractOpacity(opacity) : NaN;
+      if (!isNaN(o)) {
+        override = true;
+        overrideStyles.opacity = o;
+      }
+
+      if (width && height) {
+        override = true;
+        const w = parseInt(width, 10);
+        const h = parseInt(height, 10);
+        const doNotParseWidth = isNaN(w) || width[width.length - 1] === '%';
+        const doNotParseHeight = isNaN(h) || height[height.length - 1] === '%';
+        overrideStyles.width = doNotParseWidth ? width : w;
+        overrideStyles.height = doNotParseHeight ? height : h;
+        overrideStyles.flex = 0;
+      }
+
+      if (override) {
+        rootStyles.push(overrideStyles);
+      }
+
+      props.style = rootStyles.length > 1 ? rootStyles : defaultStyle;
+
+      if (width != null) {
+        props.bbWidth = width;
+      }
+      if (height != null) {
+        props.bbHeight = height;
+      }
+
+      extractResponder(props, props, this as ResponderInstanceProps);
+
+      const gStyle = Object.assign({}, StyleSheet.flatten(style));
+      if (transformProp) {
+        if (gStyle.transform) {
+          transform = gStyle.transform;
+          gStyle.transform = undefined;
+        }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        transform = extractTransformSvgView(props as any);
+        if (transform) {
+          props.style = [props.style, { transform }];
+        }
+      }
+
+      const RNSVGSvg =
+        Platform.OS === 'android' ? RNSVGSvgAndroid : RNSVGSvgIOS;
+
+      return (
+        <RNSVGSvg
+          {...props}
+          ref={(ref) => this.refMethod(ref as (Svg & NativeMethods) | null)}
+          {...extractViewBox({ viewBox, preserveAspectRatio })}>
+          <G
+            {...{
+              children,
+              style: gStyle,
+              font,
+              fill,
+              fillOpacity,
+              fillRule,
+              stroke,
+              strokeWidth,
+              strokeOpacity,
+              strokeDasharray,
+              strokeDashoffset,
+              strokeLinecap,
+              strokeLinejoin,
+              strokeMiterlimit,
+              onLayout,
+            }}
+          />
+        </RNSVGSvg>
+      );
     }
-
-    const RNSVGSvg = Platform.OS === 'android' ? RNSVGSvgAndroid : RNSVGSvgIOS;
-
-    return (
-      <RNSVGSvg
-        {...props}
-        ref={(ref) => this.refMethod(ref as (Svg & NativeMethods) | null)}
-        {...extractViewBox({ viewBox, preserveAspectRatio })}>
-        <G
-          {...{
-            children,
-            style: gStyle,
-            font,
-            fill,
-            fillOpacity,
-            fillRule,
-            stroke,
-            strokeWidth,
-            strokeOpacity,
-            strokeDasharray,
-            strokeDashoffset,
-            strokeLinecap,
-            strokeLinejoin,
-            strokeMiterlimit,
-            onLayout,
-          }}
-        />
-      </RNSVGSvg>
-    );
   }
 }
