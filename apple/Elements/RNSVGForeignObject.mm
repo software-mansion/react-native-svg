@@ -193,7 +193,7 @@ using namespace facebook::react;
 }
 
 #ifdef RCT_NEW_ARCH_ENABLED
-- (void) willRemoveSubview:(RCTViewComponentView *) subview
+- (void) willRemoveSubview:(RNSVGPlatformView *) subview
 {
   if ([subview isKindOfClass:[RCTViewComponentView class]]) {
     subview.hidden = NO;
