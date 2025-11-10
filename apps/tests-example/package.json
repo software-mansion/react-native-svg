@@ -10,8 +10,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "react": "19.1.1",
-    "react-native": "0.82.0",
+    "react": "19.2.0",
+    "react-native": "0.83.0-rc.0",
     "react-native-safe-area-context": "^5.5.2",
     "react-native-svg": "link:../../"
   },
@@ -22,17 +22,17 @@
     "@react-native-community/cli": "20.0.0-alpha.2",
     "@react-native-community/cli-platform-android": "20.0.0-alpha.2",
     "@react-native-community/cli-platform-ios": "20.0.0-alpha.2",
-    "@react-native/babel-preset": "0.82.0",
-    "@react-native/eslint-config": "0.82.0",
-    "@react-native/metro-config": "0.82.0",
-    "@react-native/typescript-config": "0.82.0",
+    "@react-native/babel-preset": "0.83.0-rc.0",
+    "@react-native/eslint-config": "0.83.0-rc.0",
+    "@react-native/metro-config": "0.83.0-rc.0",
+    "@react-native/typescript-config": "0.83.0-rc.0",
     "@types/jest": "^29.5.13",
-    "@types/react": "^19.1.1",
+    "@types/react": "^19.2.0",
     "@types/react-test-renderer": "^19.1.0",
     "eslint": "^8.19.0",
     "jest": "^29.6.3",
     "prettier": "2.8.8",
-    "react-test-renderer": "19.1.1",
+    "react-test-renderer": "19.2.0",
     "typescript": "^5.8.3"
   },
   "engines": {
