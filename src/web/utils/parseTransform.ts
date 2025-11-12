@@ -20,7 +20,7 @@ export function parseTransformProp(
       const stringifiedProps = stringifyTransformArrayProps(
         // @ts-expect-error FIXME
         transform as TransformsStyleArray
-      );
+      ).split(' ');
       transformArray.push(...stringifiedProps);
     }
   } else if (typeof transform === 'string') {

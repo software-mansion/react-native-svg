@@ -166,7 +166,7 @@ export function transformToMatrix(
         const stringifiedTransform = stringifyTransformArrayProps(
           // @ts-expect-error FIXME
           transform as TransformsStyleArray
-        ).join(' ');
+        );
 
         const t = parse(stringifiedTransform);
         append(t[0], t[3], t[1], t[4], t[2], t[5]);
@@ -221,51 +221,50 @@ export function extractTransformSvgView(
   return props.transform as TransformsStyle['transform'];
 }
 
+const getAngleValueInDeg = (angle: string) => {
+  if (angle.endsWith('rad')) {
+    return parseFloat(angle) * (180 / Math.PI);
+  }
+  if (angle.endsWith('deg')) {
+    return parseFloat(angle);
+  }
+};
+
 export function stringifyTransformArrayProps(
   transformArray: TransformsStyleArray
 ) {
-  const getAngleValueInDeg = (angle: string) => {
-    if (angle.endsWith('rad')) {
-      return parseFloat(angle) * (180 / Math.PI);
-    }
-    if (angle.endsWith('deg')) {
-      return parseFloat(angle);
-    }
-  };
-
   if (!transformArray) {
-    return [];
+    return '';
   }
 
-  return transformArray.map((transform) => {
-    const [key, value] = Object.entries(transform)[0];
-    switch (key) {
-      case 'translateX':
-        return `translate(${value}, 0)`;
-      case 'translateY':
-        return `translate(0, ${value})`;
-      case 'rotate': {
-        const rotation = getAngleValueInDeg(value);
-        return `rotate(${rotation})`;
+  return transformArray
+    .map((transform) => {
+      const [key, value] = Object.entries(transform)[0];
+      switch (key) {
+        case 'translateX':
+          return `translate(${value}, 0)`;
+        case 'translateY':
+          return `translate(0, ${value})`;
+        case 'rotate': {
+          return `rotate(${getAngleValueInDeg(value)})`;
+        }
+        case 'scale':
+          return `scale(${value})`;
+        case 'scaleX':
+          return `scale(${value}, 1)`;
+        case 'scaleY':
+          return `scale(1, ${value})`;
+        case 'skewX': {
+          return `skewX(${getAngleValueInDeg(value)})`;
+        }
+        case 'skewY': {
+          return `skewY(${getAngleValueInDeg(value)})`;
+        }
+        case 'matrix':
+          return `matrix(${value.join(', ')})`;
+        default:
+          return '';
       }
-      case 'scale':
-        return `scale(${value})`;
-      case 'scaleX':
-        return `scale(${value}, 1)`;
-      case 'scaleY':
-        return `scale(1, ${value})`;
-      case 'skewX': {
-        const skewX = getAngleValueInDeg(value);
-        return `skewX(${skewX})`;
-      }
-      case 'skewY': {
-        const skewY = getAngleValueInDeg(value);
-        return `skewY(${skewY})`;
-      }
-      case 'matrix':
-        return `matrix(${value.join(', ')})`;
-      default:
-        return '';
-    }
-  });
+    })
+    .join(' ');
 }
