@@ -139,11 +139,11 @@ using namespace facebook::react;
       CGContextClipToRect(context, svgViewRect);
       [svgView drawToContext:context withRect:svgViewRect];
     } else {
-      CATransform3D transform = node.layer.transform;
-      
       CGContextSaveGState(context);
+      
       CGRect bounds = node.layer.bounds;
       CGPoint position = node.layer.position;
+      CATransform3D transform = node.layer.transform;
 
       CGContextTranslateCTM(context, position.x, position.y);
       
