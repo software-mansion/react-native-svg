@@ -17,6 +17,6 @@ on:
 
 jobs:
   build-fabric:
-    uses: .github/workflows/android-build.yml
+    uses: ./.github/workflows/android-build.yml
     with:
       working-directories: '["fabric-example", "paper-example"]'
