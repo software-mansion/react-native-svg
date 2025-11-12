@@ -13,6 +13,8 @@ on:
       - main
   workflow_dispatch:
 
-uses: ./.github/workflows/android-build.yml
-with:
-  working-directory: 'tests-example'
+jobs:
+  build:
+    uses: ./.github/workflows/android-build.yml
+    with:
+      working-directory: 'tests-example'

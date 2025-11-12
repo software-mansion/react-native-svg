@@ -15,7 +15,6 @@ on:
 
 jobs:
   build:
-    name: 'Paper'
     uses: ./.github/workflows/android-build.yml
     with:
       working-directory: 'paper-example'
