@@ -7,8 +7,7 @@
 namespace facebook::react {
 
 template <typename ShadowNodeT>
-class RNSVGComponentDescriptor final
-: public ConcreteComponentDescriptor<ShadowNodeT> {
+class RNSVGComponentDescriptor final : public ConcreteComponentDescriptor<ShadowNodeT> {
 public:
   using ConcreteComponentDescriptor<ShadowNodeT>::ConcreteComponentDescriptor;
   void adopt(ShadowNode &shadowNode) const override {
