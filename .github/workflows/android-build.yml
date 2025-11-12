@@ -2,21 +2,15 @@ name: Android Build Reusable
 on:
   workflow_call:
     inputs:
-      working-directories:
+      working-directory:
         required: true
         type: string
-        description: 'JSON string array of directories (e.g. ''["paper-example"]'')'
 
 jobs:
   build:
-    name: ''
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        working-directory: ${{ fromJson(inputs.working-directories) }}
-      fail-fast: false
     concurrency:
-      group: android-${{ matrix.working-directory }}-${{ github.ref }}
+      group: android-${{ inputs.working-directory }}-${{ github.ref }}
       cancel-in-progress: true
     steps:
       - name: Checkout Git repository
@@ -41,12 +35,12 @@ jobs:
       - name: Get app node_modules cache
         uses: actions/cache@v4
         with:
-          path: apps/${{ matrix.working-directory }}/node_modules
-          key: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-${{ hashFiles(format('{0}/yarn.lock', matrix.working-directory)) }}
-          restore-keys: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-
+          path: apps/${{ inputs.working-directory }}/node_modules
+          key: ${{ runner.os }}-node-modules-${{ inputs.working-directory }}-${{ hashFiles(format('{0}/yarn.lock', inputs.working-directory)) }}
+          restore-keys: ${{ runner.os }}-node-modules-${{ inputs.working-directory }}-
 
       - name: Install app node_modules
-        working-directory: apps/${{ matrix.working-directory }}
+        working-directory: apps/${{ inputs.working-directory }}
         run: yarn install --frozen-lockfile
 
       - name: Get build cache
@@ -55,10 +49,10 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{matrix.working-directory}}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{inputs.working-directory}}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-${{matrix.working-directory}}-
+            ${{ runner.os }}-gradle-${{inputs.working-directory}}-
 
       - name: Build app
-        working-directory: apps/${{ matrix.working-directory }}/android
+        working-directory: apps/${{ inputs.working-directory }}/android
         run: ./gradlew assembleDebug --build-cache --console=plain -PreactNativeArchitectures=arm64-v8a
