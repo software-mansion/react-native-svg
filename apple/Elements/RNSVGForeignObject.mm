@@ -82,9 +82,9 @@ using namespace facebook::react;
 - (void)layoutSubviews
 {
   [super layoutSubviews];
-// We know layout is done, but the async text rendering is not.
-// We schedule the SVG redraw for the next runloop cycle.
-// This gives the text layout system time to finish its work.
+  // We know layout is done, but the async text rendering is not.
+  // We schedule the SVG redraw for the next runloop cycle.
+  // This gives the text layout system time to finish its work.
   dispatch_async(dispatch_get_main_queue(), ^{
     [self invalidate];
   });
