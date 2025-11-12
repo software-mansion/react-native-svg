@@ -6,9 +6,28 @@ function ForeignObjectExample() {
   return (
     <Svg height="300" width="300">
       <ForeignObject width={300} height={300}>
-        <View style={styles.container}>
-          <View style={styles.innerContainer}>
-            <Text style={styles.text}>Centered Text</Text>
+        <View
+          style={{
+            width: 300,
+            height: 300,
+            backgroundColor: 'red',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              width: 150,
+              height: 150,
+              backgroundColor: 'yellow',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text
+              style={{
+                textAlign: 'center',
+              }}>
+              Centered Text
+            </Text>
           </View>
         </View>
       </ForeignObject>
@@ -31,23 +50,6 @@ function ForeignObjectWithView() {
 ForeignObjectWithView.title = 'ForeignObject with full size View';
 
 const styles = StyleSheet.create({
-  container: {
-    width: 300,
-    height: 300,
-    backgroundColor: 'red',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  innerContainer: {
-    width: 150,
-    height: 150,
-    backgroundColor: 'yellow',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    textAlign: 'center',
-  },
   iconContainer: {
     width: 15,
     height: 15,
