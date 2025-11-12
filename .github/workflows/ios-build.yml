@@ -1,32 +1,19 @@
-name: Example iOS check
+name: iOS Build Reusable
 on:
-  pull_request:
-    paths:
-      - .github/workflows/ios-build-test.yml
-      - RNSVG.podspec
-      - apple/**
-      - src/fabric/**
-      - package.json
-      - apps/paper-example/package.json
-      - apps/paper-example/ios/**
-      - apps/fabric-example/package.json
-      - apps/fabric-example/ios/**
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      working-directory:
+        required: true
+        type: string
 
 jobs:
   build:
+    name: 'Xcode Build'
     runs-on: macos-latest
-    strategy:
-      matrix:
-        working-directory: [paper-example, fabric-example]
-      fail-fast: false
     env:
       DEVICE: iPhone 17 Pro
     concurrency:
-      group: ios-${{ matrix.working-directory }}-${{ github.ref }}
+      group: ios-${{ inputs.working-directory }}-${{ github.ref }}
       cancel-in-progress: true
     steps:
       - name: Checkout Git repository
@@ -50,48 +37,48 @@ jobs:
       - name: Get app node_modules cache
         uses: actions/cache@v4
         with:
-          path: apps/${{ matrix.working-directory }}/node_modules
-          key: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-${{ hashFiles(format('apps/{0}/yarn.lock', matrix.working-directory)) }}
-          restore-keys: ${{ runner.os }}-node-modules-${{ matrix.working-directory }}-
+          path: apps/${{ inputs.working-directory }}/node_modules
+          key: ${{ runner.os }}-node-modules-${{ inputs.working-directory }}-${{ hashFiles(format('apps/{0}/yarn.lock', inputs.working-directory)) }}
+          restore-keys: ${{ runner.os }}-node-modules-${{ inputs.working-directory }}-
 
       - name: Install app node_modules
-        working-directory: apps/${{ matrix.working-directory }}
+        working-directory: apps/${{ inputs.working-directory }}
         run: yarn install --frozen-lockfile
 
       - name: Get Pods cache
         uses: actions/cache@v4
         with:
-          path: apps/${{ matrix.working-directory }}/ios/Pods
-          key: ${{ runner.os }}-pods-${{ matrix.working-directory }}-${{ hashFiles(format('apps/{0}/ios/Podfile.lock', matrix.working-directory)) }}
+          path: apps/${{ inputs.working-directory }}/ios/Pods
+          key: ${{ runner.os }}-pods-${{ inputs.working-directory }}-${{ hashFiles(format('apps/{0}/ios/Podfile.lock', inputs.working-directory)) }}
           restore-keys: |
-            ${{ runner.os }}-pods-${{ matrix.working-directory }}-
+            ${{ runner.os }}-pods-${{ inputs.working-directory }}-
 
       - name: Install Pods
         id: install_pods
         continue-on-error: true
-        working-directory: apps/${{ matrix.working-directory }}/ios
+        working-directory: apps/${{ inputs.working-directory }}/ios
         run: bundle install && bundle exec pod install
 
       - if: steps.install_pods.outcome == 'failure'
         id: remove_pods
         name: Remove pods
-        working-directory: apps/${{ matrix.working-directory }}/ios
+        working-directory: apps/${{ inputs.working-directory }}/ios
         run: rm -rf build Pods Podfile.lock
 
       - if: steps.remove_pods.outcome == 'success'
         id: reinstall_pods
         name: Reinstall pods
-        working-directory: apps/${{ matrix.working-directory }}/ios
+        working-directory: apps/${{ inputs.working-directory }}/ios
         run: bundle install && bundle exec pod install
 
       - name: Get build artifacts cache
         uses: actions/cache@v4
         with:
           path: ~/Library/Developer/Xcode/DerivedData
-          key: ${{ runner.os }}-ios-derived-data-${{ matrix.working-directory }}-${{ hashFiles(format('apps/{0}/ios/Podfile.lock', matrix.working-directory)) }}
+          key: ${{ runner.os }}-ios-derived-data-${{ inputs.working-directory }}-${{ hashFiles(format('apps/{0}/ios/Podfile.lock', inputs.working-directory)) }}
           restore-keys: |
-            ${{ runner.os }}-ios-derived-data-${{ matrix.working-directory }}-
+            ${{ runner.os }}-ios-derived-data-${{ inputs.working-directory }}-
 
       - name: Build app
-        working-directory: apps/${{ matrix.working-directory }}
+        working-directory: apps/${{ inputs.working-directory }}
         run: npx react-native run-ios --simulator="${{ env.DEVICE }}" --mode Debug --verbose --no-packager
