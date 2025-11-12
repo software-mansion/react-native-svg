@@ -1,0 +1,20 @@
+name: Example Android Paper check
+on:
+  pull_request:
+    paths:
+      - .github/workflows/android-build-paper-test.yml
+      - 'android/**'
+      - 'src/fabric/**'
+      - 'package.json'
+      - 'apps/paper-example/android/**'
+      - 'apps/paper-example/package.json'
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/android-build.yml
+    with:
+      working-directories: '["paper-example"]'

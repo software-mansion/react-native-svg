@@ -1,13 +1,11 @@
-name: Example Android check
+name: Example Android Fabric check
 on:
   pull_request:
     paths:
-      - .github/workflows/android-build-test.yml
+      - .github/workflows/android-build-fabric-test.yml
       - 'android/**'
       - 'src/fabric/**'
       - 'package.json'
-      - 'apps/paper-example/android/**'
-      - 'apps/paper-example/package.json'
       - 'apps/fabric-example/android/**'
       - 'apps/fabric-example/package.json'
   push:
@@ -16,7 +14,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-fabric:
+  build:
     uses: ./.github/workflows/android-build.yml
     with:
-      working-directories: '["fabric-example", "paper-example"]'
+      working-directories: '["fabric-example"]'

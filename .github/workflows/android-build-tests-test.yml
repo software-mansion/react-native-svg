@@ -1,0 +1,20 @@
+name: Example Android Tests check
+on:
+  pull_request:
+    paths:
+      - .github/workflows/android-build-tests-test.yml
+      - 'android/**'
+      - 'src/fabric/**'
+      - 'package.json'
+      - 'apps/tests-example/android/**'
+      - 'apps/tests-example/package.json'
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/android-build.yml
+    with:
+      working-directories: '["tests-example"]'
