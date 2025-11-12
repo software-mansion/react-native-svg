@@ -193,7 +193,7 @@ using RNSVGRectShadowNode =
 JSI_EXPORT extern const char RNSVGRenderableComponentName[];
 
 /*
- * `ShadowNode` for <RNSVGRect> component.
+ * `ShadowNode` for RNSVGRenderable base.
  */
 using RNSVGRenderableShadowNode =
     RNSVGConcreteShadowNode<RNSVGRenderableComponentName>;
