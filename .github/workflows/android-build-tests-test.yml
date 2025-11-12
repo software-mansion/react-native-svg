@@ -1,4 +1,4 @@
-name: Example Android check
+name: TestsExample Android check
 on:
   pull_request:
     paths:
