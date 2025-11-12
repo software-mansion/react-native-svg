@@ -15,13 +15,13 @@ RNSVGLayoutableShadowNode::RNSVGLayoutableShadowNode(
     : YogaLayoutableShadowNode(sourceShadowNode, fragment) {}
 
 void RNSVGLayoutableShadowNode::setShadowNodePosition(float x, float y) {
-    auto style = yogaNode_.style();
-  
-    style.setPositionType(yoga::PositionType::Absolute);
-    style.setPosition(yoga::Edge::Left, yoga::StyleLength::points(x));
-    style.setPosition(yoga::Edge::Top, yoga::StyleLength::points(y));
-  
-    yogaNode_.setStyle(style);
+  auto style = yogaNode_.style();
+
+  style.setPositionType(yoga::PositionType::Absolute);
+  style.setPosition(yoga::Edge::Left, yoga::StyleLength::points(x));
+  style.setPosition(yoga::Edge::Top, yoga::StyleLength::points(y));
+
+  yogaNode_.setStyle(style);
 }
 
 void RNSVGLayoutableShadowNode::layout(LayoutContext layoutContext) {
