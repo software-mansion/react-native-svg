@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+    name: 'Gradle Build'
     runs-on: ubuntu-latest
     concurrency:
       group: android-${{ inputs.working-directory }}-${{ github.ref }}
