@@ -21,7 +21,9 @@ function ForeignObjectWithView() {
   return (
     <Svg height="300" width="300" style={{backgroundColor: 'lightgray'}}>
       <ForeignObject width={300} height={300}>
-        <View style={styles.fullSizeView} />
+        <View
+          style={{width: '100%', height: '100%', backgroundColor: 'blue'}}
+        />
       </ForeignObject>
     </Svg>
   );
@@ -59,11 +61,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'yellow',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  fullSizeView: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'blue',
   },
 });
 
