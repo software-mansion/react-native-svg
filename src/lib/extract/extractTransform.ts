@@ -70,25 +70,6 @@ function universal2axis(
   return [x || defaultValue || 0, y || defaultValue || 0];
 }
 
-export function transformsArrayToProps(
-  transformObjectsArray: TransformsStyleArray
-) {
-  const props: TransformProps = {};
-  transformObjectsArray?.forEach((transformObject) => {
-    const keys = Object.keys(transformObject);
-    if (keys.length !== 1) {
-      console.error(
-        'You must specify exactly one property per transform object.'
-      );
-    }
-    const key = keys[0] as keyof TransformProps;
-    const value = transformObject[key as keyof typeof transformObject];
-    // @ts-expect-error FIXME
-    props[key] = value;
-  });
-  return props;
-}
-
 export function props2transform(
   props: TransformProps | undefined
 ): TransformedProps | null {
@@ -182,11 +163,13 @@ export function transformToMatrix(
           columnMatrix[5]
         );
       } else {
-        const transformProps = props2transform(
+        const stringifiedTransform = stringifyTransformArrayProps(
           // @ts-expect-error FIXME
-          transformsArrayToProps(transform as TransformsStyleArray)
+          transform as TransformsStyleArray
         );
-        transformProps && appendTransformProps(transformProps);
+
+        const t = parse(stringifiedTransform);
+        append(t[0], t[3], t[1], t[4], t[2], t[5]);
       }
     } else if (typeof transform === 'string') {
       try {
@@ -236,4 +219,49 @@ export function extractTransformSvgView(
     return parseTransformSvgToRnStyle(props.transform);
   }
   return props.transform as TransformsStyle['transform'];
+}
+
+const getAngleValueInDeg = (angle: string) => {
+  if (angle.endsWith('rad')) {
+    return parseFloat(angle) * (180 / Math.PI);
+  }
+  if (angle.endsWith('deg')) {
+    return parseFloat(angle);
+  }
+};
+
+export function stringifyTransformArrayProps(
+  transformArray: TransformsStyleArray
+) {
+  if (!transformArray) {
+    return '';
+  }
+
+  return transformArray
+    .map((transform) => {
+      const [key, value] = Object.entries(transform)[0];
+      switch (key) {
+        case 'translateX':
+          return `translate(${value}, 0)`;
+        case 'translateY':
+          return `translate(0, ${value})`;
+        case 'rotate':
+          return `rotate(${getAngleValueInDeg(value)})`;
+        case 'scale':
+          return `scale(${value})`;
+        case 'scaleX':
+          return `scale(${value}, 1)`;
+        case 'scaleY':
+          return `scale(1, ${value})`;
+        case 'skewX':
+          return `skewX(${getAngleValueInDeg(value)})`;
+        case 'skewY':
+          return `skewY(${getAngleValueInDeg(value)})`;
+        case 'matrix':
+          return `matrix(${value.join(', ')})`;
+        default:
+          return '';
+      }
+    })
+    .join(' ');
 }

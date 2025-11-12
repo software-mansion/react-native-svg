@@ -1,6 +1,6 @@
 import type { TransformProps } from '../../lib/extract/types';
 import {
-  transformsArrayToProps,
+  stringifyTransformArrayProps,
   TransformsStyleArray,
 } from '../../lib/extract/extractTransform';
 import type { BaseProps } from '../types';
@@ -17,11 +17,11 @@ export function parseTransformProp(
     if (typeof transform[0] === 'number') {
       transformArray.push(`matrix(${transform.join(' ')})`);
     } else {
-      const stringifiedProps = transformsArrayToProps(
+      const stringifiedProps = stringifyTransformArrayProps(
         // @ts-expect-error FIXME
         transform as TransformsStyleArray
-      );
-      transformArray.push(...stringifyTransformProps(stringifiedProps));
+      ).split(' ');
+      transformArray.push(...stringifiedProps);
     }
   } else if (typeof transform === 'string') {
     transformArray.push(transform);
