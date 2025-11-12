@@ -111,11 +111,10 @@ class ForeignObjectView extends GroupView {
         }
       } else {
         // Enable rendering other native ancestor views in e.g. masks
-        int left = child.getLeft();
-        int top = child.getTop();
-
         final int saveCount = canvas.save();
 
+        int left = child.getLeft();
+        int top = child.getTop();
         canvas.translate(left, top);
 
         Matrix childMatrix = child.getMatrix();
@@ -124,7 +123,6 @@ class ForeignObjectView extends GroupView {
         }
 
         child.draw(canvas);
-
         canvas.restoreToCount(saveCount);
       }
     }
