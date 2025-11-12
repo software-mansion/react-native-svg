@@ -118,9 +118,9 @@ class ForeignObjectView extends GroupView {
 
         canvas.translate(left, top);
 
-        Matrix vm = child.getMatrix();
-        if (!vm.isIdentity()) {
-          canvas.concat(vm);
+        Matrix childMatrix = child.getMatrix();
+        if (!childMatrix.isIdentity()) {
+          canvas.concat(childMatrix);
         }
 
         child.draw(canvas);
