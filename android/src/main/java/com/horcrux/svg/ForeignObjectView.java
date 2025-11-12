@@ -68,6 +68,16 @@ class ForeignObjectView extends GroupView {
     invalidate();
   }
 
+  @Override
+  public void invalidate() {
+    super.invalidate();
+    SvgView svgView = getSvgView();
+
+    if (svgView != null) {
+      svgView.invalidate();
+    }
+  }
+
   void drawGroup(final Canvas canvas, final Paint paint, final float opacity) {
     pushGlyphContext();
     final SvgView svg = getSvgView();
