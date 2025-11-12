@@ -2,6 +2,7 @@ import * as Circle from './Circle';
 import * as Clipping from './Clipping';
 import * as Empty from './Empty';
 import * as Ellipse from './Ellipse';
+import * as ForeignObject from './ForeignObject';
 import * as G from './G';
 import * as Gradients from './Gradients';
 import * as Image from './Image';
@@ -27,6 +28,7 @@ export const examples = {
   Rect,
   Circle,
   Ellipse,
+  ForeignObject,
   Line,
   Polygon,
   Polyline,
