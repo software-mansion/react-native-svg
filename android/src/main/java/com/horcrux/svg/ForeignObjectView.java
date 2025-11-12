@@ -11,6 +11,7 @@ package com.horcrux.svg;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.view.View;
@@ -67,6 +68,16 @@ class ForeignObjectView extends GroupView {
     invalidate();
   }
 
+  @Override
+  public void invalidate() {
+    super.invalidate();
+    SvgView svgView = getSvgView();
+
+    if (svgView != null) {
+      svgView.invalidate();
+    }
+  }
+
   void drawGroup(final Canvas canvas, final Paint paint, final float opacity) {
     pushGlyphContext();
     final SvgView svg = getSvgView();
@@ -110,7 +121,19 @@ class ForeignObjectView extends GroupView {
         }
       } else {
         // Enable rendering other native ancestor views in e.g. masks
+        final int saveCount = canvas.save();
+
+        int left = child.getLeft();
+        int top = child.getTop();
+        canvas.translate(left, top);
+
+        Matrix childMatrix = child.getMatrix();
+        if (!childMatrix.isIdentity()) {
+          canvas.concat(childMatrix);
+        }
+
         child.draw(canvas);
+        canvas.restoreToCount(saveCount);
       }
     }
     this.setClientRect(groupRect);

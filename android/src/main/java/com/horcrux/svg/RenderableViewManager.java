@@ -67,6 +67,9 @@ import android.graphics.Matrix;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.JavaOnlyMap;
 import com.facebook.react.bridge.ReadableArray;
@@ -78,6 +81,8 @@ import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.MatrixMathHelper;
 import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.PointerEvents;
+import com.facebook.react.uimanager.ReactStylesDiffMap;
+import com.facebook.react.uimanager.StateWrapper;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.TransformHelper;
 import com.facebook.react.uimanager.ViewGroupManager;
@@ -164,6 +169,12 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
 
   protected ViewManagerDelegate getDelegate() {
     return mDelegate;
+  }
+
+  @Override
+  public Object updateState(@NonNull VirtualView view, ReactStylesDiffMap props, StateWrapper stateWrapper) {
+    view.setStateWrapper(stateWrapper);
+    return super.updateState(view, props, stateWrapper);
   }
 
   static class RenderableShadowNode extends LayoutShadowNode {

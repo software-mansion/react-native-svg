@@ -26,6 +26,10 @@
   CGFloat *_strokeDashArrayData;
   CGPathRef _srcHitPath;
   RNSVGRenderable *_caller;
+  
+#ifdef RCT_NEW_ARCH_ENABLED
+  RNSVGRenderableShadowNode::ConcreteState::Shared _state;
+#endif
 }
 
 static RNSVGRenderable *_contextElement;
@@ -243,6 +247,11 @@ static RNSVGRenderable *_contextElement;
   _filter = nil;
   _caller = nil;
 }
+
+- (void)updateState:(State::Shared const &)state oldState:(State::Shared const &)oldState
+{
+  _state = std::static_pointer_cast<const RNSVGRenderableShadowNode::ConcreteState>(state);
+}
 #endif // RCT_NEW_ARCH_ENABLED
 
 UInt32 saturate(CGFloat value)
@@ -432,6 +441,9 @@ UInt32 saturate(CGFloat value)
   CGContextRestoreGState(context);
 
   [self renderMarkers:context path:self.path rect:&rect];
+#ifdef RCT_NEW_ARCH_ENABLED
+  [self updateShadowNodeMetrics];
+#endif
 }
 
 - (void)prepareStrokeDash:(NSUInteger)count strokeDasharray:(NSArray<RNSVGLength *> *)strokeDasharray
@@ -772,5 +784,18 @@ UInt32 saturate(CGFloat value)
 
   return nil;
 }
+
+#ifdef RCT_NEW_ARCH_ENABLED
+- (void)updateShadowNodeMetrics
+{
+  if (_state) {
+    _state->updateState(RNSVGLayoutableState(self.clientRect.origin.x, self.clientRect.origin.y, self.clientRect.size.width, self.clientRect.size.height));
+  }
+}
+
+- (RNSVGRenderableShadowNode::ConcreteState::Shared)state {
+  return _state;
+}
+#endif
 
 @end
