@@ -7,29 +7,20 @@ RNSVGLayoutableShadowNode::RNSVGLayoutableShadowNode(
     const ShadowNodeFragment &fragment,
     const ShadowNodeFamily::Shared &family,
     ShadowNodeTraits traits)
-    : YogaLayoutableShadowNode(fragment, family, traits) {
-  if (std::strcmp(this->getComponentName(), "RNSVGGroup") != 0) {
-    setZeroDimensions();
-  }
-}
+    : YogaLayoutableShadowNode(fragment, family, traits) {}
 
 RNSVGLayoutableShadowNode::RNSVGLayoutableShadowNode(
     const ShadowNode &sourceShadowNode,
     const ShadowNodeFragment &fragment)
-    : YogaLayoutableShadowNode(sourceShadowNode, fragment) {
-  if (std::strcmp(this->getComponentName(), "RNSVGGroup") != 0) {
-    setZeroDimensions();
-  }
-}
+    : YogaLayoutableShadowNode(sourceShadowNode, fragment) {}
 
-void RNSVGLayoutableShadowNode::setZeroDimensions() {
-  // SVG handles its layout manually on the native side and does not depend on
-  // the Yoga layout. Setting the dimensions to 0 eliminates randomly positioned
-  // views in the layout inspector when Yoga attempts to interpret SVG
-  // properties like width when viewBox scale is set.
+void RNSVGLayoutableShadowNode::setShadowNodePosition(float x, float y) {
   auto style = yogaNode_.style();
-  style.setDimension(yoga::Dimension::Width, yoga::StyleSizeLength::points(0));
-  style.setDimension(yoga::Dimension::Height, yoga::StyleSizeLength::points(0));
+
+  style.setPositionType(yoga::PositionType::Absolute);
+  style.setPosition(yoga::Edge::Left, yoga::StyleLength::points(x));
+  style.setPosition(yoga::Edge::Top, yoga::StyleLength::points(y));
+
   yogaNode_.setStyle(style);
 }
 

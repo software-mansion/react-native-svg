@@ -190,6 +190,14 @@ JSI_EXPORT extern const char RNSVGRectComponentName[];
 using RNSVGRectShadowNode =
     RNSVGConcreteShadowNode<RNSVGRectComponentName, RNSVGRectProps>;
 
+JSI_EXPORT extern const char RNSVGRenderableComponentName[];
+
+/*
+ * `ShadowNode` for RNSVGRenderable base.
+ */
+using RNSVGRenderableShadowNode =
+    RNSVGConcreteShadowNode<RNSVGRenderableComponentName>;
+
 JSI_EXPORT extern const char RNSVGSymbolComponentName[];
 
 /*
