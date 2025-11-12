@@ -1,4 +1,4 @@
-name: Example Android Tests check
+name: Example Android check
 on:
   pull_request:
     paths:
@@ -17,4 +17,4 @@ jobs:
   build:
     uses: ./.github/workflows/android-build.yml
     with:
-      working-directories: '["tests-example"]'
+      working-directory: 'tests-example'

@@ -2,17 +2,16 @@ name: Android Build Reusable
 on:
   workflow_call:
     inputs:
-      working-directories:
+      working-directory:
         required: true
         type: string
-        description: 'JSON string array of directories (e.g. ''["paper-example"]'')'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        working-directory: ${{ fromJson(inputs.working-directories) }}
+        working-directory: ${{ inputs.working-directory }}
       fail-fast: false
     concurrency:
       group: android-${{ matrix.working-directory }}-${{ github.ref }}
