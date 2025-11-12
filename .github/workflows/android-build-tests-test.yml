@@ -17,4 +17,4 @@ jobs:
   build:
     uses: ./.github/workflows/android-build.yml
     with:
-      working-directory: 'tests-example'
+      working-directory: tests-example

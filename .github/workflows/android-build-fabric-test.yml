@@ -17,4 +17,4 @@ jobs:
   build:
     uses: ./.github/workflows/android-build.yml
     with:
-      working-directory: 'fabric-example'
+      working-directory: fabric-example
