@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-    name: 'Xcode Build'
     runs-on: macos-latest
     env:
       DEVICE: iPhone 17 Pro
