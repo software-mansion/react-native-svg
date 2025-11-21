@@ -4,7 +4,6 @@
 #include <react/renderer/components/view/ViewProps.h>
 #include <react/renderer/core/ConcreteShadowNode.h>
 #include "RNSVGLayoutableShadowNode.h"
-#include "RNSVGLayoutableState.h"
 
 namespace facebook::react {
 
@@ -14,14 +13,14 @@ class RNSVGConcreteShadowNode : public ConcreteShadowNode<
                                     RNSVGLayoutableShadowNode,
                                     PropsT,
                                     ViewEventEmitter,
-                                    RNSVGLayoutableState> {
+                                    StateData> {
  public:
   using BaseShadowNode = ConcreteShadowNode<
       concreteComponentName,
       RNSVGLayoutableShadowNode,
       PropsT,
       ViewEventEmitter,
-      RNSVGLayoutableState>;
+      StateData>;
 
   using ConcreteViewProps = PropsT;
 

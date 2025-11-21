@@ -16,12 +16,6 @@
 #import "RNSVGNode.h"
 #import "RNSVGVectorEffect.h"
 
-#ifdef RCT_NEW_ARCH_ENABLED
-#import <rnsvg/RNSVGComponentDescriptors.h>
-
-using namespace facebook::react;
-#endif
-
 @interface RNSVGRenderable : RNSVGNode
 
 @property (class) RNSVGRenderable *contextElement;
@@ -42,10 +36,6 @@ using namespace facebook::react;
 @property (nonatomic, assign) CGPathRef hitArea;
 @property (nonatomic, strong) NSString *filter;
 
-#ifdef RCT_NEW_ARCH_ENABLED
-- (facebook::react::RNSVGRenderableShadowNode::ConcreteState::Shared)state;
-#endif
-
 - (void)setColor:(RNSVGColor *)color;
 
 - (void)setHitArea:(CGPathRef)path;
@@ -57,9 +47,5 @@ using namespace facebook::react;
 - (void)resetProperties;
 
 - (CGColor *)getCurrentColor;
-
-#ifdef RCT_NEW_ARCH_ENABLED
-- (void)updateShadowNodeMetrics;
-#endif
 
 @end

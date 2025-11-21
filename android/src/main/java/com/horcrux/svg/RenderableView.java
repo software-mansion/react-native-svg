@@ -33,8 +33,8 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.touch.ReactHitSlopView;
-import com.facebook.react.uimanager.PointerEvents;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.facebook.react.uimanager.PointerEvents;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -103,8 +103,10 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
 
   public void onReceiveNativeEvent() {
     WritableMap event = Arguments.createMap();
-    ReactContext reactContext = (ReactContext) getContext();
-    reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "topSvgLayout", event);
+    ReactContext reactContext = (ReactContext)getContext();
+    reactContext
+        .getJSModule(RCTEventEmitter.class)
+        .receiveEvent(getId(), "topSvgLayout", event);
   }
 
   @Nullable String mFilter;
@@ -498,8 +500,6 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
     } else {
       draw(canvas, paint, opacity);
     }
-
-    this.updateShadowNodeMetrics();
   }
 
   @Override
@@ -822,20 +822,5 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
 
   private boolean hasOwnProperty(String propName) {
     return mAttributeList != null && mAttributeList.contains(propName);
-  }
-
-  protected void updateShadowNodeMetrics() {
-    RectF clientRect = this.getClientRect();
-
-    if (this.stateWrapper == null || clientRect == null) {
-      return;
-    }
-    
-    WritableMap map = Arguments.createMap();
-    map.putDouble("x", clientRect.left / mScale);
-    map.putDouble("y", clientRect.top / mScale);
-    map.putDouble("width", clientRect.width() / mScale);
-    map.putDouble("height", clientRect.height() / mScale);
-    this.stateWrapper.updateState(map);
   }
 }

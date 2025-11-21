@@ -21,11 +21,11 @@ import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.PointerEvents;
-import com.facebook.react.uimanager.StateWrapper;
 import com.facebook.react.uimanager.UIManagerHelper;
 import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.views.view.ReactViewGroup;
 import com.horcrux.svg.events.SvgOnLayoutEvent;
+
 import java.util.ArrayList;
 import javax.annotation.Nullable;
 
@@ -84,7 +84,6 @@ public abstract class VirtualView extends ReactViewGroup {
   private float canvasHeight = -1;
   private float canvasWidth = -1;
   private GlyphContext glyphContext;
-  protected @Nullable StateWrapper stateWrapper = null;
 
   Path mPath;
   Path mFillPath;
@@ -105,10 +104,6 @@ public abstract class VirtualView extends ReactViewGroup {
 
   public void setPointerEvents(PointerEvents pointerEvents) {
     mPointerEvents = pointerEvents;
-  }
-
-  public void setStateWrapper(@Nullable StateWrapper stateWrapper) {
-    this.stateWrapper = stateWrapper;
   }
 
   @Override
@@ -254,7 +249,7 @@ public abstract class VirtualView extends ReactViewGroup {
     int count = canvas.save();
     mCTM.set(mMatrix);
     canvas.concat(mCTM);
-    mCTM.postConcat(ctm);
+    mCTM.preConcat(ctm);
     mCTMInvertible = mCTM.invert(mInvCTM);
     return count;
   }
@@ -442,9 +437,7 @@ public abstract class VirtualView extends ReactViewGroup {
 
   double relativeOnWidth(SVGLength length) {
     SvgView svg = getSvgView();
-    if (length.unit == SVGLength.UnitType.PERCENTAGE
-        && svg != null
-        && svg.getViewBox().width() != 0) {
+    if (length.unit == SVGLength.UnitType.PERCENTAGE && svg != null && svg.getViewBox().width() != 0) {
       return relativeOn(length, svg.getViewBox().width());
     }
     return relativeOn(length, getCanvasWidth());
@@ -452,9 +445,7 @@ public abstract class VirtualView extends ReactViewGroup {
 
   double relativeOnHeight(SVGLength length) {
     SvgView svg = getSvgView();
-    if (length.unit == SVGLength.UnitType.PERCENTAGE
-        && svg != null
-        && svg.getViewBox().height() != 0) {
+    if (length.unit == SVGLength.UnitType.PERCENTAGE && svg != null && svg.getViewBox().height() != 0) {
       return relativeOn(length, svg.getViewBox().height());
     }
     return relativeOn(length, getCanvasHeight());

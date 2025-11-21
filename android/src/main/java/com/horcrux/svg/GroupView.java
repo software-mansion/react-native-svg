@@ -19,12 +19,10 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.os.Build;
 import android.view.View;
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
-import com.facebook.react.bridge.WritableMap;
 import java.util.ArrayList;
 import javax.annotation.Nullable;
 
@@ -341,21 +339,5 @@ class GroupView extends RenderableView {
         ((RenderableView) node).resetProperties();
       }
     }
-  }
-
-  @Override
-  public void updateShadowNodeMetrics() {
-    SvgView svgView = this.getSvgView();
-
-    if (this.stateWrapper == null || svgView == null) {
-      return;
-    }
-
-    WritableMap map = Arguments.createMap();
-    map.putDouble("x", 0);
-    map.putDouble("y", 0);
-    map.putDouble("width", svgView.getCanvasWidth() / mScale);
-    map.putDouble("height", svgView.getCanvasHeight() / mScale);
-    this.stateWrapper.updateState(map);
   }
 }

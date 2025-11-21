@@ -1,64 +1,64 @@
 #pragma once
 
 #include <react/renderer/componentregistry/ComponentDescriptorProviderRegistry.h>
-#include "RNSVGComponentDescriptor.h"
+#include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include "RNSVGShadowNodes.h"
 
 namespace facebook::react {
 
 using RNSVGCircleComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGCircleShadowNode>;
+    ConcreteComponentDescriptor<RNSVGCircleShadowNode>;
 using RNSVGClipPathComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGClipPathShadowNode>;
+    ConcreteComponentDescriptor<RNSVGClipPathShadowNode>;
 using RNSVGDefsComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGDefsShadowNode>;
+    ConcreteComponentDescriptor<RNSVGDefsShadowNode>;
 using RNSVGEllipseComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGEllipseShadowNode>;
+    ConcreteComponentDescriptor<RNSVGEllipseShadowNode>;
 using RNSVGFeBlendComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGFeBlendShadowNode>;
+    ConcreteComponentDescriptor<RNSVGFeBlendShadowNode>;
 using RNSVGFeColorMatrixComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGFeColorMatrixShadowNode>;
+    ConcreteComponentDescriptor<RNSVGFeColorMatrixShadowNode>;
 using RNSVGFeCompositeComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGFeCompositeShadowNode>;
+    ConcreteComponentDescriptor<RNSVGFeCompositeShadowNode>;
 using RNSVGFeFloodComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGFeFloodShadowNode>;
+    ConcreteComponentDescriptor<RNSVGFeFloodShadowNode>;
 using RNSVGFeGaussianBlurComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGFeGaussianBlurShadowNode>;
+    ConcreteComponentDescriptor<RNSVGFeGaussianBlurShadowNode>;
 using RNSVGFeMergeComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGFeMergeShadowNode>;
+    ConcreteComponentDescriptor<RNSVGFeMergeShadowNode>;
 using RNSVGFeOffsetComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGFeOffsetShadowNode>;
+    ConcreteComponentDescriptor<RNSVGFeOffsetShadowNode>;
 using RNSVGFilterComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGFilterShadowNode>;
+    ConcreteComponentDescriptor<RNSVGFilterShadowNode>;
 using RNSVGForeignObjectComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGForeignObjectShadowNode>;
+    ConcreteComponentDescriptor<RNSVGForeignObjectShadowNode>;
 using RNSVGGroupComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGGroupShadowNode>;
+    ConcreteComponentDescriptor<RNSVGGroupShadowNode>;
 using RNSVGLinearGradientComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGLinearGradientShadowNode>;
+    ConcreteComponentDescriptor<RNSVGLinearGradientShadowNode>;
 using RNSVGLineComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGLineShadowNode>;
+    ConcreteComponentDescriptor<RNSVGLineShadowNode>;
 using RNSVGMarkerComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGMarkerShadowNode>;
+    ConcreteComponentDescriptor<RNSVGMarkerShadowNode>;
 using RNSVGMaskComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGMaskShadowNode>;
+    ConcreteComponentDescriptor<RNSVGMaskShadowNode>;
 using RNSVGPathComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGPathShadowNode>;
+    ConcreteComponentDescriptor<RNSVGPathShadowNode>;
 using RNSVGPatternComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGPatternShadowNode>;
+    ConcreteComponentDescriptor<RNSVGPatternShadowNode>;
 using RNSVGRadialGradientComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGRadialGradientShadowNode>;
+    ConcreteComponentDescriptor<RNSVGRadialGradientShadowNode>;
 using RNSVGRectComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGRectShadowNode>;
+    ConcreteComponentDescriptor<RNSVGRectShadowNode>;
 using RNSVGSymbolComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGSymbolShadowNode>;
+    ConcreteComponentDescriptor<RNSVGSymbolShadowNode>;
 using RNSVGTextComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGTextShadowNode>;
+    ConcreteComponentDescriptor<RNSVGTextShadowNode>;
 using RNSVGTextPathComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGTextPathShadowNode>;
+    ConcreteComponentDescriptor<RNSVGTextPathShadowNode>;
 using RNSVGTSpanComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGTSpanShadowNode>;
+    ConcreteComponentDescriptor<RNSVGTSpanShadowNode>;
 using RNSVGUseComponentDescriptor =
-    RNSVGComponentDescriptor<RNSVGUseShadowNode>;
+    ConcreteComponentDescriptor<RNSVGUseShadowNode>;
 
 } // namespace facebook::react
