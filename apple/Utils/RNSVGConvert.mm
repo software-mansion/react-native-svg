@@ -87,6 +87,20 @@
   }
 }
 
++ (RNSVGEdgeMode)RNSVGConvolveMatrixEdgeModeFromCppEquivalent:(react::RNSVGFeConvolveMatrixEdgeMode)edgeMode
+{
+  switch (edgeMode) {
+    case react::RNSVGFeConvolveMatrixEdgeMode::Duplicate:
+      return SVG_EDGEMODE_DUPLICATE;
+    case react::RNSVGFeConvolveMatrixEdgeMode::Wrap:
+      return SVG_EDGEMODE_WRAP;
+    case react::RNSVGFeConvolveMatrixEdgeMode::None:
+      return SVG_EDGEMODE_NONE;
+    default:
+      return SVG_EDGEMODE_UNKNOWN;
+  }
+}
+
 @end
 
 #endif // RCT_NEW_ARCH_ENABLED
