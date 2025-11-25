@@ -1,7 +1,8 @@
 import * as Circle from './Circle';
 import * as Clipping from './Clipping';
-import * as Empty from './Empty';
+import * as Complex from './complex';
 import * as Ellipse from './Ellipse';
+import * as Empty from './Empty';
 import * as ForeignObject from './ForeignObject';
 import * as G from './G';
 import * as Gradients from './Gradients';
@@ -46,4 +47,5 @@ export const examples = {
   Transforms,
   Markers,
   Mask,
+  Complex,
 };
