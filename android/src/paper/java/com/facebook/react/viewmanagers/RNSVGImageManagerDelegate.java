@@ -32,9 +32,6 @@ public class RNSVGImageManagerDelegate<T extends View, U extends BaseViewManager
       case "opacity":
         mViewManager.setOpacity(view, value == null ? 1f : ((Double) value).floatValue());
         break;
-      case "matrix":
-        mViewManager.setMatrix(view, (ReadableArray) value);
-        break;
       case "mask":
         mViewManager.setMask(view, value == null ? null : (String) value);
         break;
