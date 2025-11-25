@@ -233,6 +233,24 @@ public class SvgPackage extends BaseReactPackage implements ViewManagerOnDemandR
                 }
               }));
       specs.put(
+          FeComponentTransferManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new FeComponentTransferManager();
+                }
+              }));
+      specs.put(
+          FeComponentTransferFunctionManager.REACT_CLASS,
+          ModuleSpec.viewManagerSpec(
+              new Provider<NativeModule>() {
+                @Override
+                public NativeModule get() {
+                  return new FeComponentTransferFunctionManager();
+                }
+              }));
+      specs.put(
           FeCompositeManager.REACT_CLASS,
           ModuleSpec.viewManagerSpec(
               new Provider<NativeModule>() {
