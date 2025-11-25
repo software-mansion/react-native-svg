@@ -1,5 +1,4 @@
 #include <react/renderer/components/view/YogaLayoutableShadowNode.h>
-#include "RNSVGLayoutableState.h"
 
 namespace facebook::react {
 
@@ -15,7 +14,9 @@ class RNSVGLayoutableShadowNode : public YogaLayoutableShadowNode {
       const ShadowNodeFragment &fragment);
 
   void layout(LayoutContext layoutContext) override;
-  void setShadowNodePosition(float x, float y);
+
+ private:
+  void setZeroDimensions();
 };
 
 } // namespace facebook::react

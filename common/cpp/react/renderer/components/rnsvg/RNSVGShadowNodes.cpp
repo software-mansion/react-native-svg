@@ -24,7 +24,6 @@ extern const char RNSVGPathComponentName[] = "RNSVGPath";
 extern const char RNSVGPatternComponentName[] = "RNSVGPattern";
 extern const char RNSVGRadialGradientComponentName[] = "RNSVGRadialGradient";
 extern const char RNSVGRectComponentName[] = "RNSVGRect";
-extern const char RNSVGRenderableComponentName[] = "RNSVGRenderable";
 extern const char RNSVGSymbolComponentName[] = "RNSVGSymbol";
 extern const char RNSVGTextComponentName[] = "RNSVGText";
 extern const char RNSVGTextPathComponentName[] = "RNSVGTextPath";
