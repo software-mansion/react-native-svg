@@ -44,16 +44,13 @@ function ForeignObjectWithView() {
       style={{backgroundColor: 'lightgray'}}
       viewBox="0 0 400 400">
       <ForeignObject x={50} y={50} width={300} height={300}>
-        <View
-          style={{width: '100%', height: '100%', backgroundColor: 'blue'}}
-          collapsable={false}>
+        <View style={{width: '100%', height: '100%', backgroundColor: 'blue'}}>
           <View
             style={{
               width: '50%',
               height: '50%',
               backgroundColor: 'red',
             }}
-            collapsable={false}
           />
         </View>
       </ForeignObject>
@@ -67,7 +64,6 @@ function ForeignObjectWithView() {
               height: '50%',
               backgroundColor: 'blue',
             }}
-            collapsable={false}
           />
         </View>
       </ForeignObject>
@@ -84,16 +80,13 @@ function ForeignObjectWithBigView() {
       style={{backgroundColor: 'lightgray'}}
       viewBox="0 0 600 600">
       <ForeignObject width={600} height={600}>
-        <View
-          style={{width: 600, height: 600, backgroundColor: 'blue'}}
-          collapsable={false}>
+        <View style={{width: 600, height: 600, backgroundColor: 'blue'}}>
           <View
             style={{
               width: 300,
               height: 300,
               backgroundColor: 'red',
             }}
-            collapsable={false}
           />
         </View>
       </ForeignObject>
