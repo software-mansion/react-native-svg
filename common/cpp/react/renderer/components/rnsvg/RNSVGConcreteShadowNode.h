@@ -7,17 +7,17 @@
 
 namespace facebook::react {
 
-template <const char *concreteComponentName, typename PropsT = ViewProps>
+template <const char *concreteComponentName, typename PropsT = ViewProps, typename ShadowNode = RNSVGLayoutableShadowNode>
 class RNSVGConcreteShadowNode : public ConcreteShadowNode<
                                     concreteComponentName,
-                                    RNSVGLayoutableShadowNode,
+                                    ShadowNode,
                                     PropsT,
                                     ViewEventEmitter,
                                     StateData> {
  public:
   using BaseShadowNode = ConcreteShadowNode<
       concreteComponentName,
-      RNSVGLayoutableShadowNode,
+      ShadowNode,
       PropsT,
       ViewEventEmitter,
       StateData>;

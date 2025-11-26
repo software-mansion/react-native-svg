@@ -3,6 +3,7 @@
 #include <jsi/jsi.h>
 #include <react/renderer/components/rnsvg/EventEmitters.h>
 #include <react/renderer/components/rnsvg/Props.h>
+#include <react/renderer/components/view/YogaLayoutableShadowNode.h>
 #include "RNSVGConcreteShadowNode.h"
 #include "RNSVGImageState.h"
 
@@ -114,7 +115,8 @@ JSI_EXPORT extern const char RNSVGForeignObjectComponentName[];
  */
 using RNSVGForeignObjectShadowNode = RNSVGConcreteShadowNode<
     RNSVGForeignObjectComponentName,
-    RNSVGForeignObjectProps>;
+    RNSVGForeignObjectProps,
+    YogaLayoutableShadowNode>;
 
 JSI_EXPORT extern const char RNSVGGroupComponentName[];
 
