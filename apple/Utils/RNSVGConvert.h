@@ -5,6 +5,8 @@
 #import "RNSVGCompositeOperator.h"
 #import "RNSVGEdgeMode.h"
 #import "RNSVGUnits.h"
+#import "RNSVGTurbulenceStitchTile.h"
+#import "RNSVGTurbulenceType.h"
 
 namespace react = facebook::react;
 
@@ -16,6 +18,8 @@ namespace react = facebook::react;
 + (RNSVGColorMatrixType)RNSVGColorMatrixTypeFromCppEquivalent:(react::RNSVGFeColorMatrixType)type;
 + (RNSVGCompositeOperator)RNSVGRNSVGCompositeOperatorFromCppEquivalent:(react::RNSVGFeCompositeOperator1)operator1;
 + (RNSVGEdgeMode)RNSVGEdgeModeFromCppEquivalent:(react::RNSVGFeGaussianBlurEdgeMode)edgeMode;
++ (RNSVGTurbulenceStitchTile)RNSVGTurbulenceStitchTileFromCppEquivalent:(react::RNSVGFeTurbulenceStitchTiles)stitchTiles;
++ (RNSVGTurbulenceType)RNSVGTurbulenceTypeFromCppEquivalent:(react::RNSVGFeTurbulenceType)type;
 
 @end
 
