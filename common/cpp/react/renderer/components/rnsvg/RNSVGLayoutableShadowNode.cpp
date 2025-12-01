@@ -8,28 +8,29 @@ RNSVGLayoutableShadowNode::RNSVGLayoutableShadowNode(
     const ShadowNodeFamily::Shared &family,
     ShadowNodeTraits traits)
     : YogaLayoutableShadowNode(fragment, family, traits) {
-  if (std::strcmp(this->getComponentName(), "RNSVGGroup") != 0) {
-    setZeroDimensions();
-  }
+  updatePosition();
 }
 
 RNSVGLayoutableShadowNode::RNSVGLayoutableShadowNode(
     const ShadowNode &sourceShadowNode,
     const ShadowNodeFragment &fragment)
     : YogaLayoutableShadowNode(sourceShadowNode, fragment) {
-  if (std::strcmp(this->getComponentName(), "RNSVGGroup") != 0) {
-    setZeroDimensions();
-  }
+  updatePosition();
 }
 
-void RNSVGLayoutableShadowNode::setZeroDimensions() {
+void RNSVGLayoutableShadowNode::updatePosition() {
   // SVG handles its layout manually on the native side and does not depend on
-  // the Yoga layout. Setting the dimensions to 0 eliminates randomly positioned
-  // views in the layout inspector when Yoga attempts to interpret SVG
-  // properties like width when viewBox scale is set.
+  // the Yoga layout. Setting the dimensions to absolute fill is a hack for measure 
+  // to return "correct" layout metrics when onPress is tested. It also eliminates 
+  // randomly positioned views in the layout inspector when Yoga attempts to interpret 
+  // SVG properties like width when viewBox scale is set. Ideal solution would be to 
+  // return correct bounding box from native side in getLayoutMetrics.
   auto style = yogaNode_.style();
-  style.setDimension(yoga::Dimension::Width, yoga::StyleSizeLength::points(0));
-  style.setDimension(yoga::Dimension::Height, yoga::StyleSizeLength::points(0));
+  style.setPositionType(yoga::PositionType::Absolute);
+  style.setPosition(yoga::Edge::Top, yoga::Style::Length::points(0));
+  style.setPosition(yoga::Edge::Left, yoga::Style::Length::points(0));
+  style.setPosition(yoga::Edge::Right, yoga::Style::Length::points(0));
+  style.setPosition(yoga::Edge::Bottom, yoga::Style::Length::points(0));
   yogaNode_.setStyle(style);
 }
 
