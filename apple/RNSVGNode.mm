@@ -422,7 +422,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   // abstract
 }
 
-// hitTest delagate
+// hitTest delegate
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
   // abstract
