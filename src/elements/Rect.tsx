@@ -4,6 +4,7 @@ import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import RNSVGRect from '../fabric/RectNativeComponent';
 import type { NativeMethods } from 'react-native';
+import { extractTransformSvgView } from '../lib/extract/extractTransform';
 
 export interface RectProps extends CommonPathProps {
   x?: NumberProp;
@@ -29,11 +30,16 @@ export default class Rect extends Shape<RectProps> {
     const { props } = this;
     const { x, y, width, height, rx, ry } = props;
     const rectProps = { x, y, width, height, rx, ry };
+    const extractedProps = withoutXY(this, props);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const transform = extractTransformSvgView(props as any);
+
     return (
       <RNSVGRect
         ref={(ref) => this.refMethod(ref as (Rect & NativeMethods) | null)}
-        {...withoutXY(this, props)}
+        {...extractedProps}
         {...rectProps}
+        style={{ transform }}
       />
     );
   }

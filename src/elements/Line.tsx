@@ -4,6 +4,7 @@ import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import RNSVGLine from '../fabric/LineNativeComponent';
 import type { NativeMethods } from 'react-native';
+import { extractTransformSvgView } from '../lib/extract/extractTransform';
 
 export interface LineProps extends CommonPathProps {
   opacity?: NumberProp;
@@ -33,10 +34,14 @@ export default class Line extends Shape<LineProps> {
       x2,
       y2,
     };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const transform = extractTransformSvgView(props as any);
+
     return (
       <RNSVGLine
         ref={(ref) => this.refMethod(ref as (Line & NativeMethods) | null)}
         {...lineProps}
+        style={{ transform }}
       />
     );
   }
