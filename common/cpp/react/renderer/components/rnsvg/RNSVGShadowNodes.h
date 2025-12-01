@@ -58,6 +58,23 @@ using RNSVGFeColorMatrixShadowNode = RNSVGConcreteShadowNode<
     RNSVGFeColorMatrixComponentName,
     RNSVGFeColorMatrixProps>;
 
+JSI_EXPORT extern const char RNSVGFeComponentTransferComponentName[];
+
+/*
+ * `ShadowNode` for <RNSVGFeComponentTransfer> component.
+ */
+using RNSVGFeComponentTransferShadowNode =
+    RNSVGConcreteShadowNode<RNSVGFeComponentTransferComponentName, RNSVGFeComponentTransferProps>;
+
+
+JSI_EXPORT extern const char RNSVGFeComponentTransferFunctionComponentName[];
+
+/*
+ * `ShadowNode` for <RNSVGFeComponentTransferFunction> component.
+ */
+using RNSVGFeComponentTransferFunctionShadowNode =
+    RNSVGConcreteShadowNode<RNSVGFeComponentTransferFunctionComponentName, RNSVGFeComponentTransferFunctionProps>;
+
 JSI_EXPORT extern const char RNSVGFeCompositeComponentName[];
 
 /*
