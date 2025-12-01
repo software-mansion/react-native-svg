@@ -27,10 +27,9 @@ void RNSVGLayoutableShadowNode::updatePosition() {
   // return correct bounding box from native side in getLayoutMetrics.
   auto style = yogaNode_.style();
   style.setPositionType(yoga::PositionType::Absolute);
-  style.setPosition(yoga::Edge::Top, yoga::Style::Length::points(0));
-  style.setPosition(yoga::Edge::Left, yoga::Style::Length::points(0));
-  style.setPosition(yoga::Edge::Right, yoga::Style::Length::points(0));
-  style.setPosition(yoga::Edge::Bottom, yoga::Style::Length::points(0));
+  style.setPosition(yoga::Edge::All, yoga::Style::Length::points(0));
+  style.setDimension(yoga::Dimension::Width, yoga::StyleSizeLength::percent(100));
+  style.setDimension(yoga::Dimension::Height, yoga::StyleSizeLength::percent(100));
   yogaNode_.setStyle(style);
 }
 
