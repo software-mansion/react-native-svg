@@ -12,7 +12,6 @@ import { NumberProp } from '../lib/extract/types';
 interface SvgNodeCommonProps {
   name?: string;
   opacity?: WithDefault<Float, 1.0>;
-  matrix?: ReadonlyArray<Float>;
   mask?: string;
   markerStart?: string;
   markerMid?: string;
