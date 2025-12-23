@@ -1,9 +1,9 @@
 <p align="center">
-   <img
-      src="https://user-images.githubusercontent.com/39658211/200319759-006c214f-941c-496c-a3c2-7de5b7ce33dc.png"
-      width="100%"
-      alt="React Native SVG at Software Mansion"
-   />
+  <img
+    src="https://user-images.githubusercontent.com/39658211/200319759-006c214f-941c-496c-a3c2-7de5b7ce33dc.png"
+    width="100%"
+    alt="React Native SVG at Software Mansion"
+  />
   <a href="https://stateofreactnative.com/">
     <img
       src="https://github.com/user-attachments/assets/4ed1c474-548f-4fa9-a8c5-d669e85c83d8"
