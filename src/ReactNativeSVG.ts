@@ -1,5 +1,6 @@
 import Shape from './elements/Shape';
 import {
+  err,
   AstProps,
   camelCase,
   JsxAST,
@@ -118,6 +119,7 @@ export type { UseProps } from './elements/Use';
 export * from './lib/extract/types';
 
 export {
+  err,
   camelCase,
   fetchText,
   parse,
