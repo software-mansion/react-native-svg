@@ -99,6 +99,8 @@ import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeCompositeManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeCompositeManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeConvolveMatrixManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeConvolveMatrixManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeFloodManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeFloodManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeGaussianBlurManagerDelegate;
@@ -484,6 +486,7 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     RNSVGFeBlend,
     RNSVGFeColorMatrix,
     RNSVGFeComposite,
+    RNSVGFeConvolveMatrix,
     RNSVGFeFlood,
     RNSVGFeGaussianBlur,
     RNSVGFeMerge,
@@ -540,6 +543,8 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
         return new FeColorMatrixView(reactContext);
       case RNSVGFeComposite:
         return new FeCompositeView(reactContext);
+      case RNSVGFeConvolveMatrix:
+        return new FeConvolveMatrixView(reactContext);
       case RNSVGFeFlood:
         return new FeFloodView(reactContext);
       case RNSVGFeGaussianBlur:
@@ -1579,6 +1584,61 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     @ReactProp(name = "k4")
     public void setK4(FeCompositeView node, float value) {
       node.setK4(value);
+    }
+  }
+
+  static class FeConvolveMatrixManager extends FilterPrimitiveManager<FeConvolveMatrixView>
+          implements RNSVGFeConvolveMatrixManagerInterface<FeConvolveMatrixView> {
+    FeConvolveMatrixManager() {
+      super(SVGClass.RNSVGFeConvolveMatrix);
+      mDelegate = new RNSVGFeConvolveMatrixManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeConvolveMatrix";
+
+    @ReactProp(name = "in1")
+    public void setIn1(FeConvolveMatrixView node, String in1) {
+      node.setIn1(in1);
+    }
+
+    @ReactProp(name = "order")
+    public void setOrder(FeConvolveMatrixView node, Dynamic order) {
+      node.setOrder(order);
+    }
+
+    @ReactProp(name = "kernelMatrix")
+    public void setKernelMatrix(FeConvolveMatrixView node, Dynamic kernelMatrix) {
+      node.setKernelMatrix(kernelMatrix);
+    }
+
+    @ReactProp(name = "divisor")
+    public void setDivisor(FeConvolveMatrixView node, Dynamic divisor) {
+      node.setDivisor(divisor);
+    }
+
+    @ReactProp(name = "bias")
+    public void setBias(FeConvolveMatrixView node, Dynamic bias) {
+      node.setBias(bias);
+    }
+
+    @ReactProp(name = "targetX")
+    public void setTargetX(FeConvolveMatrixView node, Dynamic targetX) {
+      node.setTargetX(targetX);
+    }
+
+    @ReactProp(name = "targetY")
+    public void setTargetY(FeConvolveMatrixView node, Dynamic targetY) {
+      node.setTargetY(targetY);
+    }
+
+    @ReactProp(name = "edgeMode")
+    public void setEdgeMode(FeConvolveMatrixView node, String edgeMode) {
+      node.setEdgeMode(edgeMode);
+    }
+
+    @ReactProp(name = "preserveAlpha")
+    public void setPreserveAlpha(FeConvolveMatrixView node, boolean preserveAlpha) {
+      node.setPreserveAlpha(preserveAlpha);
     }
   }
 
