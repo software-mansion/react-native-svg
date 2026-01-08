@@ -92,14 +92,15 @@ If remote SVG file contains CSS in `<style>` element, use `SvgCssUri`:
 import * as React from 'react';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { SvgCssUri } from 'react-native-svg/css';
+import type { SvgProps } from 'react-native-svg';
 export default function TestComponent() {
   const [loading, setLoading] = React.useState(true);
   const onError = (e: Error) => {
     console.log(e.message);
     setLoading(false);
   };
-  const onLoad = () => {
-    console.log('Svg loaded!');
+  const onLoad = (svgProps: SvgProps) => {
+    console.log('Svg loaded!', svgProps);
     setLoading(false);
   };
   return (
