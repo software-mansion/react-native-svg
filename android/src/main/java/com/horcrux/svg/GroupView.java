@@ -231,8 +231,12 @@ class GroupView extends RenderableView {
           } else {
             p2 = n.getPath(canvas, paint);
           }
-          p2.transform(transform);
-          path.op(p2, pop);
+          if (p2 != null) {
+            if (transform != null) {
+              p2.transform(transform);
+            }
+            path.op(p2, pop);
+          }
         }
       }
     } else {
@@ -253,12 +257,14 @@ class GroupView extends RenderableView {
           } else {
             p2 = n.getPath(canvas, paint);
           }
-          if (transform != null) {
-            p2.transform(transform);
+          if (p2 != null) {
+            if (transform != null) {
+              p2.transform(transform);
+            }
+            Region r2 = new Region();
+            r2.setPath(p2, bounds);
+            r.op(r2, op);
           }
-          Region r2 = new Region();
-          r2.setPath(p2, bounds);
-          r.op(r2, op);
         }
       }
       path.addPath(r.getBoundaryPath());
