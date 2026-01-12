@@ -22,6 +22,26 @@ class ClipPathView extends GroupView {
     super(reactContext);
   }
 
+  /**
+   * Get uniform clipRule from children. Returns the clipRule if all children have the same rule, or
+   * -1 if children have mixed rules.
+   */
+  int getUniformClipRule() {
+    int uniformRule = -1;
+    for (int i = 0; i < getChildCount(); i++) {
+      android.view.View child = getChildAt(i);
+      if (child instanceof VirtualView && !(child instanceof MaskView)) {
+        VirtualView node = (VirtualView) child;
+        if (uniformRule == -1) {
+          uniformRule = node.mClipRule;
+        } else if (node.mClipRule != uniformRule) {
+          return -1; // Mixed rules
+        }
+      }
+    }
+    return uniformRule;
+  }
+
   @Override
   void draw(Canvas canvas, Paint paint, float opacity) {
     FLog.w(
