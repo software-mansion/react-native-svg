@@ -27,6 +27,8 @@
 #import "RNSVGViewBox.h"
 
 #ifdef RCT_NEW_ARCH_ENABLED
+#import <memory>
+
 #import <React/RCTConversions.h>
 #import <React/RCTFabricComponentsPlugins.h>
 #import <React/RCTImageResponseObserverProxy.h>
@@ -45,7 +47,7 @@ using namespace facebook::react;
 
 #ifdef RCT_NEW_ARCH_ENABLED
   RNSVGImageShadowNode::ConcreteState::Shared _state;
-  RCTImageResponseObserverProxy _imageResponseObserverProxy;
+  std::shared_ptr<RCTImageResponseObserverProxy> _imageResponseObserverProxy;
 #endif // RCT_NEW_ARCH_ENABLED
 }
 #ifdef RCT_NEW_ARCH_ENABLED
@@ -62,7 +64,7 @@ using namespace facebook::react;
     static const auto defaultProps = std::make_shared<const RNSVGImageProps>();
     _props = defaultProps;
 
-    _imageResponseObserverProxy = RCTImageResponseObserverProxy(self);
+    _imageResponseObserverProxy = std::make_shared<RCTImageResponseObserverProxy>(self);
   }
   return self;
 }
@@ -99,6 +101,8 @@ using namespace facebook::react;
 
   setCommonRenderableProps(newProps, self);
   _props = std::static_pointer_cast<RNSVGImageProps const>(props);
+
+  [super updateProps:props oldProps:oldProps];
 }
 
 - (void)updateState:(State::Shared const &)state oldState:(State::Shared const &)oldState
@@ -118,14 +122,14 @@ using namespace facebook::react;
 {
   if (_state) {
     auto &observerCoordinator = _state->getData().getImageRequest().getObserverCoordinator();
-    observerCoordinator.removeObserver(_imageResponseObserverProxy);
+    observerCoordinator.removeObserver(*_imageResponseObserverProxy);
   }
 
   _state = state;
 
   if (_state) {
     auto &observerCoordinator = _state->getData().getImageRequest().getObserverCoordinator();
-    observerCoordinator.addObserver(_imageResponseObserverProxy);
+    observerCoordinator.addObserver(*_imageResponseObserverProxy);
   }
 }
 
