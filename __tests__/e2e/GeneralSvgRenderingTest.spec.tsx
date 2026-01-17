@@ -12,7 +12,9 @@ import failedCases from '../../e2e/failedCases.json';
 import { verifyComparisons } from '../../e2e/matchTestCases';
 import { height, targetPixelRatio, width } from '../../e2e/env';
 
-const testCases = fs.readdirSync(path.resolve('e2e', 'cases'));
+const testCases = fs
+  .readdirSync(path.resolve('e2e', 'cases'))
+  .filter((file) => file.endsWith('.svg'));
 testCases.forEach((testCase) => {
   jest.setTimeout(90_000);
   test(`Web browser rendered SVG should have less than 0.05% differences between device rendered SVG (${testCase})`, async () => {

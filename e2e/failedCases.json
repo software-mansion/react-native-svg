@@ -1,10 +1,10 @@
 {
   "ios": {
-    "paper": [],
-    "fabric": []
+    "paper": ["clip-path-shapes", "issue-1520", "mask-edge-cases"],
+    "fabric": ["clip-path-shapes", "issue-1520", "mask-edge-cases"]
   },
   "android": {
-    "paper": ["2"],
-    "fabric": ["2"]
+    "paper": ["2", "clip-path-shapes", "mask-edge-cases"],
+    "fabric": ["2", "clip-path-shapes", "mask-edge-cases"]
   }
 }
