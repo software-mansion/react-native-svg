@@ -6,12 +6,14 @@ import { FeCompositeProps as FeCompositeComponentProps } from '../../elements/fi
 import { FeFloodProps as FeFloodComponentProps } from '../../elements/filters/FeFlood';
 import { FeGaussianBlurProps as FeGaussianBlurComponentProps } from '../../elements/filters/FeGaussianBlur';
 import { FeMergeProps as FeMergeComponentProps } from '../../elements/filters/FeMerge';
+import { FeMorphologyProps as FeMorphologyComponentProps } from '../../elements/filters/FeMorphology';
 import { NativeProps as FeBlendNativeProps } from '../../fabric/FeBlendNativeComponent';
 import { NativeProps as FeColorMatrixNativeProps } from '../../fabric/FeColorMatrixNativeComponent';
 import { NativeProps as FeCompositeNativeProps } from '../../fabric/FeCompositeNativeComponent';
 import { NativeProps as FeFloodNativeProps } from '../../fabric/FeFloodNativeComponent';
 import { NativeProps as FeGaussianBlurNativeProps } from '../../fabric/FeGaussianBlurNativeComponent';
 import { NativeProps as FeMergeNativeProps } from '../../fabric/FeMergeNativeComponent';
+import { NativeProps as FeMorphologyNativeProps } from '../../fabric/FeMorphologyNativeComponent';
 import extractBrush from './extractBrush';
 import extractOpacity from './extractOpacity';
 import { NumberProp } from './types';
@@ -179,4 +181,22 @@ export const extractFeMerge = (
   }
 
   return { nodes };
+};
+
+export const extractFeMorphology = (
+  props: FeMorphologyComponentProps
+): FeMorphologyNativeProps => {
+  const extracted: FeMorphologyNativeProps = {};
+
+  if (props.in) {
+    extracted.in1 = props.in;
+  }
+  if (props.operator) {
+    extracted.operator1 = props.operator;
+  }
+  if (props.radius !== undefined) {
+    extracted.radius = props.radius;
+  }
+
+  return extracted;
 };
