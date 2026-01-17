@@ -1,0 +1,21 @@
+name: PaperExample iOS check
+on:
+  pull_request:
+    paths:
+      - .github/workflows/ios-build-paper-test.yml
+      - RNSVG.podspec
+      - apple/**
+      - src/fabric/**
+      - package.json
+      - apps/paper-example/package.json
+      - apps/paper-example/ios/**
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/ios-build.yml
+    with:
+      working-directory: 'paper-example'
