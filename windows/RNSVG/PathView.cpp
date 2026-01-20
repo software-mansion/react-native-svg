@@ -255,7 +255,7 @@ float PathView::ParseNumber(size_t &index) {
       c = m_d.at(index);
     }
   } else if (c != '.') {
-    throw hresult_invalid_argument(L"Invalid number formating character.");
+    throw hresult_invalid_argument(L"Invalid number formatting character.");
   }
 
   // Consume fraction.
@@ -280,7 +280,7 @@ float PathView::ParseNumber(size_t &index) {
       } else if (IsDigit(c)) {
         SkipDigits(index);
       } else {
-        throw hresult_invalid_argument(L"Invalid number formating character.");
+        throw hresult_invalid_argument(L"Invalid number formatting character.");
       }
     }
   }

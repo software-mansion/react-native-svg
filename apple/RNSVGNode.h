@@ -65,7 +65,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 @property (nonatomic, copy) RCTDirectEventBlock onSvgLayout;
 
 /**
- * RNSVGSvgView which ownes current RNSVGNode
+ * RNSVGSvgView which owns current RNSVGNode
  */
 @property (nonatomic, readonly, weak) RNSVGSvgView *svgView;
 @property (nonatomic, readonly, weak) RNSVGGroup *textRoot;

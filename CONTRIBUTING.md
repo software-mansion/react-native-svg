@@ -48,7 +48,7 @@ actions for all opened pull requests.
 ### To add new E2E test cases, proceed as follows:
 
 1. Put an SVG file of your selection into the `e2e/cases` directory.
-2. Execute `yarn generateE2eRefrences`. This action launches a headless Chrome browser via Puppeteer, capturing
+2. Execute `yarn generateE2eReferences`. This action launches a headless Chrome browser via Puppeteer, capturing
    snapshots of all rendered SVGs as .png files. These files will serve as a reference during testing.
 3. Check the `e2e/references` directory to observe newly created .png files.
 4. When you rerun the E2E tests, the new test case(s) you've added will be incorporated.
