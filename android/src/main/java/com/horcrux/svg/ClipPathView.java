@@ -78,6 +78,11 @@ class ClipPathView extends GroupView {
    * Determines whether to use fast path (single combined path) or mask-based rendering. Fast path:
    * single child, or non-overlapping children with uniform clipRule. Mask path: overlapping
    * children or mixed clipRules (per SVG spec, children always union).
+   *
+   * <p>Note: Unlike iOS which passes CGContextRef for context-dependent checks, Android handles
+   * context-dependent cases (e.g., TextView) by hardcoding exceptions in hasOverlappingChildren().
+   * This avoids requiring a Canvas parameter for what is primarily a structural check. Functional
+   * behavior is identical across platforms.
    */
   boolean canUseFastPath() {
     if (mClipPathStrategy != STRATEGY_UNKNOWN) {
