@@ -142,7 +142,7 @@ using namespace facebook::react;
 - (BOOL)getUniformClipRule:(RNSVGCGFCRule *)outClipRule context:(CGContextRef)context
 {
   __block BOOL firstChild = YES;
-  __block RNSVGCGFCRule uniformRule = kRNSVGCGFCRuleEvenodd;
+  __block RNSVGCGFCRule uniformRule = kRNSVGCGFCRuleNonzero;
   __block BOOL isUniform = YES;
 
   [self traverseSubviews:^(RNSVGNode *node) {
@@ -161,7 +161,9 @@ using namespace facebook::react;
     return YES;
   }];
 
-  if (isUniform && !firstChild) {
+  // No children: return default (nonzero), considered "uniform"
+  // Mixed rules: return NO
+  if (isUniform) {
     *outClipRule = uniformRule;
     return YES;
   }
