@@ -99,6 +99,22 @@ class ClipPathView extends GroupView {
     return canUseFast;
   }
 
+  /** Recursively checks if view or any descendant is a TextView (requires Canvas for getPath). */
+  private boolean containsTextView(View view) {
+    if (view instanceof TextView) {
+      return true;
+    }
+    if (view instanceof GroupView) {
+      GroupView group = (GroupView) view;
+      for (int i = 0; i < group.getChildCount(); i++) {
+        if (containsTextView(group.getChildAt(i))) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   /** O(n²) pairwise bounding box overlap check. Acceptable for typical clipPaths (<20 children). */
   private boolean hasOverlappingChildren() {
     int childCount = getChildCount();
@@ -115,7 +131,8 @@ class ClipPathView extends GroupView {
       if (child instanceof VirtualView && !(child instanceof MaskView)) {
         VirtualView node = (VirtualView) child;
         // Text nodes require Canvas context (setupGlyphContext calls canvas.getClipBounds)
-        if (node instanceof TextView) {
+        // Check recursively since Groups may contain nested Text
+        if (containsTextView(node)) {
           return true; // Assume overlap for text, use mask path
         }
         Path path = node.getPath(null, null);
