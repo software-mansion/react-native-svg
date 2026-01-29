@@ -130,8 +130,11 @@ using namespace facebook::react;
 }
 
 #pragma mark - RCTImageResponseDelegate
-
+#if !TARGET_OS_OSX // [macOS]
 - (void)didReceiveImage:(UIImage *)image metadata:(id)metadata fromObserver:(void const *)observer
+#else // [macOS
+- (void)didReceiveImage:(NSImage *)image metadata:(id)metadata fromObserver:(void const *)observer
+#endif // macOS]
 {
   if (!_eventEmitter || !_state) {
     // Notifications are delivered asynchronously and might arrive after the view is already recycled.
