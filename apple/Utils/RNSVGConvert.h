@@ -16,6 +16,7 @@ namespace react = facebook::react;
 + (RNSVGColorMatrixType)RNSVGColorMatrixTypeFromCppEquivalent:(react::RNSVGFeColorMatrixType)type;
 + (RNSVGCompositeOperator)RNSVGRNSVGCompositeOperatorFromCppEquivalent:(react::RNSVGFeCompositeOperator1)operator1;
 + (RNSVGEdgeMode)RNSVGEdgeModeFromCppEquivalent:(react::RNSVGFeGaussianBlurEdgeMode)edgeMode;
++ (RNSVGEdgeMode)RNSVGConvolveMatrixEdgeModeFromCppEquivalent:(react::RNSVGFeConvolveMatrixEdgeMode)edgeMode;
 
 @end
 
