@@ -107,6 +107,8 @@ import com.facebook.react.viewmanagers.RNSVGFeMergeManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeMergeManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeOffsetManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeOffsetManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeTurbulenceManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeTurbulenceManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFilterManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFilterManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGForeignObjectManagerDelegate;
@@ -488,6 +490,7 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     RNSVGFeGaussianBlur,
     RNSVGFeMerge,
     RNSVGFeOffset,
+    RNSVGFeTurbulence,
     RNSVGMarker,
     RNSVGForeignObject,
   }
@@ -548,6 +551,8 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
         return new FeMergeView(reactContext);
       case RNSVGFeOffset:
         return new FeOffsetView(reactContext);
+      case RNSVGFeTurbulence:
+        return new FeTurbulenceView(reactContext);
       case RNSVGMarker:
         return new MarkerView(reactContext);
       case RNSVGForeignObject:
@@ -1673,6 +1678,41 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     @ReactProp(name = "dy")
     public void setDy(FeOffsetView node, Dynamic dy) {
       node.setDy(dy);
+    }
+  }
+
+  static class FeTurbulenceManager extends FilterPrimitiveManager<FeTurbulenceView>
+          implements RNSVGFeTurbulenceManagerInterface<FeTurbulenceView> {
+    FeTurbulenceManager() {
+      super(SVGClass.RNSVGFeTurbulence);
+      mDelegate = new RNSVGFeTurbulenceManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeTurbulence";
+
+    @ReactProp(name = "baseFrequency")
+    public void setBaseFrequency(FeTurbulenceView node, Dynamic baseFrequency) {
+      node.setBaseFrequency(baseFrequency);
+    }
+
+    @ReactProp(name = "numOctaves")
+    public void setNumOctaves(FeTurbulenceView node, Dynamic numOctaves) {
+      node.setNumOctaves(numOctaves);
+    }
+
+    @ReactProp(name = "seed")
+    public void setSeed(FeTurbulenceView node, Dynamic seed) {
+      node.setSeed(seed);
+    }
+
+    @ReactProp(name = "stitchTile")
+    public void setStitchTiles(FeTurbulenceView node, String stitchTiles) {
+      node.setStitchTiles(stitchTiles);
+    }
+
+    @ReactProp(name = "type")
+    public void setType(FeTurbulenceView node, String type) {
+      node.setType(type);
     }
   }
 

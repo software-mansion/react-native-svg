@@ -98,6 +98,24 @@ RCT_ENUM_CONVERTER(
     SVG_FECOMPOSITE_OPERATOR_UNKNOWN,
     intValue)
 
+RCT_ENUM_CONVERTER(
+    RNSVGTurbulenceType,
+    (@{
+      @"turbulence" : @(SVG_FETURBULENCE_TYPE_TURBULENCE),
+      @"fractalNoise" : @(SVG_FETURBULENCE_TYPE_FRACTAL_NOISE),
+    }),
+    SVG_FETURBULENCE_TYPE_TURBULENCE,
+    intValue)
+
+RCT_ENUM_CONVERTER(
+    RNSVGTurbulenceStitchTile,
+    (@{
+      @"stitch" : @(SVG_FETURBULENCE_STITCH_TILE_STITCH),
+      @"noStitch" : @(SVG_FETURBULENCE_STITCH_TILE_NO_STITCH),
+    }),
+    SVG_FETURBULENCE_STITCH_TILE_NO_STITCH,
+    intValue)
+
 + (RNSVGBrush *)RNSVGBrush:(id)json
 {
   if (json == nil) {

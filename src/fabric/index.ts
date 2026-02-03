@@ -28,6 +28,7 @@ import RNSVGFeFlood from './FeFloodNativeComponent';
 import RNSVGFeGaussianBlur from './FeGaussianBlurNativeComponent';
 import RNSVGFeMerge from './FeMergeNativeComponent';
 import RNSVGFeOffset from './FeOffsetNativeComponent';
+import RNSVGFeTurbulence from './FeTurbulenceNativeComponent';
 
 export {
   RNSVGCircle,
@@ -60,4 +61,5 @@ export {
   RNSVGFeGaussianBlur,
   RNSVGFeMerge,
   RNSVGFeOffset,
+  RNSVGFeTurbulence,
 };
