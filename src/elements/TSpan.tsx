@@ -1,7 +1,9 @@
 import type { Component } from 'react';
 import * as React from 'react';
 import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
-import extractTransform from '../lib/extract/extractTransform';
+import extractTransform, {
+  extractTransformSvgView,
+} from '../lib/extract/extractTransform';
 import type { TextChild } from '../lib/extract/extractText';
 import extractText, { setTSpan } from '../lib/extract/extractText';
 import { pickNotNil } from '../lib/util';
@@ -45,7 +47,7 @@ export default class TSpan extends Shape<TSpanProps> {
 
   render() {
     const prop = propsAndStyles(this.props);
-    const props = extractProps(
+    const extractedProps = extractProps(
       {
         ...prop,
         x: null,
@@ -53,9 +55,11 @@ export default class TSpan extends Shape<TSpanProps> {
       },
       this
     );
-    Object.assign(props, extractText(prop, false));
-    props.ref = this.refMethod as (instance: Component | null) => void;
-    return <RNSVGTSpan {...props} />;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const transform = extractTransformSvgView(this.props as any);
+    Object.assign(extractedProps, extractText(prop, false));
+    extractedProps.ref = this.refMethod as (instance: Component | null) => void;
+    return <RNSVGTSpan {...extractedProps} style={{ transform }} />;
   }
 }
 

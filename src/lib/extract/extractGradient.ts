@@ -4,9 +4,9 @@ import { Children } from 'react';
 import { processColor } from 'react-native';
 
 import extractOpacity from './extractOpacity';
-import extractTransform from './extractTransform';
 import type { TransformProps } from './types';
 import units from '../units';
+import extractTransform from './extractTransform';
 
 const percentReg = /^([+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)(%?)$/;
 
