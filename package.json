@@ -146,6 +146,7 @@
         "RNSVGFeFlood": "RNSVGFeFlood",
         "RNSVGFeGaussianBlur": "RNSVGFeGaussianBlur",
         "RNSVGFeMerge": "RNSVGFeMerge",
+        "RNSVGFeMorphology": "RNSVGFeMorphology",
         "RNSVGFeOffset": "RNSVGFeOffset",
         "RNSVGFilter": "RNSVGFilter",
         "RNSVGForeignObject": "RNSVGForeignObject",

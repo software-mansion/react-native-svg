@@ -181,4 +181,36 @@ class FilterProperties {
       return type;
     }
   }
+
+  enum FeMorphologyOperator {
+    ERODE("erode"),
+    DILATE("dilate");
+
+    private final String operator;
+
+    FeMorphologyOperator(String operator) {
+      this.operator = operator;
+    }
+
+    static FeMorphologyOperator getEnum(String strVal) {
+      if (!typeToEnum.containsKey(strVal)) {
+        throw new IllegalArgumentException("Unknown String Value: " + strVal);
+      }
+      return typeToEnum.get(strVal);
+    }
+
+    private static final Map<String, FeMorphologyOperator> typeToEnum = new HashMap<>();
+
+    static {
+      for (final FeMorphologyOperator en : FeMorphologyOperator.values()) {
+        typeToEnum.put(en.operator, en);
+      }
+    }
+
+    @Nonnull
+    @Override
+    public String toString() {
+      return operator;
+    }
+  }
 }
