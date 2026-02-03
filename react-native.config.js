@@ -8,6 +8,8 @@ module.exports = {
           'RNSVGDefsComponentDescriptor',
           'RNSVGFeBlendComponentDescriptor',
           'RNSVGFeColorMatrixComponentDescriptor',
+          'RNSVGFeComponentTransferComponentDescriptor',
+          'RNSVGFeComponentTransferFunctionComponentDescriptor',
           'RNSVGFeCompositeComponentDescriptor',
           'RNSVGFeFloodComponentDescriptor',
           'RNSVGFeGaussianBlurComponentDescriptor',
