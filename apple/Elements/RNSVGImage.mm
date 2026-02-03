@@ -239,7 +239,7 @@ using namespace facebook::react;
 #if !TARGET_OS_OSX // [macOS]
                      callback:^(__unused NSError *error, UIImage *image) {
 #else // [macOS
-      callback:^(__unused NSError *error, NSImage *image) {
+                     callback:^(__unused NSError *error, NSImage *image) {
 #endif // macOS]
                        dispatch_async(dispatch_get_main_queue(), ^{
                          self->_image = CGImageRetain(image.CGImage);
