@@ -130,8 +130,11 @@ using namespace facebook::react;
 }
 
 #pragma mark - RCTImageResponseDelegate
-
+#if !TARGET_OS_OSX // [macOS]
 - (void)didReceiveImage:(UIImage *)image metadata:(id)metadata fromObserver:(void const *)observer
+#else // [macOS
+- (void)didReceiveImage:(NSImage *)image metadata:(id)metadata fromObserver:(void const *)observer
+#endif // macOS]
 {
   if (!_eventEmitter || !_state) {
     // Notifications are delivered asynchronously and might arrive after the view is already recycled.
@@ -233,7 +236,11 @@ using namespace facebook::react;
 
   _reloadImageCancellationBlock = [[self.bridge moduleForName:@"ImageLoader"]
       loadImageWithURLRequest:src.request
+#if !TARGET_OS_OSX // [macOS]
                      callback:^(__unused NSError *error, UIImage *image) {
+#else // [macOS
+                     callback:^(__unused NSError *error, NSImage *image) {
+#endif // macOS]
                        dispatch_async(dispatch_get_main_queue(), ^{
                          self->_image = CGImageRetain(image.CGImage);
                          self->_imageSize = CGSizeMake(CGImageGetWidth(self->_image), CGImageGetHeight(self->_image));
