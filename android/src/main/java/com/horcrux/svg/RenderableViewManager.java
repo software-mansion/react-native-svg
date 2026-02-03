@@ -694,11 +694,6 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       node.setBaselineShift(baselineShift);
     }
 
-    @ReactProp(name = "verticalAlign")
-    public void setVerticalAlign(K node, @Nullable Dynamic verticalAlign) {
-      node.setVerticalAlign(verticalAlign);
-    }
-
     @ReactProp(name = "rotate")
     public void setRotate(K node, Dynamic rotate) {
       node.setRotate(rotate);
