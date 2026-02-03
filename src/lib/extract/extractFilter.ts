@@ -3,15 +3,19 @@ import { ColorValue, processColor } from 'react-native';
 import { FeBlendProps as FeBlendComponentProps } from '../../elements/filters/FeBlend';
 import { FeColorMatrixProps as FeColorMatrixComponentProps } from '../../elements/filters/FeColorMatrix';
 import { FeCompositeProps as FeCompositeComponentProps } from '../../elements/filters/FeComposite';
+import { FeDisplacementMapProps as FeDisplacementMapComponentProps } from '../../elements/filters/FeDisplacementMap';
 import { FeFloodProps as FeFloodComponentProps } from '../../elements/filters/FeFlood';
 import { FeGaussianBlurProps as FeGaussianBlurComponentProps } from '../../elements/filters/FeGaussianBlur';
 import { FeMergeProps as FeMergeComponentProps } from '../../elements/filters/FeMerge';
+import { FeTurbulenceProps as FeTurbulenceComponentProps } from '../../elements/filters/FeTurbulence';
 import { NativeProps as FeBlendNativeProps } from '../../fabric/FeBlendNativeComponent';
 import { NativeProps as FeColorMatrixNativeProps } from '../../fabric/FeColorMatrixNativeComponent';
 import { NativeProps as FeCompositeNativeProps } from '../../fabric/FeCompositeNativeComponent';
+import { NativeProps as FeDisplacementMapNativeProps } from '../../fabric/FeDisplacementMapNativeComponent';
 import { NativeProps as FeFloodNativeProps } from '../../fabric/FeFloodNativeComponent';
 import { NativeProps as FeGaussianBlurNativeProps } from '../../fabric/FeGaussianBlurNativeComponent';
 import { NativeProps as FeMergeNativeProps } from '../../fabric/FeMergeNativeComponent';
+import { NativeProps as FeTurbulenceNativeProps } from '../../fabric/FeTurbulenceNativeComponent';
 import extractBrush from './extractBrush';
 import extractOpacity from './extractOpacity';
 import { NumberProp } from './types';
@@ -179,4 +183,50 @@ export const extractFeMerge = (
   }
 
   return { nodes };
+};
+
+export const extractFeTurbulence = (props: FeTurbulenceComponentProps) => {
+  const extracted: FeTurbulenceNativeProps = {};
+
+  if (props.baseFrequency !== undefined) {
+    extracted.baseFrequency = props.baseFrequency;
+  }
+  if (props.numOctaves !== undefined) {
+    extracted.numOctaves = props.numOctaves;
+  }
+  if (props.seed !== undefined) {
+    extracted.seed = props.seed;
+  }
+  if (props.stitchTiles) {
+    extracted.stitchTiles = props.stitchTiles;
+  }
+  if (props.type) {
+    extracted.type = props.type;
+  }
+
+  return extracted;
+};
+
+export const extractFeDisplacementMap = (
+  props: FeDisplacementMapComponentProps
+) => {
+  const extracted: FeDisplacementMapNativeProps = {};
+
+  if (props.in2) {
+    extracted.in2 = props.in2;
+  }
+
+  if (props.scale !== undefined) {
+    extracted.scale = props.scale;
+  }
+
+  if (props.xChannelSelector) {
+    extracted.xChannelSelector = props.xChannelSelector;
+  }
+
+  if (props.yChannelSelector) {
+    extracted.yChannelSelector = props.yChannelSelector;
+  }
+
+  return extracted;
 };
