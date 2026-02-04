@@ -54,9 +54,12 @@ export function SvgAst({ ast, override }: AstProps) {
   const { props, children } = ast;
 
   const Svg = tags.svg;
+  const cleanedOverrideProps = Object.fromEntries(
+    Object.entries(override || {}).filter(([_, value]) => value !== undefined)
+  );
 
   return (
-    <Svg {...props} {...override}>
+    <Svg {...props} {...cleanedOverrideProps}>
       {children}
     </Svg>
   );
