@@ -21,6 +21,7 @@ export default function extractFill(
     o.fill =
       !fill && typeof fill !== 'number' ? defaultFill : extractBrush(fill);
   } else {
+    inherited.push('fill');
     // we want the default value of fill to be black to match the spec
     o.fill = defaultFill;
   }
