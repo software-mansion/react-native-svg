@@ -33,8 +33,8 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.touch.ReactHitSlopView;
-import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.react.uimanager.PointerEvents;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -103,10 +103,8 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
 
   public void onReceiveNativeEvent() {
     WritableMap event = Arguments.createMap();
-    ReactContext reactContext = (ReactContext)getContext();
-    reactContext
-        .getJSModule(RCTEventEmitter.class)
-        .receiveEvent(getId(), "topSvgLayout", event);
+    ReactContext reactContext = (ReactContext) getContext();
+    reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(getId(), "topSvgLayout", event);
   }
 
   @Nullable String mFilter;
@@ -376,6 +374,8 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
   void render(Canvas canvas, Paint paint, float opacity) {
     MaskView mask = null;
     FilterView filter = null;
+    ClipPathView clipPathView = null;
+    boolean useClipMask = false;
 
     if (mMask != null) {
       SvgView root = getSvgView();
@@ -385,8 +385,15 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
       SvgView root = getSvgView();
       filter = (FilterView) root.getDefinedFilter(mFilter);
     }
+    if (mClipPath != null) {
+      SvgView root = getSvgView();
+      clipPathView = (ClipPathView) root.getDefinedClipPath(mClipPath);
+      if (clipPathView != null && !clipPathView.canUseFastPath()) {
+        useClipMask = true;
+      }
+    }
 
-    if (mask != null || filter != null) {
+    if (mask != null || filter != null || useClipMask) {
       if (filter != null) {
         Paint bitmapPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
         canvas.saveLayer(null, bitmapPaint);
@@ -495,6 +502,25 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
         // close combined layer
         canvas.restore();
       }
+
+      // Apply clipPath bitmap mask (complex case: overlapping children or mixed clipRules)
+      if (useClipMask && clipPathView != null) {
+        Paint dstInPaint = new Paint();
+        dstInPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        canvas.saveLayer(null, dstInPaint);
+
+        // Get and draw the clipPath bitmap mask (cached by ClipPathView)
+        RectF bounds = new RectF();
+        Bitmap clipMask = clipPathView.createMask(canvas, paint, bounds);
+        if (clipMask != null) {
+          // Draw bitmap scaled to fit bounds (bitmap is at screen density resolution)
+          // Note: Don't recycle - ClipPathView owns the bitmap lifecycle
+          canvas.drawBitmap(clipMask, null, bounds, null);
+        }
+
+        canvas.restore(); // close clipPath mask layer
+      }
+
       // close element layer
       canvas.restore();
     } else {

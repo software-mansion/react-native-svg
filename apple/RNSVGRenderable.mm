@@ -695,14 +695,9 @@ UInt32 saturate(CGFloat value)
 
   if (self.clipPath) {
     RNSVGClipPath *clipNode = (RNSVGClipPath *)[self.svgView getDefinedClipPath:self.clipPath];
-    if ([clipNode isSimpleClipPath]) {
-      CGPathRef clipPath = [self getClipPath];
-      if (clipPath && !CGPathContainsPoint(clipPath, nil, transformed, clipNode.clipRule == kRNSVGCGFCRuleEvenodd)) {
-        return nil;
-      }
-    } else {
-      RNSVGRenderable *clipGroup = (RNSVGRenderable *)clipNode;
-      if (![clipGroup hitTest:transformed withEvent:event]) {
+    CGPathRef clipPath = [self getClipPath];
+    if (clipPath && clipNode) {
+      if (![clipNode containsPoint:transformed inPath:clipPath context:UIGraphicsGetCurrentContext()]) {
         return nil;
       }
     }

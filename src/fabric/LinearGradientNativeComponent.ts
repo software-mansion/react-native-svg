@@ -18,7 +18,7 @@ interface SvgNodeCommonProps {
   markerMid?: string;
   markerEnd?: string;
   clipPath?: string;
-  clipRule?: WithDefault<Int32, 0>;
+  clipRule?: WithDefault<Int32, 1>;
   responsible?: boolean;
   display?: string;
   pointerEvents?: string;
