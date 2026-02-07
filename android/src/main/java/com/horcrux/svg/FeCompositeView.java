@@ -17,7 +17,7 @@ class FeCompositeView extends FilterPrimitiveView {
   float mK2;
   float mK3;
   float mK4;
-  FilterProperties.FeCompositeOperator mOperator;
+  FilterProperties.FeCompositeOperator mOperator = FilterProperties.FeCompositeOperator.OVER;
 
   public FeCompositeView(ReactContext reactContext) {
     super(reactContext);

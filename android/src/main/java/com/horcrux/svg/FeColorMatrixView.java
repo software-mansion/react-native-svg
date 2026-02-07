@@ -10,7 +10,7 @@ import java.util.HashMap;
 @SuppressLint("ViewConstructor")
 class FeColorMatrixView extends FilterPrimitiveView {
   String mIn1;
-  FilterProperties.FeColorMatrixType mType;
+  FilterProperties.FeColorMatrixType mType = FilterProperties.FeColorMatrixType.MATRIX;
   ReadableArray mValues;
 
   public FeColorMatrixView(ReactContext reactContext) {
