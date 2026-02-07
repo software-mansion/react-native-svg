@@ -18,6 +18,30 @@ import { NumberProp } from './types';
 
 const spaceReg = /\s+/;
 
+const validBlendModes = new Set([
+  'unknown',
+  'normal',
+  'multiply',
+  'screen',
+  'darken',
+  'lighten',
+]);
+const validEdgeModes = new Set(['duplicate', 'wrap', 'none']);
+const validColorMatrixTypes = new Set([
+  'matrix',
+  'saturate',
+  'hueRotate',
+  'luminanceToAlpha',
+]);
+const validCompositeOperators = new Set([
+  'over',
+  'in',
+  'out',
+  'atop',
+  'xor',
+  'arithmetic',
+]);
+
 interface FilterPrimitiveCommonProps {
   x?: NumberProp;
   y?: NumberProp;
@@ -57,7 +81,11 @@ export const extractFeBlend = (
     extracted.in2 = props.in2;
   }
   if (props.mode) {
-    extracted.mode = props.mode;
+    if (validBlendModes.has(props.mode)) {
+      extracted.mode = props.mode;
+    } else {
+      console.warn(`RNSVG: Unsupported feBlend mode "${props.mode}"`);
+    }
   }
 
   return extracted;
@@ -85,7 +113,11 @@ export const extractFeColorMatrix = (
     }
   }
   if (props.type) {
-    extracted.type = props.type;
+    if (validColorMatrixTypes.has(props.type)) {
+      extracted.type = props.type;
+    } else {
+      console.warn(`RNSVG: Unsupported feColorMatrix type "${props.type}"`);
+    }
   }
 
   return extracted;
@@ -94,10 +126,17 @@ export const extractFeColorMatrix = (
 export const extractFeComposite = (
   props: FeCompositeComponentProps
 ): FeCompositeNativeProps => {
+  const operator1 =
+    props.operator && validCompositeOperators.has(props.operator)
+      ? props.operator
+      : 'over';
+  if (props.operator && !validCompositeOperators.has(props.operator)) {
+    console.warn(`RNSVG: Unsupported feComposite operator "${props.operator}"`);
+  }
   const extracted: FeCompositeNativeProps = {
     in1: props.in || '',
     in2: props.in2 || '',
-    operator1: props.operator || 'over',
+    operator1,
   };
 
   (['k1', 'k2', 'k3', 'k4'] as const).forEach((key) => {
@@ -155,7 +194,11 @@ export const extractFeGaussianBlur = (
     extracted.stdDeviationY = Number(props.stdDeviation) || 0;
   }
   if (props.edgeMode) {
-    extracted.edgeMode = props.edgeMode;
+    if (validEdgeModes.has(props.edgeMode)) {
+      extracted.edgeMode = props.edgeMode;
+    } else {
+      console.warn(`RNSVG: Unsupported edgeMode "${props.edgeMode}"`);
+    }
   }
   return extracted;
 };
