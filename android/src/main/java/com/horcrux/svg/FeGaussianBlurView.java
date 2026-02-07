@@ -15,7 +15,7 @@ class FeGaussianBlurView extends FilterPrimitiveView {
   String mIn1;
   float mStdDeviationX;
   float mStdDeviationY;
-  FilterProperties.EdgeMode mEdgeMode;
+  FilterProperties.EdgeMode mEdgeMode = FilterProperties.EdgeMode.UNKNOWN;
 
   public FeGaussianBlurView(ReactContext reactContext) {
     super(reactContext);

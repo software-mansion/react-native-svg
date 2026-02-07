@@ -13,7 +13,7 @@ import java.util.HashMap;
 class FeBlendView extends FilterPrimitiveView {
   String mIn1;
   String mIn2;
-  FilterProperties.FeBlendMode mMode;
+  FilterProperties.FeBlendMode mMode = FilterProperties.FeBlendMode.NORMAL;
 
   public FeBlendView(ReactContext reactContext) {
     super(reactContext);

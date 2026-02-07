@@ -27,8 +27,21 @@ export default class Filter extends Shape<FilterProps> {
     primitiveUnits: 'userSpaceOnUse',
   };
 
+  static validUnits = new Set(['userSpaceOnUse', 'objectBoundingBox']);
+
   render() {
     const { id, x, y, width, height, filterUnits, primitiveUnits } = this.props;
+
+    let validFilterUnits = filterUnits;
+    if (filterUnits && !Filter.validUnits.has(filterUnits)) {
+      console.warn(`RNSVG: Unsupported filterUnits "${filterUnits}"`);
+      validFilterUnits = undefined;
+    }
+    let validPrimitiveUnits = primitiveUnits;
+    if (primitiveUnits && !Filter.validUnits.has(primitiveUnits)) {
+      console.warn(`RNSVG: Unsupported primitiveUnits "${primitiveUnits}"`);
+      validPrimitiveUnits = undefined;
+    }
 
     const filterProps = {
       name: id,
@@ -36,8 +49,8 @@ export default class Filter extends Shape<FilterProps> {
       y,
       width,
       height,
-      filterUnits,
-      primitiveUnits,
+      filterUnits: validFilterUnits,
+      primitiveUnits: validPrimitiveUnits,
     };
     return (
       <RNSVGFilter

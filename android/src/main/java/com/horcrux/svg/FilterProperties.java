@@ -1,5 +1,7 @@
 package com.horcrux.svg;
 
+import com.facebook.common.logging.FLog;
+import com.facebook.react.common.ReactConstants;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nonnull;
@@ -18,7 +20,8 @@ class FilterProperties {
 
     static Units getEnum(String strVal) {
       if (!unitsToEnum.containsKey(strVal)) {
-        throw new IllegalArgumentException("Unknown 'Unit' Value: " + strVal);
+        FLog.w(ReactConstants.TAG, "RNSVG: Unknown 'Unit' value: " + strVal);
+        return OBJECT_BOUNDING_BOX;
       }
       return unitsToEnum.get(strVal);
     }
@@ -53,7 +56,8 @@ class FilterProperties {
 
     static EdgeMode getEnum(String strVal) {
       if (!edgeModeToEnum.containsKey(strVal)) {
-        throw new IllegalArgumentException("Unknown 'edgeMode' Value: " + strVal);
+        FLog.w(ReactConstants.TAG, "RNSVG: Unknown 'edgeMode' value: " + strVal);
+        return UNKNOWN;
       }
       return edgeModeToEnum.get(strVal);
     }
@@ -90,7 +94,8 @@ class FilterProperties {
 
     static FeBlendMode getEnum(String strVal) {
       if (!typeToEnum.containsKey(strVal)) {
-        throw new IllegalArgumentException("Unknown String Value: " + strVal);
+        FLog.w(ReactConstants.TAG, "RNSVG: Unknown 'feBlendMode' value: " + strVal);
+        return UNKNOWN;
       }
       return typeToEnum.get(strVal);
     }
@@ -125,7 +130,8 @@ class FilterProperties {
 
     static FeColorMatrixType getEnum(String strVal) {
       if (!typeToEnum.containsKey(strVal)) {
-        throw new IllegalArgumentException("Unknown String Value: " + strVal);
+        FLog.w(ReactConstants.TAG, "RNSVG: Unknown 'feColorMatrixType' value: " + strVal);
+        return MATRIX;
       }
       return typeToEnum.get(strVal);
     }
@@ -162,7 +168,8 @@ class FilterProperties {
 
     static FeCompositeOperator getEnum(String strVal) {
       if (!typeToEnum.containsKey(strVal)) {
-        throw new IllegalArgumentException("Unknown String Value: " + strVal);
+        FLog.w(ReactConstants.TAG, "RNSVG: Unknown 'feCompositeOperator' value: " + strVal);
+        return OVER;
       }
       return typeToEnum.get(strVal);
     }
