@@ -122,14 +122,22 @@ using namespace facebook::react;
 {
   if (_state) {
     auto &observerCoordinator = _state->getData().getImageRequest().getObserverCoordinator();
+#if REACT_NATIVE_MINOR_VERSION > 84
+    observerCoordinator.removeObserver(_imageResponseObserverProxy);
+#else
     observerCoordinator.removeObserver(*_imageResponseObserverProxy);
+#endif
   }
 
   _state = state;
 
   if (_state) {
     auto &observerCoordinator = _state->getData().getImageRequest().getObserverCoordinator();
+#if REACT_NATIVE_MINOR_VERSION > 84
+    observerCoordinator.addObserver(_imageResponseObserverProxy);
+#else
     observerCoordinator.addObserver(*_imageResponseObserverProxy);
+#endif
   }
 }
 
