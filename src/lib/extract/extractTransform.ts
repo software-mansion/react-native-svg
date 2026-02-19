@@ -245,6 +245,7 @@ export function stringifyTransformArrayProps(
           return `translate(${value}, 0)`;
         case 'translateY':
           return `translate(0, ${value})`;
+        case 'rotateZ':
         case 'rotate':
           return `rotate(${getAngleValueInDeg(value)})`;
         case 'scale':
@@ -259,9 +260,16 @@ export function stringifyTransformArrayProps(
           return `skewY(${getAngleValueInDeg(value)})`;
         case 'matrix':
           return `matrix(${value.join(', ')})`;
+        case 'rotateX':
+        case 'rotateY':
+        case 'perspective':
+          // 3D transforms have no SVG 2D equivalent — skip silently
+          return '';
         default:
           return '';
       }
     })
+    // Remove empty strings resulting from unsupported transform types
+    .filter(Boolean)
     .join(' ');
 }
