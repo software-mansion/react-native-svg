@@ -168,8 +168,14 @@ export function transformToMatrix(
           transform as TransformsStyleArray
         );
 
-        const t = parse(stringifiedTransform);
-        append(t[0], t[3], t[1], t[4], t[2], t[5]);
+        if (stringifiedTransform) {
+          try {
+            const t = parse(stringifiedTransform);
+            append(t[0], t[3], t[1], t[4], t[2], t[5]);
+          } catch (e) {
+            console.error(e);
+          }
+        }
       }
     } else if (typeof transform === 'string') {
       try {
