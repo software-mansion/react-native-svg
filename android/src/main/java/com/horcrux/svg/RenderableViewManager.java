@@ -1630,7 +1630,7 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
       node.setStdDeviationY(stdDeviationY);
     }
 
-    @ReactProp(name = "values")
+    @ReactProp(name = "edgeMode")
     public void setEdgeMode(FeGaussianBlurView node, String edgeMode) {
       node.setEdgeMode(edgeMode);
     }
