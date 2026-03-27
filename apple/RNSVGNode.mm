@@ -27,6 +27,8 @@ using namespace facebook::react;
   BOOL _transparent;
   RNSVGClipPath *_clipNode;
   CGPathRef _cachedClipPath;
+  CGImageRef _cachedClipMask;
+  CGRect _cachedClipMaskBounds;
   CGFloat canvasWidth;
   CGFloat canvasHeight;
   CGFloat canvasDiagonal;
@@ -44,6 +46,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
     _matrix = CGAffineTransformIdentity;
     _invmatrix = CGAffineTransformIdentity;
     _opacity = 1;
+    _clipRule = kRNSVGCGFCRuleNonzero;
     _merging = false;
     _dirty = false;
   }
@@ -242,9 +245,9 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   if (_markerPath == markerPath) {
     return;
   }
-  
+
   CGPathRelease(_markerPath);
-  
+
   _markerPath = markerPath;
   [self invalidate];
 }
@@ -278,13 +281,12 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 #ifdef RCT_NEW_ARCH_ENABLED
   if (_eventEmitter != nullptr) {
     static_cast<const RNSVGGroupEventEmitter &>(*_eventEmitter)
-      .onSvgLayout(
-        {.layout = {
-            .x = static_cast<int>(_clientRect.origin.x),
-            .y = static_cast<int>(_clientRect.origin.y),
-            .width = static_cast<int>(_clientRect.size.width),
-            .height = static_cast<int>(_clientRect.size.height)
-        }});
+        .onSvgLayout(
+            {.layout = {
+                 .x = static_cast<int>(_clientRect.origin.x),
+                 .y = static_cast<int>(_clientRect.origin.y),
+                 .width = static_cast<int>(_clientRect.size.width),
+                 .height = static_cast<int>(_clientRect.size.height)}});
   }
 #else
   if (self.onSvgLayout) {
@@ -307,6 +309,8 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   }
   CGPathRelease(_cachedClipPath);
   _cachedClipPath = nil;
+  CGImageRelease(_cachedClipMask);
+  _cachedClipMask = nil;
   _clipPath = clipPath;
   [self invalidate];
 }
@@ -318,6 +322,8 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   }
   CGPathRelease(_cachedClipPath);
   _cachedClipPath = nil;
+  CGImageRelease(_cachedClipMask);
+  _cachedClipMask = nil;
   _clipRule = clipRule;
   [self invalidate];
 }
@@ -399,15 +405,61 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 
 - (void)clip:(CGContextRef)context
 {
-  CGPathRef clipPath = [self getClipPath:context];
+  if (!self.clipPath) {
+    return;
+  }
 
+  _clipNode = (RNSVGClipPath *)[self.svgView getDefinedClipPath:self.clipPath];
+  if (!_clipNode) {
+    return;
+  }
+
+  // Cache Invalidation Contract:
+  // ClipPath.dirty is set to true when:
+  //   1. ClipPath's own properties change (via invalidate)
+  //   2. Any child of ClipPath changes (propagates up via RNSVGContainer.invalidate)
+  // ClipPath.dirty is reset to false in parseReference after re-rendering.
+  // This ensures cached clip paths/masks are invalidated on any mutation.
+  if (_clipNode.dirty) {
+    CGPathRelease(_cachedClipPath);
+    _cachedClipPath = nil;
+    CGImageRelease(_cachedClipMask);
+    _cachedClipMask = nil;
+  }
+
+  RNSVGCGFCRule clipRule;
+  BOOL canUseFastPath = [_clipNode canUseFastPath:context clipRule:&clipRule];
+
+  if (canUseFastPath) {
+    [self applyFastPathClipping:context clipRule:clipRule];
+  } else {
+    [self applyMaskClipping:context];
+  }
+}
+
+- (void)applyFastPathClipping:(CGContextRef)context clipRule:(RNSVGCGFCRule)clipRule
+{
+  CGPathRef clipPath = [self getClipPath:context];
   if (clipPath) {
     CGContextAddPath(context, clipPath);
-    if (_clipRule == kRNSVGCGFCRuleEvenodd) {
+    if (clipRule == kRNSVGCGFCRuleEvenodd) {
       CGContextEOClip(context);
     } else {
       CGContextClip(context);
     }
+  }
+}
+
+- (void)applyMaskClipping:(CGContextRef)context
+{
+  if (!_cachedClipMask) {
+    CGRect maskBounds;
+    _cachedClipMask = [_clipNode createMask:context bounds:&maskBounds];
+    _cachedClipMaskBounds = maskBounds;
+  }
+
+  if (_cachedClipMask) {
+    CGContextClipToMask(context, _cachedClipMaskBounds, _cachedClipMask);
   }
 }
 
@@ -637,6 +689,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 - (void)dealloc
 {
   CGPathRelease(_cachedClipPath);
+  CGImageRelease(_cachedClipMask);
   CGPathRelease(_strokePath);
   CGPathRelease(_path);
   CGPathRelease(_markerPath);
@@ -656,7 +709,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   _name = nil;
   _display = nil;
   _opacity = 1;
-  _clipRule = kRNSVGCGFCRuleEvenodd;
+  _clipRule = kRNSVGCGFCRuleNonzero;
   _clipPath = nil;
   _mask = nil;
   _markerStart = nil;
@@ -699,6 +752,9 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   _strokePath = nil;
   CGPathRelease(_path);
   _path = nil;
+  CGImageRelease(_cachedClipMask);
+  _cachedClipMask = nil;
+  _cachedClipMaskBounds = CGRectZero;
 }
 #endif // RCT_NEW_ARCH_ENABLED
 

@@ -1,10 +1,10 @@
 {
   "ios": {
-    "paper": [],
-    "fabric": []
+    "paper": ["clip-evenodd-union", "clip-path-shapes", "mask-edge-cases"],
+    "fabric": ["clip-evenodd-union", "clip-path-shapes", "mask-edge-cases"]
   },
   "android": {
-    "paper": ["2"],
-    "fabric": ["2"]
+    "paper": ["2", "clip-path-shapes", "mask-edge-cases"],
+    "fabric": ["2", "clip-path-shapes", "mask-edge-cases"]
   }
 }

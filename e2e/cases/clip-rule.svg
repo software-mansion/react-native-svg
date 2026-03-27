@@ -1,0 +1,41 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Tests: clip-rule property (evenodd vs nonzero)
+       Left: evenodd - hole where path overlaps itself
+       Middle: nonzero - solid fill (no hole)
+       Right: default (no clip-rule) - should be nonzero per SVG spec -->
+
+  <defs>
+    <!-- Path with two overlapping squares - clip-rule affects how overlap is treated -->
+
+    <!-- evenodd: overlap region should be clipped OUT (hole) -->
+    <clipPath id="clip-evenodd">
+      <path clip-rule="evenodd" d="M10,10 L40,10 L40,60 L10,60 Z M20,20 L50,20 L50,50 L20,50 Z"/>
+    </clipPath>
+
+    <!-- nonzero: overlap region should be clipped IN (solid) -->
+    <clipPath id="clip-nonzero">
+      <path clip-rule="nonzero" d="M10,10 L40,10 L40,60 L10,60 Z M20,20 L50,20 L50,50 L20,50 Z"/>
+    </clipPath>
+
+    <!-- default: no clip-rule specified - should behave as nonzero per SVG spec -->
+    <clipPath id="clip-default">
+      <path d="M10,10 L40,10 L40,60 L10,60 Z M20,20 L50,20 L50,50 L20,50 Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- Test 1 (left): Red rect with evenodd - expect hole in overlap -->
+  <g transform="translate(0, 20)">
+    <rect x="5" y="5" width="50" height="60" fill="red" clip-path="url(#clip-evenodd)"/>
+  </g>
+
+  <!-- Test 2 (middle): Blue rect with nonzero - expect solid (no hole) -->
+  <g transform="translate(25, 20)">
+    <rect x="5" y="5" width="50" height="60" fill="blue" clip-path="url(#clip-nonzero)"/>
+  </g>
+
+  <!-- Test 3 (right): Green rect with default - should be solid like nonzero -->
+  <!-- This tests the iOS fix in commit 49dfe269 -->
+  <g transform="translate(50, 20)">
+    <rect x="5" y="5" width="50" height="60" fill="green" clip-path="url(#clip-default)"/>
+  </g>
+</svg>

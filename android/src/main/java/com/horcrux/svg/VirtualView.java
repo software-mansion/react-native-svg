@@ -25,7 +25,6 @@ import com.facebook.react.uimanager.UIManagerHelper;
 import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.views.view.ReactViewGroup;
 import com.horcrux.svg.events.SvgOnLayoutEvent;
-
 import java.util.ArrayList;
 import javax.annotation.Nullable;
 
@@ -61,15 +60,16 @@ public abstract class VirtualView extends ReactViewGroup {
   boolean mCTMInvertible = true;
   private RectF mClientRect;
 
-  int mClipRule;
-  private @Nullable String mClipPath;
+  static final int CLIP_RULE_EVENODD = 0;
+  static final int CLIP_RULE_NONZERO = 1;
+  static final int CLIP_RULE_MIXED = -1;
+
+  int mClipRule = CLIP_RULE_NONZERO;
+  @Nullable String mClipPath;
   @Nullable String mMask;
   @Nullable String mMarkerStart;
   @Nullable String mMarkerMid;
   @Nullable String mMarkerEnd;
-
-  private static final int CLIP_RULE_EVENODD = 0;
-  static final int CLIP_RULE_NONZERO = 1;
 
   final float mScale;
   private boolean mResponsible;
@@ -353,23 +353,30 @@ public abstract class VirtualView extends ReactViewGroup {
       ClipPathView mClipNode = (ClipPathView) getSvgView().getDefinedClipPath(mClipPath);
 
       if (mClipNode != null) {
+        // Get clipRule from children (per SVG spec, clip-rule applies to graphics elements inside
+        // clipPath)
+        int clipRule = mClipNode.getUniformClipRule();
+        if (clipRule == -1) {
+          clipRule = CLIP_RULE_NONZERO; // Default if mixed or no children
+        }
+
+        // evenodd: use simple addPath to preserve self-intersecting path winding
+        // nonzero: use Path.Op.UNION to combine children (fast path = non-overlapping only)
+        // (UNION flattens path structure, breaking evenodd hole detection)
         Path clipPath =
-            mClipRule == CLIP_RULE_EVENODD
+            clipRule == CLIP_RULE_EVENODD
                 ? mClipNode.getPath(canvas, paint)
                 : mClipNode.getPath(canvas, paint, Region.Op.UNION);
         clipPath.transform(mClipNode.mMatrix);
-        switch (mClipRule) {
-          case CLIP_RULE_EVENODD:
-            clipPath.setFillType(Path.FillType.EVEN_ODD);
-            break;
-          case CLIP_RULE_NONZERO:
-            break;
-          default:
-            FLog.w(ReactConstants.TAG, "RNSVG: clipRule: " + mClipRule + " unrecognized");
+        if (clipRule == CLIP_RULE_EVENODD) {
+          clipPath.setFillType(Path.FillType.EVEN_ODD);
         }
         mCachedClipPath = clipPath;
       } else {
-        FLog.w(ReactConstants.TAG, "RNSVG: Undefined clipPath: " + mClipPath);
+        FLog.w(
+            ReactConstants.TAG,
+            "RNSVG: Undefined clipPath: %s. Element will render without clipping.",
+            mClipPath);
       }
     }
 
@@ -377,6 +384,14 @@ public abstract class VirtualView extends ReactViewGroup {
   }
 
   void clip(Canvas canvas, Paint paint) {
+    // Skip path-based clipping if bitmap mask will be used (handled in render())
+    if (mClipPath != null) {
+      ClipPathView clipNode = (ClipPathView) getSvgView().getDefinedClipPath(mClipPath);
+      if (clipNode != null && !clipNode.canUseFastPath()) {
+        return;
+      }
+    }
+
     Path clip = getClipPath(canvas, paint);
 
     if (clip != null) {
@@ -437,7 +452,9 @@ public abstract class VirtualView extends ReactViewGroup {
 
   double relativeOnWidth(SVGLength length) {
     SvgView svg = getSvgView();
-    if (length.unit == SVGLength.UnitType.PERCENTAGE && svg != null && svg.getViewBox().width() != 0) {
+    if (length.unit == SVGLength.UnitType.PERCENTAGE
+        && svg != null
+        && svg.getViewBox().width() != 0) {
       return relativeOn(length, svg.getViewBox().width());
     }
     return relativeOn(length, getCanvasWidth());
@@ -445,7 +462,9 @@ public abstract class VirtualView extends ReactViewGroup {
 
   double relativeOnHeight(SVGLength length) {
     SvgView svg = getSvgView();
-    if (length.unit == SVGLength.UnitType.PERCENTAGE && svg != null && svg.getViewBox().height() != 0) {
+    if (length.unit == SVGLength.UnitType.PERCENTAGE
+        && svg != null
+        && svg.getViewBox().height() != 0) {
       return relativeOn(length, svg.getViewBox().height());
     }
     return relativeOn(length, getCanvasHeight());
@@ -612,13 +631,13 @@ public abstract class VirtualView extends ReactViewGroup {
         UIManagerHelper.getEventDispatcherForReactTag(mContext, getId());
     if (eventDispatcher != null) {
       eventDispatcher.dispatchEvent(
-        new SvgOnLayoutEvent(
-          UIManagerHelper.getSurfaceId(VirtualView.this),
-          this.getId(),
-          left,
-          top,
-          width,
-          height));
+          new SvgOnLayoutEvent(
+              UIManagerHelper.getSurfaceId(VirtualView.this),
+              this.getId(),
+              left,
+              top,
+              width,
+              height));
     }
   }
 
