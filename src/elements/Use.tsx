@@ -6,6 +6,7 @@ import { idPattern } from '../lib/util';
 import Shape from './Shape';
 import RNSVGUse from '../fabric/UseNativeComponent';
 import type { NativeMethods } from 'react-native';
+import { extractTransformSvgView } from '../lib/extract/extractTransform';
 
 export interface UseProps extends CommonPathProps {
   children?: ReactNode;
@@ -57,11 +58,16 @@ export default class Use extends Shape<UseProps> {
       width,
       height,
     };
+    const extractedProps = withoutXY(this, props);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const transform = extractTransformSvgView(props as any);
+
     return (
       <RNSVGUse
         ref={(ref) => this.refMethod(ref as (Use & NativeMethods) | null)}
-        {...withoutXY(this, props)}
-        {...useProps}>
+        {...extractedProps}
+        {...useProps}
+        style={{ transform }}>
         {children}
       </RNSVGUse>
     );
