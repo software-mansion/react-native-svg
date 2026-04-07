@@ -555,7 +555,11 @@ UInt32 saturate(CGFloat value)
 
   if (self.fill) {
     if (self.fill.class == RNSVGBrush.class) {
-      CGContextSetFillColorWithColor(context, [self getCurrentColor]);
+      CGColorRef currentColor = [self getCurrentColor];
+      CGColorRef colorWithOpacity =
+          CGColorCreateCopyWithAlpha(currentColor, self.fillOpacity * CGColorGetAlpha(currentColor));
+      CGContextSetFillColorWithColor(context, colorWithOpacity);
+      CGColorRelease(colorWithOpacity);
       fillColor = YES;
     } else {
       fillColor = [self.fill applyFillColor:context opacity:self.fillOpacity];
@@ -603,7 +607,11 @@ UInt32 saturate(CGFloat value)
     BOOL strokeColor;
 
     if (self.stroke.class == RNSVGBrush.class) {
-      CGContextSetStrokeColorWithColor(context, [self getCurrentColor]);
+      CGColorRef currentColor = [self getCurrentColor];
+      CGColorRef colorWithOpacity =
+          CGColorCreateCopyWithAlpha(currentColor, self.strokeOpacity * CGColorGetAlpha(currentColor));
+      CGContextSetStrokeColorWithColor(context, colorWithOpacity);
+      CGColorRelease(colorWithOpacity);
       strokeColor = YES;
     } else {
       strokeColor = [self.stroke applyStrokeColor:context opacity:self.strokeOpacity];
