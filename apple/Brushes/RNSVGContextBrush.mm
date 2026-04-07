@@ -49,7 +49,10 @@
   BOOL fillColor;
 
   if (brush.class == RNSVGBrush.class) {
-    CGContextSetFillColorWithColor(context, [element getCurrentColor]);
+    CGColorRef currentColor = [element getCurrentColor];
+    CGColorRef colorWithOpacity = CGColorCreateCopyWithAlpha(currentColor, opacity * CGColorGetAlpha(currentColor));
+    CGContextSetFillColorWithColor(context, colorWithOpacity);
+    CGColorRelease(colorWithOpacity);
     fillColor = YES;
   } else {
     fillColor = [brush applyFillColor:context opacity:opacity];
@@ -70,7 +73,10 @@
   BOOL strokeColor;
 
   if (brush.class == RNSVGBrush.class) {
-    CGContextSetStrokeColorWithColor(context, [element getCurrentColor]);
+    CGColorRef currentColor = [element getCurrentColor];
+    CGColorRef colorWithOpacity = CGColorCreateCopyWithAlpha(currentColor, opacity * CGColorGetAlpha(currentColor));
+    CGContextSetStrokeColorWithColor(context, colorWithOpacity);
+    CGColorRelease(colorWithOpacity);
     strokeColor = YES;
   } else {
     strokeColor = [brush applyStrokeColor:context opacity:opacity];
