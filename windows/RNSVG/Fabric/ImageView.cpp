@@ -69,7 +69,7 @@ struct ImageView : winrt::implements<ImageView, winrt::Windows::Foundation::IIns
   void UpdateProps(
       const winrt::Microsoft::ReactNative::ComponentView &view,
       const winrt::Microsoft::ReactNative::IComponentProps &newProps,
-      const winrt::Microsoft::ReactNative::IComponentProps &oldProps) noexcept {
+      const winrt::Microsoft::ReactNative::IComponentProps &oldProps) noexcept override {
     RenderableView::UpdateProps(view, newProps, oldProps);
 
     auto props = newProps.as<ImageProps>();
