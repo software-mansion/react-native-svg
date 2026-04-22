@@ -2481,7 +2481,7 @@ PODS:
     - React-perflogger (= 0.83.0-rc.0)
     - React-utils (= 0.83.0-rc.0)
     - SocketRocket
-  - RNSVG (15.14.0):
+  - RNSVG (15.15.4):
     - boost
     - DoubleConversion
     - fast_float
@@ -2507,10 +2507,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNSVG/common (= 15.14.0)
+    - RNSVG/common (= 15.15.4)
     - SocketRocket
     - Yoga
-  - RNSVG/common (15.14.0):
+  - RNSVG/common (15.15.4):
     - boost
     - DoubleConversion
     - fast_float
@@ -2793,7 +2793,7 @@ SPEC CHECKSUMS:
   FBLazyVector: 7cad68537e4268ea85b6b763532fc9a88206eea3
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
-  hermes-engine: 77c9e319eee7e1e241283e53a7377152fb825b26
+  hermes-engine: 6001f70f3a14afc3d17b97e9679c092e28071fd6
   RCT-Folly: 59ec0ac1f2f39672a0c6e6cecdd39383b764646f
   RCTDeprecation: 4cf20570eb1415872d0f37c28f34788b52008c60
   RCTRequired: 2f89a85405915cde5896bd74ccaab8b191509e03
@@ -2863,10 +2863,10 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: d3cb50450a55777560b4d8ea6b53f6b8efb0bba3
   ReactCodegen: 561c157e3ee4a8c678a49ee0287b37755354bb13
   ReactCommon: 6bb21d31df3c7235e399053862a313fa38308039
-  RNSVG: ea9cbf6dcdbebdfff5822b0ad9311bbc4510a0b7
+  RNSVG: 6a91afc99237de70b617c7a84ba84c988ad5573b
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: b5cdaf686877e00b5489198163ec055e52f4c4f9
 
-PODFILE CHECKSUM: 1724a8a65795bc3bed5251741119f3e86a24627c
+PODFILE CHECKSUM: 870ad64bffa60495a1eeab5b704bde8080744e72
 
 COCOAPODS: 1.15.2
