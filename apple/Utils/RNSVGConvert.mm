@@ -87,6 +87,43 @@
   }
 }
 
++ (RNSVGComponentTransferFuncType)RNSVGComponentTransferFuncTypeFromCppEquivalent:(react::RNSVGFeComponentTransferFunctionType)type
+{
+  switch (type) {
+    case react::RNSVGFeComponentTransferFunctionType::Identity:
+      return SVG_FECOMPONENTTRANSFERFUNC_TYPE_IDENTITY;
+    case react::RNSVGFeComponentTransferFunctionType::Linear:
+      return SVG_FECOMPONENTTRANSFERFUNC_TYPE_LINEAR;
+    case react::RNSVGFeComponentTransferFunctionType::Gamma:
+      return SVG_FECOMPONENTTRANSFERFUNC_TYPE_GAMMA;
+    case react::RNSVGFeComponentTransferFunctionType::Table:
+      return SVG_FECOMPONENTTRANSFERFUNC_TYPE_TABLE;
+    case react::RNSVGFeComponentTransferFunctionType::Discrete:
+      return SVG_FECOMPONENTTRANSFERFUNC_TYPE_DISCRETE;
+    default:
+      return SVG_FECOMPONENTTRANSFERFUNC_TYPE_IDENTITY;
+  }
+}
+
++ (RNSVGComponentTransferFuncChannel)RNSVGComponentTransferFuncChannelFromCppEquivalent:(react::RNSVGFeComponentTransferFunctionChannel)channel
+{
+  switch (channel) {
+    case react::RNSVGFeComponentTransferFunctionChannel::R:
+      return SVG_FECOMPONENTTRANSFERFUNC_CHANNEL_R;
+    case react::RNSVGFeComponentTransferFunctionChannel::G:
+      return SVG_FECOMPONENTTRANSFERFUNC_CHANNEL_G;
+    case react::RNSVGFeComponentTransferFunctionChannel::B:
+      return SVG_FECOMPONENTTRANSFERFUNC_CHANNEL_B;
+    case react::RNSVGFeComponentTransferFunctionChannel::A:
+      return SVG_FECOMPONENTTRANSFERFUNC_CHANNEL_A;
+    case react::RNSVGFeComponentTransferFunctionChannel::UNKNOWN:
+      return SVG_FECOMPONENTTRANSFERFUNC_CHANNEL_UNKNOWN;
+    default:
+      return SVG_FECOMPONENTTRANSFERFUNC_CHANNEL_UNKNOWN;
+  }
+}
+
+
 @end
 
 #endif // RCT_NEW_ARCH_ENABLED
