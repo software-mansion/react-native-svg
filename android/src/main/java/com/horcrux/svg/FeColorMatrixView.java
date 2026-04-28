@@ -10,7 +10,7 @@ import java.util.HashMap;
 @SuppressLint("ViewConstructor")
 class FeColorMatrixView extends FilterPrimitiveView {
   String mIn1;
-  FilterProperties.FeColorMatrixType mType;
+  FilterProperties.FeColorMatrixType mType = FilterProperties.FeColorMatrixType.MATRIX;
   ReadableArray mValues;
 
   public FeColorMatrixView(ReactContext reactContext) {
@@ -39,7 +39,7 @@ class FeColorMatrixView extends FilterPrimitiveView {
     ColorMatrix colorMatrix = new ColorMatrix();
     switch (this.mType) {
       case MATRIX:
-        if (this.mValues.size() < 20) return source;
+        if (this.mValues == null || this.mValues.size() < 20) return source;
 
         float[] rawMatrix = new float[mValues.size()];
 
@@ -50,12 +50,12 @@ class FeColorMatrixView extends FilterPrimitiveView {
         colorMatrix.set(rawMatrix);
         break;
       case SATURATE:
-        if (this.mValues.size() != 1) return source;
+        if (this.mValues == null || this.mValues.size() != 1) return source;
 
         colorMatrix.setSaturation((float) this.mValues.getDouble(0));
         break;
       case HUE_ROTATE:
-        if (this.mValues.size() != 1) return source;
+        if (this.mValues == null || this.mValues.size() != 1) return source;
 
         float hue = (float) this.mValues.getDouble(0);
         float cosHue = (float) Math.cos(hue * Math.PI / 180);
