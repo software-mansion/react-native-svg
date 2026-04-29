@@ -34,6 +34,14 @@
   bool rendered;
 }
 
+#if TARGET_OS_OSX && defined(RCT_NEW_ARCH_ENABLED)
+// RCTViewComponentView opts into updateLayer; we render in drawRect:, so opt back out.
+- (BOOL)wantsUpdateLayer
+{
+  return NO;
+}
+#endif
+
 #ifdef RCT_NEW_ARCH_ENABLED
 using namespace facebook::react;
 #endif // RCT_NEW_ARCH_ENABLED
