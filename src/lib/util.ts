@@ -1,5 +1,3 @@
-import warnOnce from 'warn-once';
-
 export function pickNotNil(object: { [prop: string]: unknown }) {
   const result: { [prop: string]: unknown } = {};
   for (const key in object) {
@@ -17,6 +15,22 @@ export const idPattern = /#([^)]+)'?\)?$/;
 
 export const getRandomNumber = () =>
   Math.floor(Math.random() * Math.floor(Math.random() * Date.now()));
+
+const DEV = process.env.NODE_ENV !== 'production';
+const warnings = new Set<string>();
+
+function warnOnce(condition: boolean, ...rest: unknown[]) {
+  if (DEV && condition) {
+    const key = rest.join(' ');
+
+    if (warnings.has(key)) {
+      return;
+    }
+
+    warnings.add(key);
+    console.warn(...rest);
+  }
+}
 
 export const warnUnimplementedFilter = () => {
   warnOnce(
