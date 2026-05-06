@@ -2,6 +2,21 @@ apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
+def isCIEnabled() {
+    return ["1", "true"].contains(System.getenv("CI")?.toLowerCase())
+}
+
+def isRNRepoEnabled() {
+    // return false // Uncomment to disable RNRepo locally
+    return System.getenv("DISABLE_RNREPO") == null
+}
+
+// Use RNRepo in CI builds. 
+// Set DISABLE_RNREPO to any value to disable RNRepo.
+if (isCIEnabled() && isRNRepoEnabled()) {
+    apply plugin: "org.rnrepo.tools.prebuilds-plugin"
+}
+
 /**
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
