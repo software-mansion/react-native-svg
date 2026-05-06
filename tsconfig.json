@@ -19,7 +19,9 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "moduleSuffixes": [".native", ".ios", ".android", ""]
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["src/**/*.web.ts", "src/**/*.web.tsx"]
 }

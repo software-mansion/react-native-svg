@@ -1,16 +1,18 @@
-import Shape from './elements/Shape';
-import {
-  AstProps,
+export {
   camelCase,
-  JsxAST,
-  Middleware,
   parse,
-  Styles,
   SvgAst,
   SvgFromUri,
   SvgFromXml,
   SvgUri,
   SvgXml,
+} from './xml';
+
+export type {
+  AstProps,
+  JsxAST,
+  Middleware,
+  Styles,
   UriProps,
   UriState,
   XmlAST,
@@ -18,9 +20,11 @@ import {
   XmlState,
 } from './xml';
 
-import { fetchText } from './utils/fetchData';
+export { fetchText } from './utils/fetchData';
 
-import {
+export { default as Shape } from './elements/Shape';
+
+export {
   RNSVGCircle,
   RNSVGClipPath,
   RNSVGDefs,
@@ -116,58 +120,6 @@ export type { TSpanProps } from './elements/TSpan';
 export type { UseProps } from './elements/Use';
 
 export * from './lib/extract/types';
-
-export {
-  camelCase,
-  fetchText,
-  parse,
-  RNSVGCircle,
-  RNSVGClipPath,
-  RNSVGDefs,
-  RNSVGEllipse,
-  RNSVGFeColorMatrix,
-  RNSVGFeComposite,
-  RNSVGFeGaussianBlur,
-  RNSVGFeMerge,
-  RNSVGFeOffset,
-  RNSVGFilter,
-  RNSVGForeignObject,
-  RNSVGGroup,
-  RNSVGImage,
-  RNSVGLine,
-  RNSVGLinearGradient,
-  RNSVGMarker,
-  RNSVGMask,
-  RNSVGPath,
-  RNSVGPattern,
-  RNSVGRadialGradient,
-  RNSVGRect,
-  RNSVGSvgAndroid,
-  RNSVGSvgIOS,
-  RNSVGSymbol,
-  RNSVGText,
-  RNSVGTextPath,
-  RNSVGTSpan,
-  RNSVGUse,
-  Shape,
-  SvgAst,
-  SvgFromUri,
-  SvgFromXml,
-  SvgUri,
-  SvgXml,
-};
-
-export type {
-  AstProps,
-  JsxAST,
-  Middleware,
-  Styles,
-  UriProps,
-  UriState,
-  XmlAST,
-  XmlProps,
-  XmlState,
-};
 
 export * from './elements';
 export { default } from './elements';
