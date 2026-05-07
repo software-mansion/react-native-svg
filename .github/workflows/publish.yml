@@ -1,0 +1,59 @@
+name: Publish to npm
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to publish. Must match package.json version.
+        required: true
+        type: string
+      release-type:
+        description: Type of release to publish.
+        default: stable
+        type: choice
+        options:
+          - stable
+      dry-run:
+        description: Run npm publish without publishing the package.
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Git repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'yarn'
+          registry-url: https://registry.npmjs.org/
+
+      - name: Validate release inputs
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          package_version="$(node -p "require('./package.json').version")"
+          if [ "$INPUT_VERSION" != "$package_version" ]; then
+            echo "Input version ($INPUT_VERSION) must match package.json version ($package_version)."
+            exit 1
+          fi
+
+      - name: Publish stable release
+        uses: software-mansion/npm-package-publish@22b6e632b4310c5c061a047bccc99d0cea88d2bb
+        with:
+          package-name: react-native-svg
+          package-json-path: package.json
+          release-type: ${{ inputs.release-type }}
+          version: ${{ inputs.version }}
+          dry-run: ${{ inputs.dry-run }}
+          perform-git-operations: false
+          install-dependencies-command: yarn install --frozen-lockfile

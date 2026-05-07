@@ -65,7 +65,8 @@ When you're sending a pull request:
 
 ## Commits and versioning
 
-All PRs are merged into the `main` branch and released with `release-it`.
+All PRs are merged into the `main` branch. Stable releases are published manually from the `Publish to npm` GitHub
+Actions workflow after the version bump merge.
 
 Most notably prefixes you'll see:
 
@@ -80,7 +81,12 @@ Most notably prefixes you'll see:
 
 ## Release process
 
-We use [release-it](https://github.com/release-it/release-it) to release new versions of library from `main` branch.
+Releases are published from `main` with npm Trusted Publishing.
+
+1. Bump `package.json` version in a pull request.
+2. Merge the pull request to `main`.
+3. Run the `Publish to npm` workflow from `main` with `release-type: stable` and the same `version` that is already
+   committed in `package.json`.
 
 ## Reporting issues
 
