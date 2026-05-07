@@ -1,0 +1,21 @@
+name: TestsExample iOS check
+on:
+  pull_request:
+    paths:
+      - .github/workflows/ios-build-tests-test.yml
+      - RNSVG.podspec
+      - apple/**
+      - src/fabric/**
+      - package.json
+      - apps/tests-example/package.json
+      - apps/tests-example/ios/**
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/ios-build.yml
+    with:
+      working-directory: 'tests-example'
