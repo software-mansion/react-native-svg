@@ -1,0 +1,6 @@
+{
+    "denyList": {
+        "android": ["react-native-svg"],
+        "ios": ["react-native-svg"]
+    }
+}

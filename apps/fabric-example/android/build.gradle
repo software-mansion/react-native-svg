@@ -11,10 +11,22 @@ buildscript {
         google()
         mavenCentral()
     }
+    // RNRepo plugin classpath for CI builds (plugin applied in app/build.gradle).
+    // To disable RNRepo support, set DISABLE_RNREPO environment variable to ANY value.
+    def rnrepoClasspath = {
+        def rnrepoDir = new File(
+            providers.exec {
+                workingDir(rootDir)
+                commandLine("node", "--print", "require.resolve('@rnrepo/build-tools/package.json')")
+            }.standardOutput.asText.get().trim()
+        ).getParentFile().absolutePath
+        return fileTree(dir: "${rnrepoDir}/gradle-plugin/build/libs", include: ["prebuilds-plugin.jar"])
+    }
     dependencies {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+        classpath rnrepoClasspath()
     }
 }
 
