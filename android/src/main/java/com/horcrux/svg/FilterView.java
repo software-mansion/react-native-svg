@@ -16,8 +16,8 @@ import java.util.HashMap;
 class FilterView extends DefinitionView {
   private final HashMap<String, Bitmap> mResultsMap = new HashMap<>();
 
-  private FilterProperties.Units mFilterUnits;
-  private FilterProperties.Units mPrimitiveUnits;
+  private FilterProperties.Units mFilterUnits = FilterProperties.Units.OBJECT_BOUNDING_BOX;
+  private FilterProperties.Units mPrimitiveUnits = FilterProperties.Units.USER_SPACE_ON_USE;
   private final FilterRegion mFilterRegion;
 
   public FilterView(ReactContext reactContext) {
