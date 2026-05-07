@@ -22,12 +22,12 @@ class MaskView extends GroupView {
 
   // TODO implement proper support for units
   @SuppressWarnings({"FieldCanBeLocal", "unused"})
-  private Brush.BrushUnits mMaskUnits;
+  private Brush.BrushUnits mMaskUnits = Brush.BrushUnits.OBJECT_BOUNDING_BOX;
 
   @SuppressWarnings({"FieldCanBeLocal", "unused"})
   private Brush.BrushUnits mMaskContentUnits;
 
-  MaskType mMaskType;
+  MaskType mMaskType = MaskType.LUMINANCE;
 
   enum MaskType {
     LUMINANCE,
