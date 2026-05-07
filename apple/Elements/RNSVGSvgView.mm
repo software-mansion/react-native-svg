@@ -32,6 +32,7 @@
   NSMutableDictionary<NSString *, RNSVGFilter *> *_filters;
   CGAffineTransform _invViewBoxTransform;
   bool rendered;
+  CGRect _lastBounds;
 }
 
 #if TARGET_OS_OSX && defined(RCT_NEW_ARCH_ENABLED)
@@ -289,6 +290,31 @@ using namespace facebook::react;
   [self invalidate];
   [self clearChildCache];
   _meetOrSlice = meetOrSlice;
+}
+
+- (void)layoutSubviews
+{
+  [super layoutSubviews];
+
+  if (!CGRectEqualToRect(self.bounds, _lastBounds)) {
+    _lastBounds = self.bounds;
+    [self invalidateAllSVGNodes:self.subviews];
+    [self invalidate];
+    [self clearChildCache];
+  }
+}
+
+- (void)invalidateAllSVGNodes:(NSArray *)subviews
+{
+  for (__kindof RNSVGNode *node in subviews) {
+    if ([node isKindOfClass:[RNSVGNode class]]) {
+      [node invalidate];
+
+      if ([node respondsToSelector:@selector(subviews)] && [node subviews].count > 0) {
+        [self invalidateAllSVGNodes:[node subviews]];
+      }
+    }
+  }
 }
 
 - (void)drawToContext:(CGContextRef)context withRect:(CGRect)rect
