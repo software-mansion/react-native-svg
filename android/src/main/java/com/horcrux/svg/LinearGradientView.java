@@ -25,7 +25,7 @@ class LinearGradientView extends DefinitionView {
   private SVGLength mX2;
   private SVGLength mY2;
   private ReadableArray mGradient;
-  private Brush.BrushUnits mGradientUnits;
+  private Brush.BrushUnits mGradientUnits = Brush.BrushUnits.OBJECT_BOUNDING_BOX;
 
   private static final float[] sRawMatrix =
       new float[] {
