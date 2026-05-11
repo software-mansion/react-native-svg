@@ -39,5 +39,5 @@ import Test2670 from './Test2670';
 import Test2923 from './Test2923';
 
 export default function App() {
-  return <Test2923 />;
+  return <ColorTest />;
 }
