@@ -24,17 +24,6 @@ target 'TestsExample' do
   )
 
   post_install do |installer|
-    # Workaround for Xcode 16+/26: Apple Clang advertises consteval support
-    # but fails to compile it in fmt 11.0.2 (bundled with React Native).
-    # See: https://github.com/facebook/react-native/issues/55601
-    fmt_base = File.join(__dir__, 'Pods', 'fmt', 'include', 'fmt', 'base.h')
-    if File.exist?(fmt_base)
-      File.chmod(0644, fmt_base)
-      content = File.read(fmt_base)
-      patched = content.gsub(/#\s*define FMT_USE_CONSTEVAL 1/, '# define FMT_USE_CONSTEVAL 0')
-      File.write(fmt_base, patched) if patched != content
-    end
-
     react_native_post_install(
       installer,
       config[:reactNativePath],
