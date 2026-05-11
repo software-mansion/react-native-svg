@@ -2,10 +2,10 @@
   "version": "15.15.5",
   "name": "react-native-svg",
   "description": "SVG library for react-native",
-  "homepage": "https://github.com/react-native-community/react-native-svg",
+  "homepage": "https://github.com/software-mansion/react-native-svg",
   "repository": {
     "type": "git",
-    "url": "https://github.com/react-native-community/react-native-svg"
+    "url": "https://github.com/software-mansion/react-native-svg"
   },
   "license": "MIT",
   "main": "lib/commonjs/index.js",

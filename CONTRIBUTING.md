@@ -90,7 +90,7 @@ Releases are published from `main` with npm Trusted Publishing.
 
 ## Reporting issues
 
-You can report issues on our [bug tracker](https://github.com/react-native-community/react-native-svg/issues). Please
+You can report issues on our [bug tracker](https://github.com/software-mansion/react-native-svg/issues). Please
 search for existing issues and follow the issue template when opening one.
 
 ## License
