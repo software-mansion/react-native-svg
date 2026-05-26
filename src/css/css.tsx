@@ -765,13 +765,45 @@ export const inlineStyles: Middleware = function inlineStyles(
   return document;
 };
 
-export function SvgCss(props: XmlProps) {
-  const { xml, override, fallback, onError = err } = props;
-  try {
-    const ast = useMemo<JsxAST | null>(
-      () => (xml !== null ? parse(xml, inlineStyles) : null),
-      [xml]
+/**
+ * Map of caller-supplied CSS custom properties. Keys must be `--`-prefixed,
+ * e.g. `{ '--brand': '#ff0000' }`.
+ */
+export type CssVars = Record<string, string>;
+
+/**
+ * Middleware that resolves `var(--name)` references on color-like props
+ * (color, fill, floodColor, lightingColor, stopColor, stroke) against a
+ * caller-supplied variable map. Compose with `inlineStyles` so that
+ * `<style>`-declared variables win:
+ *
+ *   parse(xml, (ast) => resolveCssVars(vars)(inlineStyles(ast)))
+ */
+export const resolveCssVars =
+  (vars: CssVars): Middleware =>
+  (document: XmlAST) => {
+    const variables = new Map<string, string>(Object.entries(vars));
+    const elementsWithColor = cssSelect(
+      '*[color], *[fill], *[floodColor], *[lightingColor], *[stopColor], *[stroke]',
+      document,
+      cssSelectOpts
     );
+    for (const element of elementsWithColor) {
+      resolveElementVariables(element, variables);
+    }
+    return document;
+  };
+
+export function SvgCss(props: XmlProps & { cssVars?: CssVars }) {
+  const { xml, override, fallback, onError = err, cssVars } = props;
+  try {
+    const ast = useMemo<JsxAST | null>(() => {
+      if (xml === null) return null;
+      const middleware: Middleware = cssVars
+        ? (ast) => resolveCssVars(cssVars)(inlineStyles(ast))
+        : inlineStyles;
+      return parse(xml, middleware);
+    }, [xml, cssVars]);
     return <SvgAst ast={ast} override={override || props} />;
   } catch (error) {
     onError(error);
@@ -779,8 +811,8 @@ export function SvgCss(props: XmlProps) {
   }
 }
 
-export function SvgCssUri(props: UriProps) {
-  const { uri, onError = err, onLoad, fallback } = props;
+export function SvgCssUri(props: UriProps & { cssVars?: CssVars }) {
+  const { uri, onError = err, onLoad, fallback, cssVars } = props;
   const [xml, setXml] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
   useEffect(() => {
@@ -799,27 +831,36 @@ export function SvgCssUri(props: UriProps) {
   if (isError) {
     return fallback ?? null;
   }
-  return <SvgCss xml={xml} override={props} fallback={fallback} />;
+  return (
+    <SvgCss xml={xml} override={props} fallback={fallback} cssVars={cssVars} />
+  );
 }
 
 // Extending Component is required for Animated support.
 
-export class SvgWithCss extends Component<XmlProps, XmlState> {
+export class SvgWithCss extends Component<
+  XmlProps & { cssVars?: CssVars },
+  XmlState
+> {
   state = { ast: null };
   componentDidMount() {
     this.parse(this.props.xml);
   }
 
-  componentDidUpdate(prevProps: { xml: string | null }) {
-    const { xml } = this.props;
-    if (xml !== prevProps.xml) {
+  componentDidUpdate(prevProps: { xml: string | null; cssVars?: CssVars }) {
+    const { xml, cssVars } = this.props;
+    if (xml !== prevProps.xml || cssVars !== prevProps.cssVars) {
       this.parse(xml);
     }
   }
 
   parse(xml: string | null) {
     try {
-      this.setState({ ast: xml ? parse(xml, inlineStyles) : null });
+      const { cssVars } = this.props;
+      const middleware: Middleware = cssVars
+        ? (ast) => resolveCssVars(cssVars)(inlineStyles(ast))
+        : inlineStyles;
+      this.setState({ ast: xml ? parse(xml, middleware) : null });
     } catch (e) {
       this.props.onError ? this.props.onError(e as Error) : console.error(e);
     }
@@ -834,7 +875,10 @@ export class SvgWithCss extends Component<XmlProps, XmlState> {
   }
 }
 
-export class SvgWithCssUri extends Component<UriProps, UriState> {
+export class SvgWithCssUri extends Component<
+  UriProps & { cssVars?: CssVars },
+  UriState
+> {
   state = { xml: null };
   componentDidMount() {
     this.fetch(this.props.uri);
@@ -861,6 +905,6 @@ export class SvgWithCssUri extends Component<UriProps, UriState> {
       props,
       state: { xml },
     } = this;
-    return <SvgWithCss xml={xml} override={props} />;
+    return <SvgWithCss xml={xml} override={props} cssVars={props.cssVars} />;
   }
 }

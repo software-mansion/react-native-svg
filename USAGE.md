@@ -331,6 +331,27 @@ const xml = `
 export default () => <SvgCss xml={xml} width="100%" height="100%" />;
 ```
 
+### Supplying CSS variables from JS
+
+To resolve `var(--name)` references using values supplied from JavaScript, pass them via the `cssVars` prop. Keys must be `--`-prefixed. Variables declared by an inline `<style>` take precedence.
+
+```jsx
+import * as React from 'react';
+import { SvgCss } from 'react-native-svg/css';
+
+const xml = `
+  <svg width="32" height="32" viewBox="0 0 32 32">
+    <rect fill="var(--brand)" x="0" y="0" width="32" height="32" />
+  </svg>
+`;
+
+export default () => (
+  <SvgCss xml={xml} cssVars={{ '--brand': '#ff0000' }} />
+);
+```
+
+The same prop is accepted by `SvgCssUri`, `SvgWithCss`, and `SvgWithCssUri`.
+
 # Common props:
 
 | Name             | Default  | Description                                                                                                                                                            |

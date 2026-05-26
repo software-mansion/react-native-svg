@@ -1,5 +1,68 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`SvgCss renders with cssVars prop 1`] = `
+<RNSVGSvgView
+  align="xMidYMid"
+  bbHeight="100%"
+  bbWidth="100%"
+  cssVars={
+    Object {
+      "--brand": "#ff0000",
+    }
+  }
+  focusable={false}
+  meetOrSlice={0}
+  minX={0}
+  minY={0}
+  style={
+    Array [
+      Object {
+        "backgroundColor": "transparent",
+        "borderWidth": 0,
+      },
+      Object {
+        "flex": 0,
+        "height": "100%",
+        "width": "100%",
+      },
+    ]
+  }
+  vbHeight={10}
+  vbWidth={10}
+  xml="<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 10 10\\">
+    <rect width=\\"10\\" height=\\"10\\" fill=\\"var(--brand)\\" />
+  </svg>"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <RNSVGGroup
+    fill={
+      Object {
+        "payload": 4278190080,
+        "type": 0,
+      }
+    }
+  >
+    <RNSVGRect
+      fill={
+        Object {
+          "payload": 4294901760,
+          "type": 0,
+        }
+      }
+      height={10}
+      propList={
+        Array [
+          "fill",
+        ]
+      }
+      width={10}
+      x={0}
+      y={0}
+    />
+  </RNSVGGroup>
+</RNSVGSvgView>
+`;
+
 exports[`inlines styles 1`] = `
 Object {
   "Tag": [Function],

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import renderer from 'react-test-renderer';
 import { parse } from '../src/ReactNativeSVG';
-import { SvgCss, inlineStyles } from '../css';
+import { SvgCss, inlineStyles, resolveCssVars } from '../css';
 
 const xml = `<?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -51,5 +51,39 @@ test('inlines styles', () => {
 
 test('supports CSS in style element', () => {
   const tree = renderer.create(<SvgCss xml={xml} />).toJSON();
+  expect(tree).toMatchSnapshot();
+});
+
+test('resolveCssVars resolves var() when no <style> is present', () => {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">
+    <rect width="10" height="10" fill="var(--brand)" />
+  </svg>`;
+  const ast = parse(svg, resolveCssVars({ '--brand': 'red' })) as {
+    children: { props?: { fill?: string } }[];
+  };
+  const rect = ast.children.find((c) => c.props && 'fill' in c.props);
+  expect(rect?.props?.fill).toBe('red');
+});
+
+test('composing resolveCssVars over inlineStyles lets <style> win', () => {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">
+    <style>:root { --brand: green; }</style>
+    <rect width="10" height="10" fill="var(--brand)" />
+  </svg>`;
+  const resolve = resolveCssVars({ '--brand': 'red' });
+  const ast = parse(svg, (a) => resolve(inlineStyles(a))) as {
+    children: { props?: { fill?: string } }[];
+  };
+  const rect = ast.children.find((c) => c.props && 'fill' in c.props);
+  expect(rect?.props?.fill).toBe('green');
+});
+
+test('SvgCss renders with cssVars prop', () => {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">
+    <rect width="10" height="10" fill="var(--brand)" />
+  </svg>`;
+  const tree = renderer
+    .create(<SvgCss xml={svg} cssVars={{ '--brand': '#ff0000' }} />)
+    .toJSON();
   expect(tree).toMatchSnapshot();
 });

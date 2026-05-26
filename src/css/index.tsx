@@ -4,7 +4,9 @@ import {
   SvgWithCss,
   SvgWithCssUri,
   inlineStyles,
+  resolveCssVars,
 } from './css';
+import type { CssVars } from './css';
 
 import { LocalSvg, WithLocalSvg, loadLocalRawResource } from './LocalSvg';
 
@@ -14,7 +16,9 @@ export {
   SvgWithCss,
   SvgWithCssUri,
   inlineStyles,
+  resolveCssVars,
   LocalSvg,
   WithLocalSvg,
   loadLocalRawResource,
 };
+export type { CssVars };
