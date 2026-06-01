@@ -1,8 +1,8 @@
 <img src="https://user-images.githubusercontent.com/39658211/200319759-006c214f-941c-496c-a3c2-7de5b7ce33dc.png" width="100%" alt="React Native SVG at Software Mansion" >
 
-[![Ad](https://swm-delivery.com/www/images/zone-gh-react-native-svg-1?n=1)](https://swm-delivery.com/www/delivery/ck.php?zoneid=zone-gh-react-native-svg-1&n=1)
-[![Ad](https://swm-delivery.com/www/images/zone-gh-react-native-svg-2?n=1)](https://swm-delivery.com/www/delivery/ck.php?zoneid=zone-gh-react-native-svg-2&n=1)
-[![Ad](https://swm-delivery.com/www/images/zone-gh-react-native-svg-3?n=1)](https://swm-delivery.com/www/delivery/ck.php?zoneid=zone-gh-react-native-svg-3&n=1)
+[![Ad](https://swm-delivery.com/www/images/zone-gh-react-native-svg-1?n=1)](https://swm-delivery.com/www/delivery/ck-slug.php?zoneid=zone-gh-react-native-svg-1&n=1)
+[![Ad](https://swm-delivery.com/www/images/zone-gh-react-native-svg-2?n=1)](https://swm-delivery.com/www/delivery/ck-slug.php?zoneid=zone-gh-react-native-svg-2&n=1)
+[![Ad](https://swm-delivery.com/www/images/zone-gh-react-native-svg-3?n=1)](https://swm-delivery.com/www/delivery/ck-slug.php?zoneid=zone-gh-react-native-svg-3&n=1)
 
 [![Version](https://img.shields.io/npm/v/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
 [![NPM](https://img.shields.io/npm/dm/react-native-svg.svg)](https://www.npmjs.com/package/react-native-svg)
