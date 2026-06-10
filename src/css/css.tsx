@@ -765,12 +765,41 @@ export const inlineStyles: Middleware = function inlineStyles(
   return document;
 };
 
-export function SvgCss(props: XmlProps) {
-  const { xml, override, fallback, onError = err } = props;
+const appendStylesheet: (stylesheet?: CssProps['stylesheet']) => Middleware =
+  (stylesheet) => (document) => {
+    if (stylesheet) {
+      const styles =
+        typeof stylesheet === 'string'
+          ? stylesheet
+          : Object.entries(stylesheet as { [key: string]: object })
+              .map(([selector, declarations]) => {
+                const props = Object.entries(declarations)
+                  .map(([property, value]) => `${property}:${value};`)
+                  .join('');
+                return `${selector}{${props}}`;
+              })
+              .join('\n');
+      document.children.push({
+        tag: 'style',
+        children: [styles],
+        parent: document,
+        props: {},
+        Tag: () => null,
+      });
+    }
+    return inlineStyles(document);
+  };
+
+type CssProps = { stylesheet?: string | { [key: string]: object } };
+export type CssXmlProps = XmlProps & CssProps;
+export type CssUriProps = UriProps & CssProps;
+
+export function SvgCss(props: CssXmlProps) {
+  const { xml, override, fallback, onError = err, stylesheet } = props;
   try {
     const ast = useMemo<JsxAST | null>(
-      () => (xml !== null ? parse(xml, inlineStyles) : null),
-      [xml]
+      () => (xml !== null ? parse(xml, appendStylesheet(stylesheet)) : null),
+      [xml, stylesheet]
     );
     return <SvgAst ast={ast} override={override || props} />;
   } catch (error) {
@@ -779,8 +808,8 @@ export function SvgCss(props: XmlProps) {
   }
 }
 
-export function SvgCssUri(props: UriProps) {
-  const { uri, onError = err, onLoad, fallback } = props;
+export function SvgCssUri(props: CssUriProps) {
+  const { uri, onError = err, onLoad, fallback, stylesheet } = props;
   const [xml, setXml] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
   useEffect(() => {
@@ -799,12 +828,18 @@ export function SvgCssUri(props: UriProps) {
   if (isError) {
     return fallback ?? null;
   }
-  return <SvgCss xml={xml} override={props} fallback={fallback} />;
+  return (
+    <SvgCss
+      xml={xml}
+      override={props}
+      fallback={fallback}
+      stylesheet={stylesheet}
+    />
+  );
 }
 
 // Extending Component is required for Animated support.
-
-export class SvgWithCss extends Component<XmlProps, XmlState> {
+export class SvgWithCss extends Component<CssXmlProps, XmlState> {
   state = { ast: null };
   componentDidMount() {
     this.parse(this.props.xml);
@@ -817,9 +852,11 @@ export class SvgWithCss extends Component<XmlProps, XmlState> {
     }
   }
 
-  parse(xml: string | null) {
+  parse(xml: string | null, stylesheet?: string) {
     try {
-      this.setState({ ast: xml ? parse(xml, inlineStyles) : null });
+      this.setState({
+        ast: xml ? parse(xml, appendStylesheet(stylesheet)) : null,
+      });
     } catch (e) {
       this.props.onError ? this.props.onError(e as Error) : console.error(e);
     }
@@ -834,7 +871,7 @@ export class SvgWithCss extends Component<XmlProps, XmlState> {
   }
 }
 
-export class SvgWithCssUri extends Component<UriProps, UriState> {
+export class SvgWithCssUri extends Component<CssUriProps, UriState> {
   state = { xml: null };
   componentDidMount() {
     this.fetch(this.props.uri);
@@ -861,6 +898,8 @@ export class SvgWithCssUri extends Component<UriProps, UriState> {
       props,
       state: { xml },
     } = this;
-    return <SvgWithCss xml={xml} override={props} />;
+    return (
+      <SvgWithCss xml={xml} override={props} stylesheet={props.stylesheet} />
+    );
   }
 }
