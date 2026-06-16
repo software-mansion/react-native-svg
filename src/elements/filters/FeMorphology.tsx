@@ -1,10 +1,18 @@
 import { NumberArray } from '../../lib/extract/types';
-import { warnUnimplementedFilter } from '../../lib/util';
+import RNSVGFeMorphology from '../../fabric/FeMorphologyNativeComponent';
 import FilterPrimitive from './FilterPrimitive';
+import {
+  extractFeMorphology,
+  extractFilter,
+  extractIn,
+} from '../../lib/extract/extractFilter';
+import { NativeMethods } from 'react-native';
+
+type Operator = 'erode' | 'dilate';
 
 export interface FeMorphologyProps {
   in?: string;
-  operator?: 'erode' | 'dilate';
+  operator?: Operator;
   radius?: NumberArray;
 }
 
@@ -13,10 +21,20 @@ export default class FeMorphology extends FilterPrimitive<FeMorphologyProps> {
 
   static defaultProps = {
     ...this.defaultPrimitiveProps,
+    operator: 'erode',
+    radius: 0,
   };
 
   render() {
-    warnUnimplementedFilter();
-    return null;
+    return (
+      <RNSVGFeMorphology
+        ref={(ref) =>
+          this.refMethod(ref as (FeMorphology & NativeMethods) | null)
+        }
+        {...extractFilter(this.props)}
+        {...extractIn(this.props)}
+        {...extractFeMorphology(this.props)}
+      />
+    );
   }
 }

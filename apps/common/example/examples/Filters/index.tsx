@@ -7,6 +7,7 @@ import * as FeDropShadow from './FeDropShadow';
 import * as FeFlood from './FeFlood';
 import * as FeGaussianBlur from './FeGaussianBlur';
 import * as FeMerge from './FeMerge';
+import * as FeMorphology from './FeMorphology';
 import * as FeOffset from './FeOffset';
 import * as ReanimatedFeColorMatrix from './ReanimatedFeColorMatrix';
 
@@ -18,6 +19,7 @@ const samples = {
   FeFlood,
   FeGaussianBlur,
   FeMerge,
+  FeMorphology,
   FeOffset,
   ReanimatedFeColorMatrix,
 };

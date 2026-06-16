@@ -105,6 +105,8 @@ import com.facebook.react.viewmanagers.RNSVGFeGaussianBlurManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeGaussianBlurManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeMergeManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeMergeManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeMorphologyManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeMorphologyManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeOffsetManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeOffsetManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFilterManagerDelegate;
@@ -487,6 +489,7 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     RNSVGFeFlood,
     RNSVGFeGaussianBlur,
     RNSVGFeMerge,
+    RNSVGFeMorphology,
     RNSVGFeOffset,
     RNSVGMarker,
     RNSVGForeignObject,
@@ -546,6 +549,8 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
         return new FeGaussianBlurView(reactContext);
       case RNSVGFeMerge:
         return new FeMergeView(reactContext);
+      case RNSVGFeMorphology:
+        return new FeMorphologyView(reactContext);
       case RNSVGFeOffset:
         return new FeOffsetView(reactContext);
       case RNSVGMarker:
@@ -1648,6 +1653,31 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     @ReactProp(name = "nodes")
     public void setNodes(FeMergeView node, ReadableArray nodes) {
       node.setNodes(nodes);
+    }
+  }
+
+  static class FeMorphologyManager extends FilterPrimitiveManager<FeMorphologyView>
+          implements RNSVGFeMorphologyManagerInterface<FeMorphologyView> {
+    FeMorphologyManager() {
+      super(SVGClass.RNSVGFeMorphology);
+      mDelegate = new RNSVGFeMorphologyManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeMorphology";
+
+    @ReactProp(name = "in1")
+    public void setIn1(FeMorphologyView node, String in1) {
+      node.setIn1(in1);
+    }
+
+    @ReactProp(name = "operator1")
+    public void setOperator1(FeMorphologyView node, String operator1) {
+      node.setOperator1(operator1);
+    }
+
+    @ReactProp(name = "radius")
+    public void setRadius(FeMorphologyView node, Dynamic radius) {
+      node.setRadius(radius);
     }
   }
 

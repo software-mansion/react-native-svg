@@ -12,6 +12,7 @@ module.exports = {
           'RNSVGFeFloodComponentDescriptor',
           'RNSVGFeGaussianBlurComponentDescriptor',
           'RNSVGFeMergeComponentDescriptor',
+          'RNSVGFeMorphologyComponentDescriptor',
           'RNSVGFeOffsetComponentDescriptor',
           'RNSVGFilterComponentDescriptor',
           'RNSVGEllipseComponentDescriptor',

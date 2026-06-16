@@ -98,6 +98,15 @@ RCT_ENUM_CONVERTER(
     SVG_FECOMPOSITE_OPERATOR_UNKNOWN,
     intValue)
 
+RCT_ENUM_CONVERTER(
+    RNSVGMorphologyOperator,
+    (@{
+      @"erode" : @(SVG_FEMORPHOLOGY_OPERATOR_ERODE),
+      @"dilate" : @(SVG_FEMORPHOLOGY_OPERATOR_DILATE),
+    }),
+    SVG_FEMORPHOLOGY_OPERATOR_ERODE,
+    intValue)
+
 + (RNSVGBrush *)RNSVGBrush:(id)json
 {
   if (json == nil) {
