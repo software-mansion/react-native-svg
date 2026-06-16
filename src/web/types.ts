@@ -55,6 +55,7 @@ export interface BaseProps {
   fontWeight?: NumberProp;
   fontSize?: NumberProp;
   fontFamily?: string;
+  fontFeatureSettings?: string;
   forwardedRef?:
     | React.RefCallback<SVGElement>
     | React.MutableRefObject<SVGElement | null>;

@@ -31,6 +31,7 @@ export const prepare = <T extends BaseProps>(
     fontSize,
     fontWeight,
     fontStyle,
+    fontFeatureSettings,
     style,
     forwardedRef,
     gradientTransform,
@@ -104,6 +105,7 @@ export const prepare = <T extends BaseProps>(
     fontFamily?: string;
     fontSize?: NumberProp;
     fontWeight?: NumberProp;
+    fontFeatureSettings?: string;
   } = {};
 
   if (fontFamily != null) {
@@ -117,6 +119,9 @@ export const prepare = <T extends BaseProps>(
   }
   if (fontStyle != null) {
     styles.fontStyle = fontStyle;
+  }
+  if (fontFeatureSettings != null) {
+    styles.fontFeatureSettings = fontFeatureSettings;
   }
   clean.style = resolve(style, styles);
   if (onPress !== null) {
