@@ -43,6 +43,8 @@ export interface SvgProps extends GProps, ViewProps, HitSlop {
   preserveAspectRatio?: string;
   color?: ColorValue;
   title?: string;
+  xmlns?: string;
+  xmlnsXlink?: string;
 }
 
 export default class Svg extends Shape<SvgProps> {
