@@ -23,6 +23,7 @@ import type { GProps } from './G';
 import G from './G';
 import RNSVGSvgAndroid from '../fabric/AndroidSvgViewNativeComponent';
 import RNSVGSvgIOS from '../fabric/IOSSvgViewNativeComponent';
+import RNSVGSvgVizios from '../fabric/ViziosSvgViewNativeComponent';
 import type { Spec } from '../fabric/NativeSvgViewModule';
 import extractOpacity from '../lib/extract/extractOpacity';
 import { extractTransformSvgView } from '../lib/extract/extractTransform';
@@ -187,7 +188,12 @@ export default class Svg extends Shape<SvgProps> {
       props.transform = extractTransformSvgView(props as any);
     }
 
-    const RNSVGSvg = Platform.OS === 'android' ? RNSVGSvgAndroid : RNSVGSvgIOS;
+    const RNSVGSvg =
+      Platform.OS === 'android'
+        ? RNSVGSvgAndroid
+        : Platform.OS === 'vizios'
+          ? RNSVGSvgVizios
+          : RNSVGSvgIOS;
 
     return (
       <RNSVGSvg
