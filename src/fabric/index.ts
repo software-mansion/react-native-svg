@@ -15,6 +15,7 @@ import RNSVGRadialGradient from './RadialGradientNativeComponent';
 import RNSVGRect from './RectNativeComponent';
 import RNSVGSvgAndroid from './AndroidSvgViewNativeComponent';
 import RNSVGSvgIOS from './IOSSvgViewNativeComponent';
+import RNSVGSvgVizios from './ViziosSvgViewNativeComponent';
 import RNSVGSymbol from './SymbolNativeComponent';
 import RNSVGText from './TextNativeComponent';
 import RNSVGTextPath from './TextPathNativeComponent';
@@ -47,6 +48,7 @@ export {
   RNSVGRect,
   RNSVGSvgAndroid,
   RNSVGSvgIOS,
+  RNSVGSvgVizios,
   RNSVGSymbol,
   RNSVGText,
   RNSVGTextPath,
