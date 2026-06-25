@@ -1,9 +1,11 @@
 import type { ComponentType, ComponentProps, JSX } from 'react';
 import * as React from 'react';
 import { Component, useEffect, useMemo, useState } from 'react';
+import { Platform } from 'react-native';
 import { fetchText } from './utils/fetchData';
 import type { SvgProps } from './elements/Svg';
 import { tags } from './xmlTags';
+import RNSVGSvgVizios from './fabric/IOSSvgViewNativeComponent';
 
 function missingTag() {
   return null;
@@ -81,6 +83,19 @@ export function SvgXml(props: XmlProps) {
 
 export function SvgUri(props: UriProps) {
   const { onError = err, uri, onLoad, fallback } = props;
+
+  // On VizioOS, pass the URI directly to the native SvgView component.
+  // Loki's image pipeline handles SVG fetching & rasterization via ThorVG.
+  if (Platform.OS === 'vizios') {
+    const { width, height, style, ...rest } = props;
+    return (
+      <RNSVGSvgVizios
+        style={[{ width: width as any, height: height as any }, style]}
+        svgUri={uri ?? undefined}
+      />
+    );
+  }
+
   const [xml, setXml] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
   useEffect(() => {
