@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   s.visionos.exclude_files = '**/*.macos.{h,m,mm}' if s.respond_to?(:visionos)
   s.osx.exclude_files = '**/*.ios.{h,m,mm}'
   s.requires_arc      = true
-  s.platforms         = { :osx => "10.14", :ios => "12.4", :tvos => "12.4", :visionos => "1.0" }
+  s.platforms         = { :osx => "10.15", :ios => "15.1", :tvos => "15.1", :visionos => "1.0" }
   
   s.osx.resource_bundles  = {'RNSVGFilters' => ['apple/**/*.macosx.metallib']}
   s.ios.resource_bundles  = {'RNSVGFilters' => ['apple/**/*.iphoneos.metallib']}
