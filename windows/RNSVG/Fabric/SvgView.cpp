@@ -281,10 +281,24 @@ void SvgView::Draw(
     spRoot->SetAttributeValue(SvgStrings::preserveAspectRatioAttributeName, preserveAspectRatio);
   }
 
+  // Render the SvgView's own direct children (e.g. the JS-side <G> that Svg.tsx wraps
+  // around every <Svg>'s children, carrying <Svg>'s own presentation props such as
+  // fill="none") against the document root, then recurse into their children.
+  //
+  // This previously skipped straight into RecurseRenderNode(this, child, ...) *without*
+  // ever calling `child`'s own Render()/OnRender() - so this level's D2D element was never
+  // created and none of its own attributes (including `fill`) were ever applied anywhere
+  // in the D2D SVG DOM. Concretely: a root <Svg fill="none"> forwards fill="none" to that
+  // wrapper <G>, but the wrapper <G>'s own D2D <g> element was never materialized, so
+  // there was nothing in the tree for a stroke-only descendant to inherit "none" from -
+  // it fell through to the SVG spec's black default regardless of any propList/inheritance
+  // fix on the descendant's own side (see RenderableView::Render). Calling Render() here,
+  // exactly like RecurseRenderNode does for every other level, fixes that.
   for (auto const &child : view.Children()) {
-    auto renderable = child.UserData().as<RenderableView>();
-    if (renderable->IsSupported()) {
-      RecurseRenderNode(this, child, *spSvgDocument, *spRoot);
+    auto renderable = child.UserData().try_as<RenderableView>();
+    if (renderable && renderable->IsSupported()) {
+      ID2D1SvgElement &newElement = renderable->Render(*this, *spSvgDocument, *spRoot);
+      RecurseRenderNode(this, child, *spSvgDocument, newElement);
     }
   }
 
