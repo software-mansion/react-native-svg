@@ -157,7 +157,31 @@ void RenderableView::FinalizeUpates(
 
 ID2D1SvgElement &RenderableView::Render(const SvgView &svgView, ID2D1SvgDocument& document, ID2D1SvgElement &svgElement) noexcept {
   svgElement.CreateChild(GetSvgElementName(), m_spD2DSvgElement.put());
-  OnRender(svgView, document, *m_spD2DSvgElement);
+
+  // HasProps() is false for a node whose Fabric prop-update pass (UpdateProps) hasn't run yet.
+  // OnRender() (and every override: GroupView, CircleView, EllipseView, RectView, LineView,
+  // PathView, UseView, ClipPathView, DefsView, ImageView, Linear/RadialGradientView) starts
+  // with winrt::get_self<TProps>(m_props), an unchecked cast that's only safe once m_props is
+  // non-null -- calling it earlier is what used to crash (get_self<SvgGroupProps>(null) at
+  // +0x1d0, AV in the Color compare inside SetCommonSvgProps; see RenderableView.h's HasProps()
+  // doc comment and git history for the fix that first introduced this check).
+  //
+  // That original fix gated Render() itself (skipped in SvgView.cpp's RecurseRenderNode / Draw
+  // before ever reaching here), which is crash-safe but also skips CreateChild() -- so this
+  // node's D2D element never exists, RecurseRenderNode has nothing to recurse into, and this
+  // node's *entire subtree* silently drops out of the Draw() pass, including any children that
+  // already do have their own props set. Narrowing the guard to just this call preserves the
+  // exact same crash safety (OnRender(), the only thing that dereferences m_props, is still
+  // never reached while m_props is null) while guaranteeing this node's own D2D element is
+  // always created and its children are always walked -- so one still-propless node can no
+  // longer take an already-ready descendant down with it. A still-propless node simply renders
+  // as an attribute-less element for this one pass (falls through to the parent-inherited fill
+  // below, never black; no stroke/geometry of its own yet) and repaints correctly on the very
+  // next Draw(), which is guaranteed once its own UpdateProps lands (RenderableView::FinalizeUpates
+  // -> Invalidate()).
+  if (HasProps()) {
+    OnRender(svgView, document, *m_spD2DSvgElement);
+  }
 
   // extractFill.ts (JS) intentionally leaves `fill` unset and out of `propList` when an
   // element never declares `fill`, so that native inherits it from the parent (e.g. a root

@@ -226,7 +226,11 @@ void RecurseRenderNode(
     {
       auto renderable = child.UserData().try_as<RenderableView>();
 
-      if (renderable && renderable->IsSupported() && renderable->HasProps()) {
+      // Do NOT also gate on HasProps() here: that would skip this node's entire subtree
+      // (CreateChild() never runs, so there's nothing to recurse into) instead of just the
+      // props-dependent attributes on this one node. See RenderableView::Render() for the
+      // node-local guard that replaces it.
+      if (renderable && renderable->IsSupported()) {
         ID2D1SvgElement &newElement = renderable->Render(*root, document, svgElement);
         RecurseRenderNode(root, child, document, newElement);
       }
@@ -294,9 +298,12 @@ void SvgView::Draw(
   // it fell through to the SVG spec's black default regardless of any propList/inheritance
   // fix on the descendant's own side (see RenderableView::Render). Calling Render() here,
   // exactly like RecurseRenderNode does for every other level, fixes that.
+  //
+  // (Not gated on HasProps() here for the same reason as RecurseRenderNode above -- see
+  // RenderableView::Render() for the node-local guard.)
   for (auto const &child : view.Children()) {
     auto renderable = child.UserData().try_as<RenderableView>();
-    if (renderable && renderable->IsSupported() && renderable->HasProps()) {
+    if (renderable && renderable->IsSupported()) {
       ID2D1SvgElement &newElement = renderable->Render(*this, *spSvgDocument, *spRoot);
       RecurseRenderNode(this, child, *spSvgDocument, newElement);
     }
