@@ -104,6 +104,33 @@
 - (void)pushContext:(RNSVGGroup *)node font:(NSDictionary *)font;
 @end
 
+static NSString *RNSVGResolveGenericFontFamily(NSString *fontFamily)
+{
+  if ([fontFamily length] == 0) {
+    return nil;
+  }
+
+  NSString *normalizedFontFamily = [fontFamily lowercaseString];
+
+  if ([normalizedFontFamily isEqualToString:@"serif"]) {
+    return @"Georgia";
+  }
+  if ([normalizedFontFamily isEqualToString:@"sans-serif"]) {
+    return @"System";
+  }
+  if ([normalizedFontFamily isEqualToString:@"monospace"]) {
+    return @"Menlo";
+  }
+  if ([normalizedFontFamily isEqualToString:@"cursive"]) {
+    return @"Snell Roundhand";
+  }
+  if ([normalizedFontFamily isEqualToString:@"fantasy"]) {
+    return @"Papyrus";
+  }
+
+  return fontFamily;
+}
+
 @implementation RNSVGGlyphContext
 
 - (NSArray *)getFontContext
@@ -118,7 +145,7 @@
   NSString *fontStyle = RNSVGFontStyleStrings[topFont_->fontStyle];
   NSString *fontWeight = RNSVGFontWeightStrings[topFont_->fontWeight];
   UIFont *font = [RCTFont updateFont:nil
-                          withFamily:[fontFamily isEqualToString:@""] ? nil : fontFamily
+                          withFamily:RNSVGResolveGenericFontFamily(fontFamily)
                                 size:@(isnan(size) ? 0 : size)
                               weight:fontWeight
                                style:fontStyle
