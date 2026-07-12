@@ -226,7 +226,7 @@ void RecurseRenderNode(
     {
       auto renderable = child.UserData().try_as<RenderableView>();
 
-      if (renderable && renderable->IsSupported()) {
+      if (renderable && renderable->IsSupported() && renderable->HasProps()) {
         ID2D1SvgElement &newElement = renderable->Render(*root, document, svgElement);
         RecurseRenderNode(root, child, document, newElement);
       }
@@ -296,7 +296,7 @@ void SvgView::Draw(
   // exactly like RecurseRenderNode does for every other level, fixes that.
   for (auto const &child : view.Children()) {
     auto renderable = child.UserData().try_as<RenderableView>();
-    if (renderable && renderable->IsSupported()) {
+    if (renderable && renderable->IsSupported() && renderable->HasProps()) {
       ID2D1SvgElement &newElement = renderable->Render(*this, *spSvgDocument, *spRoot);
       RecurseRenderNode(this, child, *spSvgDocument, newElement);
     }

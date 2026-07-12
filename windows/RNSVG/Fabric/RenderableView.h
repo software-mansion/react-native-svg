@@ -143,6 +143,19 @@ struct __declspec(uuid("a03986c0-b06e-4fb8-a86e-16fcc47b2f31")) RenderableView :
   virtual void OnRender(const SvgView &svgView, ID2D1SvgDocument &document, ID2D1SvgElement & /*svgElement*/) noexcept;
   virtual bool IsSupported() const noexcept;
 
+  // True once UpdateProps has been called at least once for this node. SvgView::Draw and
+  // RecurseRenderNode call Render() on freshly-mounted children as soon as they appear in the
+  // ComponentView tree, which can race ahead of Fabric's own prop-update pass for a brand-new
+  // node created in the same mount (e.g. a responsive breakpoint swapping in a new SVG tree).
+  // Render()/OnRender() dereference m_props (via winrt::get_self<TProps>) unconditionally, so
+  // calling them before UpdateProps has ever run reads through a null-backed props object and
+  // crashes. Skipping such a node for this pass is safe: the in-flight prop update triggers its
+  // own Invalidate() (RenderableView::UpdateProps's caller chain -> FinalizeUpates ->
+  // Invalidate) which redraws with props present moments later.
+  bool HasProps() const noexcept {
+    return static_cast<bool>(m_props);
+  }
+
   void Invalidate(const winrt::Microsoft::ReactNative::ComponentView &view);
 
  protected:
