@@ -22,6 +22,7 @@ export interface BaseProps {
   delayPressIn?: number;
   delayPressOut?: number;
   disabled?: boolean;
+  focusable?: boolean;
   hitSlop?: EdgeInsetsProp;
   href?: RNImageProps['source'] | string | number;
   nativeID?: string;
