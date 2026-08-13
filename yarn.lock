@@ -2320,13 +2320,13 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@^27.5.2":
-  version "27.5.2"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-27.5.2.tgz#ec49d29d926500ffb9fd22b84262e862049c026c"
-  integrity sha512-mpT8LJJ4CMeeahobofYWIjFo0xonRS/HfxnVEPMPFSQdGUt1uHCnoPT7Zhb+sjDU2wz0oKV0OLUR0WzrHNgfeA==
+"@types/jest@^28.1.0":
+  version "28.1.8"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-28.1.8.tgz#6936409f3c9724ea431efd412ea0238a0f03b09b"
+  integrity sha512-8TJkV++s7B6XqnDrzR1m/TT0A0h948Pnl/097veySPN67VRAgQ4gZ7n2KfJo2rVq6njQjdxU3GCCyDvAeuHoiw==
   dependencies:
-    jest-matcher-utils "^27.0.0"
-    pretty-format "^27.0.0"
+    expect "^28.0.0"
+    pretty-format "^28.0.0"
 
 "@types/json-schema@^7.0.9":
   version "7.0.15"
@@ -2381,13 +2381,20 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.15.tgz#e6e5a86d602beaca71ce5163fadf5f95d70931c7"
   integrity sha512-F6bEyamV9jKGAFBEmlQnesRPGOQqS2+Uwi0Em15xenOxHaf2hv6L8YCVn3rPdPJOiJfPiCnLIRyvwVaqMY3MIw==
 
-"@types/react@^18.3.12":
-  version "18.3.23"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.3.23.tgz#86ae6f6b95a48c418fecdaccc8069e0fbb63696a"
-  integrity sha512-/LDXMQh55EzZQ0uVAZmKKhfENivEvWz6E+EYzh+/MCjMhNsotd+ZHhBGIjFDTi6+fz0OhQQQLbTgdQIxxCsC0w==
+"@types/react-test-renderer@^18.2.0":
+  version "18.3.1"
+  resolved "https://registry.yarnpkg.com/@types/react-test-renderer/-/react-test-renderer-18.3.1.tgz#225bfe8d4ad7ee3b04c2fa27642bb74274a5961d"
+  integrity sha512-vAhnk0tG2eGa37lkU9+s5SoroCsRI08xnsWFiAXOuPH2jqzMbcXvKExXViPi1P5fIklDeCvXqyrdmipFaSkZrA==
+  dependencies:
+    "@types/react" "^18"
+
+"@types/react@^18", "@types/react@^18.3.12":
+  version "18.3.31"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.3.31.tgz#b5e95e28ffcceab8d982f33f2eb076e17653c2a4"
+  integrity sha512-vfEqpXTvwT91yhmwdfouStN2hSKwTvyRs8qpLfADyrq/kxDw0hZM7Wk9Ug1FELj8hIby+S/+kQCSRFF32nv2Qw==
   dependencies:
     "@types/prop-types" "*"
-    csstype "^3.0.2"
+    csstype "^3.2.2"
 
 "@types/semver@^7.3.12":
   version "7.7.0"
@@ -3630,10 +3637,10 @@ css-what@^6.1.0:
   resolved "https://registry.yarnpkg.com/css-what/-/css-what-6.2.2.tgz#cdcc8f9b6977719fdfbd1de7aec24abf756b9dea"
   integrity sha512-u/O3vwbptzhMs3L1fQE82ZSLHQQfto5gyZzwteVIEyeaY5Fc7R4dapF/BvRoSYFeqfBk4m0V1Vafq5Pjv25wvA==
 
-csstype@^3.0.2:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.3.tgz#d80ff294d114fb0e6ac500fbf85b60137d7eff81"
-  integrity sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==
+csstype@^3.0.2, csstype@^3.2.2:
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.2.3.tgz#ec48c0f3e993e50648c86da559e2610995cf989a"
+  integrity sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==
 
 data-uri-to-buffer@^6.0.2:
   version "6.0.2"
@@ -3792,11 +3799,6 @@ devtools-protocol@0.0.1312386:
   version "0.0.1312386"
   resolved "https://registry.yarnpkg.com/devtools-protocol/-/devtools-protocol-0.0.1312386.tgz#5ab824d6f1669ec6c6eb0fba047e73601d969052"
   integrity sha512-DPnhUXvmvKT2dFA/j7B+riVLUt9Q6RKJlcppojL5CoRywJJKLDYnRlw0gTFKfgDPHP5E04UoB71SxoJlVZy8FA==
-
-diff-sequences@^27.5.1:
-  version "27.5.1"
-  resolved "https://registry.yarnpkg.com/diff-sequences/-/diff-sequences-27.5.1.tgz#eaecc0d327fd68c8d9672a1e64ab8dccb2ef5327"
-  integrity sha512-k1gCAXAsNgLwEL+Y8Wvl+M6oEFj5bgazfZULpS5CneoPPXRaCCW7dm+q21Ky2VEE5X+VeRDBVg1Pcvvsr4TtNQ==
 
 diff-sequences@^28.1.1:
   version "28.1.1"
@@ -4477,7 +4479,7 @@ exit@^0.1.2:
   resolved "https://registry.yarnpkg.com/exit/-/exit-0.1.2.tgz#0632638f8d877cc82107d30a0fff1a17cba1cd0c"
   integrity sha512-Zk/eNKV2zbjpKzrsQ+n1G6poVbErQxJ0LBOJXaKZ1EViLzH+hrLu9cdXI4zw9dBQJslwBEpbQ2P1oS7nDxs6jQ==
 
-expect@^28.1.3:
+expect@^28.0.0, expect@^28.1.3:
   version "28.1.3"
   resolved "https://registry.yarnpkg.com/expect/-/expect-28.1.3.tgz#90a7c1a124f1824133dd4533cce2d2bdcb6603ec"
   integrity sha512-eEh0xn8HlsuOBxFgIss+2mX85VAS4Qy3OSkjV7rlBWljtA4oWH37glVGyOZSZvErDT/yBywZdPGwCXuTvSG85g==
@@ -5591,16 +5593,6 @@ jest-config@^28.1.3:
     slash "^3.0.0"
     strip-json-comments "^3.1.1"
 
-jest-diff@^27.5.1:
-  version "27.5.1"
-  resolved "https://registry.yarnpkg.com/jest-diff/-/jest-diff-27.5.1.tgz#a07f5011ac9e6643cf8a95a462b7b1ecf6680def"
-  integrity sha512-m0NvkX55LDt9T4mctTEgnZk3fmEg3NRYutvMPWM/0iPnkFj2wIeF45O1718cMSOFO1vINkqmxqD8vE37uTEbqw==
-  dependencies:
-    chalk "^4.0.0"
-    diff-sequences "^27.5.1"
-    jest-get-type "^27.5.1"
-    pretty-format "^27.5.1"
-
 jest-diff@^28.1.3:
   version "28.1.3"
   resolved "https://registry.yarnpkg.com/jest-diff/-/jest-diff-28.1.3.tgz#948a192d86f4e7a64c5264ad4da4877133d8792f"
@@ -5652,11 +5644,6 @@ jest-environment-node@^29.6.3:
     "@types/node" "*"
     jest-mock "^29.7.0"
     jest-util "^29.7.0"
-
-jest-get-type@^27.5.1:
-  version "27.5.1"
-  resolved "https://registry.yarnpkg.com/jest-get-type/-/jest-get-type-27.5.1.tgz#3cd613c507b0f7ace013df407a1c1cd578bcb4f1"
-  integrity sha512-2KY95ksYSaK7DMBWQn6dQz3kqAf3BB64y2udeG+hv4KfSOb9qwcYQstTJc1KCbsix+wLZWZYN8t7nwX3GOBLRw==
 
 jest-get-type@^28.0.2:
   version "28.0.2"
@@ -5721,16 +5708,6 @@ jest-leak-detector@^28.1.3:
   dependencies:
     jest-get-type "^28.0.2"
     pretty-format "^28.1.3"
-
-jest-matcher-utils@^27.0.0:
-  version "27.5.1"
-  resolved "https://registry.yarnpkg.com/jest-matcher-utils/-/jest-matcher-utils-27.5.1.tgz#9c0cdbda8245bc22d2331729d1091308b40cf8ab"
-  integrity sha512-z2uTx/T6LBaCoNWNFWwChLBKYxTMcGBRjAt+2SbP929/Fflb9aa5LGma654Rz8z9HLxsrUaYzxE9T/EFIL/PAw==
-  dependencies:
-    chalk "^4.0.0"
-    jest-diff "^27.5.1"
-    jest-get-type "^27.5.1"
-    pretty-format "^27.5.1"
 
 jest-matcher-utils@^28.1.3:
   version "28.1.3"
@@ -6001,11 +5978,6 @@ jest@^28.1.0:
     "@jest/types" "^28.1.3"
     import-local "^3.0.2"
     jest-cli "^28.1.3"
-
-jetifier@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/jetifier/-/jetifier-2.0.0.tgz#699391367ca1fe7bc4da5f8bf691eb117758e4cb"
-  integrity sha512-J4Au9KuT74te+PCCCHKgAjyLlEa+2VyIAEPNCdE5aNkAJ6FAJcAqcdzEkSnzNksIa9NkGmC4tPiClk2e7tCJuQ==
 
 joi@^17.2.1:
   version "17.13.3"
@@ -7348,16 +7320,7 @@ pretty-format@^26.6.2:
     ansi-styles "^4.0.0"
     react-is "^17.0.1"
 
-pretty-format@^27.0.0, pretty-format@^27.5.1:
-  version "27.5.1"
-  resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-27.5.1.tgz#2181879fdea51a7a5851fb39d920faa63f01d88e"
-  integrity sha512-Qb1gy5OrP5+zDf2Bvnzdl3jsTf1qXVMazbvCoKhtKqVs4/YK4ozX4gKQJJVyNe+cajNPn0KoC0MC3FUmaHWEmQ==
-  dependencies:
-    ansi-regex "^5.0.1"
-    ansi-styles "^5.0.0"
-    react-is "^17.0.1"
-
-pretty-format@^28.1.3:
+pretty-format@^28.0.0, pretty-format@^28.1.3:
   version "28.1.3"
   resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-28.1.3.tgz#c9fba8cedf99ce50963a11b27d982a9ae90970d5"
   integrity sha512-8gFb/To0OmxHR9+ZTb14Df2vNxdGCX8g1xWGUTqUw5TiZvcQf5sHKObd5UcPyLLyowNwDAMTF3XWOG1B6mxl1Q==
@@ -7498,10 +7461,10 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
-react-native-builder-bob@^0.20.4:
-  version "0.20.4"
-  resolved "https://registry.yarnpkg.com/react-native-builder-bob/-/react-native-builder-bob-0.20.4.tgz#02df01b8dc02f1bb2d566f820e33c5d42bfb9c99"
-  integrity sha512-3ZmYP8H7Fg2D8/JAPvxT78I4VWzf5DNMUf69cxWPw7Pukt+hHp1PSQ303af63uv1QXxWMJtrQ11+nuUfVqQf0Q==
+react-native-builder-bob@^0.22.0:
+  version "0.22.0"
+  resolved "https://registry.yarnpkg.com/react-native-builder-bob/-/react-native-builder-bob-0.22.0.tgz#6b55e073888c0f69421c024e7e524d194a887df6"
+  integrity sha512-dp4CmeF5rC9iehQaSZaZAfMyE3QWeU4xjsJ05oOty09qQB7PzC5bwo1RLlP1dCb+TbQqRcoP2gDoUQW1m+f4Mw==
   dependencies:
     "@babel/core" "^7.18.5"
     "@babel/plugin-proposal-class-properties" "^7.17.12"
@@ -7522,8 +7485,6 @@ react-native-builder-bob@^0.20.4:
     prompts "^2.4.2"
     which "^2.0.2"
     yargs "^17.5.1"
-  optionalDependencies:
-    jetifier "^2.0.0"
 
 react-native-windows@^0.77.0:
   version "0.77.11"
