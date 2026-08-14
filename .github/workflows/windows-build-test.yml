@@ -6,8 +6,6 @@ on:
       - 'windows/**'
       - 'src/fabric/**'
       - 'package.json'
-      - 'apps/paper-windows-example/windows/**'
-      - 'apps/paper-windows-example/package.json'
       - 'apps/fabric-windows-example/windows/**'
       - 'apps/fabric-windows-example/package.json'
   push:
@@ -19,7 +17,7 @@ jobs:
     runs-on: windows-2022
     strategy:
       matrix:
-        working-directory: [paper-windows-example, fabric-windows-example]
+        working-directory: [fabric-windows-example]
     concurrency:
       group: windows-${{ matrix.working-directory }}-${{ github.ref }}
       cancel-in-progress: true

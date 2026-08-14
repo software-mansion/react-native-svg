@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      WORKING_DIRECTORY: paper-example
+      WORKING_DIRECTORY: fabric-example
       API_LEVEL: 34
       SYSTEM_IMAGES: system-images;android-34;google_apis;x86_64
       AVD_NAME: rn-svg-avd
@@ -101,7 +101,7 @@ jobs:
             $ANDROID_HOME/platform-tools/adb install -r apps/${{ env.WORKING_DIRECTORY }}/android/app/build/outputs/apk/debug/app-debug.apk
 
             # Launch the app using bash
-            bash -c 'until $ANDROID_HOME/platform-tools/adb shell monkey -p com.paperexample 1 | grep -q "Events injected: 1"; do sleep 1; echo "Retrying app launch..."; done'
+            bash -c 'until $ANDROID_HOME/platform-tools/adb shell monkey -p com.fabricexample 1 | grep -q "Events injected: 1"; do sleep 1; echo "Retrying app launch..."; done'
 
             # Run E2E tests
             yarn e2e
