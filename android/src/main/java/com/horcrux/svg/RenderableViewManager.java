@@ -390,15 +390,6 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     node.setDisplay(display);
   }
 
-  @ReactProp(name = "matrix")
-  public void setMatrix(V node, Dynamic matrixArray) {
-    node.setMatrix(matrixArray);
-  }
-
-  public void setMatrix(V view, @Nullable ReadableArray value) {
-    view.setMatrix(value);
-  }
-
   @Override
   public void setTransform(VirtualView node, @Nullable ReadableArray matrix) {
     setTransformProperty(node, matrix);

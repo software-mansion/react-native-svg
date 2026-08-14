@@ -2,7 +2,9 @@ import type { Component, ReactNode } from 'react';
 import * as React from 'react';
 import extractText from '../lib/extract/extractText';
 import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
-import extractTransform from '../lib/extract/extractTransform';
+import extractTransform, {
+  extractTransformSvgView,
+} from '../lib/extract/extractTransform';
 import type {
   ColumnMajorTransformMatrix,
   NumberArray,
@@ -45,7 +47,7 @@ export default class Text extends Shape<TextProps> {
 
   render() {
     const prop = propsAndStyles(this.props);
-    const props = extractProps(
+    const extractedProps = extractProps(
       {
         ...prop,
         x: null,
@@ -53,8 +55,11 @@ export default class Text extends Shape<TextProps> {
       },
       this
     );
-    Object.assign(props, extractText(prop, true));
-    props.ref = this.refMethod as (instance: Component | null) => void;
-    return <RNSVGText {...props} />;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const transform = extractTransformSvgView(this.props as any);
+
+    Object.assign(extractedProps, extractText(prop, true));
+    extractedProps.ref = this.refMethod as (instance: Component | null) => void;
+    return <RNSVGText {...extractedProps} style={{ transform }} />;
   }
 }

@@ -310,33 +310,6 @@ public abstract class VirtualView extends ReactViewGroup {
     invalidate();
   }
 
-  public void setMatrix(Dynamic matrixArray) {
-    boolean isArrayType = !matrixArray.isNull() && matrixArray.getType().equals(ReadableType.Array);
-    setMatrix(isArrayType ? matrixArray.asArray() : null);
-  }
-
-  public void setMatrix(@Nullable ReadableArray matrixArray) {
-    if (matrixArray != null) {
-      int matrixSize = PropHelper.toMatrixData(matrixArray, sRawMatrix, mScale);
-      if (matrixSize == 6) {
-        if (mMatrix == null) {
-          mMatrix = new Matrix();
-          mInvMatrix = new Matrix();
-        }
-        mMatrix.setValues(sRawMatrix);
-        mInvertible = mMatrix.invert(mInvMatrix);
-      } else if (matrixSize != -1) {
-        FLog.w(ReactConstants.TAG, "RNSVG: Transform matrices must be of size 6");
-      }
-    } else {
-      mMatrix.reset();
-      mInvMatrix.reset();
-      mInvertible = true;
-    }
-    super.invalidate();
-    clearParentCache();
-  }
-
   public void setResponsible(boolean responsible) {
     mResponsible = responsible;
     invalidate();

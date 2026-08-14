@@ -23,14 +23,28 @@ function "transform function"
   / skewY
 
 matrix "matrix"
-  = _ "matrix(" _ a:NUM spaceOrComma b:NUM spaceOrComma c:NUM spaceOrComma d:NUM spaceOrComma e:NUM spaceOrComma f:NUM spaceOrComma g:NUM spaceOrComma h:NUM spaceOrComma i:NUM _ ")" _ {
-    return { matrix: [a, b, c, d, e, f, g, h, i]};
+  = _ "matrix(" _
+    a:NUM spaceOrComma
+    b:NUM spaceOrComma
+    c:NUM spaceOrComma
+    d:NUM spaceOrComma
+    e:NUM spaceOrComma
+    f:NUM
+    ghi:(
+      spaceOrComma g:NUM spaceOrComma h:NUM spaceOrComma i:NUM { return [g, h, i]; }
+    )?
+    _ ")" _
+{
+  if (ghi) {
+    return { matrix: [a, b, c, d, e, f, ghi[0], ghi[1], ghi[2]] };
+  } else {
+    return { matrix: [a, b, c, d, e, f, 0, 0, 1] };
   }
-
+}
 translate "translate"
   = _ "translate(" _ x:NUM spaceOrComma y:NUM? _ ")" _ {
     if (y == undefined) {
-        return { translate: x };
+        return { translateX: x };
     }
     return { translate: [x, y] };
   }
