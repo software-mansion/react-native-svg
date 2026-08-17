@@ -35,7 +35,7 @@ export interface JsxAST extends AST {
 export type AdditionalProps = {
   onError?: (error: Error) => void;
   override?: object;
-  onLoad?: () => void;
+  onLoad?: (svgProps: SvgProps) => void;
   fallback?: JSX.Element;
 };
 
@@ -65,18 +65,29 @@ export function SvgAst({ ast, override }: AstProps) {
 const err = console.error.bind(console);
 
 export function SvgXml(props: XmlProps) {
-  const { onError = err, xml, override, fallback } = props;
+  const { onError = err, xml, override, fallback, onLoad } = props;
 
-  try {
-    const ast = useMemo<JsxAST | null>(
-      () => (xml !== null ? parse(xml) : null),
-      [xml]
-    );
-    return <SvgAst ast={ast} override={override || props} />;
-  } catch (error) {
-    onError(error);
+  const [ast, error] = useMemo<[JsxAST | null, unknown]>(() => {
+    try {
+      const parsed = xml !== null ? parse(xml) : null;
+      return [parsed, null];
+    } catch (exc) {
+      return [null, exc];
+    }
+  }, [xml]);
+
+  useEffect(() => {
+    if (!error && ast?.props) {
+      onLoad?.(ast.props);
+    } else if (error) {
+      onError(error as Error);
+    }
+  }, [ast, error, onError, onLoad]);
+
+  if (error) {
     return fallback ?? null;
   }
+  return <SvgAst ast={ast} override={override || props} />;
 }
 
 export function SvgUri(props: UriProps) {
@@ -89,7 +100,6 @@ export function SvgUri(props: UriProps) {
           .then((data) => {
             setXml(data);
             isError && setIsError(false);
-            onLoad?.();
           })
           .catch((e) => {
             onError(e);
@@ -101,7 +111,9 @@ export function SvgUri(props: UriProps) {
   if (isError) {
     return fallback ?? null;
   }
-  return <SvgXml xml={xml} override={props} fallback={fallback} />;
+  return (
+    <SvgXml xml={xml} override={props} fallback={fallback} onLoad={onLoad} />
+  );
 }
 
 // Extending Component is required for Animated support.
