@@ -635,9 +635,6 @@ const SvgTouchableMixin = {
           this._endHighlight(e);
         }
         if (Platform.OS === 'android' && !this.props.touchSoundDisabled) {
-          console.log(
-            `[SvgTouchableMixin] playTouchSound for responder ${this.state.touchable.responderID}`
-          );
           // eslint-disable-next-line @typescript-eslint/no-var-requires
           const soundModule = require('../fabric/NativeSvgSoundModule').default;
           soundModule.playTouchSound();
