@@ -135,6 +135,8 @@ void setCommonRenderableProps(const T &renderableProps, RNSVGRenderable *rendera
   id strokeDasharray = RNSVGConvertFollyDynamicToId(renderableProps.strokeDasharray);
   if (strokeDasharray != nil) {
     renderableNode.strokeDasharray = [RCTConvert RNSVGLengthArray:strokeDasharray];
+  } else {
+    renderableNode.strokeDasharray = nil;
   }
   renderableNode.strokeDashoffset = renderableProps.strokeDashoffset;
   renderableNode.strokeMiterlimit = renderableProps.strokeMiterlimit;
