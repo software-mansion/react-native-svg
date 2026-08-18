@@ -18,6 +18,14 @@ public:
 };
 
 /**
+ * JNI C++ class for module 'NativeSvgSoundModule'
+ */
+class JSI_EXPORT NativeSvgSoundModuleSpecJSI : public JavaTurboModule {
+public:
+  NativeSvgSoundModuleSpecJSI(const JavaTurboModule::InitParams &params);
+};
+
+/**
  * JNI C++ class for module 'NativeSvgViewModule'
  */
 class JSI_EXPORT NativeSvgViewModuleSpecJSI : public JavaTurboModule {
