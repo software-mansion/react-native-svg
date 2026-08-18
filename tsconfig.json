@@ -1,25 +1,34 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "declaration": true,
+    "types": [
+      "css-tree",
+      "jest",
+      "node",
+      "pixelmatch",
+      "pngjs",
+      "react",
+      "react-test-renderer",
+      "ws"
+    ],
     "paths": {
       "react-native-svg": ["./src"],
       "react-native-svg/css": ["./src/css/index.tsx"],
       "react-native-svg/filter-image": ["./src/filter-image/index.tsx"]
     },
     "preserveSymlinks": true,
-    "target": "es6",
+    "target": "es2015",
     "module": "ESNext",
     "jsx": "react-native",
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node",
-    "lib": ["es6", "dom"],
+    "moduleResolution": "bundler",
+    "lib": ["DOM", "ES2015"],
     "esModuleInterop": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "include": ["src"]
+  "include": ["src", "__tests__", "e2e"]
 }
