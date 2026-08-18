@@ -35,6 +35,7 @@ import javax.inject.Provider;
     nativeModules = {
       SvgViewModule.class,
       RNSVGRenderableManager.class,
+      SvgSoundModule.class,
     })
 public class SvgPackage extends BaseReactPackage implements ViewManagerOnDemandReactPackage {
 
@@ -335,6 +336,8 @@ public class SvgPackage extends BaseReactPackage implements ViewManagerOnDemandR
         return new SvgViewModule(reactContext);
       case RNSVGRenderableManager.NAME:
         return new RNSVGRenderableManager(reactContext);
+      case SvgSoundModule.NAME:
+        return new SvgSoundModule(reactContext);
       default:
         return null;
     }
@@ -356,7 +359,7 @@ public class SvgPackage extends BaseReactPackage implements ViewManagerOnDemandR
 
           Class<? extends NativeModule>[] moduleList =
               new Class[] {
-                SvgViewModule.class, RNSVGRenderableManager.class,
+                SvgViewModule.class, RNSVGRenderableManager.class, SvgSoundModule.class,
               };
 
           for (Class<? extends NativeModule> moduleClass : moduleList) {

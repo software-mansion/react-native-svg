@@ -1,14 +1,12 @@
 import type { GestureResponderEvent, Insets } from 'react-native';
+import { Platform } from 'react-native';
 
 /**
  * Self-contained port of the press interaction state machine from
- * react-native's deprecated `Touchable.Mixin`. It only depends on the
- * gesture responder system, so it works without the core `Touchable` API.
+ * react-native's deprecated `Touchable.Mixin`. It uses the gesture responder
+ * system directly, so it works without the core `Touchable` API.
  *
- * Differences with the original implementation:
- * - No Android tap sound on press (`SoundManager` has no public export).
- * - Measurement uses the granted responder node or the instance `root` ref
- *   instead of `UIManager.measure`.
+ * https://github.com/react/react-native/blob/5e11ed122aa081e9a263b692637c12f0e9e02024/packages/react-native/Libraries/Components/Touchable/Touchable.js
  */
 
 const PRESS_RETENTION_OFFSET = { top: 20, left: 20, right: 20, bottom: 30 };
@@ -176,6 +174,7 @@ interface TouchableProps {
   pressRetentionOffset?: Insets;
   hitSlop?: Insets;
   rejectResponderTermination?: boolean;
+  touchSoundDisabled?: boolean;
   onStartShouldSetResponder?: (e: GestureResponderEvent) => boolean;
   onResponderTerminationRequest?: (e: GestureResponderEvent) => boolean;
   onResponderGrant?: (e: GestureResponderEvent) => void;
@@ -634,6 +633,11 @@ const SvgTouchableMixin = {
           // The highlight never fired because of the delay. Fire it now.
           this._startHighlight(e);
           this._endHighlight(e);
+        }
+        if (Platform.OS === 'android' && !this.props.touchSoundDisabled) {
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          const soundModule = require('../fabric/NativeSvgSoundModule').default;
+          soundModule.playTouchSound();
         }
         this.touchableHandlePress(e);
       }

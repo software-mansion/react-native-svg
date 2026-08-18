@@ -64,6 +64,15 @@ NativeSvgRenderableModuleSpecJSI::NativeSvgRenderableModuleSpecJSI(const JavaTur
   methodMap_["getScreenCTM"] = MethodMetadata {1, __hostFunction_NativeSvgRenderableModuleSpecJSI_getScreenCTM};
   methodMap_["getRawResource"] = MethodMetadata {1, __hostFunction_NativeSvgRenderableModuleSpecJSI_getRawResource};
 }
+static facebook::jsi::Value __hostFunction_NativeSvgSoundModuleSpecJSI_playTouchSound(facebook::jsi::Runtime& rt, TurboModule &turboModule, const facebook::jsi::Value* args, size_t count) {
+  static jmethodID cachedMethodId = nullptr;
+  return static_cast<JavaTurboModule &>(turboModule).invokeJavaMethod(rt, VoidKind, "playTouchSound", "()V", args, count, cachedMethodId);
+}
+
+NativeSvgSoundModuleSpecJSI::NativeSvgSoundModuleSpecJSI(const JavaTurboModule::InitParams &params)
+  : JavaTurboModule(params) {
+  methodMap_["playTouchSound"] = MethodMetadata {0, __hostFunction_NativeSvgSoundModuleSpecJSI_playTouchSound};
+}
 static facebook::jsi::Value __hostFunction_NativeSvgViewModuleSpecJSI_toDataURL(facebook::jsi::Runtime& rt, TurboModule &turboModule, const facebook::jsi::Value* args, size_t count) {
   static jmethodID cachedMethodId = nullptr;
   return static_cast<JavaTurboModule &>(turboModule).invokeJavaMethod(rt, VoidKind, "toDataURL", "(Ljava/lang/Double;Lcom/facebook/react/bridge/ReadableMap;Lcom/facebook/react/bridge/Callback;)V", args, count, cachedMethodId);
@@ -77,6 +86,9 @@ NativeSvgViewModuleSpecJSI::NativeSvgViewModuleSpecJSI(const JavaTurboModule::In
 std::shared_ptr<TurboModule> rnsvg_ModuleProvider(const std::string &moduleName, const JavaTurboModule::InitParams &params) {
   if (moduleName == "RNSVGRenderableModule") {
     return std::make_shared<NativeSvgRenderableModuleSpecJSI>(params);
+  }
+  if (moduleName == "RNSVGSoundModule") {
+    return std::make_shared<NativeSvgSoundModuleSpecJSI>(params);
   }
   if (moduleName == "RNSVGSvgViewModule") {
     return std::make_shared<NativeSvgViewModuleSpecJSI>(params);

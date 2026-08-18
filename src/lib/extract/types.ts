@@ -97,6 +97,7 @@ export type FilterColorMatrixType =
 
 export interface TouchableProps {
   disabled?: boolean;
+  touchSoundDisabled?: boolean;
   onPress?: (event: GestureResponderEvent) => void;
   onPressIn?: (event: GestureResponderEvent) => void;
   onPressOut?: (event: GestureResponderEvent) => void;
