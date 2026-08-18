@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.module.annotations.ReactModule;
 
 /**
@@ -18,6 +19,7 @@ class SvgSoundModule extends NativeSvgSoundModuleSpec {
     super(reactContext);
   }
 
+  @ReactMethod
   @Override
   public void playTouchSound() {
     AudioManager audioManager =
