@@ -2,9 +2,9 @@ import { maxPixelDiff, targetPixelRatio } from './env';
 // import { storeFailedResult } from './readFailedCases';
 import { FailedResults, HandshakeMessageData } from './types';
 
-const extractSvgNumber = (testCase: string) => {
-  const match = testCase.match(/(\d+)\.svg$/)!;
-  return parseInt(match[1], 10).toString();
+/** Extract test case name from filename (e.g., "1.svg" -> "1", "masking-path-01-b.svg" -> "masking-path-01-b") */
+const extractTestCaseName = (testCase: string) => {
+  return testCase.replace(/\.svg$/, '');
 };
 
 export function verifyComparisons(
@@ -17,7 +17,7 @@ export function verifyComparisons(
   //   storeFailedResult(global.os, global.arch, matchTestCase(testCase));
   // }
   if (
-    failedCases[global.os][global.arch].includes(extractSvgNumber(testCase))
+    failedCases[global.os][global.arch].includes(extractTestCaseName(testCase))
   ) {
     expect(amountOfDifferentPixels).toBeGreaterThan(
       maxPixelDiff * targetPixelRatio

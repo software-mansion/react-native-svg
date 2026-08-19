@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Multiple overlapping evenodd children (donuts) -->
+  <!-- Each child: concentric circles with evenodd → donut with center hole -->
+  <!-- Children overlap → union (solid where rings overlap, each keeps its center hole) -->
+  <defs>
+    <clipPath id="clip-multi-evenodd">
+      <path clip-rule="evenodd" d="M35,50 m-22,0 a22,22 0 1,0 44,0 a22,22 0 1,0 -44,0 m14,0 a8,8 0 1,1 16,0 a8,8 0 1,1 -16,0"/>
+      <path clip-rule="evenodd" d="M65,50 m-22,0 a22,22 0 1,0 44,0 a22,22 0 1,0 -44,0 m14,0 a8,8 0 1,1 16,0 a8,8 0 1,1 -16,0"/>
+    </clipPath>
+  </defs>
+  <rect x="0" y="0" width="100" height="100" fill="purple" clip-path="url(#clip-multi-evenodd)"/>
+</svg>

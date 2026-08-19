@@ -1,0 +1,32 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Tests: Complex paths as clip paths
+       1. Arbitrary path geometry (star) as clip path with userSpaceOnUse
+       2. Same star as objectBoundingBox (scaled 0-1 coords)
+       3. Transform inside clipPath (rotated rect) -->
+
+  <defs>
+    <!-- Star path clip (userSpaceOnUse) - centered at (16, 50) -->
+    <clipPath id="clip-star-user" clipPathUnits="userSpaceOnUse">
+      <path d="M16,35 L20,45 L30,45 L22,52 L25,62 L16,56 L7,62 L10,52 L2,45 L12,45 Z"/>
+    </clipPath>
+
+    <!-- Star path clip (objectBoundingBox) - normalized 0-1 coords -->
+    <clipPath id="clip-star-obb" clipPathUnits="objectBoundingBox">
+      <path d="M0.5,0.1 L0.6,0.4 L0.9,0.4 L0.65,0.55 L0.75,0.9 L0.5,0.7 L0.25,0.9 L0.35,0.55 L0.1,0.4 L0.4,0.4 Z"/>
+    </clipPath>
+
+    <!-- Rotated rect clip (tests transform inside clipPath) -->
+    <clipPath id="clip-rotated">
+      <rect x="70" y="30" width="24" height="24" transform="rotate(45, 82, 42)"/>
+    </clipPath>
+  </defs>
+
+  <!-- Test 1: Red rect clipped by star (userSpaceOnUse) -->
+  <rect x="2" y="35" width="28" height="30" fill="red" clip-path="url(#clip-star-user)"/>
+
+  <!-- Test 2: Blue rect clipped by star (objectBoundingBox) -->
+  <rect x="36" y="35" width="28" height="30" fill="blue" clip-path="url(#clip-star-obb)"/>
+
+  <!-- Test 3: Green rect clipped by rotated rect -->
+  <rect x="64" y="24" width="36" height="36" fill="green" clip-path="url(#clip-rotated)"/>
+</svg>
