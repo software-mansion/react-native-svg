@@ -20,6 +20,8 @@ using RNSVGFeColorMatrixComponentDescriptor =
     ConcreteComponentDescriptor<RNSVGFeColorMatrixShadowNode>;
 using RNSVGFeCompositeComponentDescriptor =
     ConcreteComponentDescriptor<RNSVGFeCompositeShadowNode>;
+using RNSVGFeConvolveMatrixComponentDescriptor =
+    ConcreteComponentDescriptor<RNSVGFeConvolveMatrixShadowNode>;
 using RNSVGFeFloodComponentDescriptor =
     ConcreteComponentDescriptor<RNSVGFeFloodShadowNode>;
 using RNSVGFeGaussianBlurComponentDescriptor =
