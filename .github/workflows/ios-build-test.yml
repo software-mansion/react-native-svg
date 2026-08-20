@@ -7,8 +7,8 @@ on:
       - apple/**
       - src/fabric/**
       - package.json
-      - apps/fabric-example/package.json
-      - apps/fabric-example/ios/**
+      - apps/tests-example/package.json
+      - apps/tests-example/ios/**
   push:
     branches:
       - main
@@ -19,7 +19,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        working-directory: [fabric-example]
+        working-directory: [tests-example]
       fail-fast: false
     env:
       DEVICE: iPhone 17 Pro
