@@ -1,8 +1,10 @@
 import {
-  Image,
   ImageResolvedAssetSource,
+  PixelRatio,
   type ImageProps as RNImageProps,
 } from 'react-native';
+// @ts-expect-error react-native/assets-registry doesn't export types.
+import { getAssetByID } from '@react-native/assets-registry/registry';
 
 export type PackagerAsset = {
   __packager_asset: boolean;
@@ -24,13 +26,31 @@ export function resolveAssetUri(
 ): Partial<ImageResolvedAssetSource> | null {
   let src: Partial<ImageResolvedAssetSource> = {};
   if (typeof source === 'number') {
-    const asset = Image.resolveAssetSource(source);
+    // get the URI from the packager
+    const asset: PackagerAsset | null = getAssetByID(source);
     if (asset == null) {
       throw new Error(
         `Image: asset with ID "${source}" could not be found. Please check the image source or packager.`
       );
     }
-    src = asset;
+    src = {
+      width: asset.width,
+      height: asset.height,
+      scale: asset.scales[0],
+    };
+    if (asset.scales.length > 1) {
+      const preferredScale = PixelRatio.get();
+      // Get the scale which is closest to the preferred scale
+      src.scale = asset.scales.reduce((prev, curr) =>
+        Math.abs(curr - preferredScale) < Math.abs(prev - preferredScale)
+          ? curr
+          : prev
+      );
+    }
+    const scaleSuffix = src.scale !== 1 ? `@${src.scale}x` : '';
+    src.uri = asset
+      ? `${asset.httpServerLocation}/${asset.name}${scaleSuffix}.${asset.type}`
+      : '';
   } else if (typeof source === 'string') {
     src.uri = source;
   } else if (
