@@ -149,7 +149,7 @@ void RenderableView::UpdateProps(
   m_props = props;
 }
 
-void RenderableView::FinalizeUpates(
+void RenderableView::FinalizeUpdates(
     const winrt::Microsoft::ReactNative::ComponentView &view,
     winrt::Microsoft::ReactNative::ComponentViewUpdateMask) noexcept {
   Invalidate(view);

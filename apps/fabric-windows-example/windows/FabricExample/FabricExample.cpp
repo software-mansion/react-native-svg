@@ -146,7 +146,7 @@ _Use_decl_annotations_ int CALLBACK WinMain(HINSTANCE instance, HINSTANCE, PSTR 
 
   rootView.ScaleFactor(scaleFactor);
 
-  // Set the intialSize of the root view
+  // Set the initialSize of the root view
   UpdateRootViewSizeToAppWindow(rootView, window);
 
   bridge.Show();

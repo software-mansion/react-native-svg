@@ -9,7 +9,7 @@
 #import "RNSVGGroup.h"
 
 /**
- * RNSVG defination are implemented as abstract UIViews for all elements inside Defs.
+ * RNSVG definition are implemented as abstract UIViews for all elements inside Defs.
  */
 
 @interface RNSVGSymbol : RNSVGGroup
