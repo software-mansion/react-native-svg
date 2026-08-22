@@ -63,6 +63,7 @@ export function SvgAst({ ast, override }: AstProps) {
 }
 
 const err = console.error.bind(console);
+export { err };
 
 export function SvgXml(props: XmlProps) {
   const { onError = err, xml, override, fallback } = props;
