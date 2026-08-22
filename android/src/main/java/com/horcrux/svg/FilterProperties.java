@@ -181,4 +181,102 @@ class FilterProperties {
       return type;
     }
   }
+
+  enum FeTurbulenceType {
+    FRACTAL_NOISE("fractalNoise"),
+    TURBULENCE("turbulence");
+
+    private final String type;
+
+    FeTurbulenceType(String type) {
+      this.type = type;
+    }
+
+    static FeTurbulenceType getEnum(String strVal) {
+      if (!typeToEnum.containsKey(strVal)) {
+        throw new IllegalArgumentException("Unknown String Value: " + strVal);
+      }
+      return typeToEnum.get(strVal);
+    }
+
+    private static final Map<String, FeTurbulenceType> typeToEnum = new HashMap<>();
+
+    static {
+      for (final FeTurbulenceType en : FeTurbulenceType.values()) {
+        typeToEnum.put(en.type, en);
+      }
+    }
+
+    @Nonnull
+    @Override
+    public String toString() {
+      return type;
+    }
+  }
+
+  enum FeTurbulenceStitchTile {
+    STITCH("stitch"),
+    NO_STITCH("noStitch");
+
+    private final String stitchTile;
+
+    FeTurbulenceStitchTile(String stitchTile) {
+      this.stitchTile = stitchTile;
+    }
+
+    static FeTurbulenceStitchTile getEnum(String strVal) {
+      if (!stitchTileToEnum.containsKey(strVal)) {
+        throw new IllegalArgumentException("Unknown String Value: " + strVal);
+      }
+      return stitchTileToEnum.get(strVal);
+    }
+
+    private static final Map<String, FeTurbulenceStitchTile> stitchTileToEnum = new HashMap<>();
+
+    static {
+      for (final FeTurbulenceStitchTile en : FeTurbulenceStitchTile.values()) {
+        stitchTileToEnum.put(en.stitchTile, en);
+      }
+    }
+
+    @Nonnull
+    @Override
+    public String toString() {
+      return stitchTile;
+    }
+  }
+
+  enum FeDisplacementMapChannelSelector {
+    R("R"),
+    G("G"),
+    B("B"),
+    A("A");
+
+    private final String channelSelector;
+
+    FeDisplacementMapChannelSelector(String channelSelector) {
+      this.channelSelector = channelSelector;
+    }
+
+    static FeDisplacementMapChannelSelector getEnum(String strVal) {
+      if (!channelSelectorToEnum.containsKey(strVal)) {
+        throw new IllegalArgumentException("Unknown String Value: " + strVal);
+      }
+      return channelSelectorToEnum.get(strVal);
+    }
+
+    private static final Map<String, FeDisplacementMapChannelSelector> channelSelectorToEnum = new HashMap<>();
+
+    static {
+      for (final FeDisplacementMapChannelSelector en : FeDisplacementMapChannelSelector.values()) {
+        channelSelectorToEnum.put(en.channelSelector, en);
+      }
+    }
+
+    @Nonnull
+    @Override
+    public String toString() {
+      return channelSelector;
+    }
+  }
 }

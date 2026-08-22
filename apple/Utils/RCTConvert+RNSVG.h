@@ -18,6 +18,8 @@
 #import "RNSVGLength.h"
 #import "RNSVGMaskType.h"
 #import "RNSVGPathParser.h"
+#import "RNSVGTurbulenceStitchTile.h"
+#import "RNSVGTurbulenceType.h"
 #import "RNSVGUnits.h"
 #import "RNSVGVBMOS.h"
 

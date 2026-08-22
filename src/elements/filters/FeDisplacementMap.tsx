@@ -1,7 +1,13 @@
 import { NumberProp } from '../../lib/extract/types';
-import { warnUnimplementedFilter } from '../../lib/util';
+import RNSVGFeDisplacementMap from '../../fabric/FeDisplacementMapNativeComponent';
 import FilterPrimitive from './FilterPrimitive';
 import { ChannelSelector } from './types';
+import { NativeMethods } from 'react-native';
+import {
+  extractFeDisplacementMap,
+  extractFilter,
+  extractIn,
+} from '../../lib/extract/extractFilter';
 
 export interface FeDisplacementMapProps {
   in?: string;
@@ -16,10 +22,21 @@ export default class FeDisplacementMap extends FilterPrimitive<FeDisplacementMap
 
   static defaultProps = {
     ...this.defaultPrimitiveProps,
+    scale: 0,
+    xChannelSelector: 'A',
+    yChannelSelector: 'A',
   };
 
   render() {
-    warnUnimplementedFilter();
-    return null;
+    return (
+      <RNSVGFeDisplacementMap
+        ref={(ref) =>
+          this.refMethod(ref as (FeDisplacementMap & NativeMethods) | null)
+        }
+        {...extractFilter(this.props)}
+        {...extractIn(this.props)}
+        {...extractFeDisplacementMap(this.props)}
+      />
+    );
   }
 }

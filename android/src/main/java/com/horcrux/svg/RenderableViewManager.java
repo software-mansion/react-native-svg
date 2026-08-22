@@ -99,6 +99,8 @@ import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeCompositeManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeCompositeManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeDisplacementMapManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeDisplacementMapManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeFloodManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeFloodManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeGaussianBlurManagerDelegate;
@@ -107,6 +109,8 @@ import com.facebook.react.viewmanagers.RNSVGFeMergeManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeMergeManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeOffsetManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeOffsetManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeTurbulenceManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeTurbulenceManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFilterManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFilterManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGForeignObjectManagerDelegate;
@@ -484,10 +488,12 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     RNSVGFeBlend,
     RNSVGFeColorMatrix,
     RNSVGFeComposite,
+    RNSVGFeDisplacementMap,
     RNSVGFeFlood,
     RNSVGFeGaussianBlur,
     RNSVGFeMerge,
     RNSVGFeOffset,
+    RNSVGFeTurbulence,
     RNSVGMarker,
     RNSVGForeignObject,
   }
@@ -540,6 +546,8 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
         return new FeColorMatrixView(reactContext);
       case RNSVGFeComposite:
         return new FeCompositeView(reactContext);
+      case RNSVGFeDisplacementMap:
+        return new FeDisplacementMapView(reactContext);
       case RNSVGFeFlood:
         return new FeFloodView(reactContext);
       case RNSVGFeGaussianBlur:
@@ -548,6 +556,8 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
         return new FeMergeView(reactContext);
       case RNSVGFeOffset:
         return new FeOffsetView(reactContext);
+      case RNSVGFeTurbulence:
+        return new FeTurbulenceView(reactContext);
       case RNSVGMarker:
         return new MarkerView(reactContext);
       case RNSVGForeignObject:
@@ -1582,6 +1592,41 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     }
   }
 
+  static class FeDisplacementMapManager extends FilterPrimitiveManager<FeDisplacementMapView>
+          implements RNSVGFeDisplacementMapManagerInterface<FeDisplacementMapView> {
+    FeDisplacementMapManager() {
+      super(SVGClass.RNSVGFeDisplacementMap);
+      mDelegate = new RNSVGFeDisplacementMapManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeDisplacementMap";
+
+    @ReactProp(name = "in1")
+    public void setIn1(FeDisplacementMapView node, String in1) {
+      node.setIn1(in1);
+    }
+
+    @ReactProp(name = "in2")
+    public void setIn2(FeDisplacementMapView node, String in2) {
+      node.setIn2(in2);
+    }
+
+    @ReactProp(name = "scale")
+    public void setScale(FeDisplacementMapView node, Dynamic scale) {
+      node.setScale(scale);
+    }
+
+    @ReactProp(name = "xChannelSelector")
+    public void setXChannelSelector(FeDisplacementMapView node, String xChannelSelector) {
+      node.setXChannelSelector(xChannelSelector);
+    }
+
+    @ReactProp(name = "yChannelSelector")
+    public void setYChannelSelector(FeDisplacementMapView node, String yChannelSelector) {
+      node.setYChannelSelector(yChannelSelector);
+    }
+  }
+
   static class FeFloodManager extends FilterPrimitiveManager<FeFloodView>
       implements RNSVGFeFloodManagerInterface<FeFloodView> {
     FeFloodManager() {
@@ -1673,6 +1718,41 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     @ReactProp(name = "dy")
     public void setDy(FeOffsetView node, Dynamic dy) {
       node.setDy(dy);
+    }
+  }
+
+  static class FeTurbulenceManager extends FilterPrimitiveManager<FeTurbulenceView>
+          implements RNSVGFeTurbulenceManagerInterface<FeTurbulenceView> {
+    FeTurbulenceManager() {
+      super(SVGClass.RNSVGFeTurbulence);
+      mDelegate = new RNSVGFeTurbulenceManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeTurbulence";
+
+    @ReactProp(name = "baseFrequency")
+    public void setBaseFrequency(FeTurbulenceView node, Dynamic baseFrequency) {
+      node.setBaseFrequency(baseFrequency);
+    }
+
+    @ReactProp(name = "numOctaves")
+    public void setNumOctaves(FeTurbulenceView node, Dynamic numOctaves) {
+      node.setNumOctaves(numOctaves);
+    }
+
+    @ReactProp(name = "seed")
+    public void setSeed(FeTurbulenceView node, Dynamic seed) {
+      node.setSeed(seed);
+    }
+
+    @ReactProp(name = "stitchTile")
+    public void setStitchTiles(FeTurbulenceView node, String stitchTiles) {
+      node.setStitchTiles(stitchTiles);
+    }
+
+    @ReactProp(name = "type")
+    public void setType(FeTurbulenceView node, String type) {
+      node.setType(type);
     }
   }
 

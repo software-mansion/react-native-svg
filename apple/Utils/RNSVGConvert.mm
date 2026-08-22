@@ -87,6 +87,62 @@
   }
 }
 
++ (RNSVGTurbulenceStitchTile)RNSVGTurbulenceStitchTileFromCppEquivalent:(react::RNSVGFeTurbulenceStitchTiles)stitchTiles
+{
+  switch (stitchTiles) {
+    case react::RNSVGFeTurbulenceStitchTiles::Stitch:
+      return SVG_FETURBULENCE_STITCH_TILE_STITCH;
+    case react::RNSVGFeTurbulenceStitchTiles::NoStitch:
+      return SVG_FETURBULENCE_STITCH_TILE_NO_STITCH;
+    default:
+      return SVG_FETURBULENCE_STITCH_TILE_NO_STITCH;
+  }
+}
+
++ (RNSVGTurbulenceType)RNSVGTurbulenceTypeFromCppEquivalent:(react::RNSVGFeTurbulenceType)type
+{
+  switch (type) {
+    case react::RNSVGFeTurbulenceType::Turbulence:
+      return SVG_FETURBULENCE_TYPE_TURBULENCE;
+    case react::RNSVGFeTurbulenceType::FractalNoise:
+      return SVG_FETURBULENCE_TYPE_FRACTAL_NOISE;
+    default:
+      return SVG_FETURBULENCE_TYPE_TURBULENCE;
+  }
+}
+
++ (RNSVGChannelSelector)RNSVGXChannelSelectorFromCppEquivalent:(react::RNSVGFeDisplacementMapXChannelSelector)channelSelector
+{
+  switch (channelSelector) {
+    case react::RNSVGFeDisplacementMapXChannelSelector::R:
+      return SVG_CHANNEL_SELECTOR_R;
+    case react::RNSVGFeDisplacementMapXChannelSelector::G:
+      return SVG_CHANNEL_SELECTOR_G;
+    case react::RNSVGFeDisplacementMapXChannelSelector::B:
+      return SVG_CHANNEL_SELECTOR_B;
+    case react::RNSVGFeDisplacementMapXChannelSelector::A:
+      return SVG_CHANNEL_SELECTOR_A;
+    default:
+      return SVG_CHANNEL_SELECTOR_A;
+  }
+}
+
++ (RNSVGChannelSelector)RNSVGYChannelSelectorFromCppEquivalent:(react::RNSVGFeDisplacementMapYChannelSelector)channelSelector
+{
+  switch (channelSelector) {
+    case react::RNSVGFeDisplacementMapYChannelSelector::R:
+      return SVG_CHANNEL_SELECTOR_R;
+    case react::RNSVGFeDisplacementMapYChannelSelector::G:
+      return SVG_CHANNEL_SELECTOR_G;
+    case react::RNSVGFeDisplacementMapYChannelSelector::B:
+      return SVG_CHANNEL_SELECTOR_B;
+    case react::RNSVGFeDisplacementMapYChannelSelector::A:
+      return SVG_CHANNEL_SELECTOR_A;
+    default:
+      return SVG_CHANNEL_SELECTOR_A;
+  }
+}
+
 @end
 
 #endif // RCT_NEW_ARCH_ENABLED
