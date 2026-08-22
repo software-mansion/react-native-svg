@@ -5,6 +5,7 @@
 #endif
 
 #include <codecvt>
+#include <string>
 
 #include "Utils.h"
 
@@ -12,6 +13,51 @@ using namespace winrt;
 using namespace Microsoft::ReactNative;
 
 namespace winrt::RNSVG::implementation {
+namespace {
+
+std::wstring TrimFontFamilyName(std::wstring value) {
+  auto const isTrim = [](wchar_t ch) { return ch == L' ' || ch == L'\t' || ch == L'"' || ch == L'\''; };
+  while (!value.empty() && isTrim(value.front())) {
+    value.erase(value.begin());
+  }
+  while (!value.empty() && isTrim(value.back())) {
+    value.pop_back();
+  }
+  return value;
+}
+
+hstring SelectAvailableFontFamily(IDWriteFactory *factory, hstring const &fontFamily) {
+  com_ptr<IDWriteFontCollection> collection;
+  if (FAILED(factory->GetSystemFontCollection(collection.put())) || !collection) {
+    return fontFamily;
+  }
+
+  std::wstring raw{fontFamily.c_str()};
+  hstring firstFamily;
+  size_t start = 0;
+  while (start <= raw.size()) {
+    size_t const comma = raw.find(L',', start);
+    std::wstring part = TrimFontFamilyName(
+        raw.substr(start, comma == std::wstring::npos ? std::wstring::npos : comma - start));
+    if (!part.empty()) {
+      if (firstFamily.empty()) {
+        firstFamily = hstring{part};
+      }
+      UINT32 index = 0;
+      BOOL exists = FALSE;
+      if (SUCCEEDED(collection->FindFamilyName(part.c_str(), &index, &exists)) && exists) {
+        return hstring{part};
+      }
+    }
+    if (comma == std::wstring::npos) {
+      break;
+    }
+    start = comma + 1;
+  }
+  return firstFamily.empty() ? fontFamily : firstFamily;
+}
+
+} // namespace
 
 void TSpanView::UpdateProperties(IJSValueReader const &reader, bool forceUpdate, bool invalidate) {
   const JSValueObject &propertyMap{JSValue::ReadObjectFrom(reader)};
@@ -52,8 +98,9 @@ void TSpanView::Draw(RNSVG::D2DDeviceContext const &context, Size const &size) {
       reinterpret_cast<::IUnknown **>(dwriteFactory.put_void())));
 
   com_ptr<IDWriteTextFormat> textFormat;
+  hstring const resolvedFamily{SelectAvailableFontFamily(dwriteFactory.get(), FontFamily())};
   check_hresult(dwriteFactory->CreateTextFormat(
-      FontFamily().c_str(),
+      resolvedFamily.c_str(),
       nullptr, // Font collection (nullptr sets it to use the system font collection).
       D2DHelpers::FontWeightFrom(SvgParent(), FontWeight()),
       DWRITE_FONT_STYLE_NORMAL,
