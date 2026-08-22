@@ -1,5 +1,6 @@
 #import "RNSVGGlyphContext.h"
 #import <React/RCTFont.h>
+#import <TargetConditionals.h>
 #import "RNSVGFontData.h"
 #import "RNSVGNode.h"
 #import "RNSVGPropHelper.h"
@@ -111,10 +112,68 @@
   return mFontContext_;
 }
 
+static NSArray<NSString *> *RNSVGFontFamilyList(NSString *fontFamily)
+{
+  if (fontFamily.length == 0) {
+    return @[];
+  }
+  NSArray<NSString *> *parts = [fontFamily componentsSeparatedByString:@","];
+  NSMutableArray<NSString *> *families = [NSMutableArray new];
+  NSCharacterSet *trimSet = [NSCharacterSet characterSetWithCharactersInString:@" \t\"'"];
+  for (NSString *part in parts) {
+    NSString *family = [part stringByTrimmingCharactersInSet:trimSet];
+    if (family.length > 0) {
+      [families addObject:family];
+    }
+  }
+  return families;
+}
+
+static BOOL RNSVGFontFamilyIsAvailable(NSString *family)
+{
+  if (family.length == 0) {
+    return NO;
+  }
+#if !TARGET_OS_OSX
+  if ([UIFont fontNamesForFamilyName:family].count > 0) {
+    return YES;
+  }
+  if ([UIFont fontWithName:family size:12] != nil) {
+    return YES;
+  }
+#endif
+  UIFont *resolved = [RCTFont updateFont:nil
+                              withFamily:family
+                                    size:@12
+                                  weight:nil
+                                   style:nil
+                                 variant:nil
+                         scaleMultiplier:1.0];
+  UIFont *systemFallback = [RCTFont updateFont:nil
+                                    withFamily:nil
+                                          size:@12
+                                        weight:nil
+                                         style:nil
+                                       variant:nil
+                               scaleMultiplier:1.0];
+  return resolved != nil && ![resolved.fontName isEqualToString:systemFallback.fontName];
+}
+
+static NSString *RNSVGSelectFontFamily(NSString *fontFamily)
+{
+  NSArray<NSString *> *families = RNSVGFontFamilyList(fontFamily);
+  for (NSString *family in families) {
+    if (RNSVGFontFamilyIsAvailable(family)) {
+      return family;
+    }
+  }
+  return families.firstObject ?: fontFamily;
+}
+
 - (CTFontRef)getGlyphFont
 {
   CGFloat size = topFont_->fontSize;
-  NSString *fontFamily = topFont_->fontFamily;
+  NSString *fontFamily = RNSVGSelectFontFamily(topFont_->fontFamily);
   NSString *fontStyle = RNSVGFontStyleStrings[topFont_->fontStyle];
   NSString *fontWeight = RNSVGFontWeightStrings[topFont_->fontWeight];
   UIFont *font = [RCTFont updateFont:nil
