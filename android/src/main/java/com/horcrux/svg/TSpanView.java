@@ -1198,12 +1198,26 @@ class TSpanView extends TextView {
     return typeface;
   }
 
+  private static boolean isResolvedFontFamily(String family, Typeface typeface, int style) {
+    if (typeface == null) {
+      return false;
+    }
+    if (isGenericOrDefaultFontFamily(family)) {
+      return true;
+    }
+    // Typeface.equals includes style. Compare against a same-style missing
+    // sentinel so bold/italic text still walks the fallback list.
+    Typeface missing = Typeface.create(MISSING_FONT_SENTINEL, style);
+    return !typeface.equals(missing)
+        && !typeface.equals(Typeface.DEFAULT)
+        && !typeface.equals(Typeface.DEFAULT_BOLD);
+  }
+
   private Typeface resolveTypefaceFromFontFamily(
       String fontFamily, int style, int weight, boolean isItalic, String fontVariationSettings) {
     if (fontFamily == null || fontFamily.length() == 0) {
       return null;
     }
-    Typeface missing = Typeface.create(MISSING_FONT_SENTINEL, Typeface.NORMAL);
     Typeface resolved = null;
     for (String rawFamily : fontFamily.split(",")) {
       String family = trimFontFamilyName(rawFamily);
@@ -1215,7 +1229,7 @@ class TSpanView extends TextView {
       if (typeface == null) {
         continue;
       }
-      if (isGenericOrDefaultFontFamily(family) || !typeface.equals(missing)) {
+      if (isResolvedFontFamily(family, typeface, style)) {
         resolved = typeface;
         break;
       }
