@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Component, useEffect, useMemo, useState } from 'react';
+import { Component, useEffect, useMemo, useRef, useState } from 'react';
 import type {
   JsxAST,
   Middleware,
@@ -783,19 +783,39 @@ export function SvgCssUri(props: UriProps) {
   const { uri, onError = err, onLoad, fallback } = props;
   const [xml, setXml] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
+  const onErrorRef = useRef(onError);
+  const onLoadRef = useRef(onLoad);
   useEffect(() => {
-    uri
-      ? fetchText(uri)
-          .then((data) => {
-            setXml(data);
-            onLoad?.();
-          })
-          .catch((e) => {
-            onError(e);
-            setIsError(true);
-          })
-      : setXml(null);
-  }, [onError, uri, onLoad]);
+    onErrorRef.current = onError;
+    onLoadRef.current = onLoad;
+  }, [onError, onLoad]);
+  useEffect(() => {
+    let cancelled = false;
+    if (uri) {
+      fetchText(uri)
+        .then((data) => {
+          if (cancelled) {
+            return;
+          }
+          setXml(data);
+          setIsError(false);
+          onLoadRef.current?.();
+        })
+        .catch((e) => {
+          if (cancelled) {
+            return;
+          }
+          onErrorRef.current(e);
+          setIsError(true);
+        });
+    } else {
+      setXml(null);
+      setIsError(false);
+    }
+    return () => {
+      cancelled = true;
+    };
+  }, [uri]);
   if (isError) {
     return fallback ?? null;
   }
@@ -836,6 +856,8 @@ export class SvgWithCss extends Component<XmlProps, XmlState> {
 
 export class SvgWithCssUri extends Component<UriProps, UriState> {
   state = { xml: null };
+  private fetchId = 0;
+
   componentDidMount() {
     this.fetch(this.props.uri);
   }
@@ -847,12 +869,22 @@ export class SvgWithCssUri extends Component<UriProps, UriState> {
     }
   }
 
+  componentWillUnmount() {
+    this.fetchId += 1;
+  }
+
   async fetch(uri: string | null) {
+    const fetchId = ++this.fetchId;
     try {
-      this.setState({ xml: uri ? await fetchText(uri) : null });
-      this.props.onLoad?.();
+      const xml = uri ? await fetchText(uri) : null;
+      if (fetchId === this.fetchId) {
+        this.setState({ xml });
+        this.props.onLoad?.();
+      }
     } catch (e) {
-      this.props.onError ? this.props.onError(e as Error) : console.error(e);
+      if (fetchId === this.fetchId) {
+        this.props.onError ? this.props.onError(e as Error) : console.error(e);
+      }
     }
   }
 
