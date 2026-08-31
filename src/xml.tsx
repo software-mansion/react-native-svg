@@ -1,6 +1,6 @@
 import type { ComponentType, ComponentProps, JSX } from 'react';
 import * as React from 'react';
-import { Component, useEffect, useMemo, useState } from 'react';
+import { Component, useEffect, useMemo, useRef, useState } from 'react';
 import { fetchText } from './utils/fetchData';
 import type { SvgProps } from './elements/Svg';
 import { tags } from './xmlTags';
@@ -83,6 +83,12 @@ export function SvgUri(props: UriProps) {
   const { onError = err, uri, onLoad, fallback } = props;
   const [xml, setXml] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
+  const onErrorRef = useRef(onError);
+  const onLoadRef = useRef(onLoad);
+  useEffect(() => {
+    onErrorRef.current = onError;
+    onLoadRef.current = onLoad;
+  }, [onError, onLoad]);
   useEffect(() => {
     let cancelled = false;
     if (uri) {
@@ -93,13 +99,13 @@ export function SvgUri(props: UriProps) {
           }
           setXml(data);
           setIsError(false);
-          onLoad?.();
+          onLoadRef.current?.();
         })
         .catch((e) => {
           if (cancelled) {
             return;
           }
-          onError(e);
+          onErrorRef.current(e);
           setIsError(true);
         });
     } else {

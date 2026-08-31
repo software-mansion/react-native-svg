@@ -10,13 +10,17 @@ jest.mock('../src/utils/fetchData', () => ({
 const mockedFetchText = fetchText as jest.MockedFunction<typeof fetchText>;
 
 function deferred<T>() {
-  let resolve!: (value: T) => void;
-  let reject!: (reason: Error) => void;
-  const promise = new Promise<T>((resolvePromise, rejectPromise) => {
-    resolve = resolvePromise;
-    reject = rejectPromise;
+  let resolveDeferred!: (value: T) => void;
+  let rejectDeferred!: (reason: Error) => void;
+  const promise = new Promise<T>((resolve, reject) => {
+    resolveDeferred = resolve;
+    rejectDeferred = reject;
   });
-  return { promise, reject, resolve };
+  return {
+    promise,
+    reject: rejectDeferred,
+    resolve: resolveDeferred,
+  };
 }
 
 const firstSvg = '<svg width="111" height="1" />';
@@ -63,6 +67,29 @@ describe.each([
 describe('SvgUri callbacks', () => {
   beforeEach(() => {
     mockedFetchText.mockReset();
+  });
+
+  test('uses the latest callbacks without refetching the same uri', async () => {
+    const request = deferred<string>();
+    const firstOnLoad = jest.fn();
+    const secondOnLoad = jest.fn();
+    mockedFetchText.mockReturnValueOnce(request.promise);
+
+    let tree!: renderer.ReactTestRenderer;
+    await act(async () => {
+      tree = renderer.create(<SvgUri uri="image.svg" onLoad={firstOnLoad} />);
+    });
+    await act(async () => {
+      tree.update(<SvgUri uri="image.svg" onLoad={secondOnLoad} />);
+    });
+    await act(async () => {
+      request.resolve(secondSvg);
+      await request.promise;
+    });
+
+    expect(mockedFetchText).toHaveBeenCalledTimes(1);
+    expect(firstOnLoad).not.toHaveBeenCalled();
+    expect(secondOnLoad).toHaveBeenCalledTimes(1);
   });
 
   test('does not report a stale success after the uri changes', async () => {
