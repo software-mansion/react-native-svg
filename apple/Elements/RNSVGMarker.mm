@@ -253,7 +253,12 @@ double deg2rad(CGFloat deg)
   CGPoint origin = [position origin];
   CGAffineTransform transform = CGAffineTransformMakeTranslation(origin.x, origin.y);
 
-  float markerAngle = [@"auto" isEqualToString:_orient] ? -1 : [_orient doubleValue];
+  // "auto-start-reverse" orients like "auto"; the extra half turn a start
+  // marker gets is applied in RNSVGMarkerPosition. Unlike Android this never
+  // threw — doubleValue answers 0 for a non-numeric string — so the marker was
+  // simply drawn at the wrong angle.
+  BOOL isAuto = [@"auto" isEqualToString:_orient] || [@"auto-start-reverse" isEqualToString:_orient];
+  float markerAngle = isAuto ? -1 : [_orient doubleValue];
   float angle = 180 + (markerAngle == -1 ? [position angle] : markerAngle);
   float rad = deg2rad(angle);
   transform = CGAffineTransformRotate(transform, rad);

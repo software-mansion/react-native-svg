@@ -41,8 +41,7 @@ class RNSVGMarkerPosition {
   private static Point in_slope_;
   private static Point out_slope_;
 
-  @SuppressWarnings("unused")
-  private static boolean auto_start_reverse_; // TODO
+  private static boolean auto_start_reverse_;
 
   RNSVGMarkerType type;
   Point origin;
@@ -54,7 +53,9 @@ class RNSVGMarkerPosition {
     this.angle = angle;
   }
 
-  static ArrayList<RNSVGMarkerPosition> fromPath(ArrayList<PathElement> elements) {
+  static ArrayList<RNSVGMarkerPosition> fromPath(
+      ArrayList<PathElement> elements, boolean autoStartReverse) {
+    auto_start_reverse_ = autoStartReverse;
     positions_ = new ArrayList<>();
     element_index_ = 0;
     origin_ = new Point(0, 0);
