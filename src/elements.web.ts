@@ -49,6 +49,7 @@ import type { TextProps } from './elements/Text';
 import type { TextPathProps } from './elements/TextPath';
 import type { TSpanProps } from './elements/TSpan';
 import type { UseProps } from './elements/Use';
+import type { PropsWithChildren } from 'react';
 import type { BaseProps } from './web/types';
 import { encodeSvg, getBoundingClientRect } from './web/utils';
 import { WebShape } from './web/WebShape';
@@ -61,7 +62,7 @@ export class ClipPath extends WebShape<BaseProps & ClipPathProps> {
   tag = 'clipPath' as const;
 }
 
-export class Defs extends WebShape {
+export class Defs extends WebShape<PropsWithChildren<BaseProps>> {
   tag = 'defs' as const;
 }
 
