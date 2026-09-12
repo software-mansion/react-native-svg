@@ -42,6 +42,7 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.views.text.ReactFontManager;
 import java.text.Bidi;
 import java.util.ArrayList;
+import java.util.Locale;
 import javax.annotation.Nullable;
 
 @SuppressLint("ViewConstructor")
@@ -1124,6 +1125,121 @@ class TSpanView extends TextView {
     }
   }
 
+  private static final String MISSING_FONT_SENTINEL = "__rnsvg_missing_font__";
+
+  private static String trimFontFamilyName(String raw) {
+    String family = raw.trim();
+    if (family.length() >= 2) {
+      char first = family.charAt(0);
+      char last = family.charAt(family.length() - 1);
+      if ((first == '"' && last == '"') || (first == '\'' && last == '\'')) {
+        family = family.substring(1, family.length() - 1).trim();
+      }
+    }
+    return family;
+  }
+
+  private static boolean isGenericOrDefaultFontFamily(String family) {
+    String normalized = family.toLowerCase(Locale.US);
+    return normalized.equals("serif")
+        || normalized.equals("sans-serif")
+        || normalized.equals("monospace")
+        || normalized.equals("cursive")
+        || normalized.equals("fantasy")
+        || normalized.equals("system-ui")
+        || normalized.equals("ui-sans-serif")
+        || normalized.equals("ui-serif")
+        || normalized.equals("ui-monospace")
+        || normalized.equals("system")
+        || normalized.equals("roboto")
+        || normalized.equals("sans-serif-thin")
+        || normalized.equals("sans-serif-light")
+        || normalized.equals("sans-serif-medium")
+        || normalized.equals("sans-serif-black")
+        || normalized.equals("sans-serif-condensed");
+  }
+
+  private Typeface loadTypefaceForFamily(
+      String family, int style, int weight, boolean isItalic, String fontVariationSettings) {
+    Typeface typeface = null;
+    String otfpath = FONTS + family + OTF;
+    String ttfpath = FONTS + family + TTF;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      Typeface.Builder builder = new Typeface.Builder(assets, otfpath);
+      builder.setFontVariationSettings("'wght' " + weight + fontVariationSettings);
+      builder.setWeight(weight);
+      builder.setItalic(isItalic);
+      typeface = builder.build();
+      if (typeface == null) {
+        builder = new Typeface.Builder(assets, ttfpath);
+        builder.setFontVariationSettings("'wght' " + weight + fontVariationSettings);
+        builder.setWeight(weight);
+        builder.setItalic(isItalic);
+        typeface = builder.build();
+      }
+    } else {
+      try {
+        typeface = Typeface.createFromAsset(assets, otfpath);
+        typeface = Typeface.create(typeface, style);
+      } catch (Exception ignored) {
+        try {
+          typeface = Typeface.createFromAsset(assets, ttfpath);
+          typeface = Typeface.create(typeface, style);
+        } catch (Exception ignored2) {
+        }
+      }
+    }
+    if (typeface == null) {
+      try {
+        typeface = ReactFontManager.getInstance().getTypeface(family, style, assets);
+      } catch (Exception ignored) {
+      }
+    }
+    return typeface;
+  }
+
+  private static boolean isResolvedFontFamily(String family, Typeface typeface, int style) {
+    if (typeface == null) {
+      return false;
+    }
+    if (isGenericOrDefaultFontFamily(family)) {
+      return true;
+    }
+    // Typeface.equals includes style. Compare against a same-style missing
+    // sentinel so bold/italic text still walks the fallback list.
+    Typeface missing = Typeface.create(MISSING_FONT_SENTINEL, style);
+    return !typeface.equals(missing)
+        && !typeface.equals(Typeface.DEFAULT)
+        && !typeface.equals(Typeface.DEFAULT_BOLD);
+  }
+
+  private Typeface resolveTypefaceFromFontFamily(
+      String fontFamily, int style, int weight, boolean isItalic, String fontVariationSettings) {
+    if (fontFamily == null || fontFamily.length() == 0) {
+      return null;
+    }
+    Typeface resolved = null;
+    for (String rawFamily : fontFamily.split(",")) {
+      String family = trimFontFamilyName(rawFamily);
+      if (family.length() == 0) {
+        continue;
+      }
+      Typeface typeface =
+          loadTypefaceForFamily(family, style, weight, isItalic, fontVariationSettings);
+      if (typeface == null) {
+        continue;
+      }
+      if (isResolvedFontFamily(family, typeface, style)) {
+        resolved = typeface;
+        break;
+      }
+      if (resolved == null) {
+        resolved = typeface;
+      }
+    }
+    return resolved;
+  }
+
   private void applyTextPropertiesToPaint(Paint paint, FontData font) {
     boolean isBold = font.fontWeight == FontWeight.Bold || font.absoluteFontWeight >= 550;
     boolean isItalic = font.fontStyle == FontStyle.italic;
@@ -1139,45 +1255,10 @@ class TSpanView extends TextView {
       style = Typeface.NORMAL;
     }
 
-    Typeface typeface = null;
     int weight = font.absoluteFontWeight;
-    final String fontFamily = font.fontFamily;
-    if (fontFamily != null && fontFamily.length() > 0) {
-      String otfpath = FONTS + fontFamily + OTF;
-      String ttfpath = FONTS + fontFamily + TTF;
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        Typeface.Builder builder = new Typeface.Builder(assets, otfpath);
-        builder.setFontVariationSettings("'wght' " + weight + font.fontVariationSettings);
-        builder.setWeight(weight);
-        builder.setItalic(isItalic);
-        typeface = builder.build();
-        if (typeface == null) {
-          builder = new Typeface.Builder(assets, ttfpath);
-          builder.setFontVariationSettings("'wght' " + weight + font.fontVariationSettings);
-          builder.setWeight(weight);
-          builder.setItalic(isItalic);
-          typeface = builder.build();
-        }
-      } else {
-        try {
-          typeface = Typeface.createFromAsset(assets, otfpath);
-          typeface = Typeface.create(typeface, style);
-        } catch (Exception ignored) {
-          try {
-            typeface = Typeface.createFromAsset(assets, ttfpath);
-            typeface = Typeface.create(typeface, style);
-          } catch (Exception ignored2) {
-          }
-        }
-      }
-    }
-
-    if (typeface == null) {
-      try {
-        typeface = ReactFontManager.getInstance().getTypeface(fontFamily, style, assets);
-      } catch (Exception ignored) {
-      }
-    }
+    Typeface typeface =
+        resolveTypefaceFromFontFamily(
+            font.fontFamily, style, weight, isItalic, font.fontVariationSettings);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
       typeface = Typeface.create(typeface, weight, isItalic);

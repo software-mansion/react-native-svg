@@ -20,16 +20,19 @@ const cachedFontObjectsFromString: {
   } | null;
 } = {};
 
-function extractSingleFontFamily(fontFamilyString?: string) {
-  // SVG on the web allows for multiple font-families to be specified.
-  // For compatibility, we extract the first font-family, hoping
-  // we'll get a match.
-  return fontFamilyString
-    ? fontFamilyString
-        .split(commaReg)[0]
-        .replace(fontFamilyPrefix, '')
-        .replace(fontFamilySuffix, '')
-    : null;
+function extractFontFamily(fontFamilyString?: string) {
+  // CSS/SVG font-family is a prioritized list. Keep every family so native
+  // renderers can fall back when the first name is not installed.
+  if (!fontFamilyString) {
+    return null;
+  }
+  const families = fontFamilyString
+    .split(commaReg)
+    .map((family) =>
+      family.replace(fontFamilyPrefix, '').replace(fontFamilySuffix, '')
+    )
+    .filter((family) => family.length > 0);
+  return families.length > 0 ? families.join(', ') : null;
 }
 
 function parseFontString(font: string) {
@@ -47,7 +50,7 @@ function parseFontString(font: string) {
     fontSize: match[2] || 12,
     fontWeight: isBold ? 'bold' : 'normal',
     fontStyle: isItalic ? 'italic' : 'normal',
-    fontFamily: extractSingleFontFamily(match[3]),
+    fontFamily: extractFontFamily(match[3]),
   };
   return cachedFontObjectsFromString[font];
 }
@@ -95,7 +98,7 @@ export function extractFont(props: fontProps) {
     fontWeight,
     fontStretch,
     fontSize,
-    fontFamily: extractSingleFontFamily(fontFamily),
+    fontFamily: extractFontFamily(fontFamily),
     textAnchor,
     textDecoration,
     letterSpacing,
