@@ -12,11 +12,13 @@ import type {
 import { findNodeHandle, Platform, StyleSheet } from 'react-native';
 import type {
   extractedProps,
+  FontObject,
   HitSlop,
   NumberProp,
   ResponderInstanceProps,
 } from '../lib/extract/types';
 import extractResponder from '../lib/extract/extractResponder';
+import { extractFont } from '../lib/extract/extractText';
 import extractViewBox from '../lib/extract/extractViewBox';
 import Shape from './Shape';
 import type { GProps } from './G';
@@ -113,7 +115,6 @@ export default class Svg extends Shape<SvgProps> {
       transform,
 
       // Inherited G properties
-      font,
       fill,
       fillOpacity,
       fillRule,
@@ -127,6 +128,9 @@ export default class Svg extends Shape<SvgProps> {
       strokeMiterlimit,
       position,
     } = stylesAndProps;
+    // Font properties are inherited, so the ones set on `svg` have to reach the
+    // root group; forwarding the `font` shorthand alone would drop them.
+    const font = extractFont(stylesAndProps) as FontObject;
     if (
       width === undefined &&
       height === undefined &&
