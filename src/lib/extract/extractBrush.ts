@@ -2,7 +2,9 @@ import type { ColorValue } from 'react-native';
 import { processColor } from 'react-native';
 import { convertPercentageColor } from '../utils/convertPercentageColor';
 
-const urlIdPattern = /^url\(#(.+)\)$/;
+// CSS allows optional whitespace and a matching pair of quotes inside url(),
+// so `url( '#id' )` has to resolve to the same paint server as `url(#id)`.
+const urlIdPattern = /^url\(\s*(['"]?)#(.+?)\1\s*\)$/;
 
 const currentColorBrush = { type: 2 };
 const contextFillBrush = { type: 3 };
@@ -27,7 +29,7 @@ export default function extractBrush(color: ColorValue) {
 
   const brush = typeof color === 'string' && color.match(urlIdPattern);
   if (brush) {
-    return { type: 1, brushRef: brush[1] };
+    return { type: 1, brushRef: brush[2] };
   }
 
   // Convert percentage RGB/RGBA color to standard RGB/RGBA color
