@@ -1,4 +1,5 @@
 import {
+  CssVars,
   SvgCss,
   SvgCssUri,
   SvgWithCss,
@@ -7,6 +8,8 @@ import {
 } from './css';
 
 import { LocalSvg, WithLocalSvg, loadLocalRawResource } from './LocalSvg';
+
+export type { CssVars };
 
 export {
   SvgCss,
