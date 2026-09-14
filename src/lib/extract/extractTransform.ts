@@ -120,8 +120,8 @@ export function props2transform(
   }
   const tr = universal2axis(
     translate,
-    translateX || (Array.isArray(x) ? x[0] : x),
-    translateY || (Array.isArray(y) ? y[0] : y)
+    translateX ?? (Array.isArray(x) ? x[0] : x),
+    translateY ?? (Array.isArray(y) ? y[0] : y)
   );
   const or = universal2axis(origin, originX, originY);
   const sc = universal2axis(scale, scaleX, scaleY, 1);
