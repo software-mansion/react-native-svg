@@ -63,13 +63,29 @@ export function LocalSvg(props: LocalProps) {
   const { asset, ...rest } = props;
   const [xml, setXml] = useState<string | null>(null);
   useEffect(() => {
-    loadLocalRawResource(asset).then(setXml);
+    let cancelled = false;
+    loadLocalRawResource(asset)
+      .then((data) => {
+        if (!cancelled) {
+          setXml(data);
+        }
+      })
+      .catch((e) => {
+        if (!cancelled) {
+          console.error(e);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [asset]);
   return <SvgCss xml={xml} {...rest} />;
 }
 
 export class WithLocalSvg extends Component<LocalProps, LocalState> {
   state = { xml: null };
+  private loadId = 0;
+
   componentDidMount() {
     this.load(this.props.asset);
   }
@@ -81,11 +97,21 @@ export class WithLocalSvg extends Component<LocalProps, LocalState> {
     }
   }
 
+  componentWillUnmount() {
+    this.loadId += 1;
+  }
+
   async load(asset: ImageSourcePropType) {
+    const loadId = ++this.loadId;
     try {
-      this.setState({ xml: asset ? await loadLocalRawResource(asset) : null });
+      const xml = asset ? await loadLocalRawResource(asset) : null;
+      if (loadId === this.loadId) {
+        this.setState({ xml });
+      }
     } catch (e) {
-      console.error(e);
+      if (loadId === this.loadId) {
+        console.error(e);
+      }
     }
   }
 
