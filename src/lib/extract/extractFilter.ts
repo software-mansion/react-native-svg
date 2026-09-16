@@ -17,6 +17,7 @@ import extractOpacity from './extractOpacity';
 import { NumberProp } from './types';
 
 const spaceReg = /\s+/;
+const numberSeparator = /[\s,]+/;
 
 interface FilterPrimitiveCommonProps {
   x?: NumberProp;
@@ -136,23 +137,17 @@ export const extractFeGaussianBlur = (
 ): FeGaussianBlurNativeProps => {
   const extracted: FeGaussianBlurNativeProps = {};
 
-  if (Array.isArray(props.stdDeviation)) {
-    extracted.stdDeviationX = Number(props.stdDeviation[0]) || 0;
-    extracted.stdDeviationY = Number(props.stdDeviation[1]) || 0;
-  } else if (
-    typeof props.stdDeviation === 'string' &&
-    props.stdDeviation.match(spaceReg)
-  ) {
-    const stdDeviation = props.stdDeviation.split(spaceReg);
-    extracted.stdDeviationX = Number(stdDeviation[0]) || 0;
-    extracted.stdDeviationY = Number(stdDeviation[1]) || 0;
-  } else if (
-    typeof props.stdDeviation === 'number' ||
-    (typeof props.stdDeviation === 'string' &&
-      !props.stdDeviation.match(spaceReg))
-  ) {
-    extracted.stdDeviationX = Number(props.stdDeviation) || 0;
-    extracted.stdDeviationY = Number(props.stdDeviation) || 0;
+  const { stdDeviation } = props;
+  if (stdDeviation !== undefined) {
+    const values = Array.isArray(stdDeviation)
+      ? stdDeviation
+      : typeof stdDeviation === 'string'
+      ? stdDeviation.trim().split(numberSeparator)
+      : [stdDeviation];
+    const x = Number(values[0]) || 0;
+    extracted.stdDeviationX = x;
+    extracted.stdDeviationY =
+      values[1] === undefined ? x : Number(values[1]) || 0;
   }
   if (props.edgeMode) {
     extracted.edgeMode = props.edgeMode;
