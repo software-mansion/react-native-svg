@@ -35,8 +35,8 @@ export const FilterImage = (props: FilterImageProps) => {
     Platform.OS === 'web'
       ? resolveAssetUri(source)
       : RNImage.resolveAssetSource(source);
-  const width = props.width || styles?.width || src?.width;
-  const height = props.height || styles?.height || src?.height;
+  const width = props.width ?? styles?.width ?? src?.width;
+  const height = props.height ?? styles?.height ?? src?.height;
   const preserveAspectRatio = extractResizeMode(props.resizeMode);
 
   return (
