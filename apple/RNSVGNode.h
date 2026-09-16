@@ -51,6 +51,8 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 @property (nonatomic, assign) CGAffineTransform matrix;
 @property (nonatomic, assign) CGAffineTransform invmatrix;
 @property (nonatomic, assign) BOOL active;
+/// Indicates node needs re-rendering. Set by invalidate, cleared after render.
+/// Used by clip: to invalidate cached clip paths/masks when ClipPath changes.
 @property (nonatomic, assign) BOOL dirty;
 @property (nonatomic, assign) BOOL merging;
 @property (nonatomic, assign) BOOL skip;

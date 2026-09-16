@@ -50,7 +50,7 @@ public class RNSVGUseManagerDelegate<T extends View, U extends BaseViewManager<T
         mViewManager.setClipPath(view, value == null ? null : (String) value);
         break;
       case "clipRule":
-        mViewManager.setClipRule(view, value == null ? 0 : ((Double) value).intValue());
+        mViewManager.setClipRule(view, value == null ? 1 : ((Double) value).intValue());
         break;
       case "responsible":
         mViewManager.setResponsible(view, value == null ? false : (boolean) value);

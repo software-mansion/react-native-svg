@@ -1,0 +1,10 @@
+<svg viewBox="0 0 250 234" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="clip">
+      <polygon points="31,0 31,234 170,234 250,0" />
+      <rect x="0" y="0" width="41" height="234" rx="8" ry="8" />
+      <rect x="0" y="112" width="250" height="10" />
+    </clipPath>
+  </defs>
+  <rect x="0" y="0" width="250" height="234" fill="red" clip-path="url(#clip)" />
+</svg>

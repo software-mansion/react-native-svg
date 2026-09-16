@@ -20,7 +20,9 @@ const generateReferences = async (
 
   const casesPath = path.resolve('e2e', 'cases');
   const referencesPath = path.resolve('e2e', 'references', platform);
-  const cases = fs.readdirSync(casesPath);
+  const cases = fs
+    .readdirSync(casesPath)
+    .filter((file: string) => file.endsWith('.svg'));
 
   for (const testCase of cases) {
     const svgPath = path.resolve(casesPath, testCase);
