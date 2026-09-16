@@ -66,7 +66,15 @@ export function resolveAssetUri(
     // inline SVG markup may contain characters (e.g., #, ") that need to be escaped
     if (match) {
       const [, prefix, svg] = match;
-      const encodedSvg = encodeURIComponent(svg);
+      let decodedSvg = svg;
+      if (!/^\s*</.test(svg)) {
+        try {
+          decodedSvg = decodeURIComponent(svg);
+        } catch {
+          // Treat malformed encoded input as raw markup and escape it once.
+        }
+      }
+      const encodedSvg = encodeURIComponent(decodedSvg);
       src.uri = `${prefix}${encodedSvg}`;
       return src;
     }
