@@ -97,6 +97,10 @@ import com.facebook.react.viewmanagers.RNSVGFeBlendManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeBlendManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeColorMatrixManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeComponentTransferManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeComponentTransferManagerInterface;
+import com.facebook.react.viewmanagers.RNSVGFeComponentTransferFunctionManagerDelegate;
+import com.facebook.react.viewmanagers.RNSVGFeComponentTransferFunctionManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeCompositeManagerDelegate;
 import com.facebook.react.viewmanagers.RNSVGFeCompositeManagerInterface;
 import com.facebook.react.viewmanagers.RNSVGFeFloodManagerDelegate;
@@ -484,6 +488,8 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     RNSVGFeBlend,
     RNSVGFeColorMatrix,
     RNSVGFeComposite,
+    RNSVGFeComponentTransfer,
+    RNSVGFeComponentTransferFunction,
     RNSVGFeFlood,
     RNSVGFeGaussianBlur,
     RNSVGFeMerge,
@@ -538,6 +544,10 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
         return new FeBlendView(reactContext);
       case RNSVGFeColorMatrix:
         return new FeColorMatrixView(reactContext);
+      case RNSVGFeComponentTransfer:
+        return new FeComponentTransferView(reactContext);
+      case RNSVGFeComponentTransferFunction:
+        return new FeComponentTransferFunctionView(reactContext);
       case RNSVGFeComposite:
         return new FeCompositeView(reactContext);
       case RNSVGFeFlood:
@@ -1534,6 +1544,71 @@ class RenderableViewManager<T extends RenderableView> extends VirtualViewManager
     @ReactProp(name = "values")
     public void setValues(FeColorMatrixView node, @Nullable ReadableArray values) {
       node.setValues(values);
+    }
+  }
+
+  static class FeComponentTransferManager extends FilterPrimitiveManager<FeComponentTransferView>
+          implements RNSVGFeComponentTransferManagerInterface<FeComponentTransferView> {
+    FeComponentTransferManager() {
+      super(SVGClass.RNSVGFeComponentTransfer);
+      mDelegate = new RNSVGFeComponentTransferManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeComponentTransfer";
+
+    @ReactProp(name = "in1")
+    public void setIn1(FeComponentTransferView node, String in1) {
+      node.setIn1(in1);
+    }
+  }
+
+  static class FeComponentTransferFunctionManager extends FilterPrimitiveManager<FeComponentTransferFunctionView>
+          implements RNSVGFeComponentTransferFunctionManagerInterface<FeComponentTransferFunctionView> {
+    FeComponentTransferFunctionManager() {
+      super(SVGClass.RNSVGFeComponentTransferFunction);
+      mDelegate = new RNSVGFeComponentTransferFunctionManagerDelegate(this);
+    }
+
+    public static final String REACT_CLASS = "RNSVGFeComponentTransferFunction";
+
+    @ReactProp(name = "channel")
+    public void setChannel(FeComponentTransferFunctionView node, String channel) {
+      node.setChannel(channel);
+    }
+
+    @ReactProp(name = "type")
+    public void setType(FeComponentTransferFunctionView node, String type) {
+      node.setType(type);
+    }
+
+    @ReactProp(name = "tableValues")
+    public void setTableValues (FeComponentTransferFunctionView node, Dynamic tableValues) {
+      node.setTableValues(tableValues);
+    }
+
+    @ReactProp(name = "slope")
+    public void setSlope (FeComponentTransferFunctionView node, Dynamic slope) {
+      node.setSlope(slope);
+    }
+
+    @ReactProp(name = "intercept")
+    public void setIntercept (FeComponentTransferFunctionView node, Dynamic intercept) {
+      node.setIntercept(intercept);
+    }
+
+    @ReactProp(name = "amplitude")
+    public void setAmplitude (FeComponentTransferFunctionView node, Dynamic amplitude) {
+      node.setAmplitude(amplitude);
+    }
+
+    @ReactProp(name = "exponent")
+    public void setExponent (FeComponentTransferFunctionView node, Dynamic exponent) {
+      node.setExponent(exponent);
+    }
+
+    @ReactProp(name = "offset")
+    public void setOffset (FeComponentTransferFunctionView node, Dynamic offset) {
+      node.setOffset(offset);
     }
   }
 
