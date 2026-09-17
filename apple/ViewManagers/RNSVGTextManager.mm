@@ -60,7 +60,6 @@ RCT_CUSTOM_VIEW_PROPERTY(baselineShift, id, RNSVGText)
 }
 RCT_EXPORT_VIEW_PROPERTY(lengthAdjust, NSString)
 RCT_EXPORT_VIEW_PROPERTY(alignmentBaseline, NSString)
-RCT_EXPORT_VIEW_PROPERTY(verticalAlign, NSString) // unused on iOS
 
 RCT_CUSTOM_VIEW_PROPERTY(fontSize, id, RNSVGText)
 {

@@ -145,9 +145,6 @@ public class RNSVGTextPathManagerDelegate<T extends View, U extends BaseViewMana
       case "alignmentBaseline":
         mViewManager.setAlignmentBaseline(view, value == null ? null : (String) value);
         break;
-      case "verticalAlign":
-        mViewManager.setVerticalAlign(view, new DynamicFromObject(value));
-        break;
       case "href":
         mViewManager.setHref(view, value == null ? null : (String) value);
         break;
