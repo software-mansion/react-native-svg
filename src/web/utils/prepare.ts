@@ -119,8 +119,8 @@ export const prepare = <T extends BaseProps>(
     styles.fontStyle = fontStyle;
   }
   clean.style = resolve(style, styles);
-  if (onPress !== null) {
-    clean.onClick = props.onPress;
+  if (onPress) {
+    clean.onClick = onPress;
   }
   if (props.href !== null && props.href !== undefined) {
     clean.href = resolveAssetUri(props.href)?.uri;
