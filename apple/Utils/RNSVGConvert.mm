@@ -87,6 +87,18 @@
   }
 }
 
++ (RNSVGMorphologyOperator)RNSVGMorphologyOperatorFromCppEquivalent:(react::RNSVGFeMorphologyOperator1)operator1
+{
+  switch (operator1) {
+    case react::RNSVGFeMorphologyOperator1::Erode:
+      return SVG_FEMORPHOLOGY_OPERATOR_ERODE;
+    case react::RNSVGFeMorphologyOperator1::Dilate:
+      return SVG_FEMORPHOLOGY_OPERATOR_DILATE;
+    default:
+      return SVG_FEMORPHOLOGY_OPERATOR_ERODE;
+  }
+}
+
 @end
 
 #endif // RCT_NEW_ARCH_ENABLED

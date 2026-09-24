@@ -26,6 +26,8 @@ using RNSVGFeGaussianBlurComponentDescriptor =
     ConcreteComponentDescriptor<RNSVGFeGaussianBlurShadowNode>;
 using RNSVGFeMergeComponentDescriptor =
     ConcreteComponentDescriptor<RNSVGFeMergeShadowNode>;
+using RNSVGFeMorphologyComponentDescriptor =
+    ConcreteComponentDescriptor<RNSVGFeMorphologyShadowNode>;
 using RNSVGFeOffsetComponentDescriptor =
     ConcreteComponentDescriptor<RNSVGFeOffsetShadowNode>;
 using RNSVGFilterComponentDescriptor =

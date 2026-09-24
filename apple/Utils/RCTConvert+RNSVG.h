@@ -17,6 +17,7 @@
 #import "RNSVGEdgeMode.h"
 #import "RNSVGLength.h"
 #import "RNSVGMaskType.h"
+#import "RNSVGMorphologyOperator.h"
 #import "RNSVGPathParser.h"
 #import "RNSVGUnits.h"
 #import "RNSVGVBMOS.h"
