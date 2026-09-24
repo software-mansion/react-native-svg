@@ -13,6 +13,7 @@ module.exports = {
           'RNSVGFeGaussianBlurComponentDescriptor',
           'RNSVGFeMergeComponentDescriptor',
           'RNSVGFeOffsetComponentDescriptor',
+          'RNSVGFeTurbulenceComponentDescriptor',
           'RNSVGFilterComponentDescriptor',
           'RNSVGEllipseComponentDescriptor',
           'RNSVGForeignObjectComponentDescriptor',
