@@ -4,6 +4,7 @@ import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import RNSVGEllipse from '../fabric/EllipseNativeComponent';
 import type { NativeMethods } from 'react-native';
+import { extractTransformSvgView } from '../lib/extract/extractTransform';
 
 export interface EllipseProps extends CommonPathProps {
   cx?: NumberProp;
@@ -33,10 +34,14 @@ export default class Ellipse extends Shape<EllipseProps> {
       rx,
       ry,
     };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const transform = extractTransformSvgView(props as any);
+
     return (
       <RNSVGEllipse
         ref={(ref) => this.refMethod(ref as (Ellipse & NativeMethods) | null)}
         {...ellipseProps}
+        style={{ transform }}
       />
     );
   }

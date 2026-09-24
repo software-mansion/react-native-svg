@@ -27,7 +27,6 @@ RCT_EXPORT_MODULE()
 
 RCT_EXPORT_VIEW_PROPERTY(name, NSString)
 RCT_EXPORT_VIEW_PROPERTY(opacity, CGFloat)
-RCT_EXPORT_VIEW_PROPERTY(matrix, CGAffineTransform)
 RCT_CUSTOM_VIEW_PROPERTY(transform, CATransform3D, RNSVGNode)
 {
   CATransform3D transform3d = json ? [RCTConvert CATransform3D:json] : defaultView.layer.transform;

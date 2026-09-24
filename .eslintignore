@@ -9,3 +9,4 @@ android/
 apple/
 windows/
 src/lib/extract/transform.js
+src/lib/extract/transformToRn.js

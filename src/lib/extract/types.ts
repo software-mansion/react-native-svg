@@ -361,7 +361,6 @@ export type extractedProps = {
   name?: string;
   mask?: string;
   opacity?: number;
-  matrix?: number[];
   propList?: string[];
   onSvgLayout?: DirectEventHandler<OnSvgLayoutEvent>;
   ref?: (instance: React.Component | null) => void;

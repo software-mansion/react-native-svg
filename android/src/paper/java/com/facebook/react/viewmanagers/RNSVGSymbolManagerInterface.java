@@ -17,7 +17,6 @@ import com.facebook.react.bridge.ReadableArray;
 public interface RNSVGSymbolManagerInterface<T extends View> {
   void setName(T view, @Nullable String value);
   void setOpacity(T view, float value);
-  void setMatrix(T view, @Nullable ReadableArray value);
   void setMask(T view, @Nullable String value);
   void setMarkerStart(T view, @Nullable String value);
   void setMarkerMid(T view, @Nullable String value);

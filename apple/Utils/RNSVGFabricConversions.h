@@ -62,15 +62,6 @@ void setCommonNodeProps(const T &nodeProps, RNSVGNode *node)
 {
   node.name = RCTNSStringFromStringNilIfEmpty(nodeProps.name);
   node.opacity = nodeProps.opacity;
-  if (nodeProps.matrix.size() == 6) {
-    node.matrix = CGAffineTransformMake(
-        nodeProps.matrix.at(0),
-        nodeProps.matrix.at(1),
-        nodeProps.matrix.at(2),
-        nodeProps.matrix.at(3),
-        nodeProps.matrix.at(4),
-        nodeProps.matrix.at(5));
-  }
   if (nodeProps.transform.operations.size() > 0) {
     auto newTransform = nodeProps.resolveTransform(MinimalLayoutMetrics);
     CATransform3D transform3d = RCTCATransform3DFromTransformMatrix(newTransform);

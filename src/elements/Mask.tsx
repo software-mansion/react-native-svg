@@ -12,6 +12,7 @@ import Shape from './Shape';
 import RNSVGMask from '../fabric/MaskNativeComponent';
 import type { NativeMethods } from 'react-native';
 import { maskType } from '../lib/maskType';
+import { extractTransformSvgView } from '../lib/extract/extractTransform';
 
 export interface MaskProps extends CommonPathProps {
   children?: ReactNode;
@@ -60,11 +61,16 @@ export default class Mask extends Shape<MaskProps> {
         maskContentUnits !== undefined ? units[maskContentUnits] : 1,
       maskType: maskType[props?.maskType || style?.maskType || 'luminance'],
     };
+    const extractedProps = withoutXY(this, props);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const transform = extractTransformSvgView(props as any);
+
     return (
       <RNSVGMask
         ref={(ref) => this.refMethod(ref as (Mask & NativeMethods) | null)}
-        {...withoutXY(this, props)}
-        {...maskProps}>
+        {...extractedProps}
+        {...maskProps}
+        style={{ transform }}>
         {children}
       </RNSVGMask>
     );

@@ -2,7 +2,9 @@ import type { ReactNode } from 'react';
 import * as React from 'react';
 import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
 import { extractFont } from '../lib/extract/extractText';
-import extractTransform from '../lib/extract/extractTransform';
+import extractTransform, {
+  extractTransformSvgView,
+} from '../lib/extract/extractTransform';
 import type {
   CommonPathProps,
   FontProps,
@@ -37,14 +39,19 @@ export default class G<P> extends Shape<GProps & P> {
     const { props } = this;
     const prop = propsAndStyles(props);
     const extractedProps = extractProps(prop, this);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const transform = extractTransformSvgView(props as any);
+
     const font = extractFont(prop);
     if (hasProps(font)) {
       extractedProps.font = font;
     }
+
     return (
       <RNSVGGroup
         ref={(ref) => this.refMethod(ref as (G<P> & NativeMethods) | null)}
-        {...extractedProps}>
+        {...extractedProps}
+        style={{ transform }}>
         {props.children}
       </RNSVGGroup>
     );

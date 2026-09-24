@@ -1,6 +1,5 @@
 import extractFill from './extractFill';
 import extractStroke from './extractStroke';
-import extractTransform from './extractTransform';
 import extractResponder from './extractResponder';
 import extractOpacity from './extractOpacity';
 import { idPattern } from '../util';
@@ -92,11 +91,6 @@ export default function extractProps(
 
   if (inherited.length) {
     extracted.propList = inherited;
-  }
-
-  const matrix = extractTransform(props);
-  if (matrix !== null) {
-    extracted.matrix = matrix;
   }
 
   if (opacity != null) {

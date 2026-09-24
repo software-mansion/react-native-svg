@@ -11,7 +11,6 @@ package com.facebook.react.viewmanagers;
 
 import android.view.View;
 import androidx.annotation.Nullable;
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.BaseViewManager;
 import com.facebook.react.uimanager.BaseViewManagerDelegate;
 import com.facebook.react.uimanager.LayoutShadowNode;
@@ -28,9 +27,6 @@ public class RNSVGDefsManagerDelegate<T extends View, U extends BaseViewManager<
         break;
       case "opacity":
         mViewManager.setOpacity(view, value == null ? 1f : ((Double) value).floatValue());
-        break;
-      case "matrix":
-        mViewManager.setMatrix(view, (ReadableArray) value);
         break;
       case "mask":
         mViewManager.setMask(view, value == null ? null : (String) value);

@@ -38,8 +38,8 @@ function PatternTransformExample() {
           width="0.25"
           height="0.25"
           patternTransform={[
-            {rotate: '20'},
-            {skewX: '30'},
+            {rotate: '20deg'},
+            {skewX: '30deg'},
             {scaleX: 1},
             {scaleY: 0.5},
           ]}>
