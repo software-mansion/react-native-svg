@@ -143,6 +143,24 @@ struct __declspec(uuid("a03986c0-b06e-4fb8-a86e-16fcc47b2f31")) RenderableView :
   virtual void OnRender(const SvgView &svgView, ID2D1SvgDocument &document, ID2D1SvgElement & /*svgElement*/) noexcept;
   virtual bool IsSupported() const noexcept;
 
+  // True once UpdateProps has been called at least once for this node. A freshly-mounted node
+  // can have Render() called on it (via SvgView::Draw / RecurseRenderNode) before Fabric's own
+  // prop-update pass reaches it -- e.g. a node attached to an already-live parent, where
+  // MountChildComponentView's onMounted() cascade, or an async LayoutMetricsChanged/
+  // ThemeChanged event, can race ahead of its own UpdateProps call. OnRender() (and every
+  // override: GroupView, CircleView, ...) dereferences m_props unconditionally via
+  // winrt::get_self<TProps>, which is only safe once m_props is non-null.
+  //
+  // This used to gate whether Render() (and therefore CreateChild() + recursion into this
+  // node's children) ran at all. That skipped this node's *entire subtree* for the pass,
+  // including any children that already do have their own props, and depended on some later
+  // trigger to redraw them. HasProps() is now consulted only inside RenderableView::Render(),
+  // immediately around the OnRender() call -- see there for why that's both crash-safe and
+  // can't drop an already-ready descendant.
+  bool HasProps() const noexcept {
+    return static_cast<bool>(m_props);
+  }
+
   void Invalidate(const winrt::Microsoft::ReactNative::ComponentView &view);
 
  protected:
