@@ -114,11 +114,11 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Midl Condition="'$(UseFabric)'!='true'">
-      <!-- This allows applications targetting older Windows SDKs (e.g. RNW 0.65 apps) to consume the library generated WinMD -->
+      <!-- This allows applications targeting older Windows SDKs (e.g. RNW 0.65 apps) to consume the library generated WinMD -->
       <AdditionalOptions>%(AdditionalOptions) /noattributename</AdditionalOptions>
     </Midl>
     <Link>
-      <AdditionalDependencies>dxguid.lib;shell32.lib;user32.lib;windowsapp.lib;%(AdditionalDependenices)</AdditionalDependencies>
+      <AdditionalDependencies>dxguid.lib;shell32.lib;user32.lib;windowsapp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <GenerateWindowsMetadata>true</GenerateWindowsMetadata>
       <ModuleDefinitionFile>RNSVG.def</ModuleDefinitionFile>

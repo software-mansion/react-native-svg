@@ -230,7 +230,7 @@ class PathParser {
         default:
           {
             throw new IllegalArgumentException(
-                String.format("Unexpected comand '%c' (s=%s)", cmd, s));
+                String.format("Unexpected command '%c' (s=%s)", cmd, s));
           }
       }
 
@@ -628,7 +628,7 @@ class PathParser {
       }
     } else if (c != '.') {
       throw new IllegalArgumentException(
-          String.format("Invalid number formating character '%c' (i=%d, s=%s)", c, i, s));
+          String.format("Invalid number formatting character '%c' (i=%d, s=%s)", c, i, s));
     }
 
     // Consume fraction.
@@ -654,7 +654,7 @@ class PathParser {
           skip_digits();
         } else {
           throw new IllegalArgumentException(
-              String.format("Invalid number formating character '%c' (i=%d, s=%s)", c, i, s));
+              String.format("Invalid number formatting character '%c' (i=%d, s=%s)", c, i, s));
         }
       }
     }

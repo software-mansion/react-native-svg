@@ -134,7 +134,7 @@ struct __declspec(uuid("a03986c0-b06e-4fb8-a86e-16fcc47b2f31")) RenderableView :
       const winrt::Microsoft::ReactNative::IComponentProps &props,
       const winrt::Microsoft::ReactNative::IComponentProps &oldProps) noexcept;
 
-  virtual void FinalizeUpates(
+  virtual void FinalizeUpdates(
       const winrt::Microsoft::ReactNative::ComponentView & /*view*/,
       winrt::Microsoft::ReactNative::ComponentViewUpdateMask mask) noexcept;
 
@@ -284,7 +284,7 @@ void RegisterRenderableComponent(
     builder.SetFinalizeUpdateHandler([](const winrt::Microsoft::ReactNative::ComponentView &view,
                                         const winrt::Microsoft::ReactNative::ComponentViewUpdateMask mask) noexcept {
       auto userData = winrt::get_self<TUserData>(view.UserData());
-      userData->FinalizeUpates(view, mask);
+      userData->FinalizeUpdates(view, mask);
     });
     builder.SetMountChildComponentViewHandler(
         [](const winrt::Microsoft::ReactNative::ComponentView &view,

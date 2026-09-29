@@ -72,7 +72,7 @@ struct SvgView : winrt::implements<SvgView, winrt::Windows::Foundation::IInspect
       const winrt::Microsoft::ReactNative::ComponentView& view,
       const winrt::Microsoft::ReactNative::UnmountChildComponentViewArgs& args) noexcept;
 
-  void FinalizeUpates(
+  void FinalizeUpdates(
       const winrt::Microsoft::ReactNative::ComponentView & /*view*/,
       winrt::Microsoft::ReactNative::ComponentViewUpdateMask mask) noexcept;
 

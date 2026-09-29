@@ -60,7 +60,7 @@ export interface BaseProps {
     | React.MutableRefObject<SVGElement | null>;
   style?: Iterable<unknown>;
 
-  // different tranform props
+  // different transform props
   gradientTransform?: TransformProps['transform'];
   patternTransform?: TransformProps['transform'];
 }
