@@ -24,10 +24,12 @@ import RNSVGFilter from './FilterNativeComponent';
 import RNSVGFeBlend from './FeBlendNativeComponent';
 import RNSVGFeColorMatrix from './FeColorMatrixNativeComponent';
 import RNSVGFeComposite from './FeCompositeNativeComponent';
+import RNSVGFeDisplacementMap from './FeDisplacementMapNativeComponent';
 import RNSVGFeFlood from './FeFloodNativeComponent';
 import RNSVGFeGaussianBlur from './FeGaussianBlurNativeComponent';
 import RNSVGFeMerge from './FeMergeNativeComponent';
 import RNSVGFeOffset from './FeOffsetNativeComponent';
+import RNSVGFeTurbulence from './FeTurbulenceNativeComponent';
 
 export {
   RNSVGCircle,
@@ -56,8 +58,10 @@ export {
   RNSVGFeBlend,
   RNSVGFeColorMatrix,
   RNSVGFeComposite,
+  RNSVGFeDisplacementMap,
   RNSVGFeFlood,
   RNSVGFeGaussianBlur,
   RNSVGFeMerge,
   RNSVGFeOffset,
+  RNSVGFeTurbulence,
 };

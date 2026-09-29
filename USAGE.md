@@ -1303,18 +1303,19 @@ The following filters have been implemented:
 - FeBlend
 - FeComposite
 - FeColorMatrix
+- FeDisplacementMap
 - FeDropShadow
 - FeFlood
 - FeGaussianBlur
 - FeMerge
 - FeOffset
+- FeTurbulence
 
 Not supported yet:
 
 - FeComponentTransfer
 - FeConvolveMatrix
 - FeDiffuseLighting
-- FeDisplacementMap
 - FeFuncA
 - FeFuncB
 - FeFuncG
@@ -1325,7 +1326,6 @@ Not supported yet:
 - FeSpecularLighting
 - FeSpotLight
 - FeTile
-- FeTurbulence
 
 Exmaple use of filters:
 
