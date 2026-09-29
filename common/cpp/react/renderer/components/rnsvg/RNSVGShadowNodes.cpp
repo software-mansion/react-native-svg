@@ -9,6 +9,7 @@ extern const char RNSVGEllipseComponentName[] = "RNSVGEllipse";
 extern const char RNSVGFeBlendComponentName[] = "RNSVGFeBlend";
 extern const char RNSVGFeColorMatrixComponentName[] = "RNSVGFeColorMatrix";
 extern const char RNSVGFeCompositeComponentName[] = "RNSVGFeComposite";
+extern const char RNSVGFeConvolveMatrixComponentName[] = "RNSVGFeConvolveMatrix";
 extern const char RNSVGFeFloodComponentName[] = "RNSVGFeFlood";
 extern const char RNSVGFeGaussianBlurComponentName[] = "RNSVGFeGaussianBlur";
 extern const char RNSVGFeMergeComponentName[] = "RNSVGFeMerge";
