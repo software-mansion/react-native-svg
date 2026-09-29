@@ -5916,8 +5916,10 @@ react-native-screens@4.27.0:
     warn-once "^0.1.0"
 
 "react-native-svg@link:../..":
-  version "0.0.0"
-  uid ""
+  version "15.15.5"
+  dependencies:
+    css-select "^5.1.0"
+    css-tree "^1.1.3"
 
 react-native-view-shot@5.1.1:
   version "5.1.1"
