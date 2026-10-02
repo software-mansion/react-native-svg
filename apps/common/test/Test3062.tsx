@@ -10,7 +10,7 @@ const xml = `
   <rect x="20" width="none" height="10" fill="blue"/>
 </svg>`;
 
-export default function TestInvalidValues() {
+export default function Test3062() {
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <SvgXml xml={xml} width={300} height={100} />
