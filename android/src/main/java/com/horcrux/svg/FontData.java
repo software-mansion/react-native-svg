@@ -132,14 +132,33 @@ class FontData {
     letterSpacing = DEFAULT_LETTER_SPACING;
   }
 
+  /** an invalid length (e.g. font-size="none") inherits `inherited` instead of crashing */
   private double toAbsolute(
-      ReadableMap font, String prop, double scale, double fontSize, double relative) {
+      ReadableMap font,
+      String prop,
+      double scale,
+      double fontSize,
+      double relative,
+      double inherited) {
     ReadableType propType = font.getType(prop);
     if (propType == ReadableType.Number) {
       return font.getDouble(prop) * scale;
     } else {
       String string = font.getString(prop);
-      return PropHelper.fromRelative(string, relative, scale, fontSize);
+      try {
+        return PropHelper.parseRelative(string, relative, scale, fontSize);
+      } catch (NumberFormatException e) {
+        return inherited;
+      }
+    }
+  }
+
+  /** an unknown keyword (e.g. font-style="none") inherits `inherited` instead of crashing */
+  private static <T extends Enum<T>> T enumOrInherited(Class<T> type, String value, T inherited) {
+    try {
+      return Enum.valueOf(type, value);
+    } catch (IllegalArgumentException | NullPointerException e) {
+      return inherited;
     }
   }
 
@@ -162,7 +181,7 @@ class FontData {
     double parentFontSize = parent.fontSize;
 
     if (font.hasKey(FONT_SIZE)) {
-      fontSize = toAbsolute(font, FONT_SIZE, 1, parentFontSize, parentFontSize);
+      fontSize = toAbsolute(font, FONT_SIZE, 1, parentFontSize, parentFontSize, parentFontSize);
     } else {
       fontSize = parentFontSize;
     }
@@ -177,7 +196,12 @@ class FontData {
           absoluteFontWeight = AbsoluteFontWeight.from(FontWeight.get(string), parent);
           fontWeight = AbsoluteFontWeight.nearestFontWeight(absoluteFontWeight);
         } else if (string != null) {
-          handleNumericWeight(parent, Double.parseDouble(string));
+          try {
+            handleNumericWeight(parent, Double.parseDouble(string));
+          } catch (NumberFormatException e) {
+            // an unknown weight (e.g. font-weight="none") inherits instead of crashing
+            setInheritedWeight(parent);
+          }
         } else {
           setInheritedWeight(parent);
         }
@@ -190,7 +214,9 @@ class FontData {
 
     fontFamily = font.hasKey(FONT_FAMILY) ? font.getString(FONT_FAMILY) : parent.fontFamily;
     fontStyle =
-        font.hasKey(FONT_STYLE) ? FontStyle.valueOf(font.getString(FONT_STYLE)) : parent.fontStyle;
+        font.hasKey(FONT_STYLE)
+            ? enumOrInherited(FontStyle.class, font.getString(FONT_STYLE), parent.fontStyle)
+            : parent.fontStyle;
     fontFeatureSettings =
         font.hasKey(FONT_FEATURE_SETTINGS)
             ? font.getString(FONT_FEATURE_SETTINGS)
@@ -201,17 +227,25 @@ class FontData {
             : parent.fontVariationSettings;
     fontVariantLigatures =
         font.hasKey(FONT_VARIANT_LIGATURES)
-            ? FontVariantLigatures.valueOf(font.getString(FONT_VARIANT_LIGATURES))
+            ? enumOrInherited(
+                FontVariantLigatures.class,
+                font.getString(FONT_VARIANT_LIGATURES),
+                parent.fontVariantLigatures)
             : parent.fontVariantLigatures;
 
     textAnchor =
         font.hasKey(TEXT_ANCHOR)
-            ? TextAnchor.valueOf(font.getString(TEXT_ANCHOR))
+            ? enumOrInherited(TextAnchor.class, font.getString(TEXT_ANCHOR), parent.textAnchor)
             : parent.textAnchor;
-    textDecoration =
-        font.hasKey(TEXT_DECORATION)
-            ? TextDecoration.getEnum(font.getString(TEXT_DECORATION))
-            : parent.textDecoration;
+    TextDecoration decoration = parent.textDecoration;
+    if (font.hasKey(TEXT_DECORATION)) {
+      try {
+        decoration = TextDecoration.getEnum(font.getString(TEXT_DECORATION));
+      } catch (IllegalArgumentException e) {
+        // an unknown decoration inherits instead of crashing
+      }
+    }
+    textDecoration = decoration;
 
     final boolean hasKerning = font.hasKey(KERNING);
     manualKerning = hasKerning || parent.manualKerning;
@@ -219,14 +253,15 @@ class FontData {
     // https://www.w3.org/TR/SVG11/text.html#SpacingProperties
     // https://drafts.csswg.org/css-text-3/#spacing
     // calculated values for units in: kerning, word-spacing, and, letter-spacing.
-    kerning = hasKerning ? toAbsolute(font, KERNING, scale, fontSize, 0) : parent.kerning;
+    kerning =
+        hasKerning ? toAbsolute(font, KERNING, scale, fontSize, 0, parent.kerning) : parent.kerning;
     wordSpacing =
         font.hasKey(WORD_SPACING)
-            ? toAbsolute(font, WORD_SPACING, scale, fontSize, 0)
+            ? toAbsolute(font, WORD_SPACING, scale, fontSize, 0, parent.wordSpacing)
             : parent.wordSpacing;
     letterSpacing =
         font.hasKey(LETTER_SPACING)
-            ? toAbsolute(font, LETTER_SPACING, scale, fontSize, 0)
+            ? toAbsolute(font, LETTER_SPACING, scale, fontSize, 0, parent.letterSpacing)
             : parent.letterSpacing;
   }
 }
