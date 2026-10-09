@@ -36,8 +36,8 @@ import Test2455 from './Test2455';
 import Test2471 from './Test2471';
 import Test2520 from './Test2520';
 import Test2670 from './Test2670';
-import Test2887 from './Test2887';
 import Test2923 from './Test2923';
+import Test3066 from './Test3066';
 
 export default function App() {
   return <ColorTest />;

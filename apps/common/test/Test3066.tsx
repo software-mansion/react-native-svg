@@ -3,7 +3,7 @@ import {Button, Image as RNImage, View} from 'react-native';
 import Svg, {Circle, Image} from 'react-native-svg';
 
 // On web, the PNG from toDataURL used to be missing the <Image>.
-export default function Test2887() {
+export default function Test3066() {
   const ref = React.useRef<Svg | null>(null);
   const [png, setPng] = React.useState<string | null>(null);
   return (
