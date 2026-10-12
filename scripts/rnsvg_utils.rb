@@ -14,8 +14,10 @@ def rnsvg_find_config()
     :react_native_node_modules_dir => nil,
   }
 
-  react_native_node_modules_dir = File.join(File.dirname(`cd "#{Pod::Config.instance.installation_root.to_s}" && node --print "require.resolve('react-native/package.json')"`), '..')
-  react_native_json = rnsvg_try_to_parse_react_native_package_json(react_native_node_modules_dir)
+  react_native_package_json_path = `cd "#{Pod::Config.instance.installation_root.to_s}" && node --print "require.resolve('react-native/package.json')"`.strip
+  react_native_node_modules_dir = File.join(File.dirname(react_native_package_json_path), '..')
+  # Node may resolve a symlink or platform fork with a different package name.
+  react_native_json = File.exist?(react_native_package_json_path) ? JSON.parse(File.read(react_native_package_json_path)) : nil
 
   if react_native_json == nil
     # user configuration, just in case
