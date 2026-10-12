@@ -1,4 +1,5 @@
 #import "RNSVGUIKit.h"
+#import <React/RCTAssert.h>
 #import <objc/runtime.h>
 
 #if TARGET_OS_OSX
