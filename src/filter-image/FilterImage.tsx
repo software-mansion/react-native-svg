@@ -2,8 +2,6 @@ import * as React from 'react';
 import {
   ImageProps,
   ImageStyle,
-  Platform,
-  Image as RNImage,
   StyleProp,
   StyleSheet,
   View,
@@ -31,10 +29,7 @@ export const FilterImage = (props: FilterImageProps) => {
 
   if (!source) return null;
 
-  const src =
-    Platform.OS === 'web'
-      ? resolveAssetUri(source)
-      : RNImage.resolveAssetSource(source);
+  const src = resolveAssetUri(source);
   const width = props.width || styles?.width || src?.width;
   const height = props.height || styles?.height || src?.height;
   const preserveAspectRatio = extractResizeMode(props.resizeMode);
