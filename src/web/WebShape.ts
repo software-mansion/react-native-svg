@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 import {
-  GestureResponderEvent,
+  TouchableWithoutFeedback,
   // @ts-ignore it is not seen in exports
   unstable_createElement as createElement,
 } from 'react-native';
@@ -8,9 +8,27 @@ import {
 import { BaseProps } from './types';
 import { prepare } from './utils/prepare';
 import { convertInt32ColorToRGBA } from './utils/convertInt32Color';
-import { getAttributeName, remeasure } from './utils';
+import { getAttributeName } from './utils';
 import { hasTouchableProperty } from './utils/hasProperty';
-import SvgTouchableMixin from '../lib/SvgTouchableMixin';
+
+/**
+ * `TouchableWithoutFeedback` clones its child and injects props on it
+ * (`focusable`, `accessibilityDisabled` and the responder handlers). Those props
+ * need `unstable_createElement` to be turned into DOM attributes, so the child
+ * has to be a component that calls it, not an already created element.
+ */
+const TouchableSvgElement = React.forwardRef<
+  SVGElement,
+  {
+    tag: React.ElementType;
+    elementProps: Record<string, unknown>;
+    children?: React.ReactNode;
+  }
+>(({ tag, elementProps, ...injectedProps }, ref) =>
+  createElement(tag, { ...elementProps, ...injectedProps, ref })
+);
+
+TouchableSvgElement.displayName = 'TouchableSvgElement';
 
 export class WebShape<
   P extends BaseProps = BaseProps,
@@ -83,30 +101,6 @@ export class WebShape<
     }
   }
 
-  _remeasureMetricsOnActivation: () => void;
-  touchableHandleStartShouldSetResponder?: (
-    e: GestureResponderEvent
-  ) => boolean;
-
-  touchableHandleResponderMove?: (e: GestureResponderEvent) => void;
-  touchableHandleResponderGrant?: (e: GestureResponderEvent) => void;
-  touchableHandleResponderRelease?: (e: GestureResponderEvent) => void;
-  touchableHandleResponderTerminate?: (e: GestureResponderEvent) => void;
-  touchableHandleResponderTerminationRequest?: (
-    e: GestureResponderEvent
-  ) => boolean;
-
-  constructor(props: P) {
-    super(props);
-
-    // Do not attach touchable mixin handlers if SVG element doesn't have a touchable prop
-    if (hasTouchableProperty(props)) {
-      SvgTouchableMixin(this);
-    }
-
-    this._remeasureMetricsOnActivation = remeasure.bind(this);
-  }
-
   render(): JSX.Element {
     if (!this.tag) {
       throw new Error(
@@ -114,9 +108,63 @@ export class WebShape<
       );
     }
     this.lastMergedProps = {};
-    return createElement(
-      this.tag,
-      prepare(this, this.prepareProps(this.props))
+
+    const cleanProps = prepare(this, this.prepareProps(this.props));
+
+    // Only touchable elements are wrapped, so only they become keyboard
+    // focusable. A plain shape stays out of the tab order.
+    if (!hasTouchableProperty(this.props)) {
+      return createElement(this.tag, cleanProps);
+    }
+
+    const { children, ref, ...elementProps } = cleanProps as Record<
+      string,
+      unknown
+    >;
+
+    const {
+      delayLongPress,
+      delayPressIn,
+      delayPressOut,
+      disabled,
+      focusable,
+      onBlur,
+      onFocus,
+      onLongPress,
+      onPress,
+      onPressIn,
+      onPressOut,
+      rejectResponderTermination,
+    } = this.props;
+
+    return React.createElement(
+      TouchableWithoutFeedback,
+      {
+        delayLongPress,
+        delayPressIn,
+        delayPressOut,
+        disabled,
+        // A touchable element is a keyboard tab stop unless it opts out with
+        // `focusable={false}`.
+        focusable,
+        onBlur,
+        onFocus,
+        onLongPress,
+        onPress,
+        onPressIn,
+        onPressOut,
+        rejectResponderTermination,
+      },
+      React.createElement(
+        TouchableSvgElement,
+        {
+          tag: this.tag,
+          elementProps,
+          // TouchableWithoutFeedback merges this ref with its own host ref
+          ref: ref as React.Ref<SVGElement>,
+        },
+        children as React.ReactNode
+      )
     );
   }
 }
