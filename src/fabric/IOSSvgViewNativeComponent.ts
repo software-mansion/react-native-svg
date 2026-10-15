@@ -1,27 +1,26 @@
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import type { ColorValue } from 'react-native';
-import type { Float, Int32 } from 'react-native/Libraries/Types/CodegenTypes';
+import { codegenNativeComponent } from 'react-native';
+import type { CodegenTypes, ColorValue } from 'react-native';
 import type { ViewProps } from './utils';
 
 import type { UnsafeMixed } from './codegenUtils';
 import { NumberProp } from '../lib/extract/types';
 
 type HitSlop = Readonly<{
-  left?: Float;
-  top?: Float;
-  right?: Float;
-  bottom?: Float;
+  left?: CodegenTypes.Float;
+  top?: CodegenTypes.Float;
+  right?: CodegenTypes.Float;
+  bottom?: CodegenTypes.Float;
 }>;
 
 interface NativeProps extends ViewProps {
   bbWidth?: UnsafeMixed<NumberProp>;
   bbHeight?: UnsafeMixed<NumberProp>;
-  minX?: Float;
-  minY?: Float;
-  vbWidth?: Float;
-  vbHeight?: Float;
+  minX?: CodegenTypes.Float;
+  minY?: CodegenTypes.Float;
+  vbWidth?: CodegenTypes.Float;
+  vbHeight?: CodegenTypes.Float;
   align?: string;
-  meetOrSlice?: Int32;
+  meetOrSlice?: CodegenTypes.Int32;
   color?: ColorValue;
   pointerEvents?: string;
   hitSlop?: UnsafeMixed<HitSlop | null | number | undefined>;

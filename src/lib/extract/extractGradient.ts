@@ -6,9 +6,15 @@ import { processColor } from 'react-native';
 import extractOpacity from './extractOpacity';
 import extractTransform from './extractTransform';
 import type { TransformProps } from './types';
+import type { StopProps } from '../../elements/Stop';
 import units from '../units';
 
 const percentReg = /^([+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)(%?)$/;
+
+type StopValues = Pick<StopProps, 'offset' | 'stopColor' | 'stopOpacity'>;
+type StopElement = ReactElement<
+  StopValues & { style?: StopValues; parent?: unknown }
+>;
 
 function percentToFloat(
   percent:
@@ -57,7 +63,7 @@ export default function extractGradient(
   const stops = [];
   const childArray = children
     ? Children.map(children, (child) =>
-        React.cloneElement(child, {
+        React.cloneElement(child as StopElement, {
           parent,
         })
       )
@@ -76,7 +82,9 @@ export default function extractGradient(
     const color = stopColor && processColor(stopColor);
     if (typeof color !== 'number' || isNaN(offsetNumber)) {
       console.warn(
-        `"${stopColor}" is not a valid color or "${offset}" is not a valid offset`
+        `"${String(
+          stopColor
+        )}" is not a valid color or "${offset}" is not a valid offset`
       );
       continue;
     }

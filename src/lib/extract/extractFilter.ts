@@ -6,6 +6,7 @@ import { FeCompositeProps as FeCompositeComponentProps } from '../../elements/fi
 import { FeFloodProps as FeFloodComponentProps } from '../../elements/filters/FeFlood';
 import { FeGaussianBlurProps as FeGaussianBlurComponentProps } from '../../elements/filters/FeGaussianBlur';
 import { FeMergeProps as FeMergeComponentProps } from '../../elements/filters/FeMerge';
+import { FeMergeNodeProps } from '../../elements/filters/FeMergeNode';
 import { NativeProps as FeBlendNativeProps } from '../../fabric/FeBlendNativeComponent';
 import { NativeProps as FeColorMatrixNativeProps } from '../../fabric/FeColorMatrixNativeComponent';
 import { NativeProps as FeCompositeNativeProps } from '../../fabric/FeCompositeNativeComponent';
@@ -160,6 +161,10 @@ export const extractFeGaussianBlur = (
   return extracted;
 };
 
+type FeMergeNodeElement = React.ReactElement<
+  Omit<FeMergeNodeProps, 'parent'> & { parent?: unknown }
+>;
+
 export const extractFeMerge = (
   props: FeMergeComponentProps,
   parent: unknown
@@ -167,7 +172,7 @@ export const extractFeMerge = (
   const nodes: Array<string> = [];
   const childArray = props.children
     ? React.Children.map(props.children, (child) =>
-        React.cloneElement(child, { parent })
+        React.cloneElement(child as FeMergeNodeElement, { parent })
       )
     : [];
   const l = childArray.length;

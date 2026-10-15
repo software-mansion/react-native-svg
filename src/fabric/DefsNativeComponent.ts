@@ -1,21 +1,17 @@
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import type {
-  Float,
-  Int32,
-  WithDefault,
-} from 'react-native/Libraries/Types/CodegenTypes';
+import { codegenNativeComponent } from 'react-native';
+import type { CodegenTypes } from 'react-native';
 import type { ViewProps } from './utils';
 
 interface SvgNodeCommonProps {
   name?: string;
-  opacity?: WithDefault<Float, 1.0>;
-  matrix?: ReadonlyArray<Float>;
+  opacity?: CodegenTypes.WithDefault<CodegenTypes.Float, 1.0>;
+  matrix?: ReadonlyArray<CodegenTypes.Float>;
   mask?: string;
   markerStart?: string;
   markerMid?: string;
   markerEnd?: string;
   clipPath?: string;
-  clipRule?: WithDefault<Int32, 0>;
+  clipRule?: CodegenTypes.WithDefault<CodegenTypes.Int32, 0>;
   responsible?: boolean;
   display?: string;
   pointerEvents?: string;
