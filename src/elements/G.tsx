@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import * as React from 'react';
+import { Children } from 'react';
 import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
 import { extractFont } from '../lib/extract/extractText';
 import extractTransform from '../lib/extract/extractTransform';
@@ -41,11 +42,18 @@ export default class G<P> extends Shape<GProps & P> {
     if (hasProps(font)) {
       extractedProps.font = font;
     }
+
+    const childArray = props.children
+      ? Children.map(props.children, (child) =>
+          React.cloneElement(child, { ...extractedProps })
+        )
+      : [];
+
     return (
       <RNSVGGroup
         ref={(ref) => this.refMethod(ref as (G<P> & NativeMethods) | null)}
         {...extractedProps}>
-        {props.children}
+        {childArray}
       </RNSVGGroup>
     );
   }
