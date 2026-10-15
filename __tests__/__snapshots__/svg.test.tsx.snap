@@ -1,0 +1,114 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`applies x and y as a native view translation 1`] = `
+<RNSVGSvgView
+  bbHeight={100}
+  bbWidth={100}
+  focusable={false}
+  height={100}
+  style={
+    Array [
+      Object {
+        "backgroundColor": "transparent",
+        "borderWidth": 0,
+      },
+      Object {
+        "flex": 0,
+        "height": 100,
+        "width": 100,
+      },
+    ]
+  }
+  transform={
+    Array [
+      Object {
+        "translateX": 20,
+      },
+      Object {
+        "translateY": 30,
+      },
+    ]
+  }
+  width={100}
+>
+  <RNSVGGroup
+    fill={
+      Object {
+        "payload": 4278190080,
+        "type": 0,
+      }
+    }
+  >
+    <RNSVGRect
+      fill={
+        Object {
+          "payload": 4278190080,
+          "type": 0,
+        }
+      }
+      height={10}
+      width={10}
+      x={0}
+      y={0}
+    />
+  </RNSVGGroup>
+</RNSVGSvgView>
+`;
+
+exports[`keeps existing transforms when applying x and y 1`] = `
+<RNSVGSvgView
+  bbHeight={100}
+  bbWidth={100}
+  focusable={false}
+  height={100}
+  style={
+    Array [
+      Object {
+        "backgroundColor": "transparent",
+        "borderWidth": 0,
+      },
+      Object {
+        "flex": 0,
+        "height": 100,
+        "width": 100,
+      },
+    ]
+  }
+  transform={
+    Array [
+      Object {
+        "translateX": 20,
+      },
+      Object {
+        "translateY": 30,
+      },
+      Object {
+        "scale": 2,
+      },
+    ]
+  }
+  width={100}
+>
+  <RNSVGGroup
+    fill={
+      Object {
+        "payload": 4278190080,
+        "type": 0,
+      }
+    }
+  >
+    <RNSVGRect
+      fill={
+        Object {
+          "payload": 4278190080,
+          "type": 0,
+        }
+      }
+      height={10}
+      width={10}
+      x={0}
+      y={0}
+    />
+  </RNSVGGroup>
+</RNSVGSvgView>
+`;
