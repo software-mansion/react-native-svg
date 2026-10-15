@@ -10,6 +10,18 @@ on:
     branches:
       - main
 jobs:
+  podspec-utils:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+      - run: gem install minitest -v '~> 5.0' --no-document
+      - run: ruby scripts/rnsvg_utils_test.rb
   build:
     runs-on: ubuntu-latest
     steps:
