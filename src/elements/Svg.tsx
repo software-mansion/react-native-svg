@@ -111,6 +111,8 @@ export default class Svg extends Shape<SvgProps> {
       height,
       focusable,
       transform,
+      x,
+      y,
 
       // Inherited G properties
       font,
@@ -136,6 +138,8 @@ export default class Svg extends Shape<SvgProps> {
     }
 
     const props: extractedProps = extracted as extractedProps;
+    delete (props as Record<string, unknown>).x;
+    delete (props as Record<string, unknown>).y;
     props.focusable = Boolean(focusable) && focusable !== 'false';
     const rootStyles: StyleProp<ViewStyle>[] = [defaultStyle];
 
@@ -178,13 +182,29 @@ export default class Svg extends Shape<SvgProps> {
     extractResponder(props, props, this as ResponderInstanceProps);
 
     const gStyle = Object.assign({}, StyleSheet.flatten(style));
-    if (transform) {
+    if (transform || x != null || y != null) {
       if (gStyle.transform) {
         props.transform = gStyle.transform;
         gStyle.transform = undefined;
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      props.transform = extractTransformSvgView(props as any);
+      const svgTransform = extractTransformSvgView(props as any);
+      if (x != null || y != null) {
+        const translateX = x != null ? parseFloat(String(x)) : 0;
+        const translateY = y != null ? parseFloat(String(y)) : 0;
+        const translateTransform = [
+          { translateX },
+          { translateY },
+        ];
+        props.transform = svgTransform
+          ? [
+              ...(Array.isArray(svgTransform) ? svgTransform : [svgTransform]),
+              ...translateTransform,
+            ]
+          : translateTransform;
+      } else {
+        props.transform = svgTransform;
+      }
     }
 
     const RNSVGSvg = Platform.OS === 'android' ? RNSVGSvgAndroid : RNSVGSvgIOS;
@@ -210,7 +230,6 @@ export default class Svg extends Shape<SvgProps> {
             strokeLinecap,
             strokeLinejoin,
             strokeMiterlimit,
-            onLayout,
           }}
         />
       </RNSVGSvg>
