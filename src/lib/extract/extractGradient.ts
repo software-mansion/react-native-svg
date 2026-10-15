@@ -80,7 +80,8 @@ export default function extractGradient(
       );
       continue;
     }
-    const alpha = Math.round(extractOpacity(stopOpacity) * 255);
+    // SVG 2 multiplies stop-opacity by the alpha the stop color already carries.
+    const alpha = Math.round(extractOpacity(stopOpacity) * (color >>> 24));
     stops.push([offsetNumber, (color & 0x00ffffff) | (alpha << 24)]);
   }
   stops.sort(offsetComparator);
