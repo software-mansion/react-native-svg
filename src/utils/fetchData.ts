@@ -1,6 +1,9 @@
 import { Platform } from 'react-native';
 
-export async function fetchText(uri?: string): Promise<string | null> {
+export async function fetchText(
+  uri?: string,
+  headers?: Record<string, string>
+): Promise<string | null> {
   if (!uri) {
     return null;
   }
@@ -9,7 +12,7 @@ export async function fetchText(uri?: string): Promise<string | null> {
   } else if (uri.startsWith('data:image/svg+xml;base64')) {
     return decodeBase64Image(uri);
   } else {
-    return fetchUriData(uri);
+    return fetchUriData(uri, headers);
   }
 }
 
@@ -30,8 +33,8 @@ function dataUriToXml(uri: string): string | null {
   }
 }
 
-async function fetchUriData(uri: string) {
-  const response = await fetch(uri);
+async function fetchUriData(uri: string, headers?: Record<string, string>) {
+  const response = await fetch(uri, { headers });
   if (response.ok || (response.status === 0 && uri.startsWith('file://'))) {
     return await response.text();
   }
