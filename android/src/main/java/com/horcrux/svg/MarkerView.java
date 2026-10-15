@@ -27,6 +27,8 @@ class MarkerView extends GroupView {
   private String mMarkerUnits;
   private String mOrient;
 
+  static final String AUTO_START_REVERSE = "auto-start-reverse";
+
   private float mMinX;
   private float mMinY;
   private float mVbWidth;
@@ -114,6 +116,21 @@ class MarkerView extends GroupView {
     }
   }
 
+  private static double markerAngleFor(String orient) {
+    if ("auto".equals(orient) || AUTO_START_REVERSE.equals(orient)) {
+      return -1;
+    }
+    try {
+      return Double.parseDouble(orient);
+    } catch (NumberFormatException | NullPointerException e) {
+      return 0;
+    }
+  }
+
+  boolean isAutoStartReverse() {
+    return AUTO_START_REVERSE.equals(mOrient);
+  }
+
   void renderMarker(
       Canvas canvas, Paint paint, float opacity, RNSVGMarkerPosition position, float strokeWidth) {
     int count = saveAndSetupCanvas(canvas, mCTM);
@@ -122,7 +139,13 @@ class MarkerView extends GroupView {
     Point origin = position.origin;
     markerTransform.setTranslate((float) origin.x, (float) origin.y);
 
-    double markerAngle = "auto".equals(mOrient) ? -1 : Double.parseDouble(mOrient);
+    // "auto-start-reverse" orients like "auto"; the extra half turn a start
+    // marker gets is applied where the position's angle is computed, in
+    // RNSVGMarkerPosition. Any other value that is not a number falls back to
+    // the property's initial value of 0 rather than throwing: this ran on the
+    // UI thread inside SvgView.onDraw, so a NumberFormatException here took
+    // the whole app down.
+    double markerAngle = markerAngleFor(mOrient);
     float degrees = 180 + (float) (markerAngle == -1 ? position.angle : markerAngle);
     markerTransform.preRotate(degrees);
 

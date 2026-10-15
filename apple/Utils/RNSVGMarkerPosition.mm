@@ -24,6 +24,13 @@
 
 + (NSArray<RNSVGMarkerPosition *> *)fromCGPath:(CGPathRef)path
 {
+  return [self fromCGPath:path autoStartReverse:NO];
+}
+
++ (NSArray<RNSVGMarkerPosition *> *)fromCGPath:(CGPathRef)path
+                             autoStartReverse:(BOOL)autoStartReverse
+{
+  auto_start_reverse_ = autoStartReverse;
   positions_ = [[NSMutableArray alloc] init];
   element_index_ = 0;
   origin_ = RNSVGZEROPOINT;
