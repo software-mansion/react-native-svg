@@ -1,8 +1,8 @@
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
+import { codegenNativeComponent } from 'react-native';
+import type { CodegenTypes } from 'react-native';
 import { NumberProp } from '../lib/extract/types';
 import type { UnsafeMixed } from './codegenUtils';
 import type { ViewProps } from './utils';
-import { WithDefault } from 'react-native/Libraries/Types/CodegenTypes';
 
 interface FilterPrimitiveCommonProps {
   x?: UnsafeMixed<NumberProp>;
@@ -23,7 +23,7 @@ type BlendMode =
 export interface NativeProps extends ViewProps, FilterPrimitiveCommonProps {
   in1?: string;
   in2?: string;
-  mode?: WithDefault<BlendMode, 'normal'>;
+  mode?: CodegenTypes.WithDefault<BlendMode, 'normal'>;
 }
 
 export default codegenNativeComponent<NativeProps>('RNSVGFeBlend', {

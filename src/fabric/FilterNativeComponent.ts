@@ -1,8 +1,8 @@
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
+import { codegenNativeComponent } from 'react-native';
+import type { CodegenTypes } from 'react-native';
 import { NumberProp } from '../lib/extract/types';
 import type { UnsafeMixed } from './codegenUtils';
 import type { ViewProps } from './utils';
-import { WithDefault } from 'react-native/Libraries/Types/CodegenTypes';
 
 type Units = 'userSpaceOnUse' | 'objectBoundingBox';
 
@@ -12,8 +12,8 @@ interface NativeProps extends ViewProps {
   y?: UnsafeMixed<NumberProp>;
   height?: UnsafeMixed<NumberProp>;
   width?: UnsafeMixed<NumberProp>;
-  filterUnits?: WithDefault<Units, 'objectBoundingBox'>;
-  primitiveUnits?: WithDefault<Units, 'userSpaceOnUse'>;
+  filterUnits?: CodegenTypes.WithDefault<Units, 'objectBoundingBox'>;
+  primitiveUnits?: CodegenTypes.WithDefault<Units, 'userSpaceOnUse'>;
 }
 
 export default codegenNativeComponent<NativeProps>('RNSVGFilter', {

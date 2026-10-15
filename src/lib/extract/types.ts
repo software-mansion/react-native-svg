@@ -1,4 +1,5 @@
 import type {
+  CodegenTypes,
   ColorValue,
   GestureResponderEvent,
   GestureResponderHandlers,
@@ -7,10 +8,6 @@ import type {
   TransformsStyle,
 } from 'react-native';
 import type React from 'react';
-import {
-  DirectEventHandler,
-  Int32,
-} from 'react-native/Libraries/Types/CodegenTypes';
 
 export type NumberProp = string | number;
 export type NumberArray = NumberProp[] | NumberProp;
@@ -306,10 +303,10 @@ export interface CommonMarkerProps {
 
 type OnSvgLayoutEvent = Readonly<{
   layout: {
-    x: Int32;
-    y: Int32;
-    width: Int32;
-    height: Int32;
+    x: CodegenTypes.Int32;
+    y: CodegenTypes.Int32;
+    width: CodegenTypes.Int32;
+    height: CodegenTypes.Int32;
   };
 }>;
 
@@ -363,7 +360,7 @@ export type extractedProps = {
   opacity?: number;
   matrix?: number[];
   propList?: string[];
-  onSvgLayout?: DirectEventHandler<OnSvgLayoutEvent>;
+  onSvgLayout?: CodegenTypes.DirectEventHandler<OnSvgLayoutEvent>;
   ref?: (instance: React.Component | null) => void;
   markerStart?: string;
   markerMid?: string;
