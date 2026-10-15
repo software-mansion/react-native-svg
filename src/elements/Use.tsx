@@ -7,7 +7,7 @@ import Shape from './Shape';
 import RNSVGUse from '../fabric/UseNativeComponent';
 import type { NativeMethods } from 'react-native';
 
-export interface UseProps extends CommonPathProps {
+export interface UseProps extends Omit<CommonPathProps, 'x' | 'y'> {
   children?: ReactNode;
   xlinkHref?: string;
   href?: string;
