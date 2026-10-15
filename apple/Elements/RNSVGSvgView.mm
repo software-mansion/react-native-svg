@@ -99,15 +99,14 @@ using namespace facebook::react;
   }
   self.align = RCTNSStringFromStringNilIfEmpty(newProps.align);
   self.meetOrSlice = intToRNSVGVBMOS(newProps.meetOrSlice);
-  if (RCTUIColorFromSharedColor(newProps.color)) {
-    self.color = RCTUIColorFromSharedColor(newProps.color);
-  }
+  self.color = RCTUIColorFromSharedColor(newProps.color);
   [super updateProps:props oldProps:oldProps];
 }
 
 - (void)prepareForRecycle
 {
   [super prepareForRecycle];
+  _color = nil;
   _minX = 0;
   _minY = 0;
   _vbWidth = 0;
