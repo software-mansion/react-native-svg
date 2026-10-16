@@ -1,0 +1,88 @@
+// swift-tools-version: 6.0
+import PackageDescription
+
+// Swift Package Manager support for React Native's SwiftPM autolinking
+// (react-native >= 0.87). CocoaPods users are unaffected; see RNSVG.podspec.
+// The two React Native packages are resolved by the autolinker relative to
+// build/generated/autolinking/libs/RNSVG in the app.
+
+// CocoaPods ships these precompiled Metal kernels in its RNSVGFilters resource
+// bundle, which RNSVGCustomFilter looks up by name. SwiftPM cannot produce that
+// bundle, so the kernels stay out and the filters that need them render
+// nothing, the same as when a kernel fails to load.
+let metalKernelFiles = ["metal"]
+    + ["appletvos", "iphoneos", "macosx", "xros"].flatMap { sdk in ["\(sdk).air", "\(sdk).metallib"] }
+let metalKernels = ["RNSVGArithmeticFilter", "RNSVGCompositeXor"].flatMap { kernel in
+    metalKernelFiles.map { "apple/Filters/MetalCI/\(kernel).\($0)" }
+}
+
+let headerSearchPaths = [
+    "common/cpp",
+    // Resolves <rnsvg/...>, the subspec's header_dir in RNSVG.podspec.
+    "common/cpp/react/renderer/components",
+    "apple",
+    "apple/Brushes",
+    "apple/Elements",
+    "apple/Filters",
+    "apple/Filters/MetalCI",
+    "apple/Shapes",
+    "apple/Text",
+    "apple/Utils",
+]
+
+// RCT_NEW_ARCH_ENABLED and FOLLY_CFG_NO_COROUTINES come from
+// install_modules_dependencies under CocoaPods; without the first, all Fabric
+// code compiles out. REACT_NATIVE_MINOR_VERSION is the app's exact minor under
+// CocoaPods, but a static manifest cannot read the app's React Native version.
+// 87 is the oldest React Native with SwiftPM autolinking, so a check against
+// any older minor holds for every app that can consume this manifest.
+let defines = [
+    ("RCT_NEW_ARCH_ENABLED", "1"),
+    ("FOLLY_CFG_NO_COROUTINES", "1"),
+    ("REACT_NATIVE_MINOR_VERSION", "87"),
+]
+
+let package = Package(
+    name: "RNSVG",
+    platforms: [.iOS("15.1")],
+    products: [
+        .library(name: "RNSVG", targets: ["RNSVG"]),
+    ],
+    dependencies: [
+        .package(name: "ReactNative", path: "../../../../xcframeworks"),
+        .package(name: "React-GeneratedCode", path: "../../../ios"),
+    ],
+    targets: [
+        .target(
+            name: "RNSVG",
+            dependencies: [
+                .product(name: "ReactHeaders", package: "ReactNative"),
+                .product(name: "ReactNativeHeaders", package: "ReactNative"),
+                .product(name: "ReactNativeDependenciesHeaders", package: "ReactNative"),
+                .product(name: "ReactAppHeaders", package: "React-GeneratedCode"),
+            ],
+            path: ".",
+            exclude: [
+                "apple/RNSVG.xcodeproj",
+                "apple/RNSVGUIKit.macos.mm",
+                "apple/Text/RNSVGTopAlignedLabel.macos.mm",
+            ] + metalKernels,
+            sources: ["apple", "common/cpp"],
+            publicHeadersPath: "apple",
+            cSettings: defines.map { .define($0, to: $1) }
+                + headerSearchPaths.map { .headerSearchPath($0) },
+            cxxSettings: defines.map { .define($0, to: $1) }
+                + headerSearchPaths.map { .headerSearchPath($0) }
+                + [
+                    .define("DEBUG", .when(configuration: .debug)),
+                    .define("NDEBUG", .when(configuration: .release)),
+                ],
+            linkerSettings: [
+                .linkedFramework("UIKit"),
+                .linkedFramework("Foundation"),
+                .linkedFramework("CoreGraphics"),
+            ]
+        ),
+    ],
+    cxxLanguageStandard: .cxx20
+)

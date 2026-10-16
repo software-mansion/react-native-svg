@@ -21,6 +21,7 @@
     "css",
     "filter-image",
     "RNSVG.podspec",
+    "Package.swift",
     "!android/build",
     "windows",
     "react-native.config.js",
