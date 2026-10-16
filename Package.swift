@@ -6,13 +6,13 @@ import PackageDescription
 // The two React Native packages are resolved by the autolinker relative to
 // build/generated/autolinking/libs/RNSVG in the app.
 
-// CocoaPods ships these precompiled Metal kernels in its RNSVGFilters resource
-// bundle, which RNSVGCustomFilter looks up by name. SwiftPM cannot produce that
-// bundle, so the kernels stay out and the filters that need them render
-// nothing, the same as when a kernel fails to load.
+// Precompiled Metal kernels that RNSVGCustomFilter loads by name. Every kernel
+// file stays excluded, even the ones copied as resources: SwiftPM reports a
+// duplicate rule for a file under a sources directory that is not excluded.
+let metalKernelNames = ["RNSVGArithmeticFilter", "RNSVGCompositeXor"]
 let metalKernelFiles = ["metal"]
     + ["appletvos", "iphoneos", "macosx", "xros"].flatMap { sdk in ["\(sdk).air", "\(sdk).metallib"] }
-let metalKernels = ["RNSVGArithmeticFilter", "RNSVGCompositeXor"].flatMap { kernel in
+let metalKernels = metalKernelNames.flatMap { kernel in
     metalKernelFiles.map { "apple/Filters/MetalCI/\(kernel).\($0)" }
 }
 
@@ -67,6 +67,9 @@ let package = Package(
                 "apple/Text/RNSVGTopAlignedLabel.macos.mm",
             ] + metalKernels,
             sources: ["apple", "common/cpp"],
+            resources: metalKernelNames.map {
+                .copy("apple/Filters/MetalCI/\($0).iphoneos.metallib")
+            },
             publicHeadersPath: "apple",
             cSettings: defines.map { .define($0, to: $1) }
                 + headerSearchPaths.map { .headerSearchPath($0) },
