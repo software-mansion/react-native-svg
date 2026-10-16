@@ -19,7 +19,7 @@
   @try {
     bundle = SWIFTPM_MODULE_BUNDLE;
   } @catch (NSException *exception) {
-    NSLog(@"RNSVG CustomFilter exception: %@", exception);
+    NSLog(@"RNSVG CustomFilter resource bundle missing: %@", exception);
     return nil;
   }
 #else
