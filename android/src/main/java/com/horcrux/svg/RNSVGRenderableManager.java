@@ -209,7 +209,7 @@ class RNSVGRenderableManager extends NativeSvgRenderableModuleSpec {
       throw new RuntimeException("Did not find parent SvgView for view with tag: " + tag);
     }
     Matrix invViewBoxMatrix = svgView.mInvViewBoxMatrix;
-    ctm.preConcat(invViewBoxMatrix);
+    ctm.postConcat(invViewBoxMatrix);
 
     float[] values = new float[9];
     ctm.getValues(values);
