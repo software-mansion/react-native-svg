@@ -2,7 +2,7 @@
 import PackageDescription
 
 // Swift Package Manager support for React Native's SwiftPM autolinking
-// (react-native >= 0.87). CocoaPods users are unaffected; see RNSVG.podspec.
+// (react-native >= 0.88). CocoaPods users are unaffected; see RNSVG.podspec.
 // The two React Native packages are resolved by the autolinker relative to
 // build/generated/autolinking/libs/RNSVG in the app.
 
@@ -30,16 +30,15 @@ let headerSearchPaths = [
     "apple/Utils",
 ]
 
-// RCT_NEW_ARCH_ENABLED and FOLLY_CFG_NO_COROUTINES come from
-// install_modules_dependencies under CocoaPods; without the first, all Fabric
-// code compiles out. REACT_NATIVE_MINOR_VERSION is the app's exact minor under
-// CocoaPods, but a static manifest cannot read the app's React Native version.
-// 87 is the oldest React Native with SwiftPM autolinking, so a check against
-// any older minor holds for every app that can consume this manifest.
+// RCT_NEW_ARCH_ENABLED comes from install_modules_dependencies under
+// CocoaPods; without it, all Fabric code compiles out. REACT_NATIVE_MINOR_VERSION
+// is the app's exact minor under CocoaPods, but a static manifest cannot read
+// the app's React Native version. 88 is the oldest React Native that can
+// consume this manifest, so a check against any older minor holds for every
+// app that can.
 let defines = [
     ("RCT_NEW_ARCH_ENABLED", "1"),
-    ("FOLLY_CFG_NO_COROUTINES", "1"),
-    ("REACT_NATIVE_MINOR_VERSION", "87"),
+    ("REACT_NATIVE_MINOR_VERSION", "88"),
 ]
 
 let package = Package(

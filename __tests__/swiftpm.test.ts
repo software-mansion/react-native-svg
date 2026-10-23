@@ -1,7 +1,7 @@
 // Guards Package.swift and its packaging. React Native's SwiftPM autolinker
-// (>= 0.87) consumes the manifest as-is: it references the product by the
-// podspec name, resolves the React Native packages by relative path, and
-// leaves a manifest a library ships itself alone. Drift in any of those makes
+// (>= 0.88) consumes the manifest as-is: it references the product by
+// package.json's swiftpmConfig.name, resolves the React Native packages by
+// relative path, and leaves a manifest a library ships itself alone. Drift in any of those makes
 // an app fail to resolve, compile or link.
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -94,8 +94,7 @@ const HEADER_SEARCH_PATHS = [
 
 const DEFINES = [
   'RCT_NEW_ARCH_ENABLED=1',
-  'FOLLY_CFG_NO_COROUTINES=1',
-  'REACT_NATIVE_MINOR_VERSION=87',
+  'REACT_NATIVE_MINOR_VERSION=88',
 ];
 
 let hasSwift = process.platform === 'darwin';
