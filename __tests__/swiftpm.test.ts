@@ -1,8 +1,8 @@
 // Guards Package.swift and its packaging. React Native's SwiftPM autolinker
 // (>= 0.88) consumes the manifest as-is: it references the product by
 // package.json's swiftpmConfig.name, resolves the React Native packages by
-// relative path, and leaves a manifest a library ships itself alone. Drift in any of those makes
-// an app fail to resolve, compile or link.
+// relative path, and leaves a manifest a library ships itself alone. Drift
+// in any of those makes an app fail to resolve, compile or link.
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -113,6 +113,16 @@ describe('Package.swift', () => {
       /^\/\/ swift-tools-version:\s*(\d+)\.\d+/.exec(source) ?? [];
     expect(Number(major)).toBeGreaterThanOrEqual(6);
     expect(source).not.toMatch(/AUTO-(SCAFFOLDED|GENERATED)/);
+  });
+
+  it('declares the product package.json names for the autolinker', () => {
+    const source = fs.readFileSync(MANIFEST, 'utf8');
+    const [, product] = /\.library\(\s*name:\s*"([^"]+)"/.exec(source) ?? [];
+    const { swiftpmConfig } = JSON.parse(
+      fs.readFileSync(path.join(REPO_ROOT, 'package.json'), 'utf8')
+    ) as { swiftpmConfig?: { name?: string } };
+    expect(product).toBeDefined();
+    expect(swiftpmConfig?.name).toBe(product);
   });
 });
 
