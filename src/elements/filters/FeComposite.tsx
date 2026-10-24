@@ -1,5 +1,5 @@
 import React from 'react';
-import { NativeMethods } from 'react-native';
+import { HostInstance } from 'react-native';
 import RNSVGFeComposite from '../../fabric/FeCompositeNativeComponent';
 import {
   extractFeComposite,
@@ -41,7 +41,7 @@ export default class FeComposite extends FilterPrimitive<FeCompositeProps> {
     return (
       <RNSVGFeComposite
         ref={(ref) =>
-          this.refMethod(ref as (FeComposite & NativeMethods) | null)
+          this.refMethod(ref as (FeComposite & HostInstance) | null)
         }
         {...extractFilter(this.props)}
         {...extractFeComposite(this.props)}

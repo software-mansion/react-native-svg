@@ -10,7 +10,7 @@ import type {
 import units from '../lib/units';
 import Shape from './Shape';
 import RNSVGMask from '../fabric/MaskNativeComponent';
-import type { NativeMethods } from 'react-native';
+import type { HostInstance } from 'react-native';
 import { maskType } from '../lib/maskType';
 
 export interface MaskProps extends CommonPathProps {
@@ -62,7 +62,7 @@ export default class Mask extends Shape<MaskProps> {
     };
     return (
       <RNSVGMask
-        ref={(ref) => this.refMethod(ref as (Mask & NativeMethods) | null)}
+        ref={(ref) => this.refMethod(ref as (Mask & HostInstance) | null)}
         {...withoutXY(this, props)}
         {...maskProps}>
         {children}

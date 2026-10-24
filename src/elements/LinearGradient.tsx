@@ -4,7 +4,7 @@ import extractGradient from '../lib/extract/extractGradient';
 import type { NumberProp, TransformProps, Units } from '../lib/extract/types';
 import Shape from './Shape';
 import RNSVGLinearGradient from '../fabric/LinearGradientNativeComponent';
-import type { NativeMethods } from 'react-native';
+import type { HostInstance } from 'react-native';
 
 export interface LinearGradientProps {
   children?: ReactElement[];
@@ -34,7 +34,7 @@ export default class LinearGradient extends Shape<LinearGradientProps> {
     return (
       <RNSVGLinearGradient
         ref={(ref) =>
-          this.refMethod(ref as (LinearGradient & NativeMethods) | null)
+          this.refMethod(ref as (LinearGradient & HostInstance) | null)
         }
         {...linearGradientProps}
         {...extractGradient(props, this)}

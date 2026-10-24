@@ -24,7 +24,9 @@ const svgDataUriPattern = /^(data:image\/svg\+xml;utf8,)(.*)/;
 export function resolveAssetUri(
   source?: RNImageProps['source'] | string | number
 ): Partial<ImageResolvedAssetSource> | null {
-  let src: Partial<ImageResolvedAssetSource> = {};
+  let src: {
+    -readonly [K in keyof ImageResolvedAssetSource]?: ImageResolvedAssetSource[K];
+  } = {};
   if (typeof source === 'number') {
     // get the URI from the packager
     const asset: PackagerAsset | null = getAssetByID(source);
@@ -53,11 +55,7 @@ export function resolveAssetUri(
       : '';
   } else if (typeof source === 'string') {
     src.uri = source;
-  } else if (
-    source &&
-    !Array.isArray(source) &&
-    typeof source.uri === 'string'
-  ) {
+  } else if (source && 'uri' in source && typeof source.uri === 'string') {
     src.uri = source.uri;
   }
 

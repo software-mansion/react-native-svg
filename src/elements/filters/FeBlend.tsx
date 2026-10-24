@@ -1,5 +1,5 @@
 import React from 'react';
-import { NativeMethods } from 'react-native';
+import { HostInstance } from 'react-native';
 import {
   extractFeBlend,
   extractFilter,
@@ -27,7 +27,7 @@ export default class FeBlend extends FilterPrimitive<FeBlendProps> {
   render() {
     return (
       <RNSVGFeBlend
-        ref={(ref) => this.refMethod(ref as (FeBlend & NativeMethods) | null)}
+        ref={(ref) => this.refMethod(ref as (FeBlend & HostInstance) | null)}
         {...extractFilter(this.props)}
         {...extractIn(this.props)}
         {...extractFeBlend(this.props)}

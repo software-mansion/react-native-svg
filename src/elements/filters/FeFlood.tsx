@@ -1,5 +1,5 @@
 import React from 'react';
-import { ColorValue, NativeMethods } from 'react-native';
+import { ColorValue, HostInstance } from 'react-native';
 import RNSVGFeFlood from '../../fabric/FeFloodNativeComponent';
 import extractFeFlood, { extractFilter } from '../../lib/extract/extractFilter';
 import { NumberProp } from '../../lib/extract/types';
@@ -23,7 +23,7 @@ export default class FeFlood extends FilterPrimitive<FeFloodProps> {
   render() {
     return (
       <RNSVGFeFlood
-        ref={(ref) => this.refMethod(ref as (FeFlood & NativeMethods) | null)}
+        ref={(ref) => this.refMethod(ref as (FeFlood & HostInstance) | null)}
         {...extractFilter(this.props)}
         {...extractFeFlood(this.props)}
       />

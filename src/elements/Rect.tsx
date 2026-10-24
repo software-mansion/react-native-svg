@@ -3,7 +3,7 @@ import { withoutXY } from '../lib/extract/extractProps';
 import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import RNSVGRect from '../fabric/RectNativeComponent';
-import type { NativeMethods } from 'react-native';
+import type { HostInstance } from 'react-native';
 
 export interface RectProps extends CommonPathProps {
   x?: NumberProp;
@@ -31,7 +31,7 @@ export default class Rect extends Shape<RectProps> {
     const rectProps = { x, y, width, height, rx, ry };
     return (
       <RNSVGRect
-        ref={(ref) => this.refMethod(ref as (Rect & NativeMethods) | null)}
+        ref={(ref) => this.refMethod(ref as (Rect & HostInstance) | null)}
         {...withoutXY(this, props)}
         {...rectProps}
       />

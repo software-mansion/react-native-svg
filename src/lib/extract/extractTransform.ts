@@ -164,7 +164,7 @@ export function transformToMatrix(
         );
       } else {
         const stringifiedTransform = stringifyTransformArrayProps(
-          // @ts-expect-error FIXME
+          // @ts-ignore FIXME
           transform as TransformsStyleArray
         );
 
@@ -239,7 +239,7 @@ export function stringifyTransformArrayProps(
 
   return transformArray
     .map((transform) => {
-      const [key, value] = Object.entries(transform)[0];
+      const [key, value] = Object.entries(transform as object)[0];
       switch (key) {
         case 'translateX':
           return `translate(${value}, 0)`;
