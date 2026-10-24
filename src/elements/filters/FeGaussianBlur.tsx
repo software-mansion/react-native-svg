@@ -1,5 +1,5 @@
 import React from 'react';
-import { NativeMethods } from 'react-native';
+import { HostInstance } from 'react-native';
 import RNSVGFeGaussianBlur from '../../fabric/FeGaussianBlurNativeComponent';
 import {
   extractFeGaussianBlur,
@@ -31,7 +31,7 @@ export default class FeGaussianBlur extends FilterPrimitive<FeGaussianBlurProps>
     return (
       <RNSVGFeGaussianBlur
         ref={(ref) =>
-          this.refMethod(ref as (FeGaussianBlur & NativeMethods) | null)
+          this.refMethod(ref as (FeGaussianBlur & HostInstance) | null)
         }
         {...extractFilter(this.props)}
         {...extractIn(this.props)}

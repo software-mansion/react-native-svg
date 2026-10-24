@@ -1,4 +1,5 @@
 import type { Component } from 'react';
+import type { HostInstance } from 'react-native';
 import * as React from 'react';
 import extractTransform from '../lib/extract/extractTransform';
 import { withoutXY } from '../lib/extract/extractProps';
@@ -81,7 +82,7 @@ export default class TextPath extends Shape<TextPathProps> {
           midLine,
         }
       );
-      props.ref = this.refMethod as (instance: Component | null) => void;
+      props.ref = this.refMethod as (instance: HostInstance | null) => void;
       return <RNSVGTextPath {...props} />;
     }
 

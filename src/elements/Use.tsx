@@ -5,7 +5,7 @@ import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import { idPattern } from '../lib/util';
 import Shape from './Shape';
 import RNSVGUse from '../fabric/UseNativeComponent';
-import type { NativeMethods } from 'react-native';
+import type { HostInstance } from 'react-native';
 
 export interface UseProps extends CommonPathProps {
   children?: ReactNode;
@@ -59,7 +59,7 @@ export default class Use extends Shape<UseProps> {
     };
     return (
       <RNSVGUse
-        ref={(ref) => this.refMethod(ref as (Use & NativeMethods) | null)}
+        ref={(ref) => this.refMethod(ref as (Use & HostInstance) | null)}
         {...withoutXY(this, props)}
         {...useProps}>
         {children}
