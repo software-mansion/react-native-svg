@@ -104,11 +104,18 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
       // when view is removed from the view hierarchy, we want to recycle the mBitmap when
       // the view is detached from window, in order to preserve it for during animation, see
       // https://github.com/react-native-svg/react-native-svg/pull/1542
-      if (mBitmap != null) {
-        mBitmap.recycle();
-      }
-      mBitmap = null;
+      recycleBitmap();
     }
+  }
+
+  // mCurrentBitmap is the same bitmap as mBitmap once drawn; a filter reads it as
+  // its background, so it is forgotten whenever mBitmap is recycled.
+  private void recycleBitmap() {
+    if (mBitmap != null) {
+      mBitmap.recycle();
+    }
+    mBitmap = null;
+    mCurrentBitmap = null;
   }
 
   @Override
@@ -119,10 +126,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   @Override
   protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
-    if (mBitmap != null) {
-      mBitmap.recycle();
-    }
-    mBitmap = null;
+    recycleBitmap();
   }
 
   @Override
