@@ -5,7 +5,7 @@ import Svg, {Circle, FeDropShadow, Filter} from 'react-native-svg';
 // Scrolling the Svg out of a removeClippedSubviews ScrollView detaches it,
 // which recycles its bitmap while the view stays registered. A toDataURL
 // that lands then draws the filter against that recycled bitmap.
-export default function TestRecycledBitmap() {
+export default function Test3103() {
   const svgRef = useRef<Svg>(null);
   const scrollRef = useRef<ScrollView>(null);
   const [result, setResult] = useState('not captured');
