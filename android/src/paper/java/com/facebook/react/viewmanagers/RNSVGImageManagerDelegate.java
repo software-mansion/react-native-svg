@@ -128,6 +128,9 @@ public class RNSVGImageManagerDelegate<T extends View, U extends BaseViewManager
       case "meetOrSlice":
         mViewManager.setMeetOrSlice(view, value == null ? 0 : ((Double) value).intValue());
         break;
+      case "hasOnSvgLayout":
+        mViewManager.setHasOnSvgLayout(view, value == null ? false : (boolean) value);
+        break;
       default:
         super.setProperty(view, propName, value);
     }

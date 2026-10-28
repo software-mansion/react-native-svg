@@ -51,4 +51,5 @@ public interface RNSVGImageManagerInterface<T extends View> extends ViewManagerW
   void setSrc(T view, @Nullable ReadableMap value);
   void setAlign(T view, @Nullable String value);
   void setMeetOrSlice(T view, int value);
+  void setHasOnSvgLayout(T view, boolean value);
 }

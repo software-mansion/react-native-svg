@@ -62,6 +62,7 @@ interface NativeProps
   y?: UnsafeMixed<NumberProp>;
   height?: UnsafeMixed<NumberProp>;
   width?: UnsafeMixed<NumberProp>;
+  hasOnSvgLayout?: boolean;
   onSvgLayout?: CodegenTypes.DirectEventHandler<OnSvgLayoutEvent>;
 }
 

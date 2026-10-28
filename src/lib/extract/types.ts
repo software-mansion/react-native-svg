@@ -360,6 +360,7 @@ export type extractedProps = {
   opacity?: number;
   matrix?: number[];
   propList?: string[];
+  hasOnSvgLayout?: boolean;
   onSvgLayout?: CodegenTypes.DirectEventHandler<OnSvgLayoutEvent>;
   ref?: (instance: React.Component | null) => void;
   markerStart?: string;

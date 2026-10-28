@@ -80,6 +80,7 @@ interface NativeProps
     SvgGroupCommonProps,
     SvgTextCommonProps {
   content?: string;
+  hasOnSvgLayout?: boolean;
   onSvgLayout?: CodegenTypes.DirectEventHandler<OnSvgLayoutEvent>;
 }
 

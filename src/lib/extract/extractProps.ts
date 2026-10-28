@@ -109,6 +109,7 @@ export default function extractProps(
 
   if (onLayout) {
     extracted.onSvgLayout = onLayout;
+    extracted.hasOnSvgLayout = true;
   }
 
   if (markerStart) {

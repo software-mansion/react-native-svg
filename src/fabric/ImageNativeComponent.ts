@@ -78,6 +78,7 @@ interface NativeProps
   align?: string;
   meetOrSlice?: CodegenTypes.Int32;
   onLoad?: CodegenTypes.DirectEventHandler<ImageLoadEventData>;
+  hasOnSvgLayout?: boolean;
   onSvgLayout?: CodegenTypes.DirectEventHandler<OnSvgLayoutEvent>;
 }
 

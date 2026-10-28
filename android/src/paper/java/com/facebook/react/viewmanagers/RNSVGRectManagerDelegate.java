@@ -124,6 +124,9 @@ public class RNSVGRectManagerDelegate<T extends View, U extends BaseViewManager<
       case "ry":
         mViewManager.setRy(view, new DynamicFromObject(value));
         break;
+      case "hasOnSvgLayout":
+        mViewManager.setHasOnSvgLayout(view, value == null ? false : (boolean) value);
+        break;
       default:
         super.setProperty(view, propName, value);
     }
