@@ -73,6 +73,9 @@ class FilterView extends DefinitionView {
     mResultsMap.clear();
     mResultsMap.put("SourceGraphic", source);
     mResultsMap.put("SourceAlpha", FilterUtils.applySourceAlphaFilter(source));
+    if (background == null || background.isRecycled()) {
+      background = Bitmap.createBitmap(source.getWidth(), source.getHeight(), source.getConfig());
+    }
     mResultsMap.put("BackgroundImage", background);
     mResultsMap.put("BackgroundAlpha", FilterUtils.applySourceAlphaFilter(background));
 
