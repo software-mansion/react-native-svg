@@ -1,11 +1,17 @@
 import React, {useRef, useState} from 'react';
-import {Button, ScrollView, Text, View} from 'react-native';
-import Svg, {Circle, FeDropShadow, Filter} from 'react-native-svg';
+import {Button, Image, ScrollView, Text, View} from 'react-native';
+import Svg, {
+  Circle,
+  FeDropShadow,
+  FeOffset,
+  Filter,
+  Rect,
+} from 'react-native-svg';
 
 // Scrolling the Svg out of a removeClippedSubviews ScrollView detaches it,
 // which recycles its bitmap while the view stays registered. A toDataURL
 // that lands then draws the filter against that recycled bitmap.
-export default function Test3103() {
+function CaptureAfterDetach() {
   const svgRef = useRef<Svg>(null);
   const scrollRef = useRef<ScrollView>(null);
   const [result, setResult] = useState('not captured');
@@ -20,7 +26,7 @@ export default function Test3103() {
   };
 
   return (
-    <View style={{flex: 1, paddingTop: 60}}>
+    <View style={{flex: 1}}>
       <Button title="Scroll away, then toDataURL" onPress={capture} />
       <Text testID="result">{result}</Text>
       <ScrollView ref={scrollRef} removeClippedSubviews style={{flex: 1}}>
@@ -32,6 +38,53 @@ export default function Test3103() {
         </Svg>
         <View style={{height: 3000}} />
       </ScrollView>
+    </View>
+  );
+}
+
+// The filter shifts BackgroundImage, what was drawn before the circle. The
+// green bar is drawn after it, so it must not appear inside the circle's
+// filter region: the capture should match the live render.
+function CaptureMatchesLive() {
+  const svgRef = useRef<Svg>(null);
+  const [uri, setUri] = useState<string | null>(null);
+
+  return (
+    <View style={{alignItems: 'center'}}>
+      <Button
+        title="toDataURL"
+        onPress={() =>
+          svgRef.current?.toDataURL(base64 =>
+            setUri(`data:image/png;base64,${base64}`),
+          )
+        }
+      />
+      <Text>live</Text>
+      <Svg ref={svgRef} width={200} height={100}>
+        <Filter id="background">
+          <FeOffset in="BackgroundImage" dx={-30} dy={0} />
+        </Filter>
+        <Rect x={0} y={0} width={100} height={100} fill="blue" />
+        <Circle cx={100} cy={50} r={40} fill="red" filter="url(#background)" />
+        <Rect x={150} y={0} width={20} height={100} fill="green" />
+      </Svg>
+      <Text>captured</Text>
+      {uri ? (
+        <Image
+          testID="capture"
+          source={{uri}}
+          style={{width: 200, height: 100}}
+        />
+      ) : null}
+    </View>
+  );
+}
+
+export default function Test3103() {
+  return (
+    <View style={{flex: 1, paddingTop: 60}}>
+      <CaptureMatchesLive />
+      <CaptureAfterDetach />
     </View>
   );
 }

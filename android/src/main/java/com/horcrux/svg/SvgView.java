@@ -353,25 +353,24 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   }
 
   String toDataURL() {
-    Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
-
-    clearChildCache();
-    drawChildren(new Canvas(bitmap));
-    clearChildCache();
-    this.invalidate();
-    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-    bitmap.recycle();
-    byte[] bitmapBytes = stream.toByteArray();
-    return Base64.encodeToString(bitmapBytes, Base64.NO_WRAP);
+    return capture(Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888));
   }
 
   String toDataURL(int width, int height) {
-    Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+    return capture(Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888));
+  }
 
+  // A filter's BackgroundImage is what this pass has drawn so far, so a capture filters
+  // against its own bitmap, as drawOutput does. The on-screen frame already holds the
+  // filtered element, is the wrong size when a width and height are asked for, and is
+  // recycled once the view detaches.
+  private String capture(Bitmap bitmap) {
+    Bitmap onScreen = mCurrentBitmap;
+    mCurrentBitmap = bitmap;
     clearChildCache();
     drawChildren(new Canvas(bitmap));
     clearChildCache();
+    mCurrentBitmap = onScreen;
     this.invalidate();
     ByteArrayOutputStream stream = new ByteArrayOutputStream();
     bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
