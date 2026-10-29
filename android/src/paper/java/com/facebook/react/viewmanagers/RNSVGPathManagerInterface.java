@@ -44,4 +44,5 @@ public interface RNSVGPathManagerInterface<T extends View> extends ViewManagerWi
   void setPropList(T view, @Nullable ReadableArray value);
   void setFilter(T view, @Nullable String value);
   void setD(T view, @Nullable String value);
+  void setHasOnSvgLayout(T view, boolean value);
 }

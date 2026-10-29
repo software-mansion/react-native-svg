@@ -151,6 +151,9 @@ public class RNSVGTSpanManagerDelegate<T extends View, U extends BaseViewManager
       case "content":
         mViewManager.setContent(view, value == null ? null : (String) value);
         break;
+      case "hasOnSvgLayout":
+        mViewManager.setHasOnSvgLayout(view, value == null ? false : (boolean) value);
+        break;
       default:
         super.setProperty(view, propName, value);
     }

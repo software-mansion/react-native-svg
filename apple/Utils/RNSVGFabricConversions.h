@@ -84,7 +84,10 @@ void setCommonNodeProps(const T &nodeProps, RNSVGNode *node)
   node.clipPath = RCTNSStringFromStringNilIfEmpty(nodeProps.clipPath);
   node.clipRule = nodeProps.clipRule == 0 ? kRNSVGCGFCRuleEvenodd : kRNSVGCGFCRuleNonzero;
   node.responsible = nodeProps.responsible;
-  // onLayout
+  // Only elements that declare onSvgLayout in their spec have this prop.
+  if constexpr (requires { nodeProps.hasOnSvgLayout; }) {
+    node.hasOnSvgLayout = nodeProps.hasOnSvgLayout;
+  }
   node.display = RCTNSStringFromStringNilIfEmpty(nodeProps.display);
   std::string pointerEvents = nodeProps.pointerEvents;
   NSString *pointerEventsString = RCTNSStringFromStringNilIfEmpty(pointerEvents);
