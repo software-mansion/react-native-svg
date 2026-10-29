@@ -249,7 +249,7 @@ public abstract class VirtualView extends ReactViewGroup {
     int count = canvas.save();
     mCTM.set(mMatrix);
     canvas.concat(mCTM);
-    mCTM.preConcat(ctm);
+    mCTM.postConcat(ctm);
     mCTMInvertible = mCTM.invert(mInvCTM);
     return count;
   }
