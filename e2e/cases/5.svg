@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Test: a stop color's own alpha multiplies stop-opacity -->
+  <!-- Rows: rgba stops | transparent to rgba | opaque stops at stop-opacity 0.5 -->
+  <!-- The first row must look exactly like the last one -->
+  <defs>
+    <linearGradient id="rgba">
+      <stop offset="0" stop-color="rgba(255, 0, 0, 0.5)" />
+      <stop offset="1" stop-color="rgba(0, 0, 255, 0.5)" />
+    </linearGradient>
+    <linearGradient id="transparent">
+      <stop offset="0" stop-color="transparent" stop-opacity="0" />
+      <stop offset="1" stop-color="rgba(14, 14, 14, 0.45)" />
+    </linearGradient>
+    <linearGradient id="opaque">
+      <stop offset="0" stop-color="red" stop-opacity="0.5" />
+      <stop offset="1" stop-color="blue" stop-opacity="0.5" />
+    </linearGradient>
+  </defs>
+  <g fill="black">
+    <rect x="16" y="0" width="16" height="200" />
+    <rect x="48" y="0" width="16" height="200" />
+    <rect x="80" y="0" width="16" height="200" />
+    <rect x="112" y="0" width="16" height="200" />
+    <rect x="144" y="0" width="16" height="200" />
+    <rect x="176" y="0" width="16" height="200" />
+  </g>
+  <rect x="8" y="16" width="184" height="48" fill="url(#rgba)" />
+  <rect x="8" y="80" width="184" height="48" fill="url(#transparent)" />
+  <rect x="8" y="144" width="184" height="48" fill="url(#opaque)" />
+</svg>
