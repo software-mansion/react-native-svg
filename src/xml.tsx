@@ -255,6 +255,48 @@ const commentStart = /<!--/;
 const whitespace = /[\s\t\r\n]/;
 const quotemarks = /['"]/;
 
+// Map of the five named XML entities. We deliberately do not extend this to
+// the full HTML entity set — SVG is XML, and parsers should not silently
+// accept HTML-only entities like &nbsp;.
+const NAMED_ENTITIES: Record<string, string> = {
+  amp: '&',
+  lt: '<',
+  gt: '>',
+  quot: '"',
+  apos: "'",
+};
+
+// Decode XML character entities in element text content:
+//   - numeric character references: &#NNN; (decimal) and &#xHHH; (hex)
+//   - the five standard named entities: &amp; &lt; &gt; &quot; &apos;
+// Unknown / malformed references are left intact so they stay visible in
+// the rendered output rather than being silently dropped.
+export function decodeXmlEntities(value: string): string {
+  if (value.indexOf('&') === -1) {
+    return value;
+  }
+  return value.replace(
+    /&(#[xX][0-9a-fA-F]+|#\d+|amp|lt|gt|quot|apos);/g,
+    (match, ref: string) => {
+      if (ref[0] === '#') {
+        const cp =
+          ref[1] === 'x' || ref[1] === 'X'
+            ? parseInt(ref.slice(2), 16)
+            : parseInt(ref.slice(1), 10);
+        if (!Number.isFinite(cp) || cp < 0 || cp > 0x10ffff) {
+          return match;
+        }
+        try {
+          return String.fromCodePoint(cp);
+        } catch {
+          return match;
+        }
+      }
+      return NAMED_ENTITIES[ref] ?? match;
+    }
+  );
+}
+
 export type Middleware = (ast: XmlAST) => XmlAST;
 
 export function parse(source: string, middleware?: Middleware): JsxAST | null {
@@ -296,7 +338,7 @@ export function parse(source: string, middleware?: Middleware): JsxAST | null {
     }
 
     if (/\S/.test(text)) {
-      children.push(text);
+      children.push(decodeXmlEntities(text));
     }
 
     if (source[i] === '<') {
