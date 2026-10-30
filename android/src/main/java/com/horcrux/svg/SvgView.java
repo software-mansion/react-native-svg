@@ -190,7 +190,9 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   final Matrix mInvViewBoxMatrix = new Matrix();
   private boolean mInvertible = true;
   private boolean mRendered = false;
-  int mCurrentColor = Color.BLACK;
+  // What currentColor resolves to without a color, on mount and once it's unset.
+  private static final int DEFAULT_CURRENT_COLOR = Color.BLACK;
+  int mCurrentColor = DEFAULT_CURRENT_COLOR;
 
   boolean notRendered() {
     return !mRendered;
@@ -211,7 +213,8 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   }
 
   public void setCurrentColor(Integer color) {
-    mCurrentColor = color != null ? color : 0;
+    // Back to the default when unset, as on mount, rather than transparent.
+    mCurrentColor = color != null ? color : DEFAULT_CURRENT_COLOR;
     invalidate();
     clearChildCache();
   }
