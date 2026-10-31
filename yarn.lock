@@ -1859,7 +1859,7 @@
   resolved "https://registry.yarnpkg.com/@react-native/assets-registry/-/assets-registry-0.80.0.tgz#7c03e0cf07fdd9e4a54ce2bbe8ae49f48440d422"
   integrity sha512-MlScsKAz99zoYghe5Rf5mUqsqz2rMB02640NxtPtBMSHNdGxxRlWu/pp1bFexDa1DYJwyIjnLgt3Z/Y90ikHfw==
 
-"@react-native/assets-registry@0.80.3":
+"@react-native/assets-registry@0.80.3", "@react-native/assets-registry@^0.80.3":
   version "0.80.3"
   resolved "https://registry.yarnpkg.com/@react-native/assets-registry/-/assets-registry-0.80.3.tgz#1703df000829be3190ade529e7d8dc5db88d160c"
   integrity sha512-fy3tFtvNNiOPRyv8o04WDI50kXTHjosQgSp/QfrjMnlye2CfuQtjganDm6Yagx34l6OfYSQ/RlodqaplcIhvAw==
