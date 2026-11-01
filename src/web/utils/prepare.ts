@@ -4,7 +4,6 @@ import {
 } from 'react-native';
 import { BaseProps } from '../types';
 import { WebShape } from '../WebShape';
-import { hasTouchableProperty } from './hasProperty';
 import { parseTransformProp } from './parseTransform';
 import { resolve } from '../../lib/resolve';
 import { NumberProp } from '../../lib/extract/types';
@@ -40,12 +39,6 @@ export const prepare = <T extends BaseProps>(
   } = props;
 
   const clean: {
-    onStartShouldSetResponder?: (e: GestureResponderEvent) => boolean;
-    onResponderMove?: (e: GestureResponderEvent) => void;
-    onResponderGrant?: (e: GestureResponderEvent) => void;
-    onResponderRelease?: (e: GestureResponderEvent) => void;
-    onResponderTerminate?: (e: GestureResponderEvent) => void;
-    onResponderTerminationRequest?: (e: GestureResponderEvent) => boolean;
     onClick?: (e: GestureResponderEvent) => void;
     transform?: string;
     gradientTransform?: string;
@@ -55,18 +48,6 @@ export const prepare = <T extends BaseProps>(
     style?: object;
     ref?: unknown;
   } = {
-    ...(hasTouchableProperty(props)
-      ? {
-          onStartShouldSetResponder:
-            self.touchableHandleStartShouldSetResponder,
-          onResponderTerminationRequest:
-            self.touchableHandleResponderTerminationRequest,
-          onResponderGrant: self.touchableHandleResponderGrant,
-          onResponderMove: self.touchableHandleResponderMove,
-          onResponderRelease: self.touchableHandleResponderRelease,
-          onResponderTerminate: self.touchableHandleResponderTerminate,
-        }
-      : null),
     ...rest,
   };
 
