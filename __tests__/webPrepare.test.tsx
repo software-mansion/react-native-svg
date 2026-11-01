@@ -2,24 +2,27 @@ import { WebShape } from '../src/web/WebShape';
 import { prepare } from '../src/web/utils/prepare';
 import type { BaseProps } from '../src/web/types';
 
-const responderProps = [
+const propsUnknownToReactDOM = [
   'onStartShouldSetResponder',
   'onResponderTerminationRequest',
   'onResponderGrant',
   'onResponderMove',
   'onResponderRelease',
   'onResponderTerminate',
+  'onPressIn',
+  'onPressOut',
+  'onLongPress',
 ];
 
 const prepareShape = (props: BaseProps) => prepare(new WebShape(props));
 
 describe('prepare on web', () => {
   test.each(['onPress', 'onPressIn', 'onPressOut', 'onLongPress'])(
-    'does not pass responder props to the DOM element for %s',
+    'only passes props known to React DOM for %s',
     (handler) => {
       const clean = prepareShape({ [handler]: jest.fn() });
 
-      responderProps.forEach((prop) => {
+      propsUnknownToReactDOM.forEach((prop) => {
         expect(clean).not.toHaveProperty(prop);
       });
     }

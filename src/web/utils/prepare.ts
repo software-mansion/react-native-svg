@@ -35,6 +35,12 @@ export const prepare = <T extends BaseProps>(
     gradientTransform,
     patternTransform,
     onPress,
+    // React DOM doesn't know these, and nothing calls them on web yet
+    /* eslint-disable @typescript-eslint/no-unused-vars */
+    onPressIn,
+    onPressOut,
+    onLongPress,
+    /* eslint-enable @typescript-eslint/no-unused-vars */
     ...rest
   } = props;
 
