@@ -224,6 +224,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
         this.fillRule = Path.FillType.EVEN_ODD;
         break;
       case FILL_RULE_NONZERO:
+        this.fillRule = Path.FillType.WINDING;
         break;
       default:
         throw new JSApplicationIllegalArgumentException("fillRule " + fillRule + " unrecognized");
