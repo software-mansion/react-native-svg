@@ -67,7 +67,11 @@ function universal2axis(
     y = axisY;
   }
 
-  return [x || defaultValue || 0, y || defaultValue || 0];
+  const fallback = defaultValue ?? 0;
+  return [
+    x == null || isNaN(x) ? fallback : x,
+    y == null || isNaN(y) ? fallback : y,
+  ];
 }
 
 export function props2transform(
