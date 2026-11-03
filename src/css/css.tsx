@@ -780,12 +780,12 @@ export function SvgCss(props: XmlProps) {
 }
 
 export function SvgCssUri(props: UriProps) {
-  const { uri, onError = err, onLoad, fallback } = props;
+  const { uri, onError = err, onLoad, fallback, headers } = props;
   const [xml, setXml] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
   useEffect(() => {
     uri
-      ? fetchText(uri)
+      ? fetchText(uri, headers)
           .then((data) => {
             setXml(data);
             onLoad?.();
@@ -795,7 +795,7 @@ export function SvgCssUri(props: UriProps) {
             setIsError(true);
           })
       : setXml(null);
-  }, [onError, uri, onLoad]);
+  }, [onError, uri, onLoad, headers]);
   if (isError) {
     return fallback ?? null;
   }
@@ -837,19 +837,22 @@ export class SvgWithCss extends Component<XmlProps, XmlState> {
 export class SvgWithCssUri extends Component<UriProps, UriState> {
   state = { xml: null };
   componentDidMount() {
-    this.fetch(this.props.uri);
+    this.fetch(this.props.uri, this.props.headers);
   }
 
-  componentDidUpdate(prevProps: { uri: string | null }) {
-    const { uri } = this.props;
-    if (uri !== prevProps.uri) {
-      this.fetch(uri);
+  componentDidUpdate(prevProps: {
+    uri: string | null;
+    headers?: Record<string, string>;
+  }) {
+    const { uri, headers } = this.props;
+    if (uri !== prevProps.uri || headers !== prevProps.headers) {
+      this.fetch(uri, headers);
     }
   }
 
-  async fetch(uri: string | null) {
+  async fetch(uri: string | null, headers?: Record<string, string>) {
     try {
-      this.setState({ xml: uri ? await fetchText(uri) : null });
+      this.setState({ xml: uri ? await fetchText(uri, headers) : null });
       this.props.onLoad?.();
     } catch (e) {
       this.props.onError ? this.props.onError(e as Error) : console.error(e);
