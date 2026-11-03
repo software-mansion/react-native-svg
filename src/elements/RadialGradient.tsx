@@ -35,8 +35,8 @@ export default class RadialGradient extends Shape<RadialGradientProps> {
     const radialGradientProps = {
       fx,
       fy,
-      rx: rx || r,
-      ry: ry || r,
+      rx: rx ?? r,
+      ry: ry ?? r,
       cx,
       cy,
     };
