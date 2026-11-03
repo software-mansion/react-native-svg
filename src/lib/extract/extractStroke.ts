@@ -66,8 +66,7 @@ export default function extractStroke(
   }
   if (strokeDashoffset != null) {
     inherited.push('strokeDashoffset');
-    o.strokeDashoffset =
-      strokeDasharray && strokeDashoffset ? +strokeDashoffset || 0 : null;
+    o.strokeDashoffset = +strokeDashoffset || 0;
   }
   if (strokeLinecap != null) {
     inherited.push('strokeLinecap');
