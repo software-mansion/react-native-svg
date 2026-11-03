@@ -1,4 +1,4 @@
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
+import { codegenNativeComponent } from 'react-native';
 import type { ViewProps } from './utils';
 
 import { NumberProp } from '../lib/extract/types';

@@ -13,8 +13,9 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.uimanager.ViewManagerWithGeneratedInterface;
 
-public interface RNSVGSvgViewAndroidManagerInterface<T extends View> {
+public interface RNSVGSvgViewAndroidManagerInterface<T extends View> extends ViewManagerWithGeneratedInterface {
   void setBbWidth(T view, Dynamic value);
   void setBbHeight(T view, Dynamic value);
   void setMinX(T view, float value);

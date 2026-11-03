@@ -13,8 +13,9 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.uimanager.ViewManagerWithGeneratedInterface;
 
-public interface RNSVGFeMergeManagerInterface<T extends View> {
+public interface RNSVGFeMergeManagerInterface<T extends View> extends ViewManagerWithGeneratedInterface {
   void setX(T view, Dynamic value);
   void setY(T view, Dynamic value);
   void setWidth(T view, Dynamic value);

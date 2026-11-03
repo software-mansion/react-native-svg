@@ -1,11 +1,5 @@
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
-import type { ColorValue } from 'react-native';
-import type {
-  DirectEventHandler,
-  Float,
-  Int32,
-  WithDefault,
-} from 'react-native/Libraries/Types/CodegenTypes';
+import { codegenNativeComponent } from 'react-native';
+import type { CodegenTypes, ColorValue } from 'react-native';
 import type { ViewProps } from './utils';
 
 import type { UnsafeMixed } from './codegenUtils';
@@ -13,48 +7,48 @@ import { NumberProp } from '../lib/extract/types';
 
 interface SvgNodeCommonProps {
   name?: string;
-  opacity?: WithDefault<Float, 1.0>;
-  matrix?: ReadonlyArray<Float>;
+  opacity?: CodegenTypes.WithDefault<CodegenTypes.Float, 1.0>;
+  matrix?: ReadonlyArray<CodegenTypes.Float>;
   mask?: string;
   markerStart?: string;
   markerMid?: string;
   markerEnd?: string;
   clipPath?: string;
-  clipRule?: WithDefault<Int32, 0>;
+  clipRule?: CodegenTypes.WithDefault<CodegenTypes.Int32, 0>;
   responsible?: boolean;
   display?: string;
   pointerEvents?: string;
 }
 
 type ColorStruct = Readonly<{
-  type?: WithDefault<Int32, -1>;
+  type?: CodegenTypes.WithDefault<CodegenTypes.Int32, -1>;
   payload?: ColorValue;
   brushRef?: string;
 }>;
 
 type OnSvgLayoutEvent = Readonly<{
   layout: {
-    x: Int32;
-    y: Int32;
-    width: Int32;
-    height: Int32;
+    x: CodegenTypes.Int32;
+    y: CodegenTypes.Int32;
+    width: CodegenTypes.Int32;
+    height: CodegenTypes.Int32;
   };
 }>;
 
 interface SvgRenderableCommonProps {
   color?: ColorValue;
   fill?: UnsafeMixed<ColorValue | ColorStruct>;
-  fillOpacity?: WithDefault<Float, 1.0>;
-  fillRule?: WithDefault<Int32, 1>;
+  fillOpacity?: CodegenTypes.WithDefault<CodegenTypes.Float, 1.0>;
+  fillRule?: CodegenTypes.WithDefault<CodegenTypes.Int32, 1>;
   stroke?: UnsafeMixed<ColorValue | ColorStruct>;
-  strokeOpacity?: WithDefault<Float, 1.0>;
+  strokeOpacity?: CodegenTypes.WithDefault<CodegenTypes.Float, 1.0>;
   strokeWidth?: UnsafeMixed<NumberProp>;
-  strokeLinecap?: WithDefault<Int32, 0>;
-  strokeLinejoin?: WithDefault<Int32, 0>;
+  strokeLinecap?: CodegenTypes.WithDefault<CodegenTypes.Int32, 0>;
+  strokeLinejoin?: CodegenTypes.WithDefault<CodegenTypes.Int32, 0>;
   strokeDasharray?: UnsafeMixed<ReadonlyArray<NumberProp> | NumberProp>;
-  strokeDashoffset?: Float;
-  strokeMiterlimit?: Float;
-  vectorEffect?: WithDefault<Int32, 0>;
+  strokeDashoffset?: CodegenTypes.Float;
+  strokeMiterlimit?: CodegenTypes.Float;
+  vectorEffect?: CodegenTypes.WithDefault<CodegenTypes.Int32, 0>;
   propList?: ReadonlyArray<string>;
   filter?: string;
 }
@@ -69,7 +63,7 @@ interface NativeProps
   width?: UnsafeMixed<NumberProp>;
   rx?: UnsafeMixed<NumberProp>;
   ry?: UnsafeMixed<NumberProp>;
-  onSvgLayout?: DirectEventHandler<OnSvgLayoutEvent>;
+  onSvgLayout?: CodegenTypes.DirectEventHandler<OnSvgLayoutEvent>;
 }
 
 export default codegenNativeComponent<NativeProps>('RNSVGRect', {
