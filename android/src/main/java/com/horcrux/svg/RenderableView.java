@@ -555,7 +555,9 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
     MarkerView markerEnd = (MarkerView) getSvgView().getDefinedMarker(mMarkerEnd);
     if (elements != null && (markerStart != null || markerMid != null || markerEnd != null)) {
       contextElement = this;
-      ArrayList<RNSVGMarkerPosition> positions = RNSVGMarkerPosition.fromPath(elements);
+      ArrayList<RNSVGMarkerPosition> positions =
+          RNSVGMarkerPosition.fromPath(
+              elements, markerStart != null && markerStart.isAutoStartReverse());
       float width = (float) (this.strokeWidth != null ? relativeOnOther(this.strokeWidth) : 1);
       mMarkerPath = new Path();
       for (RNSVGMarkerPosition position : positions) {
