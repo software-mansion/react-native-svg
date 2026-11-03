@@ -85,12 +85,19 @@ class TSpanView extends TextView {
   void draw(Canvas canvas, Paint paint, float opacity) {
     if (mContent != null) {
       if (mInlineSize != null && mInlineSize.value != 0) {
+        // Create the layout first (this also advances glyph context)
+        StaticLayout layout = createWrappedTextLayout(canvas);
+        float dx = (float) mWrappedTextDx;
+        float dy = (float) (mWrappedTextY + layout.getLineAscent(0));
+        RectF layoutRect = new RectF(dx, dy, dx + layout.getWidth(), dy + layout.getHeight());
         if (setupFillPaint(paint, opacity * fillOpacity)) {
-          drawWrappedText(canvas, paint);
+          drawWrappedText(canvas, paint, layout, dx, dy);
         }
         if (setupStrokePaint(paint, opacity * strokeOpacity)) {
-          drawWrappedText(canvas, paint);
+          drawWrappedText(canvas, paint, layout, dx, dy);
         }
+        popGlyphContext();
+        setClientRect(layoutRect);
       } else {
         int numEmoji = emoji.size();
         if (numEmoji > 0) {
@@ -114,11 +121,15 @@ class TSpanView extends TextView {
     }
   }
 
-  private void drawWrappedText(Canvas canvas, Paint paint) {
+  // Instance fields to store position computed in createWrappedTextLayout
+  private double mWrappedTextDx;
+  private double mWrappedTextY;
+
+  private StaticLayout createWrappedTextLayout(Canvas canvas) {
     GlyphContext gc = getTextRootGlyphContext();
     pushGlyphContext();
     FontData font = gc.getFont();
-    TextPaint tp = new TextPaint(paint);
+    TextPaint tp = new TextPaint();
     applyTextPropertiesToPaint(tp, font);
     applySpacingAndFeatures(tp, font);
     double fontSize = gc.getFontSize();
@@ -145,12 +156,13 @@ class TSpanView extends TextView {
         PropHelper.fromRelative(mInlineSize, canvas.getWidth(), 0, mScale, fontSize);
     StaticLayout layout = getStaticLayout(tp, align, includeFontPadding, text, (int) width);
 
-    int lineAscent = layout.getLineAscent(0);
+    mWrappedTextDx = gc.nextX(0);
+    mWrappedTextY = gc.nextY();
 
-    float dx = (float) gc.nextX(0);
-    float dy = (float) (gc.nextY() + lineAscent);
-    popGlyphContext();
+    return layout;
+  }
 
+  private void drawWrappedText(Canvas canvas, Paint paint, StaticLayout layout, float dx, float dy) {
     canvas.save();
     canvas.translate(dx, dy);
     layout.draw(canvas);
