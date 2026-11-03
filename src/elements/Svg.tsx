@@ -7,6 +7,7 @@ import type {
   MeasureOnSuccessCallback,
   NativeMethods,
   StyleProp,
+  TransformsStyle,
   ViewStyle,
 } from 'react-native';
 import { findNodeHandle, Platform, StyleSheet } from 'react-native';
@@ -35,6 +36,44 @@ const styles = StyleSheet.create({
   },
 });
 const defaultStyle = styles.svg;
+
+type Transform = TransformsStyle['transform'];
+
+function getTranslateValue(value: NumberProp | NumberProp[] | undefined) {
+  const firstValue = Array.isArray(value) ? value[0] : value;
+
+  if (firstValue == null) {
+    return 0;
+  }
+
+  const parsedValue =
+    typeof firstValue === 'number' ? firstValue : parseFloat(firstValue);
+
+  return Number.isFinite(parsedValue) ? parsedValue : 0;
+}
+
+function appendTranslate(
+  transform: Transform | undefined,
+  x: NumberProp | NumberProp[] | undefined,
+  y: NumberProp | NumberProp[] | undefined
+) {
+  const translateX = getTranslateValue(x);
+  const translateY = getTranslateValue(y);
+
+  if (!translateX && !translateY) {
+    return transform;
+  }
+
+  const translate = [];
+  if (translateX) {
+    translate.push({ translateX });
+  }
+  if (translateY) {
+    translate.push({ translateY });
+  }
+
+  return Array.isArray(transform) ? [...translate, ...transform] : translate;
+}
 
 export interface SvgProps extends GProps, ViewProps, HitSlop {
   width?: NumberProp;
@@ -100,6 +139,8 @@ export default class Svg extends Shape<SvgProps> {
       children,
       onLayout,
       preserveAspectRatio,
+      x: propsX,
+      y: propsY,
       ...extracted
     } = this.props;
     const stylesAndProps = {
@@ -111,6 +152,8 @@ export default class Svg extends Shape<SvgProps> {
       height,
       focusable,
       transform,
+      x = propsX,
+      y = propsY,
 
       // Inherited G properties
       font,
@@ -186,6 +229,7 @@ export default class Svg extends Shape<SvgProps> {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       props.transform = extractTransformSvgView(props as any);
     }
+    props.transform = appendTranslate(props.transform as Transform, x, y);
 
     const RNSVGSvg = Platform.OS === 'android' ? RNSVGSvgAndroid : RNSVGSvgIOS;
 
