@@ -35,6 +35,7 @@ import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.views.imagehelper.ImageSource;
 import com.facebook.react.views.imagehelper.ResourceDrawableIdHelper;
 import com.horcrux.svg.events.SvgLoadEvent;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -50,6 +51,8 @@ class ImageView extends RenderableView {
   private int mImageHeight;
   private String mAlign;
   private int mMeetOrSlice;
+  private int mSourceId;
+  private @Nullable DataSource<CloseableReference<CloseableImage>> mDataSource;
   private final AtomicBoolean mLoading = new AtomicBoolean(false);
 
   public ImageView(ReactContext reactContext) {
@@ -77,26 +80,35 @@ class ImageView extends RenderableView {
   }
 
   public void setSrc(@Nullable ReadableMap src) {
-    if (src != null) {
-      uriString = src.getString("uri");
-
-      if (uriString == null || uriString.isEmpty()) {
-        // TODO: give warning about this
-        return;
-      }
-
-      if (src.hasKey("width") && src.hasKey("height")) {
-        mImageWidth = src.getInt("width");
-        mImageHeight = src.getInt("height");
-      } else {
-        mImageWidth = 0;
-        mImageHeight = 0;
-      }
-      Uri mUri = Uri.parse(uriString);
-      if (mUri.getScheme() == null) {
-        ResourceDrawableIdHelper.getInstance().getResourceDrawableUri(mContext, uriString);
-      }
+    String newUri = src == null ? null : src.getString("uri");
+    if (newUri != null && newUri.isEmpty()) {
+      newUri = null;
     }
+    if (!Objects.equals(uriString, newUri)) {
+      mSourceId += 1;
+      cancelPendingRequest();
+      uriString = newUri;
+    }
+
+    if (src == null || uriString == null) {
+      mImageWidth = 0;
+      mImageHeight = 0;
+      invalidate();
+      return;
+    }
+
+    if (src.hasKey("width") && src.hasKey("height")) {
+      mImageWidth = src.getInt("width");
+      mImageHeight = src.getInt("height");
+    } else {
+      mImageWidth = 0;
+      mImageHeight = 0;
+    }
+    Uri mUri = Uri.parse(uriString);
+    if (mUri.getScheme() == null) {
+      ResourceDrawableIdHelper.getInstance().getResourceDrawableUri(mContext, uriString);
+    }
+    invalidate();
   }
 
   public void setAlign(String align) {
@@ -110,7 +122,17 @@ class ImageView extends RenderableView {
   }
 
   @Override
+  protected void onDetachedFromWindow() {
+    mSourceId += 1;
+    cancelPendingRequest();
+    super.onDetachedFromWindow();
+  }
+
+  @Override
   void draw(final Canvas canvas, final Paint paint, final float opacity) {
+    if (uriString == null || uriString.isEmpty()) {
+      return;
+    }
     if (!mLoading.get()) {
       ImagePipeline imagePipeline = Fresco.getImagePipeline();
       ImageSource imageSource = new ImageSource(mContext, uriString);
@@ -120,7 +142,7 @@ class ImageView extends RenderableView {
       if (inMemoryCache) {
         tryRenderFromBitmapCache(imagePipeline, request, canvas, paint, opacity * mOpacity);
       } else {
-        loadBitmap(imagePipeline, request);
+        loadBitmap(imagePipeline, request, uriString, mSourceId);
       }
     }
   }
@@ -132,14 +154,23 @@ class ImageView extends RenderableView {
     return mPath;
   }
 
-  private void loadBitmap(final ImagePipeline imagePipeline, final ImageRequest request) {
+  private void loadBitmap(
+      final ImagePipeline imagePipeline,
+      final ImageRequest request,
+      final String requestUri,
+      final int sourceId) {
     mLoading.set(true);
     final DataSource<CloseableReference<CloseableImage>> dataSource =
         imagePipeline.fetchDecodedImage(request, mContext);
+    mDataSource = dataSource;
     BaseBitmapDataSubscriber subscriber =
         new BaseBitmapDataSubscriber() {
           @Override
           public void onNewResultImpl(Bitmap bitmap) {
+            if (sourceId != mSourceId) {
+              return;
+            }
+            clearPendingRequest(dataSource);
             final EventDispatcher mEventDispatcher =
                 UIManagerHelper.getEventDispatcherForReactTag(mContext, getId());
             mEventDispatcher.dispatchEvent(
@@ -147,7 +178,7 @@ class ImageView extends RenderableView {
                     UIManagerHelper.getSurfaceId(ImageView.this),
                     getId(),
                     mContext,
-                    uriString,
+                    requestUri,
                     bitmap.getWidth(),
                     bitmap.getHeight()));
             mLoading.set(false);
@@ -159,6 +190,10 @@ class ImageView extends RenderableView {
 
           @Override
           public void onFailureImpl(DataSource dataSource) {
+            if (sourceId != mSourceId) {
+              return;
+            }
+            clearPendingRequest(dataSource);
             // No cleanup required here.
             // TODO: more details about this failure
             mLoading.set(false);
@@ -169,6 +204,20 @@ class ImageView extends RenderableView {
           }
         };
     dataSource.subscribe(subscriber, UiThreadImmediateExecutorService.getInstance());
+  }
+
+  private void clearPendingRequest(DataSource<CloseableReference<CloseableImage>> dataSource) {
+    if (mDataSource == dataSource) {
+      mDataSource = null;
+    }
+  }
+
+  private void cancelPendingRequest() {
+    if (mDataSource != null) {
+      mDataSource.close();
+      mDataSource = null;
+    }
+    mLoading.set(false);
   }
 
   @Nonnull
