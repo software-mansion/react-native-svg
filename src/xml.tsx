@@ -178,17 +178,51 @@ export const camelCase = (phrase: string) =>
 
 export type Styles = { [property: string]: string };
 
+function splitStyleDeclarations(string: string) {
+  const declarations: string[] = [];
+  let start = 0;
+  let depth = 0;
+  let quote = '';
+  for (let i = 0; i < string.length; i++) {
+    const char = string[i];
+    if (char === '\\') {
+      i += 1;
+    } else if (quote) {
+      if (char === quote) {
+        quote = '';
+      }
+    } else if (char === '"' || char === "'") {
+      quote = char;
+    } else if (char === '(') {
+      depth += 1;
+    } else if (char === ')' && depth > 0) {
+      depth -= 1;
+    } else if (char === ';' && depth === 0) {
+      declarations.push(string.slice(start, i));
+      start = i + 1;
+    }
+  }
+  declarations.push(string.slice(start));
+  return declarations;
+}
+
 export function getStyle(string: string): Styles {
   const style: Styles = {};
-  const declarations = string.split(';').filter((v) => v.trim());
+  const declarations = splitStyleDeclarations(string);
   const { length } = declarations;
   for (let i = 0; i < length; i++) {
-    const declaration = declarations[i];
-    if (declaration.length !== 0) {
-      const split = declaration.split(':');
-      const property = split[0];
-      const value = split[1];
-      style[camelCase(property.trim())] = value.trim();
+    const declaration = declarations[i].trim();
+    if (declaration) {
+      const separator = declaration.indexOf(':');
+      if (separator === -1) {
+        continue;
+      }
+      const property = declaration.slice(0, separator).trim();
+      if (!property) {
+        continue;
+      }
+      const value = declaration.slice(separator + 1).trim();
+      style[camelCase(property)] = value;
     }
   }
   return style;
