@@ -695,9 +695,12 @@ UInt32 saturate(CGFloat value)
   }
 
   BOOL evenodd = self.fillRule == kRNSVGCGFCRuleEvenodd;
-  if (!CGPathContainsPoint(_hitArea, nil, transformed, evenodd) &&
-      !CGPathContainsPoint(self.strokePath, nil, transformed, NO) &&
-      !CGPathContainsPoint(self.markerPath, nil, transformed, NO)) {
+  BOOL inFillArea = self.fill != nil && _hitArea && CGPathContainsPoint(_hitArea, nil, transformed, evenodd);
+  BOOL inStrokeArea =
+      self.stroke != nil && self.strokePath && CGPathContainsPoint(self.strokePath, nil, transformed, NO);
+  BOOL inMarkerArea = self.markerPath && CGPathContainsPoint(self.markerPath, nil, transformed, NO);
+
+  if (!inFillArea && !inStrokeArea && !inMarkerArea) {
     return nil;
   }
 
