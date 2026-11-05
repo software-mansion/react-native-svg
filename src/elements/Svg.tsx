@@ -153,8 +153,8 @@ export default class Svg extends Shape<SvgProps> {
 
     if (width && height) {
       override = true;
-      const w = parseInt(width, 10);
-      const h = parseInt(height, 10);
+      const w = parseFloat(width);
+      const h = parseFloat(height);
       const doNotParseWidth = isNaN(w) || width[width.length - 1] === '%';
       const doNotParseHeight = isNaN(h) || height[height.length - 1] === '%';
       overrideStyles.width = doNotParseWidth ? width : w;
