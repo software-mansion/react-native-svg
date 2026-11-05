@@ -90,6 +90,7 @@ target_compile_options(
   -Wpedantic
   -Wno-gnu-zero-variadic-macro-arguments
   -Wno-dollar-in-identifier-extension
+  -Wno-deprecated-declarations
 )
 
 target_compile_definitions(
