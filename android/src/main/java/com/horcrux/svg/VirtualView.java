@@ -134,12 +134,23 @@ public abstract class VirtualView extends ReactViewGroup {
 
   @Override
   public void invalidate() {
-    if (this instanceof RenderableView && mPath == null) {
+    if (this instanceof RenderableView && mPath == null && !isInsideClipPath()) {
       return;
     }
     clearCache();
     clearParentCache();
     super.invalidate();
+  }
+
+  private boolean isInsideClipPath() {
+    ViewParent parent = getParent();
+    while (parent instanceof VirtualView) {
+      if (parent instanceof ClipPathView) {
+        return true;
+      }
+      parent = parent.getParent();
+    }
+    return false;
   }
 
   void clearCache() {
