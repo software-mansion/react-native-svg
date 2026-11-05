@@ -39,6 +39,7 @@ import android.view.View;
 import android.view.ViewParent;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.uimanager.PointerEvents;
 import com.facebook.react.views.text.ReactFontManager;
 import java.text.Bidi;
 import java.util.ArrayList;
@@ -1213,6 +1214,10 @@ class TSpanView extends TextView {
       return super.hitTest(src);
     }
     if (mPath == null || !mInvertible) {
+      return -1;
+    }
+
+    if (mPointerEvents == PointerEvents.NONE) {
       return -1;
     }
 
