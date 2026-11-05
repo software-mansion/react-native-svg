@@ -53,4 +53,5 @@ public interface RNSVGMaskManagerInterface<T extends View> extends ViewManagerWi
   void setMaskUnits(T view, int value);
   void setMaskContentUnits(T view, int value);
   void setMaskType(T view, int value);
+  void setHasOnSvgLayout(T view, boolean value);
 }

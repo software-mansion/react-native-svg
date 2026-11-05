@@ -390,6 +390,11 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     node.setDisplay(display);
   }
 
+  @ReactProp(name = "hasOnSvgLayout")
+  public void setHasOnSvgLayout(V node, boolean hasOnSvgLayout) {
+    node.setHasOnSvgLayout(hasOnSvgLayout);
+  }
+
   @ReactProp(name = "matrix")
   public void setMatrix(V node, Dynamic matrixArray) {
     node.setMatrix(matrixArray);

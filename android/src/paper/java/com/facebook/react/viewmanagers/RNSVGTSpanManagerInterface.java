@@ -58,4 +58,5 @@ public interface RNSVGTSpanManagerInterface<T extends View> extends ViewManagerW
   void setAlignmentBaseline(T view, @Nullable String value);
   void setVerticalAlign(T view, Dynamic value);
   void setContent(T view, @Nullable String value);
+  void setHasOnSvgLayout(T view, boolean value);
 }

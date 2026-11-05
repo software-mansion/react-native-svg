@@ -115,6 +115,9 @@ public class RNSVGClipPathManagerDelegate<T extends View, U extends BaseViewMana
       case "font":
         mViewManager.setFont(view, new DynamicFromObject(value));
         break;
+      case "hasOnSvgLayout":
+        mViewManager.setHasOnSvgLayout(view, value == null ? false : (boolean) value);
+        break;
       default:
         super.setProperty(view, propName, value);
     }
