@@ -14,7 +14,7 @@ import RNSVGImage from '../fabric/ImageNativeComponent';
 
 const spacesRegExp = /\s+/;
 
-export interface ImageProps extends CommonPathProps {
+export interface ImageProps extends Omit<CommonPathProps, 'x' | 'y'> {
   x?: NumberProp;
   y?: NumberProp;
   width?: NumberProp;
