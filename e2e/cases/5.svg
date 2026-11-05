@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Test: non-scaling-stroke under nested transforms and a scaled viewBox (#3090) -->
+  <!-- The blue outline must lie on the edge of the grey square -->
+  <g transform="translate(10,10)">
+    <g transform="translate(20,20) scale(0.5)">
+      <rect x="0" y="0" width="80" height="80" fill="#cccccc" />
+      <rect x="0" y="0" width="80" height="80" fill="none" stroke="blue" stroke-width="2" vector-effect="non-scaling-stroke" />
+    </g>
+  </g>
+</svg>
