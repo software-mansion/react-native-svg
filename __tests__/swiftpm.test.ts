@@ -22,6 +22,7 @@ type Target = {
   path: string;
   sources: string[];
   exclude: string[];
+  resources: { path: string; rule: Record<string, unknown> }[];
   publicHeadersPath: string | null;
   dependencies: { product?: unknown[] }[];
   settings: {
@@ -55,6 +56,10 @@ function contract(dump: Dump) {
       name: target.name,
       path: target.path,
       sources: target.sources,
+      resources: target.resources.map((resource) => [
+        resource.path,
+        ...Object.keys(resource.rule),
+      ]),
       publicHeadersPath: target.publicHeadersPath,
       products: target.dependencies.map((each) => each.product?.slice(0, 2)),
       settings: target.settings.flatMap((setting) =>
@@ -96,6 +101,8 @@ const DEFINES = [
   'RCT_NEW_ARCH_ENABLED=1',
   'REACT_NATIVE_MINOR_VERSION=88',
 ];
+
+const METAL_KERNELS = ['RNSVGArithmeticFilter', 'RNSVGCompositeXor'];
 
 let hasSwift = process.platform === 'darwin';
 try {
@@ -165,6 +172,10 @@ describe('Package.swift', () => {
             name: 'RNSVG',
             path: '.',
             sources: ['apple', 'common/cpp'],
+            resources: METAL_KERNELS.map((kernel) => [
+              `apple/Filters/MetalCI/${kernel}.iphoneos.metallib`,
+              'copy',
+            ]),
             publicHeadersPath: 'apple',
             products: [
               ['ReactHeaders', 'ReactNative'],
@@ -227,7 +238,11 @@ describe('Package.swift', () => {
 
     it('references only paths that exist', () => {
       const referenced = dump.targets.flatMap((target) =>
-        [...target.sources, ...target.exclude].map((entry) =>
+        [
+          ...target.sources,
+          ...target.exclude,
+          ...target.resources.map((resource) => resource.path),
+        ].map((entry) =>
           path.join(REPO_ROOT, target.path, entry)
         )
       );
