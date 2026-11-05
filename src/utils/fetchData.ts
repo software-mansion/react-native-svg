@@ -18,7 +18,18 @@ const decodeBase64Image = (uri: string) => {
   const splitContent = decoded.split(';')[1].split(',');
   const content = splitContent.slice(1).join(',');
 
-  return atob(content);
+  // atob returns one character per byte, so decode the bytes as UTF-8
+  const binary = atob(content);
+  let encoded = '';
+  for (let i = 0; i < binary.length; i++) {
+    encoded += '%' + binary.charCodeAt(i).toString(16).padStart(2, '0');
+  }
+  try {
+    return decodeURIComponent(encoded);
+  } catch {
+    // not valid UTF-8, keep the bytes as they are
+    return binary;
+  }
 };
 
 function dataUriToXml(uri: string): string | null {
