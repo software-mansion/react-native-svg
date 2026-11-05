@@ -1,5 +1,5 @@
 import React from 'react';
-import { NativeMethods } from 'react-native';
+import { HostInstance } from 'react-native';
 import RNSVGFilter from '../../fabric/FilterNativeComponent';
 import { NumberProp, Units } from '../../lib/extract/types';
 import Shape from '../Shape';
@@ -41,7 +41,7 @@ export default class Filter extends Shape<FilterProps> {
     };
     return (
       <RNSVGFilter
-        ref={(ref) => this.refMethod(ref as (Filter & NativeMethods) | null)}
+        ref={(ref) => this.refMethod(ref as (Filter & HostInstance) | null)}
         {...filterProps}>
         {this.props.children}
       </RNSVGFilter>

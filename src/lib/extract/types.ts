@@ -3,11 +3,11 @@ import type {
   ColorValue,
   GestureResponderEvent,
   GestureResponderHandlers,
+  HostInstance,
   Insets,
   LayoutChangeEvent,
   TransformsStyle,
 } from 'react-native';
-import type React from 'react';
 
 export type NumberProp = string | number;
 export type NumberArray = NumberProp[] | NumberProp;
@@ -361,7 +361,7 @@ export type extractedProps = {
   matrix?: number[];
   propList?: string[];
   onSvgLayout?: CodegenTypes.DirectEventHandler<OnSvgLayoutEvent>;
-  ref?: (instance: React.Component | null) => void;
+  ref?: (instance: HostInstance | null) => void;
   markerStart?: string;
   markerMid?: string;
   markerEnd?: string;

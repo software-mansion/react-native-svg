@@ -6,7 +6,7 @@ import type { NumberProp, TransformProps, Units } from '../lib/extract/types';
 import units from '../lib/units';
 import Shape from './Shape';
 import RNSVGPattern from '../fabric/PatternNativeComponent';
-import type { NativeMethods } from 'react-native';
+import type { HostInstance } from 'react-native';
 
 export interface PatternProps extends TransformProps {
   children?: ReactNode;
@@ -62,7 +62,7 @@ export default class Pattern extends Shape<PatternProps> {
     };
     return (
       <RNSVGPattern
-        ref={(ref) => this.refMethod(ref as (Pattern & NativeMethods) | null)}
+        ref={(ref) => this.refMethod(ref as (Pattern & HostInstance) | null)}
         {...patternProps}
         {...extractViewBox({ viewBox, preserveAspectRatio })}>
         {children}

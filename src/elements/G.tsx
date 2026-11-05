@@ -10,7 +10,7 @@ import type {
 } from '../lib/extract/types';
 import Shape from './Shape';
 import RNSVGGroup from '../fabric/GroupNativeComponent';
-import type { NativeMethods } from 'react-native';
+import type { HostInstance } from 'react-native';
 
 export interface GProps extends CommonPathProps, FontProps {
   children?: ReactNode;
@@ -43,7 +43,7 @@ export default class G<P> extends Shape<GProps & P> {
     }
     return (
       <RNSVGGroup
-        ref={(ref) => this.refMethod(ref as (G<P> & NativeMethods) | null)}
+        ref={(ref) => this.refMethod(ref as (G<P> & HostInstance) | null)}
         {...extractedProps}>
         {props.children}
       </RNSVGGroup>

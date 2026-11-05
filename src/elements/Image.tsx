@@ -1,9 +1,8 @@
 import * as React from 'react';
 import type {
   ImageProps as RNImageProps,
-  NativeMethods,
-  NativeSyntheticEvent,
-  ImageLoadEventData,
+  HostInstance,
+  ImageLoadEvent,
 } from 'react-native';
 import { Image } from 'react-native';
 import { alignEnum, meetOrSliceTypes } from '../lib/extract/extractViewBox';
@@ -23,7 +22,7 @@ export interface ImageProps extends CommonPathProps {
   href?: RNImageProps['source'] | string;
   preserveAspectRatio?: string;
   opacity?: NumberProp;
-  onLoad?: (e: NativeSyntheticEvent<ImageLoadEventData>) => void;
+  onLoad?: (e: ImageLoadEvent) => void;
 }
 
 export default class SvgImage extends Shape<ImageProps> {
@@ -71,7 +70,7 @@ export default class SvgImage extends Shape<ImageProps> {
     };
     return (
       <RNSVGImage
-        ref={(ref) => this.refMethod(ref as (SvgImage & NativeMethods) | null)}
+        ref={(ref) => this.refMethod(ref as (SvgImage & HostInstance) | null)}
         {...withoutXY(this, props)}
         {...imageProps}
       />

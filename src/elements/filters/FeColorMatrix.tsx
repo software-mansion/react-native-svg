@@ -1,5 +1,5 @@
 import React from 'react';
-import { NativeMethods } from 'react-native';
+import { HostInstance } from 'react-native';
 import RNSVGFeColorMatrix from '../../fabric/FeColorMatrixNativeComponent';
 import {
   extractFeColorMatrix,
@@ -28,7 +28,7 @@ export default class FeColorMatrix extends FilterPrimitive<FeColorMatrixProps> {
     return (
       <RNSVGFeColorMatrix
         ref={(ref) =>
-          this.refMethod(ref as (FeColorMatrix & NativeMethods) | null)
+          this.refMethod(ref as (FeColorMatrix & HostInstance) | null)
         }
         {...extractFilter(this.props)}
         {...extractIn(this.props)}

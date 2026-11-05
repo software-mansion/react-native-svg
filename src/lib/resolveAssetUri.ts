@@ -11,5 +11,5 @@ import {
 export function resolveAssetUri(
   source?: RNImageProps['source'] | string | number
 ): Partial<ImageResolvedAssetSource> | null {
-  return Image.resolveAssetSource(source as ImageSourcePropType);
+  return Image.resolveAssetSource(source as ImageSourcePropType) ?? null;
 }

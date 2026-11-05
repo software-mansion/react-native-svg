@@ -4,7 +4,7 @@ import extractViewBox from '../lib/extract/extractViewBox';
 import type { NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import RNSVGMarker from '../fabric/MarkerNativeComponent';
-import type { NativeMethods } from 'react-native';
+import type { HostInstance } from 'react-native';
 
 export type MarkerUnits = 'strokeWidth' | 'userSpaceOnUse';
 
@@ -61,7 +61,7 @@ export default class Marker extends Shape<MarkerProps> {
 
     return (
       <RNSVGMarker
-        ref={(ref) => this.refMethod(ref as (Marker & NativeMethods) | null)}
+        ref={(ref) => this.refMethod(ref as (Marker & HostInstance) | null)}
         {...markerProps}
         {...extractViewBox({ viewBox, preserveAspectRatio })}>
         {children}
