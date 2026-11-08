@@ -844,7 +844,7 @@ LinearGradient also supports percentage as prop:
 </LinearGradient>
 ```
 
-This result is same as the example before. But it's recommend to use exact number instead; it has performance advantages over using percentages.
+This result is same as the example before. But it's recommended to use exact number instead; it has performance advantages over using percentages.
 
 ## RadialGradient
 
@@ -1327,7 +1327,7 @@ Not supported yet:
 - FeTile
 - FeTurbulence
 
-Exmaple use of filters:
+Example use of filters:
 
 ```jsx
 import React from 'react';
