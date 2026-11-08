@@ -16,6 +16,7 @@ interface SvgNodeCommonProps {
   clipPath?: string;
   clipRule?: CodegenTypes.WithDefault<CodegenTypes.Int32, 0>;
   responsible?: boolean;
+  hasOnLayout?: boolean;
   display?: string;
   pointerEvents?: string;
 }
