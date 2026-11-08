@@ -25,6 +25,7 @@ public interface RNSVGDefsManagerInterface<T extends View> extends ViewManagerWi
   void setClipPath(T view, @Nullable String value);
   void setClipRule(T view, int value);
   void setResponsible(T view, boolean value);
+  void setHasOnLayout(T view, boolean value);
   void setDisplay(T view, @Nullable String value);
   void setPointerEvents(T view, @Nullable String value);
 }
