@@ -36,6 +36,10 @@ export const prepare = <T extends BaseProps>(
     gradientTransform,
     patternTransform,
     onPress,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    accessible,
+    accessibilityElementsHidden,
+    importantForAccessibility,
     ...rest
   } = props;
 
@@ -50,7 +54,8 @@ export const prepare = <T extends BaseProps>(
     transform?: string;
     gradientTransform?: string;
     patternTransform?: string;
-    'transform-origin'?: string;
+    transformOrigin?: string;
+    'aria-hidden'?: boolean;
     href?: RNImageProps['source'] | string | null;
     style?: object;
     ref?: unknown;
@@ -70,10 +75,20 @@ export const prepare = <T extends BaseProps>(
     ...rest,
   };
 
+  // React Native only props are not valid DOM attributes, so we do not pass them on.
+  // The ones that hide an element and its children become `aria-hidden`.
+  if (
+    clean['aria-hidden'] == null &&
+    (accessibilityElementsHidden === true ||
+      importantForAccessibility === 'no-hide-descendants')
+  ) {
+    clean['aria-hidden'] = true;
+  }
+
   if (origin != null) {
-    clean['transform-origin'] = origin.toString().replace(',', ' ');
+    clean.transformOrigin = origin.toString().replace(',', ' ');
   } else if (originX != null || originY != null) {
-    clean['transform-origin'] = `${originX || 0} ${originY || 0}`;
+    clean.transformOrigin = `${originX || 0} ${originY || 0}`;
   }
 
   // we do it like this because setting transform as undefined causes error in web
