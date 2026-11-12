@@ -148,38 +148,16 @@ export default () => {
 
 # Web configuration
 
-## Metro bundler
+No additional packages are required on web. This applies to Metro, Webpack, Vite and other bundlers that alias `react-native` to `react-native-web`.
 
-No additional steps are required when using Metro bundler.
+Numeric asset sources (asset IDs from a bundler's asset registry) are read from the `AssetRegistry` export of `react-native-web` 0.21.4 or newer. With older `react-native-web` versions, they are read from `@react-native/assets-registry/registry` when the bundler can resolve it (Expo provides it). String URIs and `{ uri }` sources do not use an asset registry.
 
 ## Webpack
 
-If you are using the Webpack bundler, the following steps are needed:
+If Webpack shows a `Module not found` warning for `@react-native/assets-registry/registry`, install `@react-native/assets-registry` as a project dependency:
 
-- Install `@react-native/assets-registry/registry` as a project dependency.
-- Ensure that you have the proper configuration to parse flow files from `@react-native/assets-registry/registry`.
-- Configure the Webpack `module -> rules` section and include an important rule for `node_modules/@react-native/assets-registry/registry`.
-
-webpack.config.js
-
-```ts
-const babelLoaderConfiguration = {
- include: [
-   path.resolve(
-     appDirectory,
-     // Important!
-     'node_modules/@react-native/assets-registry/registry',
-   ),
- ],
- ...
-};
-
-module.exports = {
- ...config,
- module: {
-     rules: [babelLoaderConfiguration],
-   },
-};
+```bash
+npm install @react-native/assets-registry
 ```
 
 For more details on the complete Webpack configuration, you can refer to this [documentation](https://necolas.github.io/react-native-web/docs/multi-platform/#compiling-and-bundling) on how to set up a `webpack.config` file for React Native Web.
