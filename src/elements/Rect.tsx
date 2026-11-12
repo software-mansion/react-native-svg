@@ -5,7 +5,7 @@ import Shape from './Shape';
 import RNSVGRect from '../fabric/RectNativeComponent';
 import type { NativeMethods } from 'react-native';
 
-export interface RectProps extends CommonPathProps {
+export interface RectProps extends Omit<CommonPathProps, 'x' | 'y'> {
   x?: NumberProp;
   y?: NumberProp;
   width?: NumberProp;
