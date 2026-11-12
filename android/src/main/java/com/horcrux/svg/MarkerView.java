@@ -122,7 +122,13 @@ class MarkerView extends GroupView {
     Point origin = position.origin;
     markerTransform.setTranslate((float) origin.x, (float) origin.y);
 
-    double markerAngle = "auto".equals(mOrient) ? -1 : Double.parseDouble(mOrient);
+    double markerAngle;
+    try {
+      markerAngle = "auto".equals(mOrient) ? -1 : Double.parseDouble(mOrient);
+    } catch (NumberFormatException | NullPointerException e) {
+      // an invalid orient falls back to 0 (its initial value) instead of crashing
+      markerAngle = 0;
+    }
     float degrees = 180 + (float) (markerAngle == -1 ? position.angle : markerAngle);
     markerTransform.preRotate(degrees);
 

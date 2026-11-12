@@ -45,6 +45,18 @@ class PropHelper {
   }
 
   /**
+   * Same as parseRelative, but an invalid length (e.g. "none" from a design tool export) resolves
+   * to 0 instead of crashing the app with a NumberFormatException, like a browser ignoring it
+   */
+  static double fromRelative(String length, double relative, double scale, double fontSize) {
+    try {
+      return parseRelative(length, relative, scale, fontSize);
+    } catch (NumberFormatException e) {
+      return 0d;
+    }
+  }
+
+  /**
    * Converts length string into px / user units in the current user coordinate system
    *
    * @param length length string
@@ -52,8 +64,9 @@ class PropHelper {
    * @param scale scaling parameter
    * @param fontSize current font size
    * @return value in the current user coordinate system
+   * @throws NumberFormatException for an invalid length
    */
-  static double fromRelative(String length, double relative, double scale, double fontSize) {
+  static double parseRelative(String length, double relative, double scale, double fontSize) {
     /*
         TODO list
 

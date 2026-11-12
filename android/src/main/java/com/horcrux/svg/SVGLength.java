@@ -97,14 +97,26 @@ class SVGLength {
       case Number:
         return new SVGLength(dynamic.asDouble());
       case String:
-        return new SVGLength(dynamic.asString());
+        return parse(dynamic.asString());
       default:
         return new SVGLength();
     }
   }
 
   static SVGLength from(String string) {
-    return string != null ? new SVGLength(string) : new SVGLength();
+    return string != null ? parse(string) : new SVGLength();
+  }
+
+  /**
+   * An invalid length (e.g. "none"/"auto" from a design tool export) resolves to an unknown length
+   * of 0 instead of crashing the app with a NumberFormatException, like a browser ignoring it
+   */
+  private static SVGLength parse(String length) {
+    try {
+      return new SVGLength(length);
+    } catch (NumberFormatException e) {
+      return new SVGLength();
+    }
   }
 
   static SVGLength from(Double value) {
@@ -148,7 +160,7 @@ class SVGLength {
           String[] strings = stringValue.split(" ");
           ArrayList<SVGLength> list = new ArrayList<>(strings.length);
           for (String length : strings) {
-            list.add(new SVGLength(length));
+            list.add(parse(length));
           }
           return list;
         }
