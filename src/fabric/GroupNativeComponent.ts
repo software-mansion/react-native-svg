@@ -64,6 +64,7 @@ interface NativeProps
     SvgNodeCommonProps,
     SvgRenderableCommonProps,
     SvgGroupCommonProps {
+  hasOnSvgLayout?: boolean;
   onSvgLayout?: CodegenTypes.DirectEventHandler<OnSvgLayoutEvent>;
 }
 

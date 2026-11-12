@@ -37,6 +37,7 @@ import Test2471 from './Test2471';
 import Test2520 from './Test2520';
 import Test2670 from './Test2670';
 import Test2923 from './Test2923';
+import Test2994 from './Test2994';
 import Test3015 from './Test3015';
 
 export default function App() {

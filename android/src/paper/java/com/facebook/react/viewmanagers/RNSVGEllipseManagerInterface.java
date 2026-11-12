@@ -47,4 +47,5 @@ public interface RNSVGEllipseManagerInterface<T extends View> extends ViewManage
   void setCy(T view, Dynamic value);
   void setRx(T view, Dynamic value);
   void setRy(T view, Dynamic value);
+  void setHasOnSvgLayout(T view, boolean value);
 }

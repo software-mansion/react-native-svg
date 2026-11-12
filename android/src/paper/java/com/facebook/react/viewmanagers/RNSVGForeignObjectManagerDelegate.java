@@ -127,6 +127,9 @@ public class RNSVGForeignObjectManagerDelegate<T extends View, U extends BaseVie
       case "width":
         mViewManager.setWidth(view, new DynamicFromObject(value));
         break;
+      case "hasOnSvgLayout":
+        mViewManager.setHasOnSvgLayout(view, value == null ? false : (boolean) value);
+        break;
       default:
         super.setProperty(view, propName, value);
     }

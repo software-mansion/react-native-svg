@@ -75,6 +75,7 @@ public abstract class VirtualView extends ReactViewGroup {
   private boolean mResponsible;
   String mDisplay;
   String mName;
+  private boolean mHasOnSvgLayout;
 
   private SvgView svgView;
   private Path mCachedClipPath;
@@ -272,6 +273,10 @@ public abstract class VirtualView extends ReactViewGroup {
   public void setDisplay(String display) {
     mDisplay = display;
     invalidate();
+  }
+
+  public void setHasOnSvgLayout(boolean hasOnSvgLayout) {
+    mHasOnSvgLayout = hasOnSvgLayout;
   }
 
   public void setMask(String mask) {
@@ -607,6 +612,11 @@ public abstract class VirtualView extends ReactViewGroup {
         setRight(Math.min(right, root.getWidth()));
         setBottom(Math.min(bottom, root.getHeight()));
       }
+    }
+    // Only dispatch when JS has an onLayout listener. Unhandled events still go through the
+    // event dispatcher (and its listeners, e.g. Reanimated) on every draw that changes the rect.
+    if (!mHasOnSvgLayout) {
+      return;
     }
     EventDispatcher eventDispatcher =
         UIManagerHelper.getEventDispatcherForReactTag(mContext, getId());

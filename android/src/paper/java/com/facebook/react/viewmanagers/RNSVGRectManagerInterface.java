@@ -49,4 +49,5 @@ public interface RNSVGRectManagerInterface<T extends View> extends ViewManagerWi
   void setWidth(T view, Dynamic value);
   void setRx(T view, Dynamic value);
   void setRy(T view, Dynamic value);
+  void setHasOnSvgLayout(T view, boolean value);
 }
