@@ -18,6 +18,8 @@ export interface BaseProps {
   accessibilityIgnoresInvertColors?: boolean;
   accessibilityRole?: string;
   accessibilityState?: object;
+  accessibilityElementsHidden?: boolean;
+  importantForAccessibility?: 'auto' | 'yes' | 'no' | 'no-hide-descendants';
   delayLongPress?: number;
   delayPressIn?: number;
   delayPressOut?: number;
