@@ -1,6 +1,5 @@
 import React, { type JSX } from 'react';
 import {
-  GestureResponderEvent,
   // @ts-ignore it is not seen in exports
   unstable_createElement as createElement,
 } from 'react-native';
@@ -8,9 +7,7 @@ import {
 import { BaseProps } from './types';
 import { prepare } from './utils/prepare';
 import { convertInt32ColorToRGBA } from './utils/convertInt32Color';
-import { getAttributeName, remeasure } from './utils';
-import { hasTouchableProperty } from './utils/hasProperty';
-import SvgTouchableMixin from '../lib/SvgTouchableMixin';
+import { getAttributeName } from './utils';
 
 export class WebShape<
   P extends BaseProps = BaseProps,
@@ -81,30 +78,6 @@ export class WebShape<
         }
       }
     }
-  }
-
-  _remeasureMetricsOnActivation: () => void;
-  touchableHandleStartShouldSetResponder?: (
-    e: GestureResponderEvent
-  ) => boolean;
-
-  touchableHandleResponderMove?: (e: GestureResponderEvent) => void;
-  touchableHandleResponderGrant?: (e: GestureResponderEvent) => void;
-  touchableHandleResponderRelease?: (e: GestureResponderEvent) => void;
-  touchableHandleResponderTerminate?: (e: GestureResponderEvent) => void;
-  touchableHandleResponderTerminationRequest?: (
-    e: GestureResponderEvent
-  ) => boolean;
-
-  constructor(props: P) {
-    super(props);
-
-    // Do not attach touchable mixin handlers if SVG element doesn't have a touchable prop
-    if (hasTouchableProperty(props)) {
-      SvgTouchableMixin(this);
-    }
-
-    this._remeasureMetricsOnActivation = remeasure.bind(this);
   }
 
   render(): JSX.Element {

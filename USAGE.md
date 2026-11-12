@@ -1192,6 +1192,8 @@ Touch events are supported in react-native-svg. These include:
 - `delayPressOut`
 - `delayLongPress`
 
+On web, `onPressIn`, `onPressOut`, `onLongPress` and the delay props have no effect yet.
+
 You can use these events to provide interactivity to your react-native-svg components.
 
 ```jsx
