@@ -104,11 +104,18 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
       // when view is removed from the view hierarchy, we want to recycle the mBitmap when
       // the view is detached from window, in order to preserve it for during animation, see
       // https://github.com/react-native-svg/react-native-svg/pull/1542
-      if (mBitmap != null) {
-        mBitmap.recycle();
-      }
-      mBitmap = null;
+      recycleBitmap();
     }
+  }
+
+  // mCurrentBitmap is the same bitmap as mBitmap once drawn; a filter reads it as
+  // its background, so it is forgotten whenever mBitmap is recycled.
+  private void recycleBitmap() {
+    if (mBitmap != null) {
+      mBitmap.recycle();
+    }
+    mBitmap = null;
+    mCurrentBitmap = null;
   }
 
   @Override
@@ -119,10 +126,7 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   @Override
   protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
-    if (mBitmap != null) {
-      mBitmap.recycle();
-    }
-    mBitmap = null;
+    recycleBitmap();
   }
 
   @Override
@@ -349,25 +353,24 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
   }
 
   String toDataURL() {
-    Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
-
-    clearChildCache();
-    drawChildren(new Canvas(bitmap));
-    clearChildCache();
-    this.invalidate();
-    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-    bitmap.recycle();
-    byte[] bitmapBytes = stream.toByteArray();
-    return Base64.encodeToString(bitmapBytes, Base64.NO_WRAP);
+    return capture(Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888));
   }
 
   String toDataURL(int width, int height) {
-    Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+    return capture(Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888));
+  }
 
+  // A filter's BackgroundImage is what this pass has drawn so far, so a capture filters
+  // against its own bitmap, as drawOutput does. The on-screen frame already holds the
+  // filtered element, is the wrong size when a width and height are asked for, and is
+  // recycled once the view detaches.
+  private String capture(Bitmap bitmap) {
+    Bitmap onScreen = mCurrentBitmap;
+    mCurrentBitmap = bitmap;
     clearChildCache();
     drawChildren(new Canvas(bitmap));
     clearChildCache();
+    mCurrentBitmap = onScreen;
     this.invalidate();
     ByteArrayOutputStream stream = new ByteArrayOutputStream();
     bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
