@@ -49,7 +49,10 @@ test('inlines styles', () => {
   expect(ast).toMatchSnapshot();
 });
 
-test('supports CSS in style element', () => {
-  const tree = renderer.create(<SvgCss xml={xml} />).toJSON();
-  expect(tree).toMatchSnapshot();
+test('supports CSS in style element', async () => {
+  let root: renderer.ReactTestRenderer | undefined;
+  await renderer.act(async () => {
+    root = renderer.create(<SvgCss xml={xml} />);
+  });
+  expect(root?.toJSON()).toMatchSnapshot();
 });

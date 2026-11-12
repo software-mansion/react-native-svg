@@ -12,8 +12,9 @@ package com.facebook.react.viewmanagers;
 import android.view.View;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.uimanager.ViewManagerWithGeneratedInterface;
 
-public interface RNSVGDefsManagerInterface<T extends View> {
+public interface RNSVGDefsManagerInterface<T extends View> extends ViewManagerWithGeneratedInterface {
   void setName(T view, @Nullable String value);
   void setOpacity(T view, float value);
   void setMatrix(T view, @Nullable ReadableArray value);

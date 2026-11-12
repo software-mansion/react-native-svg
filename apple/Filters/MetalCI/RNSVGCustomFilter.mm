@@ -14,9 +14,19 @@
 
 - (CIColorKernel *)getWithName:(NSString *)name
 {
+#if SWIFT_PACKAGE
+  NSBundle *bundle = nil;
+  @try {
+    bundle = SWIFTPM_MODULE_BUNDLE;
+  } @catch (NSException *exception) {
+    NSLog(@"RNSVG CustomFilter resource bundle missing: %@", exception);
+    return nil;
+  }
+#else
   NSBundle *frameworkBundle = [NSBundle bundleForClass:[self class]];
   NSURL *bundleUrl = [frameworkBundle.resourceURL URLByAppendingPathComponent:@"RNSVGFilters.bundle"];
   NSBundle *bundle = [NSBundle bundleWithURL:bundleUrl];
+#endif
   NSURL *url = [bundle URLForResource:name withExtension:extension];
 
   if (url != nil) {

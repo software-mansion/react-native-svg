@@ -1,16 +1,12 @@
 import * as React from 'react';
 import { useState, useEffect, Component } from 'react';
-import { Image, Platform, type ImageSourcePropType } from 'react-native';
+import { Platform, type ImageSourcePropType } from 'react-native';
 import { fetchText, type SvgProps } from 'react-native-svg';
 import { resolveAssetUri } from '../lib/resolveAssetUri';
 import { SvgCss, SvgWithCss } from './css';
 
 export function getUriFromSource(source: ImageSourcePropType) {
-  const resolvedAssetSource =
-    Platform.OS === 'web'
-      ? resolveAssetUri(source)
-      : Image.resolveAssetSource(source);
-  return resolvedAssetSource?.uri;
+  return resolveAssetUri(source)?.uri;
 }
 
 export function loadLocalRawResourceDefault(source: ImageSourcePropType) {

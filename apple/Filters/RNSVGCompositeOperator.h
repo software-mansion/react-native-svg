@@ -1,3 +1,5 @@
+#import <Foundation/Foundation.h>
+
 typedef CF_ENUM(int32_t, RNSVGCompositeOperator) {
   SVG_FECOMPOSITE_OPERATOR_UNKNOWN,
   SVG_FECOMPOSITE_OPERATOR_OVER,
