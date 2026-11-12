@@ -101,6 +101,9 @@ class Brush {
   }
 
   private double getVal(SVGLength length, double relative, float scale, float textSize) {
+    if (length == null) {
+      return 0;
+    }
     return PropHelper.fromRelative(
         length,
         relative,
