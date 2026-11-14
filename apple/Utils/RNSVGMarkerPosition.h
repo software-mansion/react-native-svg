@@ -18,4 +18,7 @@ typedef enum RNSVGMarkerType { kStartMarker, kMidMarker, kEndMarker } RNSVGMarke
 
 + (NSArray<RNSVGMarkerPosition *> *)fromCGPath:(CGPathRef)path;
 
++ (NSArray<RNSVGMarkerPosition *> *)fromCGPath:(CGPathRef)path
+                             autoStartReverse:(BOOL)autoStartReverse;
+
 @end
