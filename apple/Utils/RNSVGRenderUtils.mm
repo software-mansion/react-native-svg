@@ -38,14 +38,9 @@
   CGFloat scale = [self getScreenScale];
 #if TARGET_OS_OSX // [macOS
   RNSVGUIGraphicsBeginImageContextWithOptions(rect.size, NO, 1.0);
-#else // macOS]
-  RNSVGUIGraphicsBeginImageContextWithOptions(rect.size, NO, scale);
-#endif // [macOS]
   CGContextRef cgContext = UIGraphicsGetCurrentContext();
   CGContextConcatCTM(cgContext, CGAffineTransformInvert(CGContextGetCTM(cgContext)));
-#if TARGET_OS_OSX // [macOS
   CGContextConcatCTM(cgContext, CGAffineTransformMakeScale(scale, scale));
-#endif // macOS]
   CGContextConcatCTM(cgContext, ctm);
 
   if (clip) {
@@ -55,6 +50,25 @@
   CGImageRef contentImage = CGBitmapContextCreateImage(cgContext);
   RNSVGUIGraphicsEndImageContext();
   return contentImage;
+#else // macOS]
+  // UIGraphicsBeginImageContextWithOptions asserts when it cannot allocate the bitmap.
+  UIGraphicsImageRendererFormat *format = [UIGraphicsImageRendererFormat defaultFormat];
+  format.scale = scale;
+  format.opaque = NO;
+  format.preferredRange = UIGraphicsImageRendererFormatRangeStandard;
+  UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:rect.size format:format];
+  UIImage *image = [renderer imageWithActions:^(UIGraphicsImageRendererContext *_Nonnull rendererContext) {
+    CGContextRef cgContext = rendererContext.CGContext;
+    CGContextConcatCTM(cgContext, CGAffineTransformInvert(CGContextGetCTM(cgContext)));
+    CGContextConcatCTM(cgContext, ctm);
+
+    if (clip) {
+      CGContextClipToRect(cgContext, *clip);
+    }
+    [renderable renderLayerTo:cgContext rect:rect];
+  }];
+  return CGImageRetain(image.CGImage);
+#endif // [macOS]
 }
 
 @end
