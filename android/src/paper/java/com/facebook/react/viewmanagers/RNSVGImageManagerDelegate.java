@@ -56,6 +56,9 @@ public class RNSVGImageManagerDelegate<T extends View, U extends BaseViewManager
       case "responsible":
         mViewManager.setResponsible(view, value == null ? false : (boolean) value);
         break;
+      case "hasOnLayout":
+        mViewManager.setHasOnLayout(view, value == null ? false : (boolean) value);
+        break;
       case "display":
         mViewManager.setDisplay(view, value == null ? null : (String) value);
         break;

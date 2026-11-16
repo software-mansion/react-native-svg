@@ -369,6 +369,11 @@ class VirtualViewManager<V extends VirtualView> extends ViewGroupManager<Virtual
     node.setResponsible(responsible);
   }
 
+  @ReactProp(name = "hasOnLayout")
+  public void setHasOnLayout(V node, boolean hasOnLayout) {
+    node.setHasOnLayout(hasOnLayout);
+  }
+
   @ReactProp(name = ViewProps.POINTER_EVENTS)
   public void setPointerEvents(V view, @Nullable String pointerEventsStr) {
     if (pointerEventsStr == null) {

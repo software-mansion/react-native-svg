@@ -583,6 +583,12 @@ public abstract class VirtualView extends ReactViewGroup {
     setMeasuredDimension(width, height);
   }
 
+  private boolean mHasOnLayout;
+
+  void setHasOnLayout(boolean hasOnLayout) {
+    mHasOnLayout = hasOnLayout;
+  }
+
   void setClientRect(RectF rect) {
     if (mClientRect != null && mClientRect.equals(rect)) {
       return;
@@ -607,6 +613,9 @@ public abstract class VirtualView extends ReactViewGroup {
         setRight(Math.min(right, root.getWidth()));
         setBottom(Math.min(bottom, root.getHeight()));
       }
+    }
+    if (!mHasOnLayout) {
+      return;
     }
     EventDispatcher eventDispatcher =
         UIManagerHelper.getEventDispatcherForReactTag(mContext, getId());
