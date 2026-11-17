@@ -158,18 +158,14 @@ using namespace facebook::react;
 #else
   // UIGraphicsBeginImageContextWithOptions asserts when it cannot allocate the bitmap.
   // CGBitmapContextCreate returns NULL instead, and its CTM is already unflipped.
+  size_t width = (size_t)ceil(size.width);
+  size_t height = (size_t)ceil(size.height);
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
   CGContextRef cropContext = CGBitmapContextCreate(
-      NULL,
-      (size_t)ceil(size.width),
-      (size_t)ceil(size.height),
-      8,
-      0,
-      colorSpace,
-      kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little);
+      NULL, width, height, 8, 0, colorSpace, kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little);
   CGColorSpaceRelease(colorSpace);
   if (cropContext) {
-    CGContextClearRect(cropContext, CGRectMake(0, 0, size.width, size.height));
+    CGContextClearRect(cropContext, CGRectMake(0, 0, width, height));
   }
   return cropContext;
 #endif

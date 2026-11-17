@@ -54,7 +54,6 @@
   // UIGraphicsBeginImageContextWithOptions asserts when it cannot allocate the bitmap.
   UIGraphicsImageRendererFormat *format = [UIGraphicsImageRendererFormat defaultFormat];
   format.scale = scale;
-  format.opaque = NO;
   format.preferredRange = UIGraphicsImageRendererFormatRangeStandard;
   UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:rect.size format:format];
   UIImage *image = [renderer imageWithActions:^(UIGraphicsImageRendererContext *_Nonnull rendererContext) {
