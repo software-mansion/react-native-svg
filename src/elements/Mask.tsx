@@ -13,7 +13,7 @@ import RNSVGMask from '../fabric/MaskNativeComponent';
 import type { NativeMethods } from 'react-native';
 import { maskType } from '../lib/maskType';
 
-export interface MaskProps extends CommonPathProps {
+export interface MaskProps extends Omit<CommonPathProps, 'x' | 'y'> {
   children?: ReactNode;
   id?: string;
   x?: NumberProp;

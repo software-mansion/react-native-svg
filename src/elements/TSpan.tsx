@@ -15,7 +15,9 @@ import type {
 } from '../lib/extract/types';
 import RNSVGTSpan from '../fabric/TSpanNativeComponent';
 
-export interface TSpanProps extends CommonPathProps, FontProps {
+export interface TSpanProps
+  extends Omit<CommonPathProps, 'x' | 'y'>,
+    FontProps {
   children?: TextChild;
   x?: NumberArray;
   y?: NumberArray;

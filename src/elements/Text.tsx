@@ -14,7 +14,7 @@ import Shape from './Shape';
 import './TSpan';
 import RNSVGText from '../fabric/TextNativeComponent';
 
-export interface TextProps extends TextSpecificProps {
+export interface TextProps extends Omit<TextSpecificProps, 'x' | 'y'> {
   children?: ReactNode;
   x?: NumberArray;
   y?: NumberArray;
