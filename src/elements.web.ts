@@ -51,7 +51,11 @@ import type { TSpanProps } from './elements/TSpan';
 import type { UseProps } from './elements/Use';
 import type { PropsWithChildren } from 'react';
 import type { BaseProps } from './web/types';
-import { encodeSvg, getBoundingClientRect } from './web/utils';
+import {
+  encodeSvg,
+  getBoundingClientRect,
+  inlineExternalResources,
+} from './web/utils';
 import { WebShape } from './web/WebShape';
 
 export class Circle extends WebShape<BaseProps & CircleProps> {
@@ -270,21 +274,24 @@ export class Svg extends WebShape<BaseProps & SvgProps> {
     svg.setAttribute('viewBox', `0 0 ${rect.width} ${rect.height}`);
     svg.setAttribute('width', String(width));
     svg.setAttribute('height', String(height));
-    svg.appendChild(ref.cloneNode(true));
+    const clone = ref.cloneNode(true) as SVGElement;
+    svg.appendChild(clone);
 
-    const img = new window.Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = height;
-      const context = canvas.getContext('2d');
-      context?.drawImage(img, 0, 0);
-      callback(canvas.toDataURL().replace('data:image/png;base64,', ''));
-    };
+    inlineExternalResources(clone, ref).then(() => {
+      const img = new window.Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const context = canvas.getContext('2d');
+        context?.drawImage(img, 0, 0);
+        callback(canvas.toDataURL().replace('data:image/png;base64,', ''));
+      };
 
-    img.src = `data:image/svg+xml;utf8,${encodeSvg(
-      new window.XMLSerializer().serializeToString(svg)
-    )}`;
+      img.src = `data:image/svg+xml;utf8,${encodeSvg(
+        new window.XMLSerializer().serializeToString(svg)
+      )}`;
+    });
   }
 }
 
