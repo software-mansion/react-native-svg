@@ -6,6 +6,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+#import <Foundation/Foundation.h>
+
 typedef CF_ENUM(int32_t, RNSVGVBMOS) {
   kRNSVGVBMOSMeet,
   kRNSVGVBMOSSlice,

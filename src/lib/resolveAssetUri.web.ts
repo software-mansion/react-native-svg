@@ -1,10 +1,9 @@
+import * as ReactNative from 'react-native';
 import {
   ImageResolvedAssetSource,
   PixelRatio,
   type ImageProps as RNImageProps,
 } from 'react-native';
-// @ts-expect-error react-native/assets-registry doesn't export types.
-import { getAssetByID } from '@react-native/assets-registry/registry';
 
 export type PackagerAsset = {
   __packager_asset: boolean;
@@ -18,6 +17,30 @@ export type PackagerAsset = {
   type: string;
 };
 
+type AssetRegistry = {
+  getAssetByID(assetId: number): PackagerAsset | undefined;
+};
+
+function getAssetByID(assetId: number): PackagerAsset | undefined {
+  // react-native-web 0.21.4+ exports the registry.
+  // Use a namespace import: older versions do not have this export, and a
+  // named import fails the build there.
+  const publicAssetRegistry = (
+    ReactNative as unknown as { AssetRegistry?: AssetRegistry }
+  ).AssetRegistry;
+  if (publicAssetRegistry != null) {
+    return publicAssetRegistry.getAssetByID(assetId);
+  }
+  // Older react-native-web: fallback to @react-native/assets-registry, as before.
+  let registry: AssetRegistry | undefined;
+  try {
+    registry = require('@react-native/assets-registry/registry');
+  } catch {
+    // Not available in this bundle.
+  }
+  return registry?.getAssetByID(assetId);
+}
+
 const svgDataUriPattern = /^(data:image\/svg\+xml;utf8,)(.*)/;
 
 // Based on that function: https://github.com/necolas/react-native-web/blob/54c14d64dabd175e8055e1dc92e9196c821f9b7d/packages/react-native-web/src/exports/Image/index.js#L118-L156
@@ -27,7 +50,7 @@ export function resolveAssetUri(
   let src: Partial<ImageResolvedAssetSource> = {};
   if (typeof source === 'number') {
     // get the URI from the packager
-    const asset: PackagerAsset | null = getAssetByID(source);
+    const asset = getAssetByID(source);
     if (asset == null) {
       throw new Error(
         `Image: asset with ID "${source}" could not be found. Please check the image source or packager.`

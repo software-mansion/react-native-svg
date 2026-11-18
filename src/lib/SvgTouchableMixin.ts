@@ -1,5 +1,6 @@
 import type { GestureResponderEvent, Insets } from 'react-native';
 import { Platform } from 'react-native';
+import { playTouchSound } from './playTouchSound';
 
 /**
  * Self-contained port of the press interaction state machine from
@@ -635,9 +636,7 @@ const SvgTouchableMixin = {
           this._endHighlight(e);
         }
         if (Platform.OS === 'android' && !this.props.touchSoundDisabled) {
-          // eslint-disable-next-line @typescript-eslint/no-var-requires
-          const soundModule = require('../fabric/NativeSvgSoundModule').default;
-          soundModule.playTouchSound();
+          playTouchSound();
         }
         this.touchableHandlePress(e);
       }

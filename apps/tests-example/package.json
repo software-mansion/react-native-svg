@@ -5,13 +5,14 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
+    "ios:clear-prebuild-caches": "rm -rf $HOME/Library/Caches/ReactNative",
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest"
   },
   "dependencies": {
     "react": "19.3.0",
-    "react-native": "0.88.0-rc.5",
+    "react-native": "0.89.0-rc.0",
     "react-native-safe-area-context": "5.9.0",
     "react-native-svg": "link:../../"
   },
@@ -19,14 +20,13 @@
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.3",
     "@babel/runtime": "^7.25.0",
-    "@react-native-community/cli": "20.2.0",
-    "@react-native-community/cli-platform-android": "20.2.0",
-    "@react-native-community/cli-platform-ios": "20.2.0",
-    "@react-native/babel-preset": "0.88.0-rc.5",
-    "@react-native/eslint-config": "0.88.0-rc.5",
-    "@react-native/jest-preset": "0.88.0-rc.5",
-    "@react-native/metro-config": "0.88.0-rc.5",
-    "@react-native/typescript-config": "0.88.0-rc.5",
+    "@react-native-community/cli": "21.0.0-alpha.1",
+    "@react-native/babel-preset": "0.89.0-rc.0",
+    "@react-native/community-cli-plugin": "0.89.0-rc.0",
+    "@react-native/eslint-config": "0.89.0-rc.0",
+    "@react-native/jest-preset": "0.89.0-rc.0",
+    "@react-native/metro-config": "0.89.0-rc.0",
+    "@react-native/typescript-config": "0.89.0-rc.0",
     "@types/jest": "^29.5.13",
     "@types/react": "^19.2.0",
     "@types/react-test-renderer": "^19.1.0",
@@ -37,6 +37,6 @@
     "typescript": "^6.0.3"
   },
   "engines": {
-    "node": ">= 22.11.0"
+    "node": "^22.13.0 || ^24.3.0 || >= 26.0.0"
   }
 }

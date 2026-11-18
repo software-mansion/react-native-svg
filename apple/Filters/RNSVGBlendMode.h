@@ -1,3 +1,5 @@
+#import <Foundation/Foundation.h>
+
 typedef CF_ENUM(int32_t, RNSVGBlendMode) {
   SVG_FEBLEND_MODE_UNKNOWN,
   SVG_FEBLEND_MODE_NORMAL,
