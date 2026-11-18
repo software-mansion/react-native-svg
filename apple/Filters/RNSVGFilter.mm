@@ -107,6 +107,9 @@ using namespace facebook::react;
   [cropFilter setDefaults];
   [cropFilter setValue:nil forKey:@"inputBackgroundImage"];
   CGContext *cropContext = [self openContext:canvasBounds.size];
+  if (!cropContext) {
+    return nil;
+  }
   CIImage *mask;
 
   CGRect filterRegionRect = [self.filterRegion getCropRect:self units:self.filterUnits bounds:renderableBounds];
@@ -146,21 +149,35 @@ using namespace facebook::react;
 
 - (CGContext *)openContext:(CGSize)size
 {
+#if TARGET_OS_OSX
   RNSVGUIGraphicsBeginImageContextWithOptions(size, NO, 1.0);
   CGContextRef cropContext = UIGraphicsGetCurrentContext();
-#if TARGET_OS_OSX
   CGFloat scale = [RNSVGRenderUtils getScreenScale];
   CGContextScaleCTM(cropContext, scale, scale);
-#else
-  CGContextTranslateCTM(cropContext, 0, size.height);
-  CGContextScaleCTM(cropContext, 1, -1);
-#endif
   return cropContext;
+#else
+  // UIGraphicsBeginImageContextWithOptions asserts when it cannot allocate the bitmap.
+  // CGBitmapContextCreate returns NULL instead, and its CTM is already unflipped.
+  size_t width = (size_t)ceil(size.width);
+  size_t height = (size_t)ceil(size.height);
+  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+  CGContextRef cropContext = CGBitmapContextCreate(
+      NULL, width, height, 8, 0, colorSpace, kCGImageAlphaPremultipliedFirst | kCGBitmapByteOrder32Little);
+  CGColorSpaceRelease(colorSpace);
+  if (cropContext) {
+    CGContextClearRect(cropContext, CGRectMake(0, 0, width, height));
+  }
+  return cropContext;
+#endif
 }
 
 - (void)endContext:(CGContext *)context
 {
+#if TARGET_OS_OSX
   RNSVGUIGraphicsEndImageContext();
+#else
+  CGContextRelease(context);
+#endif
 }
 
 - (CIImage *)getMaskFromRect:(CGContext *)context rect:(CGRect)rect ctm:(CGAffineTransform)ctm
