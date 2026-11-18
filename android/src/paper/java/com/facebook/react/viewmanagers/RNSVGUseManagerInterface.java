@@ -48,4 +48,5 @@ public interface RNSVGUseManagerInterface<T extends View> extends ViewManagerWit
   void setY(T view, Dynamic value);
   void setHeight(T view, Dynamic value);
   void setWidth(T view, Dynamic value);
+  void setHasOnSvgLayout(T view, boolean value);
 }

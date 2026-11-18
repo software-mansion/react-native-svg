@@ -71,6 +71,7 @@ interface NativeProps
   maskUnits?: CodegenTypes.Int32;
   maskContentUnits?: CodegenTypes.Int32;
   maskType?: CodegenTypes.Int32;
+  hasOnSvgLayout?: boolean;
   onSvgLayout?: CodegenTypes.DirectEventHandler<OnSvgLayoutEvent>;
 }
 

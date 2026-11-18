@@ -63,4 +63,5 @@ public interface RNSVGTextPathManagerInterface<T extends View> extends ViewManag
   void setMidLine(T view, @Nullable String value);
   void setSpacing(T view, @Nullable String value);
   void setStartOffset(T view, Dynamic value);
+  void setHasOnSvgLayout(T view, boolean value);
 }

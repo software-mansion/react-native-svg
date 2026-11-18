@@ -115,6 +115,9 @@ public class RNSVGCircleManagerDelegate<T extends View, U extends BaseViewManage
       case "r":
         mViewManager.setR(view, new DynamicFromObject(value));
         break;
+      case "hasOnSvgLayout":
+        mViewManager.setHasOnSvgLayout(view, value == null ? false : (boolean) value);
+        break;
       default:
         super.setProperty(view, propName, value);
     }

@@ -148,6 +148,9 @@ public class RNSVGTextManagerDelegate<T extends View, U extends BaseViewManager<
       case "verticalAlign":
         mViewManager.setVerticalAlign(view, new DynamicFromObject(value));
         break;
+      case "hasOnSvgLayout":
+        mViewManager.setHasOnSvgLayout(view, value == null ? false : (boolean) value);
+        break;
       default:
         super.setProperty(view, propName, value);
     }

@@ -46,4 +46,5 @@ public interface RNSVGCircleManagerInterface<T extends View> extends ViewManager
   void setCx(T view, Dynamic value);
   void setCy(T view, Dynamic value);
   void setR(T view, Dynamic value);
+  void setHasOnSvgLayout(T view, boolean value);
 }

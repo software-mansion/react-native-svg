@@ -47,4 +47,5 @@ public interface RNSVGLineManagerInterface<T extends View> extends ViewManagerWi
   void setY1(T view, Dynamic value);
   void setX2(T view, Dynamic value);
   void setY2(T view, Dynamic value);
+  void setHasOnSvgLayout(T view, boolean value);
 }

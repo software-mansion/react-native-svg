@@ -63,6 +63,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
 @property (nonatomic, assign) CGRect strokeBounds;
 @property (nonatomic, assign) CGRect markerBounds;
 @property (nonatomic, copy) RCTDirectEventBlock onSvgLayout;
+@property (nonatomic, assign) BOOL hasOnSvgLayout;
 
 /**
  * RNSVGSvgView which ownes current RNSVGNode

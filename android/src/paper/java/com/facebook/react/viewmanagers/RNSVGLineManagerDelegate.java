@@ -118,6 +118,9 @@ public class RNSVGLineManagerDelegate<T extends View, U extends BaseViewManager<
       case "y2":
         mViewManager.setY2(view, new DynamicFromObject(value));
         break;
+      case "hasOnSvgLayout":
+        mViewManager.setHasOnSvgLayout(view, value == null ? false : (boolean) value);
+        break;
       default:
         super.setProperty(view, propName, value);
     }

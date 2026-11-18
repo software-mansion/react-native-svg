@@ -276,7 +276,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   }
   _clientRect = clientRect;
 #ifdef RCT_NEW_ARCH_ENABLED
-  if (_eventEmitter != nullptr) {
+  if (_eventEmitter != nullptr && _hasOnSvgLayout) {
     static_cast<const RNSVGGroupEventEmitter &>(*_eventEmitter)
       .onSvgLayout(
         {.layout = {
@@ -683,6 +683,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   _strokeBounds = CGRectZero;
   _markerBounds = CGRectZero;
   _onSvgLayout = nil;
+  _hasOnSvgLayout = NO;
 
   _svgView = nil;
   _textRoot = nil;

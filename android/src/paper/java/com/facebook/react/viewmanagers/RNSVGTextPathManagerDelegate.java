@@ -166,6 +166,9 @@ public class RNSVGTextPathManagerDelegate<T extends View, U extends BaseViewMana
       case "startOffset":
         mViewManager.setStartOffset(view, new DynamicFromObject(value));
         break;
+      case "hasOnSvgLayout":
+        mViewManager.setHasOnSvgLayout(view, value == null ? false : (boolean) value);
+        break;
       default:
         super.setProperty(view, propName, value);
     }

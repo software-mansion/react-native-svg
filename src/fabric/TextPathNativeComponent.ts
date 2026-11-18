@@ -84,6 +84,7 @@ interface NativeProps
   midLine?: string;
   spacing?: string;
   startOffset?: UnsafeMixed<NumberProp>;
+  hasOnSvgLayout?: boolean;
   onSvgLayout?: CodegenTypes.DirectEventHandler<OnSvgLayoutEvent>;
 }
 

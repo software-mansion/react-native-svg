@@ -46,4 +46,5 @@ public interface RNSVGGroupManagerInterface<T extends View> extends ViewManagerW
   void setFontSize(T view, Dynamic value);
   void setFontWeight(T view, Dynamic value);
   void setFont(T view, Dynamic value);
+  void setHasOnSvgLayout(T view, boolean value);
 }

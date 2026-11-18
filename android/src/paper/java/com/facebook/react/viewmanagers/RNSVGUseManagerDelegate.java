@@ -121,6 +121,9 @@ public class RNSVGUseManagerDelegate<T extends View, U extends BaseViewManager<T
       case "width":
         mViewManager.setWidth(view, new DynamicFromObject(value));
         break;
+      case "hasOnSvgLayout":
+        mViewManager.setHasOnSvgLayout(view, value == null ? false : (boolean) value);
+        break;
       default:
         super.setProperty(view, propName, value);
     }
