@@ -49,7 +49,7 @@ static double BisectingAngle(double in_angle, double out_angle)
 
 static CGFloat RNSVG_radToDeg = 180 / (CGFloat)M_PI;
 
-double rad2deg(CGFloat rad)
+static double rad2deg(CGFloat rad)
 {
   return rad * RNSVG_radToDeg;
 }
