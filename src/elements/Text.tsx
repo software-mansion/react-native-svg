@@ -1,4 +1,5 @@
-import type { Component, ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import type { HostInstance } from 'react-native';
 import * as React from 'react';
 import extractText from '../lib/extract/extractText';
 import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
@@ -54,7 +55,7 @@ export default class Text extends Shape<TextProps> {
       this
     );
     Object.assign(props, extractText(prop, true));
-    props.ref = this.refMethod as (instance: Component | null) => void;
+    props.ref = this.refMethod as (instance: HostInstance | null) => void;
     return <RNSVGText {...props} />;
   }
 }

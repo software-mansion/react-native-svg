@@ -4,7 +4,7 @@ import extractViewBox from '../lib/extract/extractViewBox';
 import Shape from './Shape';
 import RNSVGSymbol from '../fabric/SymbolNativeComponent';
 import type { NumberProp } from '../lib/extract/types';
-import type { NativeMethods } from 'react-native';
+import type { HostInstance } from 'react-native';
 
 export interface SymbolProps {
   children?: ReactNode;
@@ -23,7 +23,7 @@ export default class Symbol extends Shape<SymbolProps> {
     const symbolProps = { name: id };
     return (
       <RNSVGSymbol
-        ref={(ref) => this.refMethod(ref as Shape<SymbolProps> & NativeMethods)}
+        ref={(ref) => this.refMethod(ref as Shape<SymbolProps> & HostInstance)}
         {...symbolProps}
         {...extractViewBox(props)}>
         {children}

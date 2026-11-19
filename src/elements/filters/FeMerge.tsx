@@ -1,5 +1,5 @@
 import React from 'react';
-import { NativeMethods } from 'react-native';
+import { HostInstance } from 'react-native';
 import RNSVGFeMerge from '../../fabric/FeMergeNativeComponent';
 import { extractFeMerge, extractFilter } from '../../lib/extract/extractFilter';
 import FilterPrimitive from './FilterPrimitive';
@@ -18,7 +18,7 @@ export default class FeMerge extends FilterPrimitive<FeMergeProps> {
   render() {
     return (
       <RNSVGFeMerge
-        ref={(ref) => this.refMethod(ref as (FeMerge & NativeMethods) | null)}
+        ref={(ref) => this.refMethod(ref as (FeMerge & HostInstance) | null)}
         {...extractFilter(this.props)}
         {...extractFeMerge(this.props, this)}
       />

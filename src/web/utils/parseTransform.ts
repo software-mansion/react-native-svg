@@ -18,7 +18,7 @@ export function parseTransformProp(
       transformArray.push(`matrix(${transform.join(' ')})`);
     } else {
       const stringifiedProps = stringifyTransformArrayProps(
-        // @ts-expect-error FIXME
+        // @ts-ignore FIXME
         transform as TransformsStyleArray
       ).split(' ');
       transformArray.push(...stringifiedProps);

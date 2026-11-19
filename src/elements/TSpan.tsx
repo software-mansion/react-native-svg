@@ -1,4 +1,4 @@
-import type { Component } from 'react';
+import type { HostInstance } from 'react-native';
 import * as React from 'react';
 import extractProps, { propsAndStyles } from '../lib/extract/extractProps';
 import extractTransform from '../lib/extract/extractTransform';
@@ -54,7 +54,7 @@ export default class TSpan extends Shape<TSpanProps> {
       this
     );
     Object.assign(props, extractText(prop, false));
-    props.ref = this.refMethod as (instance: Component | null) => void;
+    props.ref = this.refMethod as (instance: HostInstance | null) => void;
     return <RNSVGTSpan {...props} />;
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { NativeMethods } from 'react-native';
+import { HostInstance } from 'react-native';
 import RNSVGFeOffset from '../../fabric/FeOffsetNativeComponent';
 import { extractFilter, extractIn } from '../../lib/extract/extractFilter';
 import { NumberProp } from '../../lib/extract/types';
@@ -23,7 +23,7 @@ export default class FeOffset extends FilterPrimitive<FeOffsetProps> {
   render() {
     return (
       <RNSVGFeOffset
-        ref={(ref) => this.refMethod(ref as (FeOffset & NativeMethods) | null)}
+        ref={(ref) => this.refMethod(ref as (FeOffset & HostInstance) | null)}
         {...this.props}
         {...extractFilter(this.props)}
         {...extractIn(this.props)}

@@ -5,7 +5,7 @@ import type {
   MeasureInWindowOnSuccessCallback,
   MeasureLayoutOnSuccessCallback,
   MeasureOnSuccessCallback,
-  NativeMethods,
+  HostInstance,
   StyleProp,
   ViewStyle,
 } from 'react-native';
@@ -36,7 +36,12 @@ const styles = StyleSheet.create({
 });
 const defaultStyle = styles.svg;
 
-export interface SvgProps extends GProps, ViewProps, HitSlop {
+type MutableViewStyle = { -readonly [K in keyof ViewStyle]: ViewStyle[K] };
+
+export interface SvgProps
+  extends GProps,
+    Omit<ViewProps, keyof GProps>,
+    HitSlop {
   width?: NumberProp;
   height?: NumberProp;
   viewBox?: string;
@@ -85,7 +90,7 @@ export default class Svg extends Shape<SvgProps> {
     if (!callback) {
       return;
     }
-    const handle = findNodeHandle(this.root as Component);
+    const handle = findNodeHandle(this.root as Component) ?? null;
     const RNSVGSvgViewModule: Spec =
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       require('../fabric/NativeSvgViewModule').default;
@@ -144,7 +149,7 @@ export default class Svg extends Shape<SvgProps> {
     }
 
     let override = false;
-    const overrideStyles: ViewStyle = {};
+    const overrideStyles: MutableViewStyle = {};
     const o = opacity != null ? extractOpacity(opacity) : NaN;
     if (!isNaN(o)) {
       override = true;
@@ -177,7 +182,10 @@ export default class Svg extends Shape<SvgProps> {
 
     extractResponder(props, props, this as ResponderInstanceProps);
 
-    const gStyle = Object.assign({}, StyleSheet.flatten(style));
+    const gStyle: MutableViewStyle = Object.assign(
+      {},
+      StyleSheet.flatten(style)
+    );
     if (transform) {
       if (gStyle.transform) {
         props.transform = gStyle.transform;
@@ -192,7 +200,7 @@ export default class Svg extends Shape<SvgProps> {
     return (
       <RNSVGSvg
         {...props}
-        ref={(ref) => this.refMethod(ref as (Svg & NativeMethods) | null)}
+        ref={(ref) => this.refMethod(ref as (Svg & HostInstance) | null)}
         {...extractViewBox({ viewBox, preserveAspectRatio })}>
         <G
           {...{

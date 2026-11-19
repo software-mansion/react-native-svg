@@ -3,7 +3,7 @@ import { extract } from '../lib/extract/extractProps';
 import type { CommonPathProps, NumberProp } from '../lib/extract/types';
 import Shape from './Shape';
 import RNSVGLine from '../fabric/LineNativeComponent';
-import type { NativeMethods } from 'react-native';
+import type { HostInstance } from 'react-native';
 
 export interface LineProps extends CommonPathProps {
   opacity?: NumberProp;
@@ -35,7 +35,7 @@ export default class Line extends Shape<LineProps> {
     };
     return (
       <RNSVGLine
-        ref={(ref) => this.refMethod(ref as (Line & NativeMethods) | null)}
+        ref={(ref) => this.refMethod(ref as (Line & HostInstance) | null)}
         {...lineProps}
       />
     );
