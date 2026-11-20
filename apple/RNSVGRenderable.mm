@@ -457,7 +457,9 @@ UInt32 saturate(CGFloat value)
   RNSVGMarker *markerEnd = (RNSVGMarker *)[self.svgView getDefinedMarker:self.markerEnd];
   if (markerStart || markerMid || markerEnd) {
     _contextElement = self;
-    NSArray<RNSVGMarkerPosition *> *positions = [RNSVGMarkerPosition fromCGPath:path];
+    NSArray<RNSVGMarkerPosition *> *positions =
+        [RNSVGMarkerPosition fromCGPath:path
+                       autoStartReverse:[@"auto-start-reverse" isEqualToString:markerStart.orient]];
     CGFloat width = self.strokeWidth ? [self relativeOnOther:self.strokeWidth] : 1;
     __block CGRect bounds = CGRectNull;
     CGMutablePathRef markerPath = CGPathCreateMutable();
