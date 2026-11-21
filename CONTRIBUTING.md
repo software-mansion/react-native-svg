@@ -31,10 +31,10 @@ actions for all opened pull requests.
 ### Running E2E tests:
 
 > [!WARNING]  
-> Reference images in this repository are generated with [pixel ratio](https://reactnative.dev/docs/pixelratio) = `3`.
-> Make sure to run tests on a device that also has pixel ratio equal 3. Otherwise tests will fail.
-> In order to use device with different pixel ratio, adjust it in `e2e/generateRefereces.ts` viewport and regenerate
-> references.
+> Reference images in this repository are generated with [pixel ratio](https://reactnative.dev/docs/pixelratio)
+> equal to `3` for iOS and `2.625` for Android. Make sure to run tests on a device with the matching pixel ratio.
+> To use a device with a different pixel ratio, update the platform's scale factor in `e2e/generateReferences.ts`
+> and `targetPixelRatio` in `e2e/env.ts`, then regenerate references.
 
 1. Navigate to the example application's directory and initiate the Metro server using the yarn start command.
 2. To run the example application on your preferred platform (note: currently only Android and iOS are supported),
