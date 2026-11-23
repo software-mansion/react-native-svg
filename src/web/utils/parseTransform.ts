@@ -47,7 +47,7 @@ export function stringifyTransformProps(transformProps: TransformProps) {
   }
   if (transformProps.scaleX != null || transformProps.scaleY != null) {
     transformArray.push(
-      `scale(${transformProps.scaleX || 1}, ${transformProps.scaleY || 1})`
+      `scale(${transformProps.scaleX ?? 1}, ${transformProps.scaleY ?? 1})`
     );
   }
   // rotation maps to rotate, not to collide with the text rotate attribute (which acts per glyph rather than block)
