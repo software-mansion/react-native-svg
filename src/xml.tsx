@@ -1,6 +1,6 @@
 import type { ComponentType, ComponentProps, JSX } from 'react';
 import * as React from 'react';
-import { Component, useEffect, useMemo, useState } from 'react';
+import { Component, useEffect, useMemo, useRef, useState } from 'react';
 import { fetchText } from './utils/fetchData';
 import type { SvgProps } from './elements/Svg';
 import { tags } from './xmlTags';
@@ -83,21 +83,40 @@ export function SvgUri(props: UriProps) {
   const { onError = err, uri, onLoad, fallback } = props;
   const [xml, setXml] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
+  const onErrorRef = useRef(onError);
+  const onLoadRef = useRef(onLoad);
   useEffect(() => {
-    uri
-      ? fetchText(uri)
-          .then((data) => {
-            setXml(data);
-            isError && setIsError(false);
-            onLoad?.();
-          })
-          .catch((e) => {
-            onError(e);
-            setIsError(true);
-          })
-      : setXml(null);
+    onErrorRef.current = onError;
+    onLoadRef.current = onLoad;
+  }, [onError, onLoad]);
+  useEffect(() => {
+    let cancelled = false;
+    if (uri) {
+      fetchText(uri)
+        .then((data) => {
+          if (cancelled) {
+            return;
+          }
+          setXml(data);
+          setIsError(false);
+          onLoadRef.current?.();
+        })
+        .catch((e) => {
+          if (cancelled) {
+            return;
+          }
+          onErrorRef.current(e);
+          setIsError(true);
+        });
+    } else {
+      setXml(null);
+      setIsError(false);
+    }
+    return () => {
+      cancelled = true;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onError, uri, onLoad]);
+  }, [uri]);
   if (isError) {
     return fallback ?? null;
   }
@@ -143,6 +162,8 @@ export class SvgFromXml extends Component<XmlProps, XmlState> {
 
 export class SvgFromUri extends Component<UriProps, UriState> {
   state = { xml: null };
+  private fetchId = 0;
+
   componentDidMount() {
     this.fetch(this.props.uri);
   }
@@ -154,11 +175,21 @@ export class SvgFromUri extends Component<UriProps, UriState> {
     }
   }
 
+  componentWillUnmount() {
+    this.fetchId += 1;
+  }
+
   async fetch(uri: string | null) {
+    const fetchId = ++this.fetchId;
     try {
-      this.setState({ xml: uri ? await fetchText(uri) : null });
+      const xml = uri ? await fetchText(uri) : null;
+      if (fetchId === this.fetchId) {
+        this.setState({ xml });
+      }
     } catch (e) {
-      console.error(e);
+      if (fetchId === this.fetchId) {
+        console.error(e);
+      }
     }
   }
 
