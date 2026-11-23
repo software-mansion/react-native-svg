@@ -18,6 +18,7 @@ import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.common.ReactConstants;
+import com.facebook.react.uimanager.PointerEvents;
 
 @SuppressLint("ViewConstructor")
 class UseView extends RenderableView {
@@ -102,6 +103,10 @@ class UseView extends RenderableView {
   @Override
   int hitTest(float[] src) {
     if (!mInvertible) {
+      return -1;
+    }
+
+    if (mPointerEvents == PointerEvents.NONE) {
       return -1;
     }
 

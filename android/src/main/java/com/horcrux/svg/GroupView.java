@@ -23,6 +23,7 @@ import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.uimanager.PointerEvents;
 import java.util.ArrayList;
 import javax.annotation.Nullable;
 
@@ -270,6 +271,10 @@ class GroupView extends RenderableView {
   @Override
   int hitTest(final float[] src) {
     if (!mInvertible) {
+      return -1;
+    }
+
+    if (mPointerEvents == PointerEvents.NONE) {
       return -1;
     }
 
