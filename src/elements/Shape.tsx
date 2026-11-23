@@ -163,8 +163,8 @@ export class SVGMatrix implements SVGMatrix {
 
   rotateFromVector(x: number, y: number): SVGMatrix {
     const angle = Math.atan2(y, x);
-    const cos = Math.cos(deg2rad * angle);
-    const sin = Math.sin(deg2rad * angle);
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
     return new SVGMatrix(
       multiplyMatrices(this, { a: cos, b: sin, c: -sin, d: cos, e: 0, f: 0 })
     );
