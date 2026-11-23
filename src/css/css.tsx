@@ -72,8 +72,9 @@ function getText(_node: XmlAST | string): string {
 // get the attribute value
 // getAttributeValue: ( elem:ElementNode, name:String ) => value:String
 // returns null when attribute doesn't exist
-function getAttributeValue(elem: XmlAST, name: string): string {
-  return (elem.props[name] || null) as string;
+function getAttributeValue(elem: XmlAST, name: string): string | undefined {
+  const value = elem.props[camelCase(name)];
+  return value == null ? undefined : String(value);
 }
 
 // takes an array of nodes, and removes any duplicates, as well as any nodes
@@ -134,7 +135,7 @@ function getSiblings(node: XmlAST | string): Array<XmlAST | string> {
 
 // does the element have the named attribute?
 function hasAttrib(elem: XmlAST, name: string): boolean {
-  return Object.prototype.hasOwnProperty.call(elem.props, name);
+  return Object.prototype.hasOwnProperty.call(elem.props, camelCase(name));
 }
 
 // finds the first node in the array that matches the test predicate, or one
