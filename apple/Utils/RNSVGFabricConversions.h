@@ -142,13 +142,14 @@ void setCommonRenderableProps(const T &renderableProps, RNSVGRenderable *rendera
       : renderableProps.vectorEffect == 1                         ? kRNSVGVectorEffectNonScalingStroke
       : renderableProps.vectorEffect == 2                         ? kRNSVGVectorEffectInherit
                                                                   : kRNSVGVectorEffectUri;
-  if (renderableProps.propList.size() > 0) {
-    NSMutableArray<NSString *> *propArray = [NSMutableArray new];
-    for (auto str : renderableProps.propList) {
+  NSMutableArray<NSString *> *propArray = nil;
+  if (!renderableProps.propList.empty()) {
+    propArray = [NSMutableArray arrayWithCapacity:renderableProps.propList.size()];
+    for (const auto &str : renderableProps.propList) {
       [propArray addObject:RCTNSStringFromString(str)];
     }
-    renderableNode.propList = propArray;
   }
+  renderableNode.propList = propArray;
   renderableNode.filter = RCTNSStringFromStringNilIfEmpty(renderableProps.filter);
 }
 

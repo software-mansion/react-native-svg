@@ -358,11 +358,15 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
   }
 
   public void setPropList(@Nullable ReadableArray propList) {
-    if (propList != null) {
-      mPropList = mAttributeList = new ArrayList<>();
-      for (int i = 0; i < propList.size(); i++) {
-        mPropList.add(propList.getString(i));
-      }
+    if (propList == null) {
+      mPropList = mAttributeList = null;
+      invalidate();
+      return;
+    }
+
+    mPropList = mAttributeList = new ArrayList<>(propList.size());
+    for (int i = 0; i < propList.size(); i++) {
+      mPropList.add(propList.getString(i));
     }
 
     invalidate();
