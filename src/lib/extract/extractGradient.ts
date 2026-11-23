@@ -42,9 +42,6 @@ function percentToFloat(
   return matched[2] ? +matched[1] / 100 : +matched[1];
 }
 
-const offsetComparator = (object: number[], other: number[]) =>
-  object[0] - other[0];
-
 export default function extractGradient(
   props: {
     id?: string;
@@ -69,6 +66,7 @@ export default function extractGradient(
       )
     : [];
   const l = childArray.length;
+  let previousOffset = 0;
   for (let i = 0; i < l; i++) {
     const {
       props: {
@@ -78,9 +76,9 @@ export default function extractGradient(
         stopOpacity = style && style.stopOpacity,
       },
     } = childArray[i];
-    const offsetNumber = percentToFloat(offset || 0);
+    const rawOffset = percentToFloat(offset || 0);
     const color = stopColor && processColor(stopColor);
-    if (typeof color !== 'number' || isNaN(offsetNumber)) {
+    if (typeof color !== 'number' || isNaN(rawOffset)) {
       console.warn(
         `"${String(
           stopColor
@@ -88,11 +86,11 @@ export default function extractGradient(
       );
       continue;
     }
+    const offsetNumber = Math.min(1, Math.max(previousOffset, rawOffset));
+    previousOffset = offsetNumber;
     const alpha = Math.round(extractOpacity(stopOpacity) * 255);
     stops.push([offsetNumber, (color & 0x00ffffff) | (alpha << 24)]);
   }
-  stops.sort(offsetComparator);
-
   const gradient = [];
   const k = stops.length;
   for (let j = 0; j < k; j++) {
