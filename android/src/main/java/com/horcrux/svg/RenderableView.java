@@ -37,6 +37,7 @@ import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.react.uimanager.PointerEvents;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
@@ -772,6 +773,27 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
     return mAttributeList;
   }
 
+  // mergeProperties/resetProperties run for every child on every draw, and
+  // Class.getField walks the whole class hierarchy each call. On screens with
+  // many icons this keeps the UI thread busy long enough to trigger ANRs.
+  // Fields never change at runtime, so resolve each one once. Only accessed
+  // from the UI thread, so a plain HashMap is enough.
+  private static final HashMap<Class<?>, HashMap<String, Field>> sFieldCache = new HashMap<>();
+
+  private Field cachedField(String name) throws NoSuchFieldException {
+    HashMap<String, Field> fields = sFieldCache.get(getClass());
+    if (fields == null) {
+      fields = new HashMap<>();
+      sFieldCache.put(getClass(), fields);
+    }
+    Field field = fields.get(name);
+    if (field == null) {
+      field = getClass().getField(name);
+      fields.put(name, field);
+    }
+    return field;
+  }
+
   void mergeProperties(RenderableView target) {
     mCaller = target;
     ArrayList<String> targetAttributeList = target.getAttributeList();
@@ -786,7 +808,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
     for (int i = 0, size = targetAttributeList.size(); i < size; i++) {
       try {
         String fieldName = targetAttributeList.get(i);
-        Field field = getClass().getField(fieldName);
+        Field field = cachedField(fieldName);
         Object value = field.get(target);
         mOriginProperties.add(field.get(this));
 
@@ -806,7 +828,7 @@ public abstract class RenderableView extends VirtualView implements ReactHitSlop
     if (mLastMergedList != null && mOriginProperties != null) {
       try {
         for (int i = mLastMergedList.size() - 1; i >= 0; i--) {
-          Field field = getClass().getField(mLastMergedList.get(i));
+          Field field = cachedField(mLastMergedList.get(i));
           field.set(this, mOriginProperties.get(i));
         }
       } catch (Exception e) {
