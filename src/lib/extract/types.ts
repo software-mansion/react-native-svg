@@ -361,6 +361,7 @@ export type extractedProps = {
   matrix?: number[];
   propList?: string[];
   onSvgLayout?: CodegenTypes.DirectEventHandler<OnSvgLayoutEvent>;
+  hasLayoutListener?: boolean;
   ref?: (instance: React.Component | null) => void;
   markerStart?: string;
   markerMid?: string;

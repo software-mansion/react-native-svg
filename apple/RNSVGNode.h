@@ -45,6 +45,7 @@ extern CGFloat const RNSVG_DEFAULT_FONT_SIZE;
  */
 @property (nonatomic, assign) RCTPointerEvents pointerEvents;
 @property (nonatomic, assign) BOOL responsible;
+@property (nonatomic, assign) BOOL hasLayoutListener;
 
 @property (nonatomic, assign) CGAffineTransform ctm;
 @property (nonatomic, assign) CGAffineTransform screenCTM;
