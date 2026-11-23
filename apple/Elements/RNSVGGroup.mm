@@ -221,6 +221,10 @@ using namespace facebook::react;
 
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
+  if (self.pointerEvents == RCTPointerEventsNone) {
+    return nil;
+  }
+
   CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
 
   if (!CGRectContainsPoint(self.pathBounds, transformed)) {
@@ -251,11 +255,13 @@ using namespace facebook::react;
     }
   }
 
+  BOOL hasChildNodes = NO;
   for (RNSVGView *node in [self.subviews reverseObjectEnumerator]) {
     if ([node isKindOfClass:[RNSVGNode class]]) {
       if ([node isKindOfClass:[RNSVGMask class]]) {
         continue;
       }
+      hasChildNodes = YES;
       RNSVGNode *svgNode = (RNSVGNode *)node;
       if (event) {
         svgNode.active = NO;
@@ -272,6 +278,14 @@ using namespace facebook::react;
         return hitChild;
       }
     }
+  }
+
+  // As on Android, a group with child nodes is hit only through them. Its own hit
+  // area is the union of their paths, so testing it would take a press that a
+  // child declines, such as one with pointerEvents="none". A TSpan holding its
+  // text has no child nodes and is tested here.
+  if (hasChildNodes) {
+    return nil;
   }
 
   RNSVGPlatformView *hitSelf = [super hitTest:transformed withEvent:event];

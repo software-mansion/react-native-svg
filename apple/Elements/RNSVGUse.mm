@@ -188,6 +188,10 @@ using namespace facebook::react;
 
 - (RNSVGPlatformView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
+  if (self.pointerEvents == RCTPointerEventsNone) {
+    return nil;
+  }
+
   CGPoint transformed = CGPointApplyAffineTransform(point, self.invmatrix);
   RNSVGNode const *definedTemplate = [self.svgView getDefinedTemplate:self.href];
   if (event) {
