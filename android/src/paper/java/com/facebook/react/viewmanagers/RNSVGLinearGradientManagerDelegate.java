@@ -54,6 +54,9 @@ public class RNSVGLinearGradientManagerDelegate<T extends View, U extends BaseVi
       case "responsible":
         mViewManager.setResponsible(view, value == null ? false : (boolean) value);
         break;
+      case "hasLayoutListener":
+        mViewManager.setHasLayoutListener(view, value == null ? false : (boolean) value);
+        break;
       case "display":
         mViewManager.setDisplay(view, value == null ? null : (String) value);
         break;

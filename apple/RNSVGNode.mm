@@ -269,14 +269,30 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   self.matrix = transforms;
 }
 
+- (void)setHasLayoutListener:(BOOL)hasLayoutListener
+{
+  if (_hasLayoutListener == hasLayoutListener) {
+    return;
+  }
+  _hasLayoutListener = hasLayoutListener;
+  if (_hasLayoutListener && !CGRectEqualToRect(_clientRect, CGRectZero)) {
+    [self dispatchSvgLayout];
+  }
+}
+
 - (void)setClientRect:(CGRect)clientRect
 {
   if (CGRectEqualToRect(_clientRect, clientRect)) {
     return;
   }
   _clientRect = clientRect;
+  [self dispatchSvgLayout];
+}
+
+- (void)dispatchSvgLayout
+{
 #ifdef RCT_NEW_ARCH_ENABLED
-  if (_eventEmitter != nullptr) {
+  if (_eventEmitter != nullptr && _hasLayoutListener) {
     static_cast<const RNSVGGroupEventEmitter &>(*_eventEmitter)
       .onSvgLayout(
         {.layout = {
@@ -666,6 +682,7 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
 
   _pointerEvents = RCTPointerEventsUnspecified;
   _responsible = NO;
+  _hasLayoutListener = NO;
 
   _ctm = CGAffineTransformIdentity;
   _screenCTM = CGAffineTransformIdentity;

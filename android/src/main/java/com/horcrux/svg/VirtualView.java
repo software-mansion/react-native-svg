@@ -73,6 +73,7 @@ public abstract class VirtualView extends ReactViewGroup {
 
   final float mScale;
   private boolean mResponsible;
+  private boolean mHasLayoutListener;
   String mDisplay;
   String mName;
 
@@ -342,6 +343,16 @@ public abstract class VirtualView extends ReactViewGroup {
     invalidate();
   }
 
+  public void setHasLayoutListener(boolean hasLayoutListener) {
+    if (mHasLayoutListener == hasLayoutListener) {
+      return;
+    }
+    mHasLayoutListener = hasLayoutListener;
+    if (mHasLayoutListener && mClientRect != null) {
+      dispatchSvgLayout();
+    }
+  }
+
   @Nullable
   Path getClipPath() {
     return mCachedClipPath;
@@ -608,17 +619,23 @@ public abstract class VirtualView extends ReactViewGroup {
         setBottom(Math.min(bottom, root.getHeight()));
       }
     }
+    if (mHasLayoutListener) {
+      dispatchSvgLayout();
+    }
+  }
+
+  private void dispatchSvgLayout() {
     EventDispatcher eventDispatcher =
         UIManagerHelper.getEventDispatcherForReactTag(mContext, getId());
     if (eventDispatcher != null) {
       eventDispatcher.dispatchEvent(
-        new SvgOnLayoutEvent(
-          UIManagerHelper.getSurfaceId(VirtualView.this),
-          this.getId(),
-          left,
-          top,
-          width,
-          height));
+          new SvgOnLayoutEvent(
+              UIManagerHelper.getSurfaceId(VirtualView.this),
+              this.getId(),
+              (int) Math.floor(mClientRect.left),
+              (int) Math.floor(mClientRect.top),
+              (int) Math.ceil(mClientRect.width()),
+              (int) Math.ceil(mClientRect.height())));
     }
   }
 

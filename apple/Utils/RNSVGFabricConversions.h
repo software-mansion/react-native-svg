@@ -84,6 +84,7 @@ void setCommonNodeProps(const T &nodeProps, RNSVGNode *node)
   node.clipPath = RCTNSStringFromStringNilIfEmpty(nodeProps.clipPath);
   node.clipRule = nodeProps.clipRule == 0 ? kRNSVGCGFCRuleEvenodd : kRNSVGCGFCRuleNonzero;
   node.responsible = nodeProps.responsible;
+  node.hasLayoutListener = nodeProps.hasLayoutListener;
   // onLayout
   node.display = RCTNSStringFromStringNilIfEmpty(nodeProps.display);
   std::string pointerEvents = nodeProps.pointerEvents;
