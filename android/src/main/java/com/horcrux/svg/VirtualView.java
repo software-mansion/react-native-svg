@@ -135,6 +135,7 @@ public abstract class VirtualView extends ReactViewGroup {
   @Override
   public void invalidate() {
     if (this instanceof RenderableView && mPath == null) {
+      clearParentCache();
       return;
     }
     clearCache();
