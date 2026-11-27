@@ -2,6 +2,7 @@ import React from 'react';
 import { ColorValue, processColor } from 'react-native';
 import { FeBlendProps as FeBlendComponentProps } from '../../elements/filters/FeBlend';
 import { FeColorMatrixProps as FeColorMatrixComponentProps } from '../../elements/filters/FeColorMatrix';
+import { FeConvolveMatrixProps as FeConvolveMatrixComponentProps } from '../../elements/filters/FeConvolveMatrix';
 import { FeCompositeProps as FeCompositeComponentProps } from '../../elements/filters/FeComposite';
 import { FeFloodProps as FeFloodComponentProps } from '../../elements/filters/FeFlood';
 import { FeGaussianBlurProps as FeGaussianBlurComponentProps } from '../../elements/filters/FeGaussianBlur';
@@ -9,6 +10,7 @@ import { FeMergeProps as FeMergeComponentProps } from '../../elements/filters/Fe
 import { FeMergeNodeProps } from '../../elements/filters/FeMergeNode';
 import { NativeProps as FeBlendNativeProps } from '../../fabric/FeBlendNativeComponent';
 import { NativeProps as FeColorMatrixNativeProps } from '../../fabric/FeColorMatrixNativeComponent';
+import { NativeProps as FeConvolveMatrixNativeProps } from '../../fabric/FeConvolveMatrixNativeComponent';
 import { NativeProps as FeCompositeNativeProps } from '../../fabric/FeCompositeNativeComponent';
 import { NativeProps as FeFloodNativeProps } from '../../fabric/FeFloodNativeComponent';
 import { NativeProps as FeGaussianBlurNativeProps } from '../../fabric/FeGaussianBlurNativeComponent';
@@ -184,4 +186,50 @@ export const extractFeMerge = (
   }
 
   return { nodes };
+};
+
+export const extractFeConvolveMatrix = (
+  props: FeConvolveMatrixComponentProps
+) => {
+  const extracted: FeConvolveMatrixNativeProps = {};
+
+  if (props.order !== undefined) {
+    extracted.order = props.order;
+  }
+
+  if (props.kernelMatrix !== undefined) {
+    extracted.kernelMatrix = props.kernelMatrix;
+  }
+
+  if (props.divisor === 0 || props.divisor === '0') {
+    extracted.divisor = 1;
+  } else {
+    extracted.divisor = props.divisor;
+  }
+
+  if (props.bias !== undefined) {
+    extracted.bias = props.bias;
+  }
+
+  if (props.targetX !== undefined) {
+    extracted.targetX = props.targetX;
+  }
+
+  if (props.targetY !== undefined) {
+    extracted.targetY = props.targetY;
+  }
+
+  if (props.edgeMode !== undefined) {
+    extracted.edgeMode = props.edgeMode;
+  }
+
+  if (props.preserveAlpha === 'false') {
+    extracted.preserveAlpha = false;
+  } else if (props.preserveAlpha === 'true') {
+    extracted.preserveAlpha = true;
+  } else {
+    extracted.preserveAlpha = props.preserveAlpha;
+  }
+
+  return extracted;
 };
