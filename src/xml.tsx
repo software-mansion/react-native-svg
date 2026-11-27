@@ -39,7 +39,15 @@ export type AdditionalProps = {
   fallback?: JSX.Element;
 };
 
-export type UriProps = SvgProps & { uri: string | null } & AdditionalProps;
+export type UriProps = SvgProps & {
+  uri: string | null;
+  /**
+   * Additional HTTP headers to send with the request, modelled on
+   * `ImageURISource.headers`. Keep this object referentially stable
+   * (e.g. memoized) to avoid unnecessary re-fetches.
+   */
+  headers?: Record<string, string>;
+} & AdditionalProps;
 export type UriState = { xml: string | null };
 
 export type XmlProps = SvgProps & { xml: string | null } & AdditionalProps;
@@ -80,12 +88,12 @@ export function SvgXml(props: XmlProps) {
 }
 
 export function SvgUri(props: UriProps) {
-  const { onError = err, uri, onLoad, fallback } = props;
+  const { onError = err, uri, onLoad, fallback, headers } = props;
   const [xml, setXml] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
   useEffect(() => {
     uri
-      ? fetchText(uri)
+      ? fetchText(uri, headers)
           .then((data) => {
             setXml(data);
             isError && setIsError(false);
@@ -97,7 +105,7 @@ export function SvgUri(props: UriProps) {
           })
       : setXml(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onError, uri, onLoad]);
+  }, [onError, uri, onLoad, headers]);
   if (isError) {
     return fallback ?? null;
   }
@@ -144,19 +152,22 @@ export class SvgFromXml extends Component<XmlProps, XmlState> {
 export class SvgFromUri extends Component<UriProps, UriState> {
   state = { xml: null };
   componentDidMount() {
-    this.fetch(this.props.uri);
+    this.fetch(this.props.uri, this.props.headers);
   }
 
-  componentDidUpdate(prevProps: { uri: string | null }) {
-    const { uri } = this.props;
-    if (uri !== prevProps.uri) {
-      this.fetch(uri);
+  componentDidUpdate(prevProps: {
+    uri: string | null;
+    headers?: Record<string, string>;
+  }) {
+    const { uri, headers } = this.props;
+    if (uri !== prevProps.uri || headers !== prevProps.headers) {
+      this.fetch(uri, headers);
     }
   }
 
-  async fetch(uri: string | null) {
+  async fetch(uri: string | null, headers?: Record<string, string>) {
     try {
-      this.setState({ xml: uri ? await fetchText(uri) : null });
+      this.setState({ xml: uri ? await fetchText(uri, headers) : null });
     } catch (e) {
       console.error(e);
     }

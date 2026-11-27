@@ -23,6 +23,7 @@ import Test2196 from './Test2196';
 import Test2248 from './Test2248';
 import Test2266 from './Test2266';
 import Test2276 from './Test2276';
+import Test2320 from './Test2320';
 import Test2327 from './Test2327';
 import Test2233 from './Test2233';
 import Test2363 from './Test2363';
