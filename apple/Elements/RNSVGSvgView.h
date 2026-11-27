@@ -47,6 +47,12 @@
 
 - (RNSVGNode *)getDefinedTemplate:(NSString *)templateName;
 
+/**
+ * Clears the layout of the text laid out along the element named `name`, so it follows
+ * the element's new geometry.
+ */
+- (void)clearTextPathsReferencing:(NSString *)name;
+
 - (void)definePainter:(RNSVGPainter *)painter painterName:(NSString *)painterName;
 
 - (RNSVGPainter *)getDefinedPainter:(NSString *)painterName;

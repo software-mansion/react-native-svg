@@ -37,6 +37,10 @@ class TextPathView extends TextView {
     invalidate();
   }
 
+  String getHref() {
+    return mHref;
+  }
+
   public void setStartOffset(Dynamic startOffset) {
     mStartOffset = SVGLength.from(startOffset);
     invalidate();

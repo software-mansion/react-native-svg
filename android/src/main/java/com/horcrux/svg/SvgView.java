@@ -19,6 +19,7 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.Base64;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import com.facebook.react.bridge.Dynamic;
@@ -417,6 +418,30 @@ public class SvgView extends ReactViewGroup implements ReactCompoundView, ReactC
 
   VirtualView getDefinedClipPath(String clipPathRef) {
     return mDefinedClipPaths.get(clipPathRef);
+  }
+
+  /**
+   * Clears the layout of the text laid out along the element named {@code name}, so it follows the
+   * element's new geometry.
+   */
+  void clearTextPathsReferencing(String name) {
+    if (clearTextPathsReferencing(name, this)) {
+      invalidate();
+    }
+  }
+
+  private static boolean clearTextPathsReferencing(String name, ViewGroup view) {
+    boolean cleared = false;
+    for (int i = 0; i < view.getChildCount(); i++) {
+      View node = view.getChildAt(i);
+      if (node instanceof TextPathView && name.equals(((TextPathView) node).getHref())) {
+        ((TextPathView) node).getTextContainer().clearChildCache();
+        cleared = true;
+      } else if (node instanceof ViewGroup) {
+        cleared |= clearTextPathsReferencing(name, (ViewGroup) node);
+      }
+    }
+    return cleared;
   }
 
   void defineTemplate(VirtualView template, String templateRef) {

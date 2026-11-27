@@ -9,6 +9,7 @@
 #import "RNSVGSvgView.h"
 #import <React/RCTLog.h>
 #import "RNSVGNode.h"
+#import "RNSVGTextPath.h"
 #import "RNSVGViewBox.h"
 
 #ifdef RCT_NEW_ARCH_ENABLED
@@ -442,6 +443,22 @@ using namespace facebook::react;
 - (RNSVGNode *)getDefinedTemplate:(NSString *)templateName
 {
   return _templates ? [_templates objectForKey:templateName] : nil;
+}
+
+- (void)clearTextPathsReferencing:(NSString *)name
+{
+  [self clearTextPathsReferencing:name inView:self];
+}
+
+- (void)clearTextPathsReferencing:(NSString *)name inView:(RNSVGPlatformView *)view
+{
+  for (RNSVGPlatformView *node in view.subviews) {
+    if ([node isKindOfClass:[RNSVGTextPath class]] && [((RNSVGTextPath *)node).href isEqualToString:name]) {
+      [((RNSVGTextPath *)node).textRoot clearChildCache];
+    } else {
+      [self clearTextPathsReferencing:name inView:node];
+    }
+  }
 }
 
 - (void)definePainter:(RNSVGPainter *)painter painterName:(NSString *)painterName
