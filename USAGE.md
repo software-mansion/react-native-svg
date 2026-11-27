@@ -1305,7 +1305,7 @@ Not supported yet:
 - FeTile
 - FeTurbulence
 
-Exmaple use of filters:
+Example use of filters:
 
 ```jsx
 import React from 'react';
