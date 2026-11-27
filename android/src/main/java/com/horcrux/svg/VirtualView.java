@@ -134,6 +134,15 @@ public abstract class VirtualView extends ReactViewGroup {
 
   @Override
   public void invalidate() {
+    // A text path names its path by `href`, outside of the path's ancestors, so the text
+    // would keep its layout along the old geometry unless it is cleared here. This runs
+    // before the check below, since a path in `Defs` is never drawn itself.
+    if (mName != null && this instanceof RenderableView) {
+      SvgView svg = getSvgView();
+      if (svg != null) {
+        svg.clearTextPathsReferencing(mName);
+      }
+    }
     if (this instanceof RenderableView && mPath == null) {
       return;
     }

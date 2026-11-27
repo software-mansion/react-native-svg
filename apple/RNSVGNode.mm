@@ -11,6 +11,7 @@
 #import "RNSVGContainer.h"
 #import "RNSVGGlyphContext.h"
 #import "RNSVGGroup.h"
+#import "RNSVGRenderable.h"
 
 #ifdef RCT_NEW_ARCH_ENABLED
 #import <react/renderer/components/rnsvg/ComponentDescriptors.h>
@@ -98,6 +99,12 @@ CGFloat const RNSVG_DEFAULT_FONT_SIZE = 12;
   canvasWidth = -1;
   canvasHeight = -1;
   canvasDiagonal = -1;
+
+  // A text path names its path by `href`, outside of the path's ancestors, so the text
+  // would keep its layout along the old geometry unless it is cleared here.
+  if (self.name && [self isKindOfClass:[RNSVGRenderable class]]) {
+    [self.svgView clearTextPathsReferencing:self.name];
+  }
 }
 
 - (void)clearPath
