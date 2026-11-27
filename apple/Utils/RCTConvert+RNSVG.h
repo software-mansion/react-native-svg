@@ -13,6 +13,8 @@
 #import "RNSVGBlendMode.h"
 #import "RNSVGCGFCRule.h"
 #import "RNSVGColorMatrixType.h"
+#import "RNSVGComponentTransferFuncChannel.h"
+#import "RNSVGComponentTransferFuncType.h"
 #import "RNSVGCompositeOperator.h"
 #import "RNSVGEdgeMode.h"
 #import "RNSVGLength.h"
