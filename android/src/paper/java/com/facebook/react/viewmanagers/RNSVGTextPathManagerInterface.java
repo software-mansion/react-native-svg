@@ -56,7 +56,6 @@ public interface RNSVGTextPathManagerInterface<T extends View> extends ViewManag
   void setBaselineShift(T view, Dynamic value);
   void setLengthAdjust(T view, @Nullable String value);
   void setAlignmentBaseline(T view, @Nullable String value);
-  void setVerticalAlign(T view, Dynamic value);
   void setHref(T view, @Nullable String value);
   void setSide(T view, @Nullable String value);
   void setMethod(T view, @Nullable String value);

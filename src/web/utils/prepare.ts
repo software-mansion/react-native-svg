@@ -7,8 +7,9 @@ import { WebShape } from '../WebShape';
 import { hasTouchableProperty } from './hasProperty';
 import { parseTransformProp } from './parseTransform';
 import { resolve } from '../../lib/resolve';
-import { NumberProp } from '../../lib/extract/types';
+import { AlignmentBaseline, NumberProp } from '../../lib/extract/types';
 import { resolveAssetUri } from '../../lib/resolveAssetUri';
+import { parseVerticalAlign } from './parseVerticalAlign';
 /**
  * `react-native-svg` supports additional props that aren't defined in the spec.
  * This function replaces them in a spec conforming manner.
@@ -36,6 +37,7 @@ export const prepare = <T extends BaseProps>(
     gradientTransform,
     patternTransform,
     onPress,
+    verticalAlign,
     ...rest
   } = props;
 
@@ -104,7 +106,20 @@ export const prepare = <T extends BaseProps>(
     fontFamily?: string;
     fontSize?: NumberProp;
     fontWeight?: NumberProp;
+    alignmentBaseline?: AlignmentBaseline;
+    baselineShift?: NumberProp;
   } = {};
+
+  const { baselineShift, alignmentBaseline } =
+    parseVerticalAlign(verticalAlign);
+
+  if (baselineShift != null) {
+    styles.baselineShift = baselineShift;
+  }
+
+  if (alignmentBaseline != null) {
+    styles.alignmentBaseline = alignmentBaseline;
+  }
 
   if (fontFamily != null) {
     styles.fontFamily = fontFamily;
