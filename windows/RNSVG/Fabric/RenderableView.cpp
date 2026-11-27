@@ -157,7 +157,74 @@ void RenderableView::FinalizeUpates(
 
 ID2D1SvgElement &RenderableView::Render(const SvgView &svgView, ID2D1SvgDocument& document, ID2D1SvgElement &svgElement) noexcept {
   svgElement.CreateChild(GetSvgElementName(), m_spD2DSvgElement.put());
-  OnRender(svgView, document, *m_spD2DSvgElement);
+
+  // HasProps() is false for a node whose Fabric prop-update pass (UpdateProps) hasn't run yet.
+  // OnRender() (and every override: GroupView, CircleView, EllipseView, RectView, LineView,
+  // PathView, UseView, ClipPathView, DefsView, ImageView, Linear/RadialGradientView) starts
+  // with winrt::get_self<TProps>(m_props), an unchecked cast that's only safe once m_props is
+  // non-null -- calling it earlier is what used to crash (get_self<SvgGroupProps>(null) at
+  // +0x1d0, AV in the Color compare inside SetCommonSvgProps; see RenderableView.h's HasProps()
+  // doc comment and git history for the fix that first introduced this check).
+  //
+  // That original fix gated Render() itself (skipped in SvgView.cpp's RecurseRenderNode / Draw
+  // before ever reaching here), which is crash-safe but also skips CreateChild() -- so this
+  // node's D2D element never exists, RecurseRenderNode has nothing to recurse into, and this
+  // node's *entire subtree* silently drops out of the Draw() pass, including any children that
+  // already do have their own props set. Narrowing the guard to just this call preserves the
+  // exact same crash safety (OnRender(), the only thing that dereferences m_props, is still
+  // never reached while m_props is null) while guaranteeing this node's own D2D element is
+  // always created and its children are always walked -- so one still-propless node can no
+  // longer take an already-ready descendant down with it. A still-propless node simply renders
+  // as an attribute-less element for this one pass (falls through to the parent-inherited fill
+  // below, never black; no stroke/geometry of its own yet) and repaints correctly on the very
+  // next Draw(), which is guaranteed once its own UpdateProps lands (RenderableView::FinalizeUpates
+  // -> Invalidate()).
+  if (HasProps()) {
+    OnRender(svgView, document, *m_spD2DSvgElement);
+  }
+
+  // extractFill.ts (JS) intentionally leaves `fill` unset and out of `propList` when an
+  // element never declares `fill`, so that native inherits it from the parent (e.g. a root
+  // <Svg fill="none">). SetCommonSvgProps only calls SetAttributeValue for attributes present
+  // in propList, so OnRender above leaves this freshly created D2D SVG element's `fill`
+  // attribute completely unset in that case. Because this tree is rebuilt from scratch via
+  // CreateChild()/SetAttributeValue() every frame (SvgView::Draw creates a new
+  // ID2D1SvgDocument on every Invalidate) rather than parsed from a full <svg> document, D2D
+  // does not retroactively cascade an unset presentation attribute from its parent - it
+  // resolves to the SVG spec's black initial paint instead, reproducing the exact bug the JS
+  // fix was meant to eliminate. Direct2D's paint model (D2D1_SVG_PAINT_TYPE) has no INHERIT
+  // value, so setting the literal string "inherit" via SetAttributeValue is not meaningful for
+  // `fill`/`stroke` - we resolve inheritance ourselves instead, by copying the parent
+  // element's already-resolved `fill` paint onto this element. Parent nodes are always
+  // rendered (and thus resolved by this same logic) before their children in
+  // SvgView::RecurseRenderNode, so by induction this correctly propagates the nearest
+  // explicit ancestor's fill all the way down, and bottoms out at the SVG spec's black
+  // default when no ancestor - including the document root, which never has `fill` set (see
+  // SvgView::Draw) - ever declared one either.
+  if (!m_spD2DSvgElement->IsAttributeSpecified(SvgStrings::fillAttributeName, nullptr)) {
+    winrt::com_ptr<ID2D1SvgPaint> parentPaint;
+    winrt::com_ptr<ID2D1SvgPaint> childPaint;
+    if (SUCCEEDED(svgElement.GetAttributeValue(SvgStrings::fillAttributeName, parentPaint.put())) && parentPaint &&
+        SUCCEEDED(m_spD2DSvgElement->GetAttributeValue(SvgStrings::fillAttributeName, childPaint.put())) && childPaint) {
+      D2D1_SVG_PAINT_TYPE paintType = parentPaint->GetPaintType();
+      childPaint->SetPaintType(paintType);
+      if (paintType == D2D1_SVG_PAINT_TYPE_COLOR) {
+        D2D1_COLOR_F color;
+        parentPaint->GetColor(&color);
+        childPaint->SetColor(color);
+      } else if (
+          paintType == D2D1_SVG_PAINT_TYPE_URI || paintType == D2D1_SVG_PAINT_TYPE_URI_NONE ||
+          paintType == D2D1_SVG_PAINT_TYPE_URI_COLOR || paintType == D2D1_SVG_PAINT_TYPE_URI_CURRENT_COLOR) {
+        UINT32 idLen = parentPaint->GetIdLength();
+        if (idLen > 0) {
+          std::wstring id(idLen, L'\0');
+          parentPaint->GetId(&id[0], idLen + 1);
+          childPaint->SetId(id.c_str());
+        }
+      }
+    }
+  }
+
   return *m_spD2DSvgElement;
 }
 
