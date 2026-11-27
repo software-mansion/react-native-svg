@@ -69,7 +69,7 @@ using namespace facebook::react;
     return nil;
   }
 
-  // We need to multiply stdDeviation by screenScale to achive the same results as on web
+  // We need to multiply stdDeviation by screenScale to achieve the same results as on web
   CGFloat screenScale = [RNSVGRenderUtils getScreenScale];
 
   CIFilter *filter = [CIFilter filterWithName:(_stdDeviationX == _stdDeviationY ? @"CIGaussianBlur" : @"CIMotionBlur")];
